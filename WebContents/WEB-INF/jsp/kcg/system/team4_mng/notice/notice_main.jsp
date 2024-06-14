@@ -8,11 +8,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
 </head>
 <body>
-<<<<<<< HEAD
-공지사항 페이지
- 
-=======
 
->>>>>>> cd72103126fd82342300365dbc30358e0089d94a
+공지사항 페이지
+
 </body>
 </html>
