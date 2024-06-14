@@ -5,7 +5,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import kcg.common.svc.CommonSvc;
-import kcg.system.t4_cust_mng.svc.T4CustMngSvc;
 import kcg.system.t4_main_mng.svc.T4MainMngSvc;
 
 @Controller
