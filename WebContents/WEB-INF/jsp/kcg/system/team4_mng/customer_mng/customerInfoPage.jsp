@@ -4,9 +4,9 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Customer InfoPage</title>
 </head>
 <body>
-테스트 확인용
+
 </body>
 </html>
