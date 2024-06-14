@@ -8,14 +8,15 @@
 <title>admin List</title>
 </head>
 <body>
-<table border="1">
-<thead>T4 company</thead>
-<tbody>
-<c:forEach="" var="name" items="${}">     <!-- 직원 테이블에서 이름 가져와서 리스트로 뿌려주기 -->
-<td><input type="radio" id="name" value="name"></td>
-</c:forEach>
-</tbody>
-</table>
+조건 검색
+
+전체 검색
+
+리스트
+
+전체 name 을 c:forEach 로 찾아서
+
+옵션부여 radio 로 선택
 
 </body>
 </html>
