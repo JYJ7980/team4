@@ -9,6 +9,8 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
     <!-- axios CDN 추가 -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
     <style>
         /* 테이블 숨기기 */
         #customerTable {
@@ -38,7 +40,7 @@
                 </tr>
             </table>
         </div>
-    </div>
+    </div>     
 
     <script>
     new Vue({
@@ -61,6 +63,8 @@
             }
         }
     });
+    
+    
     </script>
 </body>
 </html>

@@ -15,7 +15,7 @@ public class DesignService {
 	CmmnDao cmmnDao;
 
 	public List<CmmnMap> getProList(CmmnMap params) {
-		List<CmmnMap> productList = cmmnDao.selectList("kcg.system.t4_design_mng.getProInfo", params);
+		List<CmmnMap> productList = cmmnDao.selectList("getProList", params);
 		return productList;
 	}
 }

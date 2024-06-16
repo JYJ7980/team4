@@ -10,7 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-
+import common.dao.CmmnDao;
 import common.utils.common.CmmnMap;
 import kcg.system.t4_design_mng.svc.DesignService;
 
@@ -21,17 +21,22 @@ public class DesignController {
 	@Autowired
 	DesignService designService;
 	
+	@Autowired
+	CmmnDao cmmnDao;
+	
 	@GetMapping("subscriptionForm")
 	public String subsciptionForm(Model model) {
-		return "kcg/system/t4_design_mng/SubscriptionForm";
+		return "kcg/system/team4_mng/t4_design_mng/SubscriptionForm";
 	}
 		
 	@RequestMapping("productList")
 	public List<CmmnMap> productList(CmmnMap params){
-
-//		System.out.println(params.toString()); param값은 제대로 받아옴 
+		
+		System.out.println("==========================================");
+		System.out.println("==========================================");
+		System.out.println("==========================================");
+		System.out.println(params.toString()); 
 		List<CmmnMap> productList = designService.getProList(params);
-		System.out.println(productList);
 		return productList;
 	}
 }

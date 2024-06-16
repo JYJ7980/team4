@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="kcg.system.t4_design_mng">
+<mapper namespace="system.t4_design_mng">
 	
 	<select id="getProInfo" parameterType="cmmnMap" resultType="cmmnMap">
     SELECT product_name, product_id, product_type FROM kcgbd.db4_product_info 
