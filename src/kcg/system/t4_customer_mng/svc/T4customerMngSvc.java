@@ -13,16 +13,14 @@ public class T4customerMngSvc {
 
 	@Autowired
 	CmmnDao cmmnDao;
-	
-	
-	public List<CmmnMap> getCustInfo(CmmnMap params) {
-		List<CmmnMap> dataList = cmmnDao.selectList("getCustInfo", params);
-		
+
+	public List<CmmnMap> getAllCustomers(CmmnMap params) {
+		List<CmmnMap> dataList = cmmnDao.selectList("getAllCustomers", params);
+//		System.out.println(dataList);
 		return dataList;
 	}
 
 
-	
-	
 
+	
 }
