@@ -45,8 +45,7 @@
 		<h4>고객 정보 관리</h4>
 		<div>
 			<br> <input id="keywordInput" type="text" name="keyword"
-				v-model="searchKeyword"
-				class="inputtext" placeholder="이름을 입력하세요">
+				v-model="searchKeyword" class="inputtext" placeholder="이름을 입력하세요">
 			<button @click="searchCustomers">조건 검색</button>
 		</div>
 		<br>
@@ -88,8 +87,14 @@
 						v-model="selectedCustomer.customer_id_number" readonly>
 				</div>
 				<div class="input-form">
-					<label for="customerLevel">고객 등급</label> <input type="text"
-						id="customerLevel" v-model="selectedCustomer.customer_level">
+					<label for="customerLevel">고객 등급</label> 
+					<select id="customerLevel"
+						v-model="selectedCustomer.customer_level">
+						<option value="1">일반</option>
+						<option value="2">우수</option>
+						<option value="3">VIP</option>
+						<option value="4">플래티넘</option>
+					</select>
 				</div>
 				<div class="input-form">
 					<label for="customerPhone">고객 전화번호</label> <input type="text"
@@ -145,8 +150,14 @@
 						id="customerIdNumber" v-model="customerIdNumber">
 				</div>
 				<div class="input-form">
-					<label for="customerLevel">고객 등급</label> <input type="text"
-						id="customerLevel" v-model="customerLevel">
+					<label for="customerLevel">고객 등급</label>
+						<select id="customerLevel"
+						v-model="customerLevel">
+						<option value="1">일반</option>
+						<option value="2">우수</option>
+						<option value="3">VIP</option>
+						<option value="4">플래티넘</option>
+					</select>
 				</div>
 				<div class="input-form">
 					<label for="customerPhone">고객 전화번호</label> <input type="text"
@@ -223,6 +234,7 @@ new Vue({
             // userInfoVO.userId와 customer.user_id가 같은 고객만 필터링
             this.filteredCustomers = this.customers.filter(customer => customer.user_id === this.userId);
         },
+        
         searchCustomers: function() {
             if (this.searchKeyword.trim() === '') {
                 alert('검색어를 입력하세요.');
@@ -344,6 +356,9 @@ new Vue({
             this.customerAddr = ''; // 고객 주소 초기화
         }
     },
+    
+
+
     mounted: function() {
         // 페이지 로딩 시 초기화
         this.selectedCustomer = null;
