@@ -41,6 +41,7 @@
 		,customer_email
 		,customer_job
 		,customer_addr
+		,customer_sub_date
 		,user_id
 		,use_yn
 		)VALUES(
@@ -53,6 +54,7 @@
 		,#{customer_email}
 		,#{customer_job}
 		,#{customer_addr}
+		,CURRENT_DATE
 		,#{user_id}
 		,'Y'
 		)

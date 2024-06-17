@@ -41,17 +41,20 @@
 <body>
 	<div id="app">
 		<span style="font-size: 18px; font-weight: bold; color: black;">${userInfoVO.userId}</span>&nbsp;님
-		화면
-		<br>
-		<a href="/system/team4/main">메인으로 돌아가기</a><br>
+		화면 <br> <a href="/system/team4/main">메인으로 돌아가기</a><br>
 		<h4>고객 정보 관리</h4>
+		<div>
+			<br> <input id="keywordInput" type="text" name="keyword"
+				v-model="searchKeyword"
+				class="inputtext" placeholder="이름을 입력하세요">
+			<button @click="searchCustomers">조건 검색</button>
+		</div>
 		<br>
 		<div>
 			<!-- 전체 조회 버튼 -->
+			<br>
 			<button @click="getAllCustomers">전체 조회</button>
 			<br>
-			<br>
-			
 		</div>
 		<div id="customerTable" class="customer-container">
 			<div class="customer-table">
@@ -60,15 +63,15 @@
 				<table border='1' v-show="filteredCustomers.length > 0">
 					<tr>
 						<th>Select</th>
-						<th>Name</th>
-						<th>Job</th>
+						<th>이름</th>
+						<th>생년월일</th>
 					</tr>
 					<tr v-for="customer in filteredCustomers"
 						:key="customer.customer_id">
 						<td><input type="radio" name="selectedCustomer"
 							v-model="selectedCustomer" :value="customer"></td>
 						<td>{{ customer.customer_name }}</td>
-						<td>{{ customer.customer_job }}</td>
+						<td>{{ customer.customer_brdt }}</td>
 					</tr>
 				</table>
 			</div>
@@ -172,15 +175,15 @@
 				<h2>관리자 정보</h2>
 				<div class="input-form">
 					<label for="userName">관리자 이름</label> <input type="text"
-						id="userName" value="">
+						id="userName" value="${userInfoVO.name}" disabled>
 				</div>
 				<div class="input-form">
 					<label for="userDept">관리자 부서</label> <input type="text"
-						id="userDept" value="">
+						id="userDept" value="${userInfoVO.dept}" disabled>
 				</div>
 				<div class="input-form">
 					<label for="userjikgub">관리자 직급</label> <input type="text"
-						id="userjikgub" value="">
+						id="userjikgub" value="${userInfoVO.jikgubNm}" disabled>
 				</div>
 			</div>
 		</div>
@@ -202,6 +205,7 @@ new Vue({
         customerEmail:'', // 고객 이메일을 저장할 변수
         customerJob: '', 
         customerAddr: '',
+        searchKeyword: '' // 검색 키워드 저장
     },
     methods: {
         getAllCustomers: function() {
@@ -218,6 +222,23 @@ new Vue({
         filterCustomers: function() {
             // userInfoVO.userId와 customer.user_id가 같은 고객만 필터링
             this.filteredCustomers = this.customers.filter(customer => customer.user_id === this.userId);
+        },
+        searchCustomers: function() {
+            if (this.searchKeyword.trim() === '') {
+                alert('검색어를 입력하세요.');
+                return;
+            }
+            axios.get('/system/team4/getCustInfo')
+                .then(response => {
+                    this.customers = response.data;
+                    this.filteredCustomers = this.customers.filter(customer => 
+                        customer.user_id === this.userId && 
+                        customer.customer_name.includes(this.searchKeyword)
+                    );
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         },
         deleteCustomer: function() {
             if (this.selectedCustomer !== null) {
@@ -291,7 +312,7 @@ new Vue({
                 customer_email: this.customerEmail,
                 customer_job: this.customerJob,
                 customer_addr: this.customerAddr,
-                user_id: ${userInfoVO.userId} // 현재 사용자의 userId 추가
+                user_id: this.userId // 현재 사용자의 userId 추가
             };
 
             // 서버에 POST 요청으로 새로운 고객 등록
@@ -322,7 +343,6 @@ new Vue({
             this.customerJob = ''; // 고객 직업 초기화
             this.customerAddr = ''; // 고객 주소 초기화
         }
-
     },
     mounted: function() {
         // 페이지 로딩 시 초기화
@@ -332,3 +352,4 @@ new Vue({
 </script>
 </body>
 </html>
+
