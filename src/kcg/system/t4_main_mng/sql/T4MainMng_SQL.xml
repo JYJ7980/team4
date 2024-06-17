@@ -8,5 +8,13 @@
 		FROM 
 		테이블명
 	</select>
+	
+	 <insert id="newCreateManagement" parameterType="cmmnMap">
+        INSERT INTO employees (
+            user_id, user_pw, email, name, status_cd, jikgub_nm, dept, reg_dt
+        ) VALUES (
+            #{user_id}, #{user_pw}, #{email}, #{name}, #{status_cd}, #{jikgub_nm}, #{dept}, NOW()
+        )
+    </insert>
 
 </mapper>
