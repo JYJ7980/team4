@@ -3,7 +3,7 @@
 
 <mapper namespace='system.t4_customer_mng'>
 <select id="getAllCustomers" parameterType="cmmnMap" resultType="cmmnMap">
-   select customer_name,customer_job  from kcgbd.db4_customer_info
+   select *  from kcgbd.db4_customer_info
 </select>
 
 
