@@ -6,36 +6,4 @@
 	   select customer_name,customer_job  from kcgbd.db4_customer_info
 	</select>
 	
-	
-	
-	
-	
-<!-- 	//design 설계 sql 나중에 옮겨 갈 것-->
-	
-	<select id="getProductList" parameterType="cmmnMap" resultType="cmmnMap">
-    SELECT product_name, product_id, product_type FROM kcgbd.db4_product_info 
-    WHERE product_name LIKE CONCAT('%', #{product_name}, '%')
-	</select>
-	
-	<select id="selectOneProduct" parameterType="cmmnMap" resultType="cmmnMap">
-    SELECT product_name, product_id, product_type FROM kcgbd.db4_product_info 
-    WHERE product_id = #{product_id}
-	</select>
-	
-
-	<select id="getCustomerList" parameterType="cmmnMap" resultType="cmmnMap">
-    SELECT customer_name, customer_id, customer_brdt FROM kcgbd.db4_customer_info 
-    WHERE customer_name LIKE CONCAT('%', #{customer_name}, '%')
-	</select>
-
-	<select id="selectOneCustomer" parameterType="cmmnMap" resultType="cmmnMap">
-    SELECT customer_name, customer_id FROM kcgbd.db4_customer_info 
-    WHERE customer_id = CAST(#{customer_id} as INTEGER)    
-	</select>
-
-	<insert id="insertProduct" parameterType="cmmnMap">
-	    INSERT INTO kcgbd.db4_product_sub (sub_end_date, start_money, cycle_money, loan, product_id, customer_id, pro_interest_rate)
-	    VALUES (#{sub_end_date}, CAST(#{start_money} AS INTEGER), CAST(#{cycle_money} AS INTEGER), CAST(#{loan} AS INTEGER), CAST(#{product_id} AS INTEGER), CAST(#{customer_id} AS INTEGER), #{pro_interest_rate})
-	</insert>
-
 </mapper>

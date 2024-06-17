@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace='system.t4_design_mng'>
+<!-- 	//design 설계 sql 나중에 옮겨 갈 것-->
+	
+	<select id="getProductList" parameterType="cmmnMap" resultType="cmmnMap">
+    SELECT product_name, product_id, product_type FROM kcgbd.db4_product_info 
+    WHERE product_name LIKE CONCAT('%', #{product_name}, '%')
+	</select>
+	
+	<select id="selectOneProduct" parameterType="cmmnMap" resultType="cmmnMap">
+    SELECT product_name, product_id, product_type FROM kcgbd.db4_product_info 
+    WHERE product_id = #{product_id}
+	</select> 
+
+
+	<select id="getCustomerList" parameterType="cmmnMap" resultType="cmmnMap">
+    SELECT customer_name, customer_id, customer_brdt FROM kcgbd.db4_customer_info 
+    WHERE customer_name LIKE CONCAT('%', #{customer_name}, '%')
+	</select>
+
+	<select id="selectOneCustomer" parameterType="cmmnMap" resultType="cmmnMap">
+    SELECT customer_name, customer_id FROM kcgbd.db4_customer_info 
+    WHERE customer_id = CAST(#{customer_id} as INTEGER)    
+	</select>
+
+	<insert id="insertProduct" parameterType="cmmnMap">
+	    INSERT INTO kcgbd.db4_product_sub (sub_end_date, start_money, cycle_money, loan, product_id, customer_id, pro_interest_rate)
+	    VALUES (#{sub_end_date}, CAST(#{start_money} AS INTEGER), CAST(#{cycle_money} AS INTEGER), CAST(#{loan} AS INTEGER), CAST(#{product_id} AS INTEGER), CAST(#{customer_id} AS INTEGER), #{pro_interest_rate})
+	</insert>
+	
+	
+	<select id="getSubscriptionList" parameterType="cmmnMap" resultType="cmmnMap">
+	    SELECT c.customer_id
+	           , c.customer_name
+	           , s.sub_start_date
+	           , s.sub_end_date
+	           , s.sub_id 
+	           , c.customer_phone
+	           , p.product_type
+	           , p.product_name
+	           , s.start_money
+	           , s.cycle_money
+	           , s.loan
+	           , t.user_id 
+	           , s.sub_quit
+	    FROM kcgbd.db4_customer_info c 
+	    LEFT JOIN kcgbd.t_user t ON c.user_id = t.user_id
+	    LEFT JOIN kcgbd.db4_product_sub s ON s.customer_id = c.customer_id
+	    LEFT JOIN kcgbd.db4_product_info p ON s.product_id = p.product_id
+	    <where>
+	    	AND s.sub_quit = 'Y'
+	        AND s.sub_id IS NOT null
+	        <if test='customer_name != null and customer_name != ""'>
+	           AND c.customer_name LIKE CONCAT('%',#{customer_name},'%')
+	        </if>
+	        <if test='product_name != null and product_name != ""'>
+	           AND p.product_name LIKE CONCAT('%',#{product_name},'%')
+	        </if>
+	        <if test='user_id != null and user_id != ""'>
+	           AND t.user_id LIKE CONCAT('%',#{user_id},'%')
+	        </if>
+	        <if test='sub_start_date != null and sub_start_date != ""'>
+	           AND s.sub_start_date LIKE CONCAT('%',#{sub_start_date},'%')
+	        </if>
+	    </where>
+	</select>
+	<update id="subQuit" parameterType="cmmnMap">
+		UPDATE kcgbd.db4_product_sub 
+		SET sub_quit = 'N'
+		WHERE sub_id = #{sub_id}
+	</update>
+	
+    <update id="subQuitMultiple" parameterType="cmmnMap">
+        UPDATE kcgbd.db4_product_sub 
+        SET sub_quit = 'N'
+        WHERE sub_id IN 
+        <foreach item="sub_id" index="index" collection="subIds" open="(" separator="," close=")">
+            #{sub_id}
+        </foreach>
+    </update>
+	
+	
+	<select id="selectAllList" parameterType="cmmnMap" resultType="cmmnMap">
+	    SELECT c.customer_id
+	           , c.customer_name
+	           , s.sub_start_date
+	           , s.sub_end_date
+	           , s.sub_id 
+	           , c.customer_phone
+	           , p.product_type
+	           , p.product_name
+	           , s.start_money
+	           , s.cycle_money
+	           , s.loan
+	           , t.user_id 
+	           , s.sub_quit
+	    FROM kcgbd.db4_customer_info c 
+	    LEFT JOIN kcgbd.t_user t ON c.user_id = t.user_id
+	    LEFT JOIN kcgbd.db4_product_sub s ON s.customer_id = c.customer_id
+	    LEFT JOIN kcgbd.db4_product_info p ON s.product_id = p.product_id
+	    <where>
+	    	AND s.sub_quit = 'Y'
+	        AND s.sub_id IS NOT null
+	    </where>
+	</select>	
+</mapper>

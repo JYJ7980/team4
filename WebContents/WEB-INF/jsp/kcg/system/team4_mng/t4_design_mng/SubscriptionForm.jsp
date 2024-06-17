@@ -223,7 +223,7 @@ var vueapp = new Vue({
 			product_id : this.pro.product_id
 			}
             
-            axios.get('/system/team4/proSelectOne', {params : params})
+            axios.get('/team4/proSelectOne', {params : params})
             	.then(response => {
     				console.log("2. 정상작동 하였습니다.")
     				this.pro = response.data				            		
@@ -240,7 +240,7 @@ var vueapp = new Vue({
 			customer_id : this.cus.customer_id
 			}
             
-            axios.get('/system/team4/cusSelectOne', {params : params})
+            axios.get('/team4/cusSelectOne', {params : params})
             	.then(response => {
     				console.log("2. 정상작동 하였습니다.")
     				this.cus = response.data	
@@ -318,10 +318,12 @@ var vueapp = new Vue({
                 sub_end_date: subEndDate
             };
 			console.log(params);
-            axios.post('/system/team4/subscription', {params : params})
+            axios.post('/team4/subscription', {params : params})
                 .then(response => {
                     alert("정상적으로 등록되었습니다.");
                     // 등록 성공 후 추가 작업을 수행할 수 있습니다.
+                    window.location.href = "/team4/subscriptionList";
+
                 })
                 .catch(error => {
                     console.error("Error:", error);
@@ -347,7 +349,7 @@ var pop_prod = new Vue({
 				product_name : this.pop_product_name
 			}
 			console.log(params);
-			cf_ajax("/system/team4/productList", params, function(proList){
+			cf_ajax("/team4/productList", params, function(proList){
 				pop_prod.dataList = proList;
 			});
 		},
@@ -374,7 +376,7 @@ var pop_cust = new Vue({
 				customer_name : this.pop_customer_name,
 			}
 			console.log(params);
-			cf_ajax("/system/team4/customerList", params, function(data){
+			cf_ajax("/team4/customerList", params, function(data){
 				pop_cust.dataList = data;
 			});
 		},

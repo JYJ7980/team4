@@ -20,9 +20,6 @@ public class T4customerMngSvc {
 		
 		return dataList;
 	}
-
-
-	
 	
 
 }
