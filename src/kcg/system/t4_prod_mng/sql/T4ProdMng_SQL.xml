@@ -13,12 +13,21 @@
 			, lowest_date
 			, highest_date
 			, product_status
-			, texation
+			, taxation
 			, lowest_money
 			, highest_money
 			, product_sale_start_date
 			, product_sale_end_date
-		FROM db4_product_info
+		FROM kcgbd.db4_product_info
 		WHERE 1=1
+		<if test='product_id != null and product_id != ""'>
+		   and product_id = #{product_id}
+		</if>
+		<if test='product_name != null and product_name != ""'>
+		   and product_name like concat('%',#{product_name},'%')
+		</if>
+		<if test='possible_member != null and possible_member != ""'>
+		   and possible_member = #{possible_member}
+		</if>
 	</select>
 </mapper>

@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import common.dao.CmmnDao;
 import common.utils.common.CmmnMap;
+import common.utils.common.PagingConfig;
+import common.utils.mybatis_paginator.domain.PageList;
 import kcg.common.svc.CommonSvc;
 
 @Service
@@ -29,8 +31,13 @@ public class T4ProdMngSvc {
 	CommonSvc commonSvc;
 
 	public List<CmmnMap> getList(CmmnMap params) {
-		List<CmmnMap> rslt = cmmnDao.selectList("system.t4_prod_mng.getList", params);
-		return rslt;
+		List<CmmnMap> dataList = cmmnDao.selectList("system.t4_prod_mng.getList", params);
+		return dataList;
+	}
+
+	public PageList<CmmnMap> getListPaging(CmmnMap params, PagingConfig pagingConfig) {
+		PageList<CmmnMap> pageList = cmmnDao.selectListPage("system.t4_prod_mng.getList", params, pagingConfig);
+		return pageList;
 	}
 
 

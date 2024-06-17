@@ -8,6 +8,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
 </head>
 <body>
+<<<<<<< HEAD:WebContents/WEB-INF/jsp/kcg/system/team4_mng/notice/notice_main.jsp
 
+=======
+<h4>test</h4>
+>>>>>>> 15962c1d24c3375abe763b1a5dd289cb76893151:WebContents/WEB-INF/jsp/kcg/system/team4_mng/notice/test.jsp
 </body>
 </html>

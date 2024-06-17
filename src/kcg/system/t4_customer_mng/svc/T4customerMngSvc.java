@@ -16,7 +16,7 @@ public class T4customerMngSvc {
 	
 	
 	public List<CmmnMap> getCustInfo(CmmnMap params) {
-		List<CmmnMap> dataList = cmmnDao.selectList("getCustInfo", params);
+		List<CmmnMap> dataList = cmmnDao.selectList("getAllCustomers", params);
 		
 		return dataList;
 	}

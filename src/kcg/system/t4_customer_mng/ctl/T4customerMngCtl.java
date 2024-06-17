@@ -38,9 +38,10 @@ public class T4customerMngCtl {
 
 	
 	@GetMapping("/getCustInfo")
-	public List<CmmnMap> getCustInfo() {
-	    List<CmmnMap> dataList = cmmnDao.selectList("getAllCustomers", null); // 여기서 params에 null을 전달하거나 필요한 경우 적절한 파라미터를 전달하세요.
-	    System.out.println(dataList);
+	public List<CmmnMap> getCustInfo(CmmnMap params) {
+//	    List<CmmnMap> dataList = cmmnDao.selectList("getAllCustomers", null); // 여기서 params에 null을 전달하거나 필요한 경우 적절한 파라미터를 전달하세요.
+	    List<CmmnMap> dataList = svc.getCustInfo(params);
+		System.out.println(dataList);
 	    return dataList;
 	}
 
