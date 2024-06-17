@@ -54,6 +54,12 @@ public class T4customerMngCtl {
 		return svc.deleteCust(params); 
 		
 	}
+	
+	//담당 고객정보 변경
+	@RequestMapping("updateCust")
+	public CmmnMap updateCust(CmmnMap params) {
+		return svc.updateCust(params);
+	}
 
 
 

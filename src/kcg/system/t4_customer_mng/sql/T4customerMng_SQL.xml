@@ -7,10 +7,24 @@
 		select * from kcgbd.db4_customer_info where use_yn = 'Y'
 	</select>
 	<update id="deleteCust" parameterType="cmmnMap">
-		update kcgbd.db4_customer_info
+		update
+		kcgbd.db4_customer_info
 		set use_yn = 'N'
-		where customer_id = CAST(#{customer_id} AS integer)
+		where customer_id =
+		CAST(#{customer_id} AS integer)
 	</update>
 
-
+	<update id="updateCust" parameterType="cmmnMap">
+		update
+		kcgbd.db4_customer_info
+		set 
+		customer_name = #{customer_name},
+		customer_level = #{customer_level},
+		customer_phone = #{customer_phone},
+		customer_sub_tel = #{customer_sub_tel},
+		customer_email = #{customer_email},
+		customer_job = #{customer_job},
+		customer_addr = #{customer_addr}
+		where customer_id = CAST(#{customer_id} AS integer)
+	</update>
 </mapper>

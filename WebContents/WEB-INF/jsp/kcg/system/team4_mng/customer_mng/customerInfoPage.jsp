@@ -68,62 +68,95 @@
 				</table>
 			</div>
 			<!-- 선택된 고객의 상세 정보 입력 폼 -->
-			 <div class="customer-details" v-if="selectedCustomer !== null">
+			<div class="customer-details" v-if="selectedCustomer !== null">
 				<h2>고객 정보</h2>
 				<div class="input-form">
-					<label for="customerId">고객 ID</label> <input type="text"
-						id="customerId" v-model="selectedCustomer.customer_id" readonly>
+					<label for="customerName">고객 이름</label> <input type="text"
+						id="customerName" v-model="selectedCustomer.customer_name">
 				</div>
 				<div class="input-form">
-					<label for="customerName">고객 이름</label> <input type="text"
-						id="customerName" v-model="selectedCustomer.customer_name"
-						readonly>
+					<label for="customerIdNumber">고객 주민번호</label> <input type="text"
+						id="customerIdNumber"
+						v-model="selectedCustomer.customer_id_number" readonly>
+				</div>
+				<div class="input-form">
+					<label for="customerLevel">고객 등급</label> <input type="text"
+						id="customerLevel" v-model="selectedCustomer.customer_level">
 				</div>
 				<div class="input-form">
 					<label for="customerPhone">고객 전화번호</label> <input type="text"
 						id="customerPhone" v-model="selectedCustomer.customer_phone">
 				</div>
 				<div class="input-form">
+					<label for="customerSubTel">고객 비상연락망</label> <input type="text"
+						id="customerSubTel" v-model="selectedCustomer.customer_sub_tel">
+				</div>
+				<div class="input-form">
 					<label for="customerEmail">고객 이메일</label> <input type="text"
 						id="customerEmail" v-model="selectedCustomer.customer_email">
 				</div>
-				<br> 
+				<div class="input-form">
+					<label for="customerJob">고객 직업</label> <input type="text"
+						id="customerJob" v-model="selectedCustomer.customer_job">
+				</div>
+				<div class="input-form">
+					<label for="customerAddr">고객 주소</label> <input type="text"
+						id="customerAddr" v-model="selectedCustomer.customer_addr">
+				</div>
+				<br>
 				<button @click="deleteCustomer">삭제</button>
+				<button @click="updateCustomer">수정</button>
 				<br> <br>
 				<h2>관리자 정보</h2>
 				<div class="input-form">
 					<label for="userName">관리자 이름</label> <input type="text"
-						id="userName" value="${userInfoVO.name}">
+						id="userName" value="${userInfoVO.name}" disabled>
 				</div>
 				<div class="input-form">
 					<label for="userDept">관리자 부서</label> <input type="text"
-						id="userDept" value="${userInfoVO.dept}">
+						id="userDept" value="${userInfoVO.dept}" disabled>
 				</div>
 				<div class="input-form">
 					<label for="userjikgub">관리자 직급</label> <input type="text"
-						id="userjikgub" value="${userInfoVO.jikgubNm}">
+						id="userjikgub" value="${userInfoVO.jikgubNm}" disabled>
 				</div>
 				<!-- 필요한 입력 폼 추가 -->
 			</div>
-			 <div class="customer-details" v-else>
+			<div class="customer-details" v-else>
 				<!-- 선택된 고객이 없는 경우의 메시지 -->
 				<p>고객을 선택해주세요.</p>
 				<h2>고객 정보</h2>
 				<div class="input-form">
-					<label for="customerId">고객 아이디</label> <input type="text"
-						id="customerId" v-model="customerName">
-				</div>
-				<div class="input-form">
 					<label for="customerName">고객 이름</label> <input type="text"
 						id="customerName" v-model="customerName">
+				</div>
+				<div class="input-form">
+					<label for="customerIdNumber">고객 주민번호</label> <input type="text"
+						id="customerIdNumber" v-model="customerIdNumber">
+				</div>
+				<div class="input-form">
+					<label for="customerLevel">고객 등급</label> <input type="text"
+						id="customerLevel" v-model="customerLevel">
 				</div>
 				<div class="input-form">
 					<label for="customerPhone">고객 전화번호</label> <input type="text"
 						id="customerPhone" v-model="customerPhone">
 				</div>
 				<div class="input-form">
-					<label for="customerEmail">이메일</label> <input type="text"
+					<label for="customerSubTel">고객 비상연락망</label> <input type="text"
+						id="customerSubTel" v-model="customerSubTel">
+				</div>
+				<div class="input-form">
+					<label for="customerEmail">고객 이메일</label> <input type="text"
 						id="customerEmail" v-model="customerEmail">
+				</div>
+				<div class="input-form">
+					<label for="customerJob">고객 직업</label> <input type="text"
+						id="customerJob" v-model="customerJob">
+				</div>
+				<div class="input-form">
+					<label for="customerAddr">고객 주소</label> <input type="text"
+						id="customerAddr" v-model="customerAddr">
 				</div>
 				<br> <br>
 				<h2>관리자 정보</h2>
@@ -151,10 +184,14 @@ new Vue({
         filteredCustomers: [], // 필터된 고객 정보를 저장할 배열
         selectedCustomer: null, // 선택된 고객 정보
         userId: '${userInfoVO.userId}', // 현재 사용자의 userId를 저장
-        customerID: '',
         customerName: '', // 고객 이름을 저장할 변수
+        customerIdNumber:'',
+        customerLevel:'',
         customerPhone: '',
-        customerEmail: '' // 고객 이메일을 저장할 변수
+        customerSubTel: '',
+        customerEmail:'', // 고객 이메일을 저장할 변수
+        customerJob: '', 
+        customerAddr: '',
     },
     methods: {
         getAllCustomers: function() {
@@ -196,6 +233,41 @@ new Vue({
                 }
             } else {
                 alert('삭제할 고객을 선택해주세요.');
+            }
+        },
+        updateCustomer: function() {
+            // 선택된 고객이 존재하는지 확인
+            if (this.selectedCustomer !== null) {
+                // 서버에 보낼 고객 정보 준비
+                var params = {
+                    customer_id: this.selectedCustomer.customer_id,
+                    customer_name: this.selectedCustomer.customer_name,
+                    customer_id_number: this.selectedCustomer.customer_id_number,
+                    customer_level: this.selectedCustomer.customer_level,
+                    customer_phone: this.selectedCustomer.customer_phone,
+                    customer_sub_tel: this.selectedCustomer.customer_sub_tel,
+                    customer_email: this.selectedCustomer.customer_email,
+                    customer_job: this.selectedCustomer.customer_job,
+                    customer_addr: this.selectedCustomer.customer_addr
+                };
+
+                // 서버에 PUT 또는 POST 요청 보내기 (수정에 따라 다름)
+                axios.put('/system/team4/updateCust', { params: params })
+                    .then(response => {
+                        if (response.data.status === 'OK') {
+                            alert('고객 정보가 수정되었습니다.');
+                            // 수정된 고객 정보를 다시 불러오기
+                            this.getAllCustomers();
+                        } else {
+                            alert('고객 정보 수정에 실패했습니다.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('고객 정보 수정 중 오류가 발생했습니다.');
+                    });
+            } else {
+                alert('수정할 고객을 선택해주세요.');
             }
         }
 

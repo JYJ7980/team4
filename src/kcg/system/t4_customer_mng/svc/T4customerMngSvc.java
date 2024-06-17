@@ -28,4 +28,27 @@ public class T4customerMngSvc {
 
 	}
 
+	public CmmnMap updateCust(CmmnMap params) {
+		String customer_id = params.getString("customer_id");
+		String customer_name = params.getString("customer_name");
+		String customer_level = params.getString("customer_level");
+		String customer_phone = params.getString("customer_phone");
+		String customer_sub_tel = params.getString("customer_sub_tel");
+		String customer_email = params.getString("customer_email");
+		String customer_job = params.getString("customer_job");
+		String customer_addr = params.getString("customer_addr");
+		
+		params.put("customer_id", customer_id);
+		params.put("customer_name", customer_name);
+		params.put("customer_level", customer_level);
+		params.put("customer_phone", customer_phone);
+		params.put("customer_sub_tel", customer_sub_tel);
+		params.put("customer_email", customer_email);
+		params.put("customer_job", customer_job);
+		params.put("customer_addr", customer_addr);
+		
+		cmmnDao.update("system.t4_customer_mng.updateCust", params);
+		return new CmmnMap().put("status", "OK");
+	}
+
 }
