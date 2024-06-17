@@ -47,6 +47,13 @@ public class T4customerMngCtl {
 	public List<CmmnMap> getCustInfo(CmmnMap params) {
         return svc.getAllCustomers(params);
     }
+	
+	//담당 고객 삭제
+	@RequestMapping("/updateCust")
+	public CmmnMap deleteCust(CmmnMap params){
+		return svc.deleteCust(params); 
+		
+	}
 
 
 

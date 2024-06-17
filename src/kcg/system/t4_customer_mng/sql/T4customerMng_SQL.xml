@@ -4,8 +4,13 @@
 <mapper namespace='system.t4_customer_mng'>
 	<select id="getAllCustomers" parameterType="cmmnMap"
 		resultType="cmmnMap">
-		select * from kcgbd.db4_customer_info
+		select * from kcgbd.db4_customer_info where use_yn = 'Y'
 	</select>
+	<update id="deleteCust" parameterType="cmmnMap">
+		update kcgbd.db4_customer_info
+		set use_yn = 'N'
+		where customer_id = CAST(#{customer_id} AS integer)
+	</update>
 
 
 </mapper>

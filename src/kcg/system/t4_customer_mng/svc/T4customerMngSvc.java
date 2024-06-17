@@ -20,7 +20,12 @@ public class T4customerMngSvc {
 		return dataList;
 	}
 
+	public CmmnMap deleteCust(CmmnMap params) {
+		String customer_id = params.getString("customer_id");
+		params.put("customer_id", customer_id);
+		cmmnDao.update("system.t4_customer_mng.deleteCust", params);
+		return new CmmnMap().put("status", "OK");
 
+	}
 
-	
 }

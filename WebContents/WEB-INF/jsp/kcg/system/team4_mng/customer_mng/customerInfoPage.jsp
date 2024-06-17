@@ -87,6 +87,8 @@
 					<label for="customerEmail">고객 이메일</label> <input type="text"
 						id="customerEmail" v-model="selectedCustomer.customer_email">
 				</div>
+				<br> 
+				<button @click="deleteCustomer">삭제</button>
 				<br> <br>
 				<h2>관리자 정보</h2>
 				<div class="input-form">
@@ -169,6 +171,32 @@ new Vue({
         filterCustomers: function() {
             // userInfoVO.userId와 customer.user_id가 같은 고객만 필터링
             this.filteredCustomers = this.customers.filter(customer => customer.user_id === this.userId);
+        },
+        deleteCustomer: function() {
+        	   var params = {
+        			   customer_id: this.selectedCustomer.customer_id
+                    
+                    };
+        	   console.log(params);
+
+
+            if (this.selectedCustomer !== null) {
+                axios.post('/system/team4/updateCust', { params: params })
+                    .then(response => {
+                        if (response.data.status === 'OK') {
+                            alert('고객이 삭제되었습니다.');
+                            this.getAllCustomers(); // 고객 목록을 다시 불러옵니다.
+                            this.selectedCustomer = null; // 선택된 고객 초기화
+                        } else {
+                            alert('고객 삭제에 실패했습니다.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            } else {
+                alert('삭제할 고객을 선택해주세요.');
+            }
         }
     },
     mounted: function() {
