@@ -173,31 +173,32 @@ new Vue({
             this.filteredCustomers = this.customers.filter(customer => customer.user_id === this.userId);
         },
         deleteCustomer: function() {
-        	   var params = {
-        			   customer_id: this.selectedCustomer.customer_id
-                    
-                    };
-        	   console.log(params);
-
-
             if (this.selectedCustomer !== null) {
-                axios.post('/system/team4/updateCust', { params: params })
-                    .then(response => {
-                        if (response.data.status === 'OK') {
-                            alert('고객이 삭제되었습니다.');
-                            this.getAllCustomers(); // 고객 목록을 다시 불러옵니다.
-                            this.selectedCustomer = null; // 선택된 고객 초기화
-                        } else {
-                            alert('고객 삭제에 실패했습니다.');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
+                // 확인 메시지 추가
+                if (confirm('정말로 고객을 삭제하시겠습니까?')) {
+                    var params = {
+                        customer_id: this.selectedCustomer.customer_id
+                    };
+                    console.log(params);
+                    axios.post('/system/team4/deleteCust', { params: params })
+                        .then(response => {
+                            if (response.data.status === 'OK') {
+                                alert('고객이 삭제되었습니다.');
+                                this.getAllCustomers(); // 고객 목록을 다시 불러옵니다.
+                                this.selectedCustomer = null; // 선택된 고객 초기화
+                            } else {
+                                alert('고객 삭제에 실패했습니다.');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                }
             } else {
                 alert('삭제할 고객을 선택해주세요.');
             }
         }
+
     },
     mounted: function() {
         // 페이지 로딩 시 초기화

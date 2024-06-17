@@ -49,7 +49,7 @@ public class T4customerMngCtl {
     }
 	
 	//담당 고객 삭제
-	@RequestMapping("/updateCust")
+	@RequestMapping("/deleteCust")
 	public CmmnMap deleteCust(CmmnMap params){
 		return svc.deleteCust(params); 
 		
