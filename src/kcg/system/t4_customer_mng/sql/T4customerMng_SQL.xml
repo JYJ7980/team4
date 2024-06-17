@@ -17,14 +17,46 @@
 	<update id="updateCust" parameterType="cmmnMap">
 		update
 		kcgbd.db4_customer_info
-		set 
+		set
 		customer_name = #{customer_name},
 		customer_level = #{customer_level},
-		customer_phone = #{customer_phone},
+		customer_phone
+		= #{customer_phone},
 		customer_sub_tel = #{customer_sub_tel},
 		customer_email = #{customer_email},
 		customer_job = #{customer_job},
 		customer_addr = #{customer_addr}
-		where customer_id = CAST(#{customer_id} AS integer)
+		where customer_id =
+		CAST(#{customer_id} AS integer)
 	</update>
+
+	<insert id="addCust" parameterType="cmmnMap">
+		INSERT INTO kcgbd.db4_customer_info(
+		customer_name
+		,customer_id_number
+		,customer_brdt
+		,customer_level
+		,customer_phone
+		,customer_sub_tel
+		,customer_email
+		,customer_job
+		,customer_addr
+		,user_id
+		,use_yn
+		)VALUES(
+		#{customer_name}
+		,#{customer_id_number}
+		,substring(#{customer_id_number}, 1, 6)
+		,#{customer_level}
+		,#{customer_phone}
+		,#{customer_sub_tel}
+		,#{customer_email}
+		,#{customer_job}
+		,#{customer_addr}
+		,#{user_id}
+		,'Y'
+		)
+
+
+	</insert>
 </mapper>

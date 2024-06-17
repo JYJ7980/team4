@@ -48,6 +48,14 @@ public class T4customerMngCtl {
         return svc.getAllCustomers(params);
     }
 	
+	
+	//고객 추가
+	@RequestMapping("/addCust")
+	public CmmnMap addCust(CmmnMap params){
+		return svc.addCust(params); 
+		
+	}
+	
 	//담당 고객 삭제
 	@RequestMapping("/deleteCust")
 	public CmmnMap deleteCust(CmmnMap params){
@@ -60,6 +68,8 @@ public class T4customerMngCtl {
 	public CmmnMap updateCust(CmmnMap params) {
 		return svc.updateCust(params);
 	}
+	
+	
 
 
 

@@ -42,11 +42,16 @@
 	<div id="app">
 		<span style="font-size: 18px; font-weight: bold; color: black;">${userInfoVO.userId}</span>&nbsp;님
 		화면
+		<br>
+		<a href="/system/team4/main">메인으로 돌아가기</a><br>
 		<h4>고객 정보 관리</h4>
 		<br>
 		<div>
 			<!-- 전체 조회 버튼 -->
 			<button @click="getAllCustomers">전체 조회</button>
+			<br>
+			<br>
+			
 		</div>
 		<div id="customerTable" class="customer-container">
 			<div class="customer-table">
@@ -106,6 +111,8 @@
 				<br>
 				<button @click="deleteCustomer">삭제</button>
 				<button @click="updateCustomer">수정</button>
+				<button @click="resetForm">신규</button>
+
 				<br> <br>
 				<h2>관리자 정보</h2>
 				<div class="input-form">
@@ -124,7 +131,7 @@
 			</div>
 			<div class="customer-details" v-else>
 				<!-- 선택된 고객이 없는 경우의 메시지 -->
-				<p>고객을 선택해주세요.</p>
+				<p>고객 선택 및 신규 등록해 주세요.</p>
 				<h2>고객 정보</h2>
 				<div class="input-form">
 					<label for="customerName">고객 이름</label> <input type="text"
@@ -158,7 +165,10 @@
 					<label for="customerAddr">고객 주소</label> <input type="text"
 						id="customerAddr" v-model="customerAddr">
 				</div>
-				<br> <br>
+				<br>
+
+				<button @click="addCustomer">등록</button>
+				<button @click="resetForm">초기화</button>
 				<h2>관리자 정보</h2>
 				<div class="input-form">
 					<label for="userName">관리자 이름</label> <input type="text"
@@ -269,6 +279,48 @@ new Vue({
             } else {
                 alert('수정할 고객을 선택해주세요.');
             }
+        },
+        addCustomer: function() {
+            // 새로운 고객 정보 생성
+            var params = {
+                customer_name: this.customerName,
+                customer_id_number: this.customerIdNumber,
+                customer_level: this.customerLevel,
+                customer_phone: this.customerPhone,
+                customer_sub_tel: this.customerSubTel,
+                customer_email: this.customerEmail,
+                customer_job: this.customerJob,
+                customer_addr: this.customerAddr,
+                user_id: ${userInfoVO.userId} // 현재 사용자의 userId 추가
+            };
+
+            // 서버에 POST 요청으로 새로운 고객 등록
+            axios.post('/system/team4/addCust', { params: params })
+                .then(response => {
+                    if (response.data.status === 'OK') {
+                        alert('새로운 고객이 등록되었습니다.');
+                        this.getAllCustomers(); // 고객 목록을 다시 불러옵니다.
+                        this.resetForm(); // 입력 폼 초기화
+                    } else {
+                        alert('고객 등록에 실패했습니다.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('고객 등록 중 오류가 발생했습니다.');
+                });
+        },
+        resetForm: function() {
+            // 입력 폼 데이터 초기화
+            this.selectedCustomer = null; // 선택된 고객 초기화
+            this.customerName = ''; // 고객 이름 초기화
+            this.customerIdNumber = ''; // 고객 주민번호 초기화
+            this.customerLevel = ''; // 고객 등급 초기화
+            this.customerPhone = ''; // 고객 전화번호 초기화
+            this.customerSubTel = ''; // 고객 비상연락망 초기화
+            this.customerEmail = ''; // 고객 이메일 초기화
+            this.customerJob = ''; // 고객 직업 초기화
+            this.customerAddr = ''; // 고객 주소 초기화
         }
 
     },
