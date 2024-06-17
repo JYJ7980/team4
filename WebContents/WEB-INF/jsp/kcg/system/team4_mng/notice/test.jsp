@@ -7,7 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-공지사항 페이지
-
+<h4>test</h4>
 </body>
 </html>

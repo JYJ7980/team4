@@ -8,6 +8,6 @@
 </head>
 <body>
 team4 main
-<a href="/system/team4/notice_main">공지사항 메인</a>
+<a href="/system/team4/notice/">공지사항 메인</a>
 </body>
 </html>
