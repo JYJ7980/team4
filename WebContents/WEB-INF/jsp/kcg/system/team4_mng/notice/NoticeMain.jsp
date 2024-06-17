@@ -4,6 +4,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<jsp:include page="/WEB-INF/jsp/kcg/_include/system/header_meta.jsp" flush="false"/>
+	<!-- Imported styles on this page -->
+	<link rel="stylesheet" href="/static_resources/system/js/datatables/datatables.css">
+	<link rel="stylesheet" href="/static_resources/system/js/select2/select2-bootstrap.css">
+	<link rel="stylesheet" href="/static_resources/system/js/select2/select2.css">
 <meta charset="UTF-8">
 <title>Customer InfoPage</title>
 <!-- Vue.js CDN 추가 -->
@@ -11,6 +16,10 @@
 <!-- axios CDN 추가 -->
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <style>
+.has-text-centered {text-align: center}
+        .has-text-prev { background-color : #ECEFF1   }
+        .has-text-next { background-color : #ECEFF1 }
+        .has-text-primary { background-color : #598987 }
     .modal {
         display: block;
         position: fixed;
@@ -45,7 +54,14 @@
     }
 </style>
 </head>
-<body>
+<body class="page-body">
+
+<div class="page-container">
+
+	<jsp:include page="/WEB-INF/jsp/kcg/_include/system/sidebar-menu.jsp" flush="false"/>
+
+	<div class="main-content">
+
 	<div id="app">
 		<div>
 			<h2>공지사항</h2>
@@ -95,7 +111,8 @@
 			</div>
 		</div>
 	</div>
-
+</div>
+</div>
 	<script>
     new Vue({
         el: '#app',
