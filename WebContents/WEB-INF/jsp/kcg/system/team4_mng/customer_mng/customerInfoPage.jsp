@@ -87,14 +87,15 @@
 						v-model="selectedCustomer.customer_id_number" readonly>
 				</div>
 				<div class="input-form">
-					<label for="customerLevel">고객 등급</label> 
-					<select id="customerLevel"
+					<label for="customerLevel">고객 등급</label> <select id="customerLevel"
 						v-model="selectedCustomer.customer_level">
 						<option value="1">일반</option>
 						<option value="2">우수</option>
 						<option value="3">VIP</option>
-						<option value="4">플래티넘</option>
+						<option value="4">VVIP</option>
+						<option value="5">플래티넘</option>
 					</select>
+
 				</div>
 				<div class="input-form">
 					<label for="customerPhone">고객 전화번호</label> <input type="text"
@@ -150,13 +151,13 @@
 						id="customerIdNumber" v-model="customerIdNumber">
 				</div>
 				<div class="input-form">
-					<label for="customerLevel">고객 등급</label>
-						<select id="customerLevel"
+					<label for="customerLevel">고객 등급</label><select id="customerLevel"
 						v-model="customerLevel">
 						<option value="1">일반</option>
 						<option value="2">우수</option>
 						<option value="3">VIP</option>
-						<option value="4">플래티넘</option>
+						<option value="4">VVIP</option>
+						<option value="5">플래티넘</option>
 					</select>
 				</div>
 				<div class="input-form">
