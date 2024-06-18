@@ -1,14 +1,13 @@
 package kcg.system.t4_main_mng.ctl;
 
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import common.utils.common.CmmnMap;
 import kcg.common.svc.CommonSvc;
 import kcg.system.t4_main_mng.svc.T4MainMngSvc;
 import kcg.system.t4_notice_mng.svc.T4NoticeMng_Svc;
@@ -32,5 +31,19 @@ public class T4MainMng_Ctl {
 	}
 	
 
+	@GetMapping("notice_main")
+	public String noticeMain() {
+		return "kcg/system/team4_mng/notice/notice_main";
+	}
+	
+	@GetMapping("/employee/emcreateform")
+	public String newCreateManagementForm(){
+		return "kcg/system/team4_mng/employee/emcreateform";
+	}
+	
+
+	
 
 }
+
+

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace='system.t4_employee'>
+
+<!-- <select id="getEmployeelist" parameterType="cmmnMap" resultType="cmmnMap">
+	SELECT*FROM kcgbd.t_user
+</select> -->
+<insert id="insertEmp" parameterType="cmmnMap">
+	INSERT INTO kcgbd.t_user
+	(reg_dt, user_id, user_pw, name, auth_cd ,status_cd, jikgub_nm, dept, email)
+	VALUES(#{reg_dt}, #{user_id}, #{user_pw}, #{name}, #{auth_cd} ,#{status_cd},
+	#{jikgub_nm}, #{dept}, #{email})
+</insert>
+
+
+</mapper>

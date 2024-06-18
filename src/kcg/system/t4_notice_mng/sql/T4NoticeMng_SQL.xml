@@ -9,6 +9,7 @@
 		FROM kcgbd.db4_notice
 	</select>
 
+
 	<insert id="insertNotice" parameterType="cmmnMap">
 		INSERT INTO kcgbd.db4_notice
 		(notice_title, notice_content, regis_date, cor_date)
