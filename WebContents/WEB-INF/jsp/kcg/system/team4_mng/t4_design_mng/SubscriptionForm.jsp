@@ -240,7 +240,7 @@ var vueapp = new Vue({
 			customer_id : this.cus.customer_id
 			}
             
-            axios.get('/team4/cusSelectOne', {params : params})
+            axios.get('/team4/designCusInfo', {params : params})
             	.then(response => {
     				console.log("2. 정상작동 하였습니다.")
     				this.cus = response.data	

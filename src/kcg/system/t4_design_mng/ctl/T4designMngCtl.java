@@ -3,13 +3,15 @@ package kcg.system.t4_design_mng.ctl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import common.dao.CmmnDao;
 import common.utils.common.CmmnMap;
@@ -32,21 +34,19 @@ public class T4designMngCtl {
 	CmmnDao cmmnDao;
 
 	
-	//design 폴더에서 오류나서 일단 되는 곳에서 코드들 정상 작동하는지 확인용 코드들 나중에 복사해서 폴더 옮기기
 	
-	//design 폴더에서 오류나서 일단 되는 곳에서 코드들 정상 작동하는지 확인용 코드들 나중에 복사해서 폴더 옮기기
+	//상품가입 및 리스트 출력 CRUD
 	
 	@GetMapping("subscriptionForm")
 	public String subsciptionForm(Model model) {
 		return "kcg/system/team4_mng/t4_design_mng/SubscriptionForm";
 	}
-
+	
 	
 	@RequestMapping("productList")
 	public List<CmmnMap> productList(CmmnMap params){
 		
 		List<CmmnMap> productList = cmmnDao.selectList("getProductList", params);
-		System.out.println(productList.toString());
 		return productList;
 	}
 	
@@ -91,10 +91,7 @@ public class T4designMngCtl {
 	}
 	
     @PostMapping("/deleteProduct")
-    public List<CmmnMap> deleteProduct(@RequestBody List<String> subIds) {
-        CmmnMap params = new CmmnMap();
-        params.put("subIds", subIds);
-        svc.deleteProducts(params);
+    public List<CmmnMap> deleteProduct(CmmnMap params) {
         return cmmnDao.selectList("system.t4_design_mng.selectAllList", params);
     }
 	
@@ -104,5 +101,42 @@ public class T4designMngCtl {
     	svc.deleteProduct(params);
         return cmmnDao.selectOne("selectAllList", params);
     }
+    
+    @PostMapping("/moveUpdateForm")
+    public CmmnMap moveUpdateForm(CmmnMap params) {
+
+        CmmnMap rslt = cmmnDao.selectOne("selectOneSub", params);
+        return rslt;
+    }
+    
+    @PostMapping("updateSubscription")
+    public String updateSub(CmmnMap params) {
+    	svc.updateSub(params);
+    	
+		return "kcg/system/team4_mng/t4_design_mng/SubscriptionList";
+    }
+    
+    //계산기파트
+    @GetMapping("calculate")
+    public String calculate(CmmnMap params) {
+    	if (params.get("product_type") == "예금") {
+    		return "kcg/system/team4_mng/t4_design_mng/CalculateDeposit";
+    	} else if(params.get("product_type") == "적금"){
+    		return "kcg/system/team4_mng/t4_design_mng/CalculateSavings";
+    	} else if(params.get("product_type") == "대출") {
+    		return "kcg/system/team4_mng/t4_design_mng/CalculateLoan";
+    	} else {
+    		return "kcg/system/team4_mng/t4_design_mng/CalculateDeposit";
+    	}
+    }
+    
+	@RequestMapping("designCusInfo")
+	public CmmnMap designCusInfo(CmmnMap params) {
+
+		return svc.designCusInfo(params);
+		 
+	}
+
+
 
 }

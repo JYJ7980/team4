@@ -13,8 +13,27 @@
     SELECT product_name, product_id, product_type FROM kcgbd.db4_product_info 
     WHERE product_id = #{product_id}
 	</select> 
-
-
+	
+	<select id="selectOneSub" parameterType="cmmnMap" resultType="cmmnMap">
+	    SELECT c.customer_id
+	           , c.customer_name
+	           , s.sub_start_date
+	           , s.sub_end_date
+	           , s.sub_id 
+	           , p.product_id
+	           , p.product_type
+	           , p.product_name
+	           , s.start_money
+	           , s.cycle_money
+	           , s.loan
+	           , s.pro_interest_rate
+	    FROM kcgbd.db4_customer_info c 
+	    LEFT JOIN kcgbd.t_user t ON c.user_id = t.user_id
+	    LEFT JOIN kcgbd.db4_product_sub s ON s.customer_id = c.customer_id
+	    LEFT JOIN kcgbd.db4_product_info p ON s.product_id = p.product_id
+	    WHERE s.sub_id = #{sub_id}
+	</select> 
+	
 	<select id="getCustomerList" parameterType="cmmnMap" resultType="cmmnMap">
     SELECT customer_name, customer_id, customer_brdt FROM kcgbd.db4_customer_info 
     WHERE customer_name LIKE CONCAT('%', #{customer_name}, '%')
@@ -38,6 +57,7 @@
 	           , s.sub_end_date
 	           , s.sub_id 
 	           , c.customer_phone
+	           , p.product_id
 	           , p.product_type
 	           , p.product_name
 	           , s.start_money
@@ -72,15 +92,26 @@
 		WHERE sub_id = #{sub_id}
 	</update>
 	
-    <update id="subQuitMultiple" parameterType="cmmnMap">
-        UPDATE kcgbd.db4_product_sub 
-        SET sub_quit = 'N'
-        WHERE sub_id IN 
-        <foreach item="sub_id" index="index" collection="subIds" open="(" separator="," close=")">
-            #{sub_id}
-        </foreach>
-    </update>
-	
+	<update id="subQuitMultiple" parameterType="java.util.List">
+	    UPDATE kcgbd.db4_product_sub 
+	    SET sub_quit = 'N'
+	    WHERE sub_id IN
+	    <foreach collection="list" item="sub_id" open="(" close=")" separator="," >
+	        #{sub_id}
+	    </foreach>
+	</update>
+
+	<update id="updateSub" parameterType="cmmnMap">
+	    UPDATE kcgbd.db4_product_sub 
+	    SET  sub_start_date = #{sub_start_date}
+	    	,sub_end_date = #{sub_end_date}
+	    	,start_money = CAST(#{start_money} AS BIGINT)
+	    	,cycle_money = CAST(#{cycle_money} AS BIGINT)
+	    	,loan = CAST(#{loan} AS BIGINT)
+	    	,pro_interest_rate = #{pro_interest_rate}
+	    WHERE sub_id = CAST(#{sub_id} AS BIGINT)
+	</update>
+		
 	
 	<select id="selectAllList" parameterType="cmmnMap" resultType="cmmnMap">
 	    SELECT c.customer_id
@@ -89,6 +120,7 @@
 	           , s.sub_end_date
 	           , s.sub_id 
 	           , c.customer_phone
+	           , p.product_id
 	           , p.product_type
 	           , p.product_name
 	           , s.start_money
@@ -105,4 +137,23 @@
 	        AND s.sub_id IS NOT null
 	    </where>
 	</select>	
+<!-- 	//design 설계 sql -->
+	<select id="designCusInfo" parameterType="cmmnMap" resultType="cmmnMap">
+	    SELECT c.customer_id
+	           , c.customer_name
+	           , c.customer_id
+	           , c.customer_id_number
+	           , c.customer_email
+	           , c.customer_phone
+	           , c.customer_sub_tel
+	           , c.customer_job
+	           , c.customer_addr
+	           , c.customer_userId
+	           , t.dept
+	           , t.jikgup_nm
+	    FROM kcgbd.db4_customer_info c 
+	    LEFT JOIN kcgbd.t_user t ON c.user_id = t.user_id
+	    WHERE c.customer_id = #{customer_id}
+	</select>	
+
 </mapper>

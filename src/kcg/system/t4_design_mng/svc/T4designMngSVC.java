@@ -1,5 +1,6 @@
 package kcg.system.t4_design_mng.svc;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +25,35 @@ public class T4designMngSVC {
 	}
 
     public void deleteProducts(CmmnMap params) {
-        cmmnDao.update("system.t4_design_mng.subQuitMultiple", params);
+    	List<Integer> selectedIds = new ArrayList<Integer>();
+    	
+        Object selectedIdsObject = params.get("selectedIds");
+
+        if (selectedIdsObject instanceof List) {
+            // List<Integer>로 캐스팅해서 넣어줌
+            selectedIds.addAll((List<Integer>) selectedIdsObject);
+            
+        } else if (selectedIdsObject instanceof Integer) {
+            // 단일 Integer인 경우 처리
+            selectedIds.add((Integer) selectedIdsObject);
+        }
+        System.out.println("=====================================");
+        System.out.println("==========svc==========");
+        System.out.println(selectedIds.toString());
+
+    	
+        cmmnDao.update("system.t4_design_mng.subQuitMultiple", selectedIds);
     }
+
+	public int updateSub(CmmnMap params) {
+		return cmmnDao.update("updateSub", params);
+	}
+
+	public CmmnMap designCusInfo(CmmnMap params) {
+		return cmmnDao.selectOne("designCusInfo", params);
+	}
+
+
 	
 	
 
