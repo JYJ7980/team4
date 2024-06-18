@@ -93,7 +93,7 @@
 		</div>
 		<br>
 		<button @click="addConsult">추가</button>
-		
+		<button @click="resetForm">취소</button>
 
 		<div class="popup-overlay" :class="{active: showPopup}" @click="closePopup"></div>
 		<div class="popup" :class="{active: showPopup}">
@@ -172,6 +172,11 @@
 		                    alert('상담내역 등록 중 오류가 발생했습니다.');
 		                });
 					
+				},
+				resetForm: function() {
+					this.customerName = '';
+					this.consultTitle = '';
+					this.consultContext = '';
 				}
 			}
 		});
