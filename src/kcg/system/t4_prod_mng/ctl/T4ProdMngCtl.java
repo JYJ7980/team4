@@ -40,9 +40,25 @@ public class T4ProdMngCtl {
 		return t4ProdMngSvc.getListPaging(params, pagingConfig);
 	}
 	
-	@RequestMapping("/insertForm")
-	public String insertForm(Model model) {
-		return "/kcg/system/team4_mng/t4_prod_mng/T4ProdInsertForm";
+	@RequestMapping("/dtl")
+	public String insertForm(Model model, CmmnMap params) {
+		model.addAttribute("product_id", params.getString("product_id",""));
+		return "/kcg/system/team4_mng/t4_prod_mng/T4ProdDtl";
+	}
+	
+	@RequestMapping("/save")
+	public CmmnMap save(CmmnMap params) {
+		return t4ProdMngSvc.save(params);
+	}
+	
+	@RequestMapping("/delete")
+	public void delete(CmmnMap params) {
+		t4ProdMngSvc.delete(params);
+	}
+	
+	@RequestMapping("/getInfo")
+	public CmmnMap getInfo(CmmnMap params) {
+		return t4ProdMngSvc.getInfo(params);
 	}
 
 }

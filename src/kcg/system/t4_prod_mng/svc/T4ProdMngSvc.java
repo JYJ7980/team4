@@ -14,19 +14,20 @@ import common.utils.common.CmmnMap;
 import common.utils.common.PagingConfig;
 import common.utils.mybatis_paginator.domain.PageList;
 import kcg.common.svc.CommonSvc;
+import kcg.login.vo.UserInfoVO;
 
 @Service
 public class T4ProdMngSvc {
-	
+
 	@SuppressWarnings("unused")
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	@Autowired
 	HttpServletRequest request;
-	
+
 	@Autowired
 	CmmnDao cmmnDao;
-	
+
 	@Autowired
 	CommonSvc commonSvc;
 
@@ -40,5 +41,25 @@ public class T4ProdMngSvc {
 		return pageList;
 	}
 
+	public CmmnMap save(CmmnMap params) {
+		UserInfoVO userInfoVO = commonSvc.getLoginInfo();
+		params.put("user_id", userInfoVO.getUserId());
+		if ("insert".equals(params.getString("save_mode"))) {
+			cmmnDao.insert("system.t4_prod_mng.insertInfo", params);
+		} else {
+			cmmnDao.update("system.t4_prod_mng.updateInfo", params);
+		}
+		return new CmmnMap().put("product_id", params.getString("product_id"));
+	}
+
+	public void delete(CmmnMap params) {
+		cmmnDao.delete("system.t4_prod_mng.deleteInfo", params);
+		
+	}
+
+	public CmmnMap getInfo(CmmnMap params) {
+		CmmnMap resultInfo = cmmnDao.selectOne("system.t4_prod_mng.getList", params);
+		return resultInfo;
+	}
 
 }

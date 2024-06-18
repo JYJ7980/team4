@@ -26,7 +26,7 @@
 		<div>
 			<button type="button"
 				class="btn btn-orange btn-icon icon-left btn-small"
-				@click="cf_movePage('/system/team4/product/insertForm')">
+				@click="cf_movePage('/system/team4/product/dtl')">
 				등록 <i class="entypo-plus"></i>
 			</button>
 		</div>
@@ -50,7 +50,7 @@
 				</button>
 			</div>
 		</div>
-		<table style="border: 1px solid #999999;">
+		<table class="table table-bordered datatable dataTable" id="grid_app" style="border: 1px solid #999999;">
 			<thead>
 				<tr>
 					<th>상품명</th>
@@ -64,15 +64,15 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr v-for="product in products" :key="product.product_id">
-					<td>{{product.product_name}}</td>
-					<td>{{product.product_type}}</td>
-					<td>{{product.possible_member}}</td>
-					<td>{{product.lowest_money}}</td>
-					<td>{{product.highest_money}}</td>
-					<td>{{product.lowest_rate}}</td>
-					<td>{{product.highest_rate}}</td>
-					<td>{{product.taxation}}</td>
+				<tr v-for="product in products" style="cursor: pointer;">
+					<td @click="gotoDtl(product.product_id)">{{product.product_name}}</td>
+					<td @click="gotoDtl(product.product_id)">{{product.product_type}}</td>
+					<td @click="gotoDtl(product.product_id)">{{product.possible_member}}</td>
+					<td @click="gotoDtl(product.product_id)">{{product.lowest_money}}</td>
+					<td @click="gotoDtl(product.product_id)">{{product.highest_money}}</td>
+					<td @click="gotoDtl(product.product_id)">{{product.lowest_rate}}</td>
+					<td @click="gotoDtl(product.product_id)">{{product.highest_rate}}</td>
+					<td @click="gotoDtl(product.product_id)">{{product.taxation}}</td>
 				</tr>
 			</tbody>
 		</table>
@@ -145,8 +145,14 @@
 										.numformat();
 							}
 							cv_pagingConfig.renderPagenation("system");
-						}
-					}
+						},
+						gotoDtl : function(product_id){
+							var params = {
+									product_id : cf_defaultIfEmpty(product_id, ""),
+							}
+							cf_movePage("/system/team4/product/dtl", params);
+						},
+					},
 				});
 	</script>
 </body>
