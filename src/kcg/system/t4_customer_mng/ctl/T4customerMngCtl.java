@@ -84,6 +84,20 @@ public class T4customerMngCtl {
 	public List<CmmnMap> getAllconsult(CmmnMap params) {
         return svc.getAllconsult(params);
     }
+	
+	//상담내역 추가 페이지로 이동
+	@GetMapping("/insertConsult")
+	public String insertConsultPage() {
+		return "kcg/system/team4_mng/customer_mng/insertConsultPage";
+	}
+	
+	//상담내역 추가
+	@RequestMapping("/addConsult")
+	public CmmnMap addConsult(CmmnMap params){
+		return svc.addConsult(params); 
+		
+	}
+	
 
 	
 	

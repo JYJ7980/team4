@@ -86,6 +86,21 @@ public class T4customerMngSvc {
 		return consultList;
 	}
 
+	public CmmnMap addConsult(CmmnMap params) {
+		String user_id = params.getString("user_id");
+		String consult_title = params.getString("consult_title");
+		String consult_context = params.getString("consult_context");
+		String con_id = params.getString("con_id");
+				
+		params.put("user_id", user_id);
+		params.put("consult_title", consult_title);
+		params.put("consult_context", consult_context);
+		params.put("con_id", con_id);
+		
+		cmmnDao.insert("system.t4_customer_mng.addConsult", params);
+		return new CmmnMap().put("status", "OK");
+	}
+
 
 
 

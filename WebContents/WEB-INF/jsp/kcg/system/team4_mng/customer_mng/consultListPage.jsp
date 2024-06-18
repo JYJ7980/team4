@@ -39,6 +39,8 @@ pageEncoding="UTF-8"%>
 				</tr>
 			</table>
 		</div>
+		<br>
+		<button><a href="/system/team4/insertConsult">상담내역 추가하기</a></button>
 	</div>
 <script>
 new Vue({
@@ -49,10 +51,10 @@ new Vue({
     },
     mounted() {
         // Vue 인스턴스가 마운트된 후에 실행되는 부분
-        this.getAllCustomers();
+        this.getAllConsults();
     },
     methods: {
-        getAllCustomers: function() {
+        getAllConsults: function() {
         	 var params = {user_id: this.userId};
             // AJAX 요청을 보내고 응답 데이터를 customers에 할당
             axios.get('/system/team4/getAllconsult',{ params: params })

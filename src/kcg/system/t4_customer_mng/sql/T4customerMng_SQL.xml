@@ -4,7 +4,9 @@
 <mapper namespace='system.t4_customer_mng'>
 	<select id="getAllCustomers" parameterType="cmmnMap"
 		resultType="cmmnMap">
-		select * from kcgbd.db4_customer_info where use_yn = 'Y'
+		select *
+		FROM kcgbd.db4_customer_info cust join kcgbd.db4_cust_con dcc on
+		cust.customer_id = dcc.customer_id where cust.use_yn = 'Y';
 	</select>
 	<update id="deleteCust" parameterType="cmmnMap">
 		update
@@ -73,7 +75,8 @@
 		FROM
 		kcgbd.db4_consult con
 		JOIN
-		kcgbd.t_user tu ON con.user_id = tu.user_id
+		kcgbd.t_user tu ON con.user_id =
+		tu.user_id
 		JOIN
 		kcgbd.db4_cust_con cc ON con.con_id = cc.con_id
 		JOIN
@@ -81,6 +84,25 @@
 		JOIN
 		kcgbd.t_user rep ON ci.user_id = rep.user_id
 		WHERE
-		con.user_id = #{user_id};
+		con.user_id =
+		#{user_id};
 	</select>
+	
+	<insert id="addConsult" parameterType="cmmnMap">
+		INSERT INTO
+		kcgbd.db4_consult(
+		con_date,
+		user_id,
+		consult_title,
+		consult_context,
+		con_id
+		)VALUES(
+		CURRENT_TIMESTAMP,
+		#{user_id},
+		#{consult_title},
+		#{consult_context},
+		CAST(#{con_id} AS integer)
+		)
+	</insert>
+	
 </mapper>
