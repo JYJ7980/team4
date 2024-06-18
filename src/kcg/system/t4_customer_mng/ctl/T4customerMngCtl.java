@@ -71,8 +71,19 @@ public class T4customerMngCtl {
 	}
 	
 	
+	//고객 상담내역 페이지로 이동
+	@GetMapping("/consultListPage")
+	public String consultListPage() {
+		return "kcg/system/team4_mng/customer_mng/consultListPage";
+	}
+	
 
-
+	
+	//상담내역 전체 조회
+	@GetMapping("/getAllconsult")
+	public List<CmmnMap> getAllconsult(CmmnMap params) {
+        return svc.getAllconsult(params);
+    }
 
 	
 	

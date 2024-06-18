@@ -78,6 +78,14 @@ public class T4customerMngSvc {
 		return new CmmnMap().put("status", "OK");
 	}
 
+	public List<CmmnMap> getAllconsult(CmmnMap params) {
+		List<CmmnMap> consultList = cmmnDao.selectList("getAllconsult", params);
+		//System.out.println(consultList);
+		String user_id = params.getString("user_id");
+		params.put("user_id", user_id);
+		return consultList;
+	}
+
 
 
 

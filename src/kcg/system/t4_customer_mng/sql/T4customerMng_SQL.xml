@@ -23,15 +23,18 @@
 		customer_phone
 		= #{customer_phone},
 		customer_sub_tel = #{customer_sub_tel},
-		customer_email = #{customer_email},
+		customer_email =
+		#{customer_email},
 		customer_job = #{customer_job},
-		customer_addr = #{customer_addr}
+		customer_addr =
+		#{customer_addr}
 		where customer_id =
 		CAST(#{customer_id} AS integer)
 	</update>
 
 	<insert id="addCust" parameterType="cmmnMap">
-		INSERT INTO kcgbd.db4_customer_info(
+		INSERT INTO
+		kcgbd.db4_customer_info(
 		customer_name
 		,customer_id_number
 		,customer_brdt
@@ -58,7 +61,26 @@
 		,#{user_id}
 		,'Y'
 		)
-
-
 	</insert>
+	<select id="getAllconsult" parameterType="cmmnMap"
+		resultType="cmmnMap">
+		SELECT
+		con.*,
+		tu.*,
+		cc.*,
+		ci.*,
+		rep.name AS representative_name
+		FROM
+		kcgbd.db4_consult con
+		JOIN
+		kcgbd.t_user tu ON con.user_id = tu.user_id
+		JOIN
+		kcgbd.db4_cust_con cc ON con.con_id = cc.con_id
+		JOIN
+		kcgbd.db4_customer_info ci ON cc.customer_id = ci.customer_id
+		JOIN
+		kcgbd.t_user rep ON ci.user_id = rep.user_id
+		WHERE
+		con.user_id = #{user_id};
+	</select>
 </mapper>

@@ -10,7 +10,8 @@
 team4 main
 <br><br>
 <a href="/system/team4/notice/">공지사항 메인</a><br>
-<a href="/system/team4/customerInfoPage">고객관리 페이지</a>
+<a href="/system/team4/customerInfoPage">고객관리 페이지</a><br>
+<a href="/system/team4/consultListPage">상담내역 페이지</a>
 
 </body>
 </html>
