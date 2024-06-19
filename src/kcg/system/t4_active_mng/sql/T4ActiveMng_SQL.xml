@@ -25,7 +25,7 @@ SELECT cc.bn_cal_id, cc.cal_title, cc.cal_content, cc.cal_date, bn.manager_id, c
 	
 	<select id="findCalId" parameterType="cmmnMap" resultType="int">
 	SELECT cal_id FROM kcgbd.db4_bn_cal_mag
-	WHERE manager_id = #{manager_id}
+	WHERE manager_id LIKE #{manager_id}
 	</select>
 	
 	<insert id="saveCalender" parameterType="cmmnMap">
