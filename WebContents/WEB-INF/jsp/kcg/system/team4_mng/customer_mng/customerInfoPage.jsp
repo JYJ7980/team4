@@ -172,7 +172,8 @@
 					</div>
 					<div class="input-form">
 						<label for="customerIdNumber">**고객 주민번호</label> <input type="text"
-							id="customerIdNumber" v-model="customerIdNumber" required>
+							id="customerIdNumber" v-model="customerIdNumber" required maxlength="14">
+						<small>예시: YYMMDD-1234567</small>
 					</div>
 					<div class="input-form">
 						<label for="customerPhone">**고객 전화번호</label> <input type="text"
@@ -195,7 +196,7 @@
 							id="customerAddr" v-model="customerAddr">
 					</div>
 					<br>
-				
+
 
 					<button @click="addCustomer">등록</button>
 					<button @click="resetForm">초기화</button>
@@ -334,6 +335,7 @@ new Vue({
             }
         },
         addCustomer: function() {
+        	
         	//폼에 비어있는 칸이 있나 확인하기
         	 if (
         this.customerName.trim() === '' ||
@@ -346,6 +348,11 @@ new Vue({
         alert('모든 필수 입력 필드를 입력해주세요.');
         return; 
     }
+        	   // 주민등록 번호 자릿수 확인 (YYMMDD-1234567 형식으로 입력될 것을 가정)
+             if (this.customerIdNumber.trim().length !== 14) {
+                 this.errorMessage = alert('올바른 주민등록 번호 형식이 아닙니다. YYMMDD-1234567 형식으로 입력해주세요.');
+                 return;
+             }
         	
             // 새로운 고객 정보 생성
             var params = {
