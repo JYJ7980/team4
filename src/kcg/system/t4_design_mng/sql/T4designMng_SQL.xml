@@ -5,9 +5,16 @@
 <!-- 	//design 설계 sql 나중에 옮겨 갈 것-->
 	
 	<select id="getProductList" parameterType="cmmnMap" resultType="cmmnMap">
-    SELECT product_name, product_id, product_type FROM kcgbd.db4_product_info 
-    WHERE product_name LIKE CONCAT('%', #{product_name}, '%')
+		SELECT product_name, product_id, product_type FROM kcgbd.db4_product_info 
+	    WHERE product_name LIKE CONCAT('%', #{product_name}, '%')	
 	</select>
+	
+	<select id="selectTypeProductList" parameterType="cmmnMap" resultType="cmmnMap">
+		SELECT product_name, product_id, product_type FROM kcgbd.db4_product_info 
+	    WHERE product_name LIKE CONCAT('%', #{product_name}, '%')
+		AND product_type LIKE CONCAT('%', #{product_type}, '%')	
+	</select>
+	
 	
 	<select id="selectOneProduct" parameterType="cmmnMap" resultType="cmmnMap">
     SELECT product_name, product_id, product_type FROM kcgbd.db4_product_info 
@@ -148,12 +155,29 @@
 	           , c.customer_sub_tel
 	           , c.customer_job
 	           , c.customer_addr
-	           , c.customer_userId
+	           , c.user_id
 	           , t.dept
-	           , t.jikgup_nm
+	           , t.name
+	           , t.jikgub_nm
 	    FROM kcgbd.db4_customer_info c 
 	    LEFT JOIN kcgbd.t_user t ON c.user_id = t.user_id
-	    WHERE c.customer_id = #{customer_id}
+	    WHERE c.customer_id = CAST(#{customer_id} AS integer)
 	</select>	
+	
+	<insert id="saveCalulate" parameterType="cmmnMap">
+	    INSERT INTO kcgbd.db4_product_design 
+	    (v_select_month, v_interest_rate, tax_rate, 
+	    sub_money, rec_before_tax, rec_after_tax,
+	    profit_rate, net_profit_rate, interest_type,
+	    interest_tax, f_select_month, f_interest_rate, 
+	    before_interest, after_interest, product_id, customer_id)
+	    VALUES 
+	    (CAST(#{v_select_month} AS INTEGER), CAST(#{v_interest_rate} AS NUMERIC), CAST(#{tax_rate} AS NUMERIC), 
+	    CAST(#{sub_money} AS BIGINT), CAST(#{rec_before_tax} AS BIGINT), CAST(#{rec_after_tax} AS BIGINT),
+	    CAST(#{profit_rate} AS NUMERIC),CAST(#{net_profit_rate} AS NUMERIC) ,#{interest_type} ,
+	    CAST(#{interest_tax} AS BIGINT),CAST(#{f_select_month} AS INTEGER),CAST(#{f_interest_rate} AS NUMERIC),
+	    CAST(#{before_interest} AS BIGINT),CAST(#{after_interest} AS BIGINT), #{product_id}, CAST(#{customer_id} AS BIGINT))
+	</insert>
+	
 
 </mapper>

@@ -53,8 +53,8 @@ public class T4designMngSVC {
 		return cmmnDao.selectOne("designCusInfo", params);
 	}
 
-
-	
-	
+	public void saveCalulate(CmmnMap params) {
+		cmmnDao.insert("saveCalulate", params);
+	}	
 
 }

@@ -99,7 +99,7 @@
 				<span>(%)</span>
 				 <br><br>
 			    <label>만기 날짜:</label> 
-				<input type="text" id="sub_end_date"> 
+				<input type="date" id="sub_end_date"> 
 				<br><br>
 				<form @submit.prevent="handleSubmit">
 					<input type="submit" value="등록" id="submit">
@@ -297,11 +297,6 @@ var vueapp = new Vue({
                 return;
             }
 
-            if (!isValidDate(subEndDate)) {
-                alert('날짜는 yyyy-mm-dd 형식으로 입력해주세요.');
-                return;
-            }
-
             if (!isNumeric(additionalField)) {
                 alert('예금, 적금, 대출 금액은 숫자만 입력 가능합니다.');
                 return;
@@ -317,7 +312,7 @@ var vueapp = new Vue({
                 loan: loan,
                 sub_end_date: subEndDate
             };
-			console.log(params);
+			console.log(JSON.stringfy(params));
             axios.post('/team4/subscription', {params : params})
                 .then(response => {
                     alert("정상적으로 등록되었습니다.");

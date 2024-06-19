@@ -55,6 +55,14 @@ public class T4designMngCtl {
 		CmmnMap getOne = cmmnDao.selectOne("selectOneProduct", params);
 		return getOne;
 	}
+	
+	@RequestMapping("typeProductList")
+	public List<CmmnMap> typeProductList(CmmnMap params){
+		
+		List<CmmnMap> productList = cmmnDao.selectList("selectTypeProductList", params);
+		return productList;
+	}
+
 
 	@RequestMapping("customerList")
 	public List<CmmnMap> customerList(CmmnMap params){
@@ -133,10 +141,19 @@ public class T4designMngCtl {
 	@RequestMapping("designCusInfo")
 	public CmmnMap designCusInfo(CmmnMap params) {
 
-		return svc.designCusInfo(params);
-		 
+		return svc.designCusInfo(params);	 
 	}
+	
+	@RequestMapping("saveCalulate")
+	public String saveCalulate(CmmnMap params) {
+		System.out.println("===========================================");
+		System.out.println("===========================================");
+		System.out.println("===========================================");
+		System.out.println("===========================================");
+		System.out.println("params: " + params.toString());
 
-
+		svc.saveCalulate(params);
+		return "kcg/system/team4_mng/t4_design_mng/CalculateDeposit";
+	}
 
 }
