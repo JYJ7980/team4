@@ -53,7 +53,8 @@
 
 	<insert id="insertProduct" parameterType="cmmnMap">
 	    INSERT INTO kcgbd.db4_product_sub (sub_end_date, start_money, cycle_money, loan, product_id, customer_id, pro_interest_rate)
-	    VALUES (#{sub_end_date}, CAST(#{start_money} AS INTEGER), CAST(#{cycle_money} AS INTEGER), CAST(#{loan} AS INTEGER), CAST(#{product_id} AS INTEGER), CAST(#{customer_id} AS INTEGER), #{pro_interest_rate})
+	    VALUES (#{sub_end_date}, CAST(#{start_money} AS INTEGER), CAST(#{cycle_money} AS INTEGER), 
+	    		CAST(#{loan} AS INTEGER), #{product_id}, CAST(#{customer_id} AS INTEGER), #{pro_interest_rate})
 	</insert>
 	
 	
