@@ -13,14 +13,21 @@
 	<select id="getCustIdNumber" parameterType="cmmnMap"
 		resultType="cmmnMap">
 		select customer_id_number
-		FROM kcgbd.db4_customer_info 
+		FROM kcgbd.db4_customer_info
 		where customer_id_number = #{customer_id_number}
 		and use_yn = 'Y'
 	</select>
-		<select id="getCustPhone" parameterType="cmmnMap"
+	<select id="getQuitCustIdNumber" parameterType="cmmnMap"
+		resultType="cmmnMap">
+		select customer_id_number
+		FROM kcgbd.db4_customer_info
+		where customer_id_number = #{customer_id_number}
+		and use_yn = 'N'
+	</select>
+	<select id="getCustPhone" parameterType="cmmnMap"
 		resultType="cmmnMap">
 		select customer_phone
-		FROM kcgbd.db4_customer_info 
+		FROM kcgbd.db4_customer_info
 		where customer_phone = #{customer_phone}
 		and use_yn = 'Y'
 	</select>

@@ -233,7 +233,8 @@ new Vue({
         customerEmail:'', // 고객 이메일을 저장할 변수
         customerJob: '', 
         customerAddr: '',
-        searchKeyword: '' // 검색 키워드 저장
+        searchKeyword: '', // 검색 키워드 저장
+        errorMessage: '' // 오류 메시지 저장
     },
     methods: {
         getAllCustomers: function() {
@@ -320,8 +321,8 @@ new Vue({
                             alert('고객 정보가 수정되었습니다.');
                             // 수정된 고객 정보를 다시 불러오기
                             this.getAllCustomers();
-                        } else {
-                            alert('고객 정보 수정에 실패했습니다.');
+                        } else if (response.data.status === 'ERROR') {
+                            alert(response.data.message); // 서버로부터 받은 에러 메시지를 표시
                         }
                     })
                     .catch(error => {
@@ -365,8 +366,9 @@ new Vue({
                         alert('새로운 고객이 등록되었습니다.');
                         this.getAllCustomers(); // 고객 목록을 다시 불러옵니다.
                         this.resetForm(); // 입력 폼 초기화
-                    } else if (response.data.status === 'ERROR') {
-                        alert(response.data.message); // 서버로부터 받은 에러 메시지를 표시
+                    }else if (response.data.status === 'ERROR') {
+                        this.errorMessage = response.data.message; // 오류 메시지 저장
+                        alert(response.data.message); // 사용자에게 오류 메시지 alert으로 표시
                     }
                 })
                 .catch(error => {

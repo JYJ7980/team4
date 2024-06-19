@@ -49,12 +49,24 @@ public class T4customerMngCtl {
     }
 	
 	
-	//고객 전체 주민번호 조회
+	//고객 주민번호 중복 확인용 조회
 	@GetMapping("/getCustIdNumber")
 	public List<CmmnMap> getCustIdNumber(CmmnMap params){
 		return svc.getCustIdNumber(params);
 	}
 	
+	//탈퇴 회원 주민번호 중복 확인용 조회
+	@GetMapping("/getQuitCustIdNumber")
+	public List<CmmnMap> getQuitCustIdNumber(CmmnMap params){
+		return svc.getQuitCustIdNumber(params);
+	}
+	
+	
+	//고객 전화번호 중복 확인용 조회
+	@GetMapping("/getCustPhone")
+	public List<CmmnMap> getCustPhone(CmmnMap params){
+		return svc.getCustPhone(params);
+	}
 
 	
 	//고객 추가
