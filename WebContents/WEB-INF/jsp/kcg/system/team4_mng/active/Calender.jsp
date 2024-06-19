@@ -131,6 +131,9 @@
 					{{ year }}년 {{ month }}월
 					<button @click="calendarData(1)">></button>
 				</div>
+				<div>
+					<button type="button" @click="openInsertForm">등록</button>
+				</div>
 				<table border="1" style="width: 80%;" align="center">
 					<thead>
 						<!-- 요일 -->
@@ -187,11 +190,42 @@
 						</div>
 					</div>
 				</div>
-				
-				
-				
+
+				<div v-if="insertForm" class="modal">
+					<div class="modal-content">
+						<span class="close" @click="closeInsertForm">&times;</span>
+						<div class="form-group">
+
+							<div>
+							<div>
+								<label for="insert.date">날짜</label> : <input type="date" id="insert.date" v-model="insert.date">
+								</div>
+								<br>
+								<div>
+								 <label for="insert.title">제목</label> : <input type="text" id="insert.title"
+									v-model="insert.title">
+									</div>
+									<div class="form-group">
+							<label for="insert.content">내용</label>
+							<div>
+								<textarea rows="5" id="insert.content" v-model="insert.content"
+									placeholder="내용을 입력하세요."></textarea>
+							</div>
+							<div class="form-group">
+							<button type="button" @click="save">
+								등록<i class="entypo-check"></i>
+							</button>
+						</div>
+						</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
 			</div>
 		</div>
+	</div>
 
 
 
@@ -212,6 +246,12 @@ var vueapp = new Vue({
 		toDoList: [],
 		selected: null,
 		showModal: false,
+		insertForm: false,
+		insert: {
+			date:"",
+			title:"",
+			content:"",
+		}
 	},
 	created() {
 		const date = new Date();
@@ -323,6 +363,17 @@ var vueapp = new Vue({
         		this.selected = Object.assign({}, toDo);
         		this.showModal = true;
         	},
+        	openInsertForm(){
+        		this.insertForm = true;
+        	},
+        	closeInsertForm(){
+        		this.insertForm = false;
+        		this.insert = [
+        				cal_date="",
+        				cal_title="",
+        				cal_content=""
+        		]
+        	},
         	closeEditModal() {
         		this.showModal = false;
         		this.selected = null;
@@ -374,6 +425,30 @@ var vueapp = new Vue({
 					})
 					.catch(error => {
 						alert('오류 발생: ' + error);
+					});
+			},
+			save : function (){
+				if (!this.insert.title.trim()) {
+					alert("제목을 입력하세요.");
+					return;
+				}
+				var params = {
+						date : this.insert.date,
+						title : this.insert.title,
+						content : this.insert.content
+				};
+				console.log(params);
+				axios.post("/system/team4/active/save", {params:params})
+					.then(response => {
+						if (response.data.status === "OK") {
+							alert("저장되었습니다.");
+							window.location.href = '/system/team4/active/calender'; // 저장 후 목록으로 이동
+						} else {
+							alert("저장 실패: " + response.data.message);
+						}
+					})
+					.catch(error => {
+						alert("오류 발생: " + error);
 					});
 			}
 

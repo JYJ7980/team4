@@ -69,8 +69,8 @@ public class T4ActiveMng_svc {
 
 	public CmmnMap saveCalender(CmmnMap params) {
 		String cal_date = params.getString("date");
-		String cal_title = params.getString("cal_title");
-		String cal_content = params.getString("cal_content");
+		String cal_title = params.getString("title");
+		String cal_content = params.getString("content");
 		int cal_id = findCalId();
 		
 		params.put("cal_date", cal_date);
