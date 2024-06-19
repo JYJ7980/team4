@@ -38,8 +38,8 @@
 	border: 1px solid #ccc;
 	background-color: #fff;
 	z-index: 1000;
-	width: 300px;
-	height: 400px;
+	width: 400px;
+	height: 450px;
 	overflow-y: auto;
 }
 
@@ -78,6 +78,12 @@
 	border: 1px solid #ccc;
 	padding: 5px;
 	text-align: left;
+}
+
+.popup-search-container {
+	display: flex; /* Flexbox 사용 */
+	align-items: center; /* 요소들을 세로 중앙 정렬 */
+	gap: 10px; /* 요소들 사이 간격 조정 */
 }
 </style>
 <title>상담내역 추가 페이지</title>
@@ -118,7 +124,19 @@
 				@click="closePopup"></div>
 			<div class="popup" :class="{active: showPopup}">
 				<div class="popup-close" @click="closePopup">X</div>
-				<h4>고객 검색</h4>
+				<br> <br>
+				<div class="popup-search-container">
+					<label for="searchInput">고객 이름:</label> <input type="text"
+						id="searchInput" v-model="searchKeyword">
+					<button @click="searchCustomers">
+						<i class="fa fa-search"></i>
+					</button>
+					<button @click="searchCustomersReset">다시</button>
+				</div>
+
+
+				<br>
+
 				<table>
 					<tr>
 						<th>이름</th>
@@ -141,7 +159,8 @@
 				customerConId:'',
 				customerName: '',
 				consultTitle: '',
-				consultContext: ''
+				consultContext: '',
+				searchKeyword: '' // 팝업에 있는 고객이름 검색 keyword
 			},
 			mounted() {
 				// Vue 인스턴스가 마운트된 후에 실행되는 부분
@@ -158,7 +177,44 @@
 							console.error('Error:', error);
 						});
 				},
+				 searchCustomers: function() {
+			            if (this.searchKeyword.trim() === '') {
+			                alert('검색어를 입력하세요.');
+			                return;
+			            }
+			            axios.get('/system/team4/getCustInfo')
+			                .then(response => {
+			                	this.customers = response.data;
+			                    this.customers = this.customers.filter(customer => 
+			                        customer.customer_name.includes(this.searchKeyword)
+			                        
+			                    );
+			                    this.searchKeyword = '';
+			                    
+			                })
+			                .catch(error => {
+			                    console.error('Error:', error);
+			                });
+			        },
+			        searchCustomersReset:function(){
+			        	axios.get('/system/team4/getCustInfo')
+						.then(response => {
+							this.customers = response.data;
+							 this.searchKeyword = '';
+						})
+						.catch(error => {
+							console.error('Error:', error);
+						});
+			        	
+			        },
 				popupCust: function() {
+					axios.get('/system/team4/getCustInfo')
+					.then(response => {
+						this.customers = response.data;
+					})
+					.catch(error => {
+						console.error('Error:', error);
+					});
 					this.showPopup = true;
 				},
 				closePopup: function() {
