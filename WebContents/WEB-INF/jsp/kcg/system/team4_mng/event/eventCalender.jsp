@@ -144,7 +144,7 @@
 						<tr v-for="(week, index) in dates" :key="index">
 							<td v-for="day in week" :key="day" class="fixed-text">
 								<div v-if="day !== 0" style="text-align: left;">
-									<div class="inner-text">{{day}}</div>
+									<div class="inner-text">{{ day }}</div>
 									<ul>
 										<li v-for="toDo in toDoList"
 											v-if="parseInt(toDo.customer_brdt.substring(4, 6))==day"
