@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace='system.t4_customer_mng'>
+	<select id="getAllCustomers" parameterType="cmmnMap"
+		resultType="cmmnMap">
+		select * from kcgbd.db4_customer_info where use_yn = 'Y'
+	</select>
+	<update id="deleteCust" parameterType="cmmnMap">
+		update
+		kcgbd.db4_customer_info
+		set use_yn = 'N'
+		where customer_id =
+		CAST(#{customer_id} AS integer)
+	</update>
+
+	<update id="updateCust" parameterType="cmmnMap">
+		update
+		kcgbd.db4_customer_info
+		set
+		customer_name = #{customer_name},
+		customer_level = #{customer_level},
+		customer_phone
+		= #{customer_phone},
+		customer_sub_tel = #{customer_sub_tel},
+		customer_email = #{customer_email},
+		customer_job = #{customer_job},
+		customer_addr = #{customer_addr}
+		where customer_id =
+		CAST(#{customer_id} AS integer)
+	</update>
+
+	<insert id="addCust" parameterType="cmmnMap">
+		INSERT INTO kcgbd.db4_customer_info(
+		customer_name
+		,customer_id_number
+		,customer_brdt
+		,customer_level
+		,customer_phone
+		,customer_sub_tel
+		,customer_email
+		,customer_job
+		,customer_addr
+		,user_id
+		,use_yn
+		)VALUES(
+		#{customer_name}
+		,#{customer_id_number}
+		,substring(#{customer_id_number}, 1, 6)
+		,#{customer_level}
+		,#{customer_phone}
+		,#{customer_sub_tel}
+		,#{customer_email}
+		,#{customer_job}
+		,#{customer_addr}
+		,#{user_id}
+		,'Y'
+		)
+
+
+	</insert>
+</mapper>
