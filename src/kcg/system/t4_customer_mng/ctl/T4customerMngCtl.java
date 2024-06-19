@@ -42,7 +42,7 @@ public class T4customerMngCtl {
 	}
 
 	
-	// 전체 조회
+	// 고객정보 전체 조회
 	@GetMapping("/getCustInfo")
 	public List<CmmnMap> getCustInfo(CmmnMap params) {
         return svc.getAllCustomers(params);

@@ -97,7 +97,7 @@
 		consult_context,
 		con_id
 		)VALUES(
-		CURRENT_TIMESTAMP,
+		TO_CHAR(CURRENT_TIMESTAMP, 'YYYY-MM-DD HH24:MI:SS'),
 		#{user_id},
 		#{consult_title},
 		#{consult_context},

@@ -11,6 +11,12 @@
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
 <!-- axios CDN 추가 -->
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<jsp:include page="/WEB-INF/jsp/kcg/_include/system/header_meta.jsp" flush="false"/>
+	<!-- Imported styles on this page -->
+	<link rel="stylesheet" href="/static_resources/system/js/datatables/datatables.css">
+	<link rel="stylesheet" href="/static_resources/system/js/select2/select2-bootstrap.css">
+	<link rel="stylesheet" href="/static_resources/system/js/select2/select2.css">
+
 <style>
 .input-form {
    margin-bottom: 10px;
@@ -38,8 +44,13 @@
 }
 </style>
 </head>
-<body>
-   <div id="app">
+<body class="page-body">
+
+<div class="page-container">
+
+	<jsp:include page="/WEB-INF/jsp/kcg/_include/system/sidebar-menu.jsp" flush="false"/>
+	
+   <div id="app" style="margin-left: 70px;">
       <span style="font-size: 18px; font-weight: bold; color: black;">${userInfoVO.userId}</span>&nbsp;님
       화면 <br> <a href="/system/team4/main">메인으로 돌아가기</a><br>
        <div id="customerTable" class="customer-container">
@@ -368,6 +379,7 @@ new Vue({
     }
 });
 </script>
+</div>
 </body>
 </html>
 

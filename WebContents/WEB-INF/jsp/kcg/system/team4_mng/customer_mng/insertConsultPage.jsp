@@ -9,6 +9,16 @@
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
 <!-- axios CDN 추가 -->
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<jsp:include page="/WEB-INF/jsp/kcg/_include/system/header_meta.jsp"
+	flush="false" />
+<!-- Imported styles on this page -->
+<link rel="stylesheet"
+	href="/static_resources/system/js/datatables/datatables.css">
+<link rel="stylesheet"
+	href="/static_resources/system/js/select2/select2-bootstrap.css">
+<link rel="stylesheet"
+	href="/static_resources/system/js/select2/select2.css">
+
 <style>
 .input-form {
 	margin-bottom: 10px;
@@ -71,47 +81,57 @@
 }
 </style>
 <title>상담내역 추가 페이지</title>
-</head>
-<body>
-	<div id="app">
-		<h4>상담 내역을 추가히세요!</h4>
-		<div class="input-form">
-			<label for="customerName">고객 이름:</label> <input type="text"
-				id="customerName" v-model="customerName">
-			<button type="button" class="btn" @click="popupCust()">
-				<i class="fa fa-search"></i> 검색
-			</button>
-		</div>
-		<br>
-		<div class="input-form">
-			<label for="consultTitle">제목:</label> <input type="text"
-				id="consultTitle" v-model="consultTitle">
-		</div>
-		<div class="input-form">
-			<label for="consultContext">내용:</label> <input type="text"
-				id="consultContext" v-model="consultContext">
-		</div>
-		<br>
-		<button @click="addConsult">추가</button>
-		<button @click="resetForm">취소</button>
 
-		<div class="popup-overlay" :class="{active: showPopup}" @click="closePopup"></div>
-		<div class="popup" :class="{active: showPopup}">
-			<div class="popup-close" @click="closePopup">X</div>
-			<h4>고객 검색</h4>
-			<table>
-				<tr>
-					<th>이름</th>
-					<th>생년월일</th>
-				</tr>
-				<tr v-for="customer in customers" @click="selectCustomer(customer)">
-					<td>{{ customer.customer_name }}</td>
-					<td>{{ customer.customer_brdt }}</td>
-				</tr>
-			</table>
+</head>
+<body class="page-body">
+
+	<div class="page-container">
+
+		<jsp:include page="/WEB-INF/jsp/kcg/_include/system/sidebar-menu.jsp"
+			flush="false" />
+
+		<div id="app" style="margin-left: 70px;">
+
+			<h4>상담 내역을 추가히세요!</h4>
+			<div class="input-form">
+				<label for="customerName">고객 이름:</label> <input type="search"
+					id="customerName" v-model="customerName" placeholder="고객을 선택하세요">
+				<button type="button" class="btn" @click="popupCust()">
+					<i class="fa fa-search"></i> 검색
+				</button>
+			</div>
+			<br>
+			<div class="input-form">
+				<label for="consultTitle">제목:</label> <input type="text"
+					id="consultTitle" v-model="consultTitle">
+			</div>
+			<div class="input-form">
+				<label for="consultContext">내용:</label>
+				<textArea rows="4" cols="50" id="consultContext"
+					v-model="consultContext"></textArea>
+			</div>
+			<br>
+			<button @click="addConsult">추가</button>
+			<button @click="resetForm">취소</button>
+
+			<div class="popup-overlay" :class="{active: showPopup}"
+				@click="closePopup"></div>
+			<div class="popup" :class="{active: showPopup}">
+				<div class="popup-close" @click="closePopup">X</div>
+				<h4>고객 검색</h4>
+				<table>
+					<tr>
+						<th>이름</th>
+						<th>생년월일</th>
+					</tr>
+					<tr v-for="customer in customers" @click="selectCustomer(customer)">
+						<td>{{ customer.customer_name }}</td>
+						<td>{{ customer.customer_brdt }}</td>
+					</tr>
+				</table>
+			</div>
 		</div>
-	</div>
-	<script>
+		<script>
 		new Vue({
 			el: '#app',
 			data: {
@@ -181,5 +201,6 @@
 			}
 		});
 	</script>
+	</div>
 </body>
 </html>
