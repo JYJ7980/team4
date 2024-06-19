@@ -195,6 +195,7 @@
 							id="customerAddr" v-model="customerAddr">
 					</div>
 					<br>
+				
 
 					<button @click="addCustomer">등록</button>
 					<button @click="resetForm">초기화</button>
@@ -241,6 +242,8 @@ new Vue({
                 .then(response => {
                     this.customers = response.data;
                     this.filterCustomers(); // 고객 필터링 함수 호출
+                    this.selectedCustomer = null; // 선택 고객 초기화
+                    
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -362,8 +365,8 @@ new Vue({
                         alert('새로운 고객이 등록되었습니다.');
                         this.getAllCustomers(); // 고객 목록을 다시 불러옵니다.
                         this.resetForm(); // 입력 폼 초기화
-                    } else {
-                        alert('고객 등록에 실패했습니다.');
+                    } else if (response.data.status === 'ERROR') {
+                        alert(response.data.message); // 서버로부터 받은 에러 메시지를 표시
                     }
                 })
                 .catch(error => {
