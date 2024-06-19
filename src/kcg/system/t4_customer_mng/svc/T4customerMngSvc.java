@@ -55,7 +55,7 @@ public class T4customerMngSvc {
 	
 		String customer_name = params.getString("customer_name");
 		String customer_id_number = params.getString("customer_id_number");
-		String customer_level = params.getString("customer_level");
+//		String customer_level = params.getString("customer_level");
 		String customer_phone = params.getString("customer_phone");
 		String customer_sub_tel = params.getString("customer_sub_tel");
 		String customer_email = params.getString("customer_email");
@@ -66,7 +66,7 @@ public class T4customerMngSvc {
 		
 		params.put("customer_name", customer_name);
 		params.put("customer_id_number", customer_id_number);
-		params.put("customer_level", customer_level);
+//		params.put("customer_level", customer_level);
 		params.put("customer_phone", customer_phone);
 		params.put("customer_sub_tel", customer_sub_tel);
 		params.put("customer_email", customer_email);

@@ -40,7 +40,7 @@
 		customer_name
 		,customer_id_number
 		,customer_brdt
-		,customer_level
+		
 		,customer_phone
 		,customer_sub_tel
 		,customer_email
@@ -53,7 +53,7 @@
 		#{customer_name}
 		,#{customer_id_number}
 		,substring(#{customer_id_number}, 1, 6)
-		,#{customer_level}
+		
 		,#{customer_phone}
 		,#{customer_sub_tel}
 		,#{customer_email}
