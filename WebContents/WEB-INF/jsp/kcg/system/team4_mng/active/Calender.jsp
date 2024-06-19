@@ -30,26 +30,77 @@
 	background-color: #598987
 }
 
-  .fixed-text {
-  		width:100px;
-  		height: 150px;
-        position: relative; /* 부모 요소 기준으로 위치를 설정하기 위해 relative 설정 */
-    }
+.fixed-text {
+	width: 100px;
+	height: 150px;
+	position: relative; /* 부모 요소 기준으로 위치를 설정하기 위해 relative 설정 */
+}
 
-    .fixed-text .inner-text {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 20px;
-        height: 20px;
-        background-color: lightgray; /* 배경색 설정 (선택사항) */
-        text-align: center;
-    }
-    
-    .fixed-text .ptag {
-    	margin-left: 0;
-    	
-    }
+.fixed-text .inner-text {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 20px;
+	height: 20px;
+	background-color: lightgray; /* 배경색 설정 (선택사항) */
+	text-align: center;
+}
+
+.fixed-text .ptag {
+	margin-left: 0;
+}
+
+.has-text-centered {
+	text-align: center
+}
+
+.has-text-prev {
+	background-color: #ECEFF1
+}
+
+.has-text-next {
+	background-color: #ECEFF1
+}
+
+.has-text-primary {
+	background-color: #598987
+}
+
+.modal {
+	display: block;
+	position: fixed;
+	z-index: 1;
+	left: 0;
+	top: 0;
+	margin-left: 100px;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgb(0, 0, 0);
+	background-color: rgba(0, 0, 0, 0.4);
+	padding-top: 60px;
+}
+
+.modal-content {
+	background-color: #fefefe;
+	margin: 5% auto;
+	padding: 20px;
+	border: 1px solid #888;
+	width: 80%;
+}
+
+.close {
+	color: #aaa;
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
+}
+
+.close:hover, .close:focus {
+	color: black;
+	text-decoration: none;
+	cursor: pointer;
+}
 </style>
 <title>관리자시스템</title>
 </head>
@@ -80,36 +131,73 @@
 					{{ year }}년 {{ month }}월
 					<button @click="calendarData(1)">></button>
 				</div>
-				<table border="1" style="width:80%;" align="center">
+				<table border="1" style="width: 80%;" align="center">
 					<thead>
 						<!-- 요일 -->
 						<tr>
-							<th v-for="days in weeks" :key="days" style="text-align: center;">{{ days }}</th>
+							<th v-for="days in weeks" :key="days" style="text-align: center;">{{
+								days }}</th>
 						</tr>
 					</thead>
 					<!-- 날짜 -->
 					<tbody>
 						<tr v-for="(week, index) in dates" :key="index">
-							<td v-for="day in week" :key="day"
-								class="fixed-text">
-								<div v-if="day !== 0" style="text-align: left;" >
-									    <div class="inner-text">{{ day }}</div>
-											<ul>
-											<li v-for="toDo in toDoList"
-												v-if="parseInt(toDo.cal_date.substring(8, 10))==day"
-												class="ptag">
-												{{toDo.cal_title}}</li>
-										</ul>
-								<div v-else></div>
+							<td v-for="day in week" :key="day" class="fixed-text">
+								<div v-if="day !== 0" style="text-align: left;">
+									<div class="inner-text">{{ day }}</div>
+									<ul>
+										<li v-for="toDo in toDoList"
+											v-if="parseInt(toDo.cal_date.substring(8, 10))==day"
+											@click="openEditModal(toDo)" class="ptag">
+											{{toDo.cal_title}}</li>
+									</ul>
+									<div v-else></div>
 							</td>
 						</tr>
 						<tr>
 						</tr>
 					</tbody>
 				</table>
+
+				<div v-if="showModal" class="modal">
+					<div class="modal-content">
+						<span class="close" @click="closeEditModal">&times;</span>
+						<div class="form-group">
+							<label for="date">날짜</label> <input type="date" id="date"
+								v-model="selected.cal_date">
+							<div>
+								<label for="title">제목</label> <input type="text" id="title"
+									v-model="selected.cal_title">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="content">내용</label>
+							<div>
+								<textarea rows="5" id="content" v-model="selected.cal_content"
+									placeholder="내용을 입력하세요."></textarea>
+							</div>
+						</div>
+						<div class="form-group">
+							<button type="button" @click="updateCal">
+								수정<i class="entypo-check"></i>
+							</button>
+							<button type="button" @click="deleteCal(selected.bn_cal_id)">
+								삭제 <i class="entypo-check"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+				
+				
+				
 			</div>
 		</div>
+
+
+
 	</div>
+
+
 
 	<script>
 var vueapp = new Vue({
@@ -122,6 +210,8 @@ var vueapp = new Vue({
 		month: 0,
 		dates: [],
 		toDoList: [],
+		selected: null,
+		showModal: false,
 	},
 	created() {
 		const date = new Date();
@@ -188,8 +278,8 @@ var vueapp = new Vue({
 		      }
 		      const prevLastDate = new Date(lastYear, lastMonth, 0).getDate(); // 지난 달 마지막 날짜
 		      return [firstDay, lastDate, prevLastDate];
-		    },
-		    getMonthOfDays(
+		},
+		getMonthOfDays(
 		      monthFirstDay,
 		      monthLastDate,
 		      prevMonthLastDate,
@@ -225,10 +315,68 @@ var vueapp = new Vue({
 		      
 		      return dates;
 		      
-		    },
+		},
 		    getDataListCB : function(data){
 		    	this.toDoList = data;
-		    },		    
+		    },
+		    openEditModal(toDo) {
+        		this.selected = Object.assign({}, toDo);
+        		this.showModal = true;
+        	},
+        	closeEditModal() {
+        		this.showModal = false;
+        		this.selected = null;
+        	},
+        	
+			updateCal: function () {
+				if (!this.selected.cal_title.trim()) {
+					alert("제목을 입력하세요.");
+					return;
+				}
+
+				var params = {
+					update_id: this.selected.bn_cal_id,
+					update_title: this.selected.cal_title,
+					update_content: this.selected.cal_content,
+					update_date: this.selected.cal_date
+				};
+
+				axios.post('/system/team4/active/calUpdate', { params: params })
+					.then(response => {
+						if (response.data.status === "OK") {
+							alert("저장되었습니다.");
+							this.getCalendar(true);
+							this.closeEditModal();
+						} else {
+							alert("저장 실패: " + response.data.message);
+						}
+					})
+					.catch(error => {
+						alert("오류 발생: " + error);
+					});
+			},
+			deleteCal(bn_cal_id) {
+				if (!confirm('정말로 삭제하시겠습니까?')) return;
+				var params = {
+					delete_id: bn_cal_id,
+				};
+
+				console.log(params);
+				axios.post('/system/team4/active/calDelete', { params: params })
+					.then(response => {
+						if (response.data.status === 'OK') {
+							alert('삭제되었습니다.');
+							this.getCalendar(true);
+							this.closeEditModal();
+						} else {
+							alert('삭제 실패: ' + response.data.message);
+						}
+					})
+					.catch(error => {
+						alert('오류 발생: ' + error);
+					});
+			}
+
 	}
 });
 </script>

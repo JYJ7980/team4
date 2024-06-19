@@ -28,5 +28,18 @@ public class T4ActiveMng_ctl {
 		return t4ActiveMng_svc.findToDoList(params);
 	}
 	
+	@PostMapping("/calUpdate")
+	public CmmnMap calUpdate(CmmnMap params) {
+		return t4ActiveMng_svc.updateCalender(params);
+	}
 	
+	@PostMapping("/calDelete")
+	public CmmnMap calDelete(CmmnMap params) {
+		return t4ActiveMng_svc.deleteCalender(params);
+	}
+	
+	@PostMapping("/save")
+	public CmmnMap saveCalender(CmmnMap params) {
+		return t4ActiveMng_svc.saveCalender(params);
+	}
 }

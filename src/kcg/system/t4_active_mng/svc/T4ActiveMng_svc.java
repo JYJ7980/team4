@@ -35,4 +35,53 @@ public class T4ActiveMng_svc {
 		return dataList;
 	}
 
+	public CmmnMap updateCalender(CmmnMap params) {
+		int bn_cal_id = params.getInt("update_id");
+		String cal_title = params.getString("update_title");
+		String cal_content = params.getString("update_content");
+		String cal_date = params.getString("update_date");
+		
+		params.put("bn_cal_id", bn_cal_id);
+		params.put("cal_title", cal_title);
+		params.put("cal_content", cal_content);
+		params.put("cal_date", cal_date);
+		
+		cmmnDao.update("system.t4_active_mng.updateCalender",params);
+		return  new CmmnMap().put("status", "OK");
+	}
+
+	public CmmnMap deleteCalender(CmmnMap params) {
+		int bn_cal_id = params.getInt("delete_id");
+		System.out.println("====================================" + bn_cal_id);
+		params.put("bn_cal_id", bn_cal_id);
+		
+		cmmnDao.delete("system.t4_active_mng.deleteCalender", params);
+		return new CmmnMap().put("status", "OK");
+	}
+	
+	public int findCalId() {
+		CmmnMap params = new CmmnMap();
+		String manager_id = commonSvc.getLoginInfo().getUserId();
+		params.put("manager_id", manager_id);
+		
+		return cmmnDao.selectOne("system.t4_active_mng.findCalId",params);
+	}
+
+	public CmmnMap saveCalender(CmmnMap params) {
+		String cal_date = params.getString("date");
+		String cal_title = params.getString("cal_title");
+		String cal_content = params.getString("cal_content");
+		int cal_id = findCalId();
+		
+		params.put("cal_date", cal_date);
+		params.put("cal_title", cal_title);
+		params.put("cal_content", cal_content);
+		params.put("cal_id", cal_id);
+		
+		cmmnDao.insert("system.t4_active_mng.saveCalender",params);
+		
+		
+		return new CmmnMap().put("status", "OK");
+	}
+
 }
