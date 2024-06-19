@@ -312,7 +312,6 @@ var vueapp = new Vue({
                 loan: loan,
                 sub_end_date: subEndDate
             };
-			console.log(JSON.stringfy(params));
             axios.post('/team4/subscription', {params : params})
                 .then(response => {
                     alert("정상적으로 등록되었습니다.");

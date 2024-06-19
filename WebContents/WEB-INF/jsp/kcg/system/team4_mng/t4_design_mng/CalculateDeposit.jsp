@@ -187,48 +187,48 @@
                     <ul class="nav">
                         <li class="nav-tab active">계산결과</li>
                     </ul>
+                    
                     <div class="right-bottom flex-100">
-                        <form class="form flex-column" method="POST" action="#">
-	                        <table>
-	                        	<tr>
-	                        		<td class="center" style="width: 40%; vertical-align: top;">
-	                        			<div class="form-wrapper flex flex-wrap flex-gap-10">
-			                                <div class="form-group">
-			                                    <label>예치금액:</label>
-			                                    <input class="form-control" id="tot_dpst_amt" v-model="info.sub_money" disabled />
-			                                </div>
-			                                <div class="form-group">
-			                                    <label>세전이자:</label>
-			                                    <input class="form-control" id="tot_dpst_int" v-model="info.before_interest" disabled />
-			                                </div>
-			                                <div class="form-group">
-			                                    <span>수익률:</span>
-			                                    <span id="tot_dpst_int"disabled>{{ info.profit_rate }}%</span>
-			                                </div>
-			                                			                                
-			                                <div class="form-group">
-			                                    <label>세전수령액:</label>
-			                                    <input class="form-control" id="bfo_rcve_amt" v-model="info.rec_before_tax" disabled />
-			                                </div>
-			                                <div class="form-group">
-			                                    <label>이자과세금:</label>
-			                                    <input class="form-control" id="int_tax_amt" v-model="info.interest_tax" disabled />
-			                                </div>
-			                                <div class="form-group">
-			                                    <label>세후수령액:</label>
-			                                    <input class="form-control" id="atx_rcve_amt" v-model="info.rec_after_tax" disabled />
-			                                </div>
-			                                <div class="form-group">
-			                                    <span>순수익률:</span>
-			                                    <span id="tot_dpst_int" disabled>{{ info.net_profit_rate }}%</span>
-			                                </div>
-			                                
-			                            </div>	
-			                            
-			                            <div class="panel-heading">
-											<div class="panel-title">계산결과 CHART</div>
-										</div>
-										<div id="chart" class="bottom-right-bottom flex-100"></div>
+	                       <table>
+	                        <tr>
+	                        	<td class="center" style="width: 40%; vertical-align: top;">
+	                        		<div class="form-wrapper flex flex-wrap flex-gap-10">
+			                               <div class="form-group">
+			                                   <label>예치금액:</label>
+			                                   <input class="form-control" id="tot_dpst_amt" v-model="info.sub_money" disabled />
+			                               </div>
+			                               <div class="form-group">
+			                                   <label>세전이자:</label>
+			                                   <input class="form-control" id="tot_dpst_int" v-model="info.before_interest" disabled />
+			                               </div>
+			                               <div class="form-group">
+			                                   <span>수익률:</span>
+			                                   <span id="tot_dpst_int"disabled>{{ info.profit_rate }}%</span>
+			                               </div>
+			                               			                                
+			                               <div class="form-group">
+			                                   <label>세전수령액:</label>
+			                                   <input class="form-control" id="bfo_rcve_amt" v-model="info.rec_before_tax" disabled />
+			                               </div>
+			                               <div class="form-group">
+			                                   <label>이자과세금:</label>
+			                                   <input class="form-control" id="int_tax_amt" v-model="info.interest_tax" disabled />
+			                               </div>
+			                               <div class="form-group">
+			                                   <label>세후수령액:</label>
+			                                   <input class="form-control" id="atx_rcve_amt" v-model="info.rec_after_tax" disabled />
+			                               </div>
+			                               <div class="form-group">
+			                                   <span>순수익률:</span>
+			                                   <span id="tot_dpst_int" disabled>{{ info.net_profit_rate }}%</span>
+			                               </div>
+			                               
+			                           </div>	
+			                           
+		                            <div class="panel-heading">
+										<div class="panel-title">계산결과 CHART</div>
+									</div>										
+									<div id="chart" class="bottom-right-bottom flex-100"></div>
 	                        		</td>
 	                        		<td class="center" style="width: 3%;">
 	                        		</td>
@@ -238,18 +238,25 @@
 												<tr class="replace-inputs">
 													<th style="width: 10%;" class="center">회차</th>
 													<th style="width: 23%;" class="center">회차예치금액</th>
-													<th style="width: 23%;" class="center">누적예치금액</th>
-													<th style="width: 21%;" class="center">회차이자</th>
-													<th style="width: 23%;" class="center">회차원리금</th>
+													<th style="width: 23%;" class="center">회차이자</th>
+													<th style="width: 21%;" class="center">누적이자</th>
+													<th style="width: 23%;" class="center">회차 총 금액</th>
 												</tr>
 											</thead>
 											<tbody id="grid_tbody">
+												<tr v-for="item in calculate_arr" style="cursor: pointer;">
+													<td class="right" style="text-align: right;">{{item.round_num}}</td>
+													<td class="right" style="text-align: right;">{{item.round_sub_money}}</td>
+													<td class="right" style="text-align: right;">{{item.round_interest}}</td>
+													<td class="right" style="text-align: right;">{{item.acc_interest}}</td>
+													<td class="right" style="text-align: right;">{{item.round_total}}</td>
+												</tr>
+											
 											</tbody>
 										</table>
 	                        		</td>
 	                        	</tr>
 	                        </table>
-                        </form>
                     </div>
                 </div>
 				
@@ -354,6 +361,8 @@
 var vueapp = new Vue({
 	el : "#vueapp",
 	data : {
+		calculate_arr: [],
+
 		info : {
 			design_id : "", //설계아이디
 			f_interest_rate : "", //고정 금리
@@ -370,7 +379,6 @@ var vueapp = new Vue({
 			f_select_month : "", //고정 금리 예치 기간
 			profit_rate : "", //수익률
 			net_profit_rate : "", //순수익률
-
 		},
 		proInfo : {
 			product_id : "",
@@ -628,7 +636,40 @@ var vueapp = new Vue({
 					this.info.rec_after_tax = formattedRecAfterTax;
 					this.info.profit_rate = profit_rate;
 					this.info.net_profit_rate = net_profit_rate;
+					
+					
+					var length = this.info.f_select_month + this.info.v_select_month;
+					var accumulate_interest = 0;
+					var money = removeCommas(this.info.sub_money)
+					var r_interest = (money * f_interest_rate).toFixed(0);
+					for(var i = 1; i <= length; i++ ){
+						
+						if(i <= this.info.f_select_month){
+							accumulate_interest = accumulate_interest + money * f_interest_rate;
+							var params = {
+								round_num : i,
+								round_sub_money : money,
+					            round_interest: r_interest,
+								acc_interest : accumulate_interest.toFixed(0),
+								round_total : (money + accumulate_interest).toFixed(0)
+							}
+							this.calculate_arr.push(params);
+						} else{
+							accumulate_interest = accumulate_interest + money * v_interest_rate;
+							var params = {
+								round_num : i,
+								round_sub_money : money,
+								round_interest : money * v_interest_rate,
+								round_before_interest : accumulate_interest,
+								round_total : money + accumulate_interest
+							}
+							this.calculate_arr.push(params);
+						}
+					}
+					console.log("========================================")
+					console.log(JSON.stringify(this.calculate_arr))
 
+					
 				}
 				
 				if(this.info.interest_type == "복리"){

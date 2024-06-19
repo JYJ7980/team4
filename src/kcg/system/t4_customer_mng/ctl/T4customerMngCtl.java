@@ -8,13 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-<<<<<<< HEAD
 import org.springframework.web.bind.annotation.PostMapping;
-=======
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
->>>>>>> 8c4760da6290db4b45b792c9e763e07766a5ea5f
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -62,8 +59,6 @@ public class T4customerMngCtl {
 		return svc.addCust(params); 
 		
 	}
-<<<<<<< HEAD
-=======
 	
 	//담당 고객 삭제
 	@RequestMapping("/deleteCust")
@@ -84,7 +79,6 @@ public class T4customerMngCtl {
 
 	
 	
->>>>>>> 8c4760da6290db4b45b792c9e763e07766a5ea5f
 	
 
 }

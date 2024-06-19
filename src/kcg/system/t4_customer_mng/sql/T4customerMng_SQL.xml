@@ -2,12 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace='system.t4_customer_mng'>
-<<<<<<< HEAD
-	<select id="getAllCustomers" parameterType="cmmnMap" resultType="cmmnMap">
-	   select customer_name,customer_job  from kcgbd.db4_customer_info
-	</select>
-	
-=======
 	<select id="getAllCustomers" parameterType="cmmnMap"
 		resultType="cmmnMap">
 		select * from kcgbd.db4_customer_info where use_yn = 'Y'
@@ -65,5 +59,4 @@
 
 
 	</insert>
->>>>>>> 8c4760da6290db4b45b792c9e763e07766a5ea5f
 </mapper>

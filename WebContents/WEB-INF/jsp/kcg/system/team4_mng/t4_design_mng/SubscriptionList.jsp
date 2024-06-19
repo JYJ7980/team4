@@ -83,10 +83,6 @@
 			<div class="dataTables_filter" style="float: none;">
 			<div class="sub flex flex-90">
                 <span class="sub-button flex-center flex-10 flex-wrap">
-<!--                     <button type="button" class="btn btn-blue btn-icon icon-left" style="margin-left: 5px;" @click="popupPrint()"> -->
-<!-- 						인쇄 -->
-<!-- 						<i class="entypo-print"></i> -->
-<!-- 					</button> -->
 					<button type="button" class="btn btn-orange btn-icon icon-left btn-small" @click="cf_movePage('/team4/subscriptionForm')">
 						등록
 						<i class="entypo-plus"></i>
