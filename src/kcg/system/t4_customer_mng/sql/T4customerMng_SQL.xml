@@ -5,8 +5,24 @@
 	<select id="getAllCustomers" parameterType="cmmnMap"
 		resultType="cmmnMap">
 		select *
-		FROM kcgbd.db4_customer_info cust join kcgbd.db4_cust_con dcc on
-		cust.customer_id = dcc.customer_id where cust.use_yn = 'Y';
+		FROM kcgbd.db4_customer_info cust join
+		kcgbd.db4_cust_con dcc on
+		cust.customer_id = dcc.customer_id where
+		cust.use_yn = 'Y';
+	</select>
+	<select id="getCustIdNumber" parameterType="cmmnMap"
+		resultType="cmmnMap">
+		select customer_id_number
+		FROM kcgbd.db4_customer_info 
+		where customer_id_number = #{customer_id_number}
+		and use_yn = 'Y'
+	</select>
+		<select id="getCustPhone" parameterType="cmmnMap"
+		resultType="cmmnMap">
+		select customer_phone
+		FROM kcgbd.db4_customer_info 
+		where customer_phone = #{customer_phone}
+		and use_yn = 'Y'
 	</select>
 	<update id="deleteCust" parameterType="cmmnMap">
 		update
@@ -40,7 +56,6 @@
 		customer_name
 		,customer_id_number
 		,customer_brdt
-		
 		,customer_phone
 		,customer_sub_tel
 		,customer_email
@@ -53,7 +68,6 @@
 		#{customer_name}
 		,#{customer_id_number}
 		,substring(#{customer_id_number}, 1, 6)
-		
 		,#{customer_phone}
 		,#{customer_sub_tel}
 		,#{customer_email}
@@ -87,7 +101,7 @@
 		con.user_id =
 		#{user_id};
 	</select>
-	
+
 	<insert id="addConsult" parameterType="cmmnMap">
 		INSERT INTO
 		kcgbd.db4_consult(
@@ -101,8 +115,9 @@
 		#{user_id},
 		#{consult_title},
 		#{consult_context},
-		CAST(#{con_id} AS integer)
+		CAST(#{con_id} AS
+		integer)
 		)
 	</insert>
-	
+
 </mapper>

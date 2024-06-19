@@ -226,6 +226,15 @@
 					this.showPopup = false;
 				},
 				addConsult:function(){
+					   if (
+						        this.consultTitle.trim() === '' ||
+						        this.consultContext.trim() === '' ||
+						        this.customerName.trim() === ''
+						    ) {
+						        alert('모든 필수 입력 필드를 입력해주세요.');
+						        return; 
+						    }
+		        
 					var params = {
 						user_id : this.userId,
 						consult_title : this.consultTitle,
