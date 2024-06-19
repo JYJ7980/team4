@@ -32,6 +32,10 @@ public class T4MainMng_Ctl {
 		return "kcg/system/team4_mng/main";
 	}
 	
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8c4760da6290db4b45b792c9e763e07766a5ea5f
 
 
 }
