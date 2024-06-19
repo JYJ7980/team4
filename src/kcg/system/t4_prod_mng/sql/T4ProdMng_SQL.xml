@@ -6,23 +6,20 @@
 		/* system.t4_prod_mng.getList */
 		SELECT product_id
 		, product_name
-		,
-		product_type
+		, product_type
 		, possible_member
 		, lowest_rate
 		, highest_rate
-		,
-		rate_condition
+		, rate_condition
 		, lowest_date
 		, highest_date
 		, product_status
 		, taxation
-		,
-		lowest_money
+		, lowest_money
 		, highest_money
 		, product_sale_start_date
-		,
-		product_sale_end_date
+		, product_sale_end_date
+		, writer_name
 		FROM kcgbd.db4_product_info
 		WHERE 1=1
 		<if test='product_id != null and product_id != ""'>
@@ -54,6 +51,7 @@
 		, highest_money
 		, product_sale_start_date
 		, product_sale_end_date
+		, writer_name
 		)
 		VALUES (
 		#{product_id}
@@ -71,6 +69,7 @@
 		, cast(#{highest_money} as int4)
 		, cast(#{product_sale_start_date} as date)
 		, cast(#{product_sale_end_date} as date)
+		, #{user_id}
 		)
 	</insert>
 	<update id="updateInfo" parameterType="cmmnMap">
@@ -93,9 +92,20 @@
 		WHERE product_id = #{product_id}
 	</update>
 	<delete id="deleteInfo" parameterType="cmmnMap">
-		/*
-		system.t4_prod_mng.deleteInfo */
+		/* system.t4_prod_mng.deleteInfo */
 		DELETE FROM kcgbd.db4_product_info
 		WHERE product_id = #{product_id}
 	</delete>
+	<select id="checkName" parameterType="cmmnMap" resultType="cmmnMap">
+		/* system.t4_prod_mng.checkName */
+		SELECT * FROM kcgbd.db4_product_info
+		WHERE 1=1
+		AND product_name = #{product_name}
+	</select>
+	<select id="checkId" parameterType="cmmnMap" resultType="cmmnMap">
+		/* system.t4_prod_mng.checkId */
+		SELECT * FROM kcgbd.db4_product_info
+		WHERE 1=1
+		AND product_id = #{product_id}
+	</select>
 </mapper>

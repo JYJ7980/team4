@@ -60,5 +60,15 @@ public class T4ProdMngCtl {
 	public CmmnMap getInfo(CmmnMap params) {
 		return t4ProdMngSvc.getInfo(params);
 	}
+	
+	@RequestMapping("/checkName")
+	public CmmnMap checkName(CmmnMap params) {
+		return t4ProdMngSvc.checkName(params);
+	}
+	
+	@RequestMapping("/checkId")
+	public CmmnMap checkId(CmmnMap params) {
+		return t4ProdMngSvc.checkId(params);
+	}
 
 }

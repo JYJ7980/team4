@@ -62,4 +62,14 @@ public class T4ProdMngSvc {
 		return resultInfo;
 	}
 
+	public CmmnMap checkName(CmmnMap params) {
+		CmmnMap resultInfo = cmmnDao.selectOne("system.t4_prod_mng.checkName", params);
+		return resultInfo;
+	}
+	
+	public CmmnMap checkId(CmmnMap params) {
+		CmmnMap resultInfo = cmmnDao.selectOne("system.t4_prod_mng.checkId", params);
+		return resultInfo;
+	}
+
 }

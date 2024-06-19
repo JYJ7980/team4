@@ -45,7 +45,7 @@
 			class="flex-wrap flex-33 flex flex-center flex-gap-10 flex-padding-10">
 			<div class="form-group" style="width: 45%;">
 				<button class="btn btn-blue btn-icon icon-left form-control"
-					@click="getList">
+					@click="getListAll">
 					{{message}}<i class="entypo-search"></i>
 				</button>
 			</div>
@@ -87,8 +87,6 @@
 						products : [],
 						product_name : "",
 						possible_member : "",
-						pay_ty_cd : "",
-						from_date : "",
 						all_srch : "N",
 						message : '전체조회',
 					},
@@ -126,8 +124,6 @@
 								params = {
 									product_name : this.product_name,
 									possible_member : this.possible_member,
-									pay_ty_cd : this.pay_ty_cd,
-									from_date : this.from_date,
 								}
 							}
 							cv_sessionStorage.setItem('pagingConfig',
