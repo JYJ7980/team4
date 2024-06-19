@@ -19,6 +19,9 @@ public class T4customerMngSvc {
 //		System.out.println(dataList);
 		return dataList;
 	}
+<<<<<<< HEAD
+	
+=======
 
 	public CmmnMap deleteCust(CmmnMap params) {
 		String customer_id = params.getString("customer_id");
@@ -27,6 +30,7 @@ public class T4customerMngSvc {
 		return new CmmnMap().put("status", "OK");
 
 	}
+>>>>>>> 8c4760da6290db4b45b792c9e763e07766a5ea5f
 
 	public CmmnMap updateCust(CmmnMap params) {
 		String customer_id = params.getString("customer_id");

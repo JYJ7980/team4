@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace='system.t4_design_mng'>
+<!-- 	//design 설계 sql 나중에 옮겨 갈 것-->
+	
+	<select id="getProductList" parameterType="cmmnMap" resultType="cmmnMap">
+		SELECT product_name, product_id, product_type FROM kcgbd.db4_product_info 
+	    WHERE product_name LIKE CONCAT('%', #{product_name}, '%')	
+	</select>
+	
+	<select id="selectTypeProductList" parameterType="cmmnMap" resultType="cmmnMap">
+		SELECT product_name, product_id, product_type FROM kcgbd.db4_product_info 
+	    WHERE product_name LIKE CONCAT('%', #{product_name}, '%')
+		AND product_type LIKE CONCAT('%', #{product_type}, '%')	
+	</select>
+	
+	
+	<select id="selectOneProduct" parameterType="cmmnMap" resultType="cmmnMap">
+    SELECT product_name, product_id, product_type FROM kcgbd.db4_product_info 
+    WHERE product_id = #{product_id}
+	</select> 
+	
+	<select id="selectOneSub" parameterType="cmmnMap" resultType="cmmnMap">
+	    SELECT c.customer_id
+	           , c.customer_name
+	           , s.sub_start_date
+	           , s.sub_end_date
+	           , s.sub_id 
+	           , p.product_id
+	           , p.product_type
+	           , p.product_name
+	           , s.start_money
+	           , s.cycle_money
+	           , s.loan
+	           , s.pro_interest_rate
+	    FROM kcgbd.db4_customer_info c 
+	    LEFT JOIN kcgbd.t_user t ON c.user_id = t.user_id
+	    LEFT JOIN kcgbd.db4_product_sub s ON s.customer_id = c.customer_id
+	    LEFT JOIN kcgbd.db4_product_info p ON s.product_id = p.product_id
+	    WHERE s.sub_id = #{sub_id}
+	</select> 
+	
+	<select id="getCustomerList" parameterType="cmmnMap" resultType="cmmnMap">
+    SELECT customer_name, customer_id, customer_brdt FROM kcgbd.db4_customer_info 
+    WHERE customer_name LIKE CONCAT('%', #{customer_name}, '%')
+	</select>
+
+	<select id="selectOneCustomer" parameterType="cmmnMap" resultType="cmmnMap">
+    SELECT customer_name, customer_id FROM kcgbd.db4_customer_info 
+    WHERE customer_id = CAST(#{customer_id} as INTEGER)    
+	</select>
+
+	<insert id="insertProduct" parameterType="cmmnMap">
+	    INSERT INTO kcgbd.db4_product_sub (sub_end_date, start_money, cycle_money, loan, product_id, customer_id, pro_interest_rate)
+	    VALUES (#{sub_end_date}, CAST(#{start_money} AS INTEGER), CAST(#{cycle_money} AS INTEGER), CAST(#{loan} AS INTEGER), CAST(#{product_id} AS INTEGER), CAST(#{customer_id} AS INTEGER), #{pro_interest_rate})
+	</insert>
+	
+	
+	<select id="getSubscriptionList" parameterType="cmmnMap" resultType="cmmnMap">
+	    SELECT c.customer_id
+	           , c.customer_name
+	           , s.sub_start_date
+	           , s.sub_end_date
+	           , s.sub_id 
+	           , c.customer_phone
+	           , p.product_id
+	           , p.product_type
+	           , p.product_name
+	           , s.start_money
+	           , s.cycle_money
+	           , s.loan
+	           , t.user_id 
+	           , s.sub_quit
+	    FROM kcgbd.db4_customer_info c 
+	    LEFT JOIN kcgbd.t_user t ON c.user_id = t.user_id
+	    LEFT JOIN kcgbd.db4_product_sub s ON s.customer_id = c.customer_id
+	    LEFT JOIN kcgbd.db4_product_info p ON s.product_id = p.product_id
+	    <where>
+	    	AND s.sub_quit = 'Y'
+	        AND s.sub_id IS NOT null
+	        <if test='customer_name != null and customer_name != ""'>
+	           AND c.customer_name LIKE CONCAT('%',#{customer_name},'%')
+	        </if>
+	        <if test='product_name != null and product_name != ""'>
+	           AND p.product_name LIKE CONCAT('%',#{product_name},'%')
+	        </if>
+	        <if test='user_id != null and user_id != ""'>
+	           AND t.user_id LIKE CONCAT('%',#{user_id},'%')
+	        </if>
+	        <if test='sub_start_date != null and sub_start_date != ""'>
+	           AND s.sub_start_date LIKE CONCAT('%',#{sub_start_date},'%')
+	        </if>
+	    </where>
+	</select>
+	<update id="subQuit" parameterType="cmmnMap">
+		UPDATE kcgbd.db4_product_sub 
+		SET sub_quit = 'N'
+		WHERE sub_id = #{sub_id}
+	</update>
+	
+	<update id="subQuitMultiple" parameterType="java.util.List">
+	    UPDATE kcgbd.db4_product_sub 
+	    SET sub_quit = 'N'
+	    WHERE sub_id IN
+	    <foreach collection="list" item="sub_id" open="(" close=")" separator="," >
+	        #{sub_id}
+	    </foreach>
+	</update>
+
+	<update id="updateSub" parameterType="cmmnMap">
+	    UPDATE kcgbd.db4_product_sub 
+	    SET  sub_start_date = #{sub_start_date}
+	    	,sub_end_date = #{sub_end_date}
+	    	,start_money = CAST(#{start_money} AS BIGINT)
+	    	,cycle_money = CAST(#{cycle_money} AS BIGINT)
+	    	,loan = CAST(#{loan} AS BIGINT)
+	    	,pro_interest_rate = #{pro_interest_rate}
+	    WHERE sub_id = CAST(#{sub_id} AS BIGINT)
+	</update>
+		
+	
+	<select id="selectAllList" parameterType="cmmnMap" resultType="cmmnMap">
+	    SELECT c.customer_id
+	           , c.customer_name
+	           , s.sub_start_date
+	           , s.sub_end_date
+	           , s.sub_id 
+	           , c.customer_phone
+	           , p.product_id
+	           , p.product_type
+	           , p.product_name
+	           , s.start_money
+	           , s.cycle_money
+	           , s.loan
+	           , t.user_id 
+	           , s.sub_quit
+	    FROM kcgbd.db4_customer_info c 
+	    LEFT JOIN kcgbd.t_user t ON c.user_id = t.user_id
+	    LEFT JOIN kcgbd.db4_product_sub s ON s.customer_id = c.customer_id
+	    LEFT JOIN kcgbd.db4_product_info p ON s.product_id = p.product_id
+	    <where>
+	    	AND s.sub_quit = 'Y'
+	        AND s.sub_id IS NOT null
+	    </where>
+	</select>	
+<!-- 	//design 설계 sql -->
+	<select id="designCusInfo" parameterType="cmmnMap" resultType="cmmnMap">
+	    SELECT c.customer_id
+	           , c.customer_name
+	           , c.customer_id
+	           , c.customer_id_number
+	           , c.customer_email
+	           , c.customer_phone
+	           , c.customer_sub_tel
+	           , c.customer_job
+	           , c.customer_addr
+	           , c.user_id
+	           , t.dept
+	           , t.name
+	           , t.jikgub_nm
+	    FROM kcgbd.db4_customer_info c 
+	    LEFT JOIN kcgbd.t_user t ON c.user_id = t.user_id
+	    WHERE c.customer_id = CAST(#{customer_id} AS integer)
+	</select>	
+	
+	<insert id="saveCalulate" parameterType="cmmnMap">
+	    INSERT INTO kcgbd.db4_product_design 
+	    (v_select_month, v_interest_rate, tax_rate, 
+	    sub_money, rec_before_tax, rec_after_tax,
+	    profit_rate, net_profit_rate, interest_type,
+	    interest_tax, f_select_month, f_interest_rate, 
+	    before_interest, after_interest, product_id, customer_id)
+	    VALUES 
+	    (CAST(#{v_select_month} AS INTEGER), CAST(#{v_interest_rate} AS NUMERIC), CAST(#{tax_rate} AS NUMERIC), 
+	    CAST(#{sub_money} AS BIGINT), CAST(#{rec_before_tax} AS BIGINT), CAST(#{rec_after_tax} AS BIGINT),
+	    CAST(#{profit_rate} AS NUMERIC),CAST(#{net_profit_rate} AS NUMERIC) ,#{interest_type} ,
+	    CAST(#{interest_tax} AS BIGINT),CAST(#{f_select_month} AS INTEGER),CAST(#{f_interest_rate} AS NUMERIC),
+	    CAST(#{before_interest} AS BIGINT),CAST(#{after_interest} AS BIGINT), #{product_id}, CAST(#{customer_id} AS BIGINT))
+	</insert>
+	
+
+</mapper>
