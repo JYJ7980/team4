@@ -148,7 +148,7 @@
 		kcgbd.t_user rep ON ci.user_id = rep.user_id
 		WHERE
 		con.user_id =
-		#{user_id} and rep.name=#{user_name};
+		#{user_id_number} and rep.name=#{user_name};
 	</select>
 
 	<insert id="addConsult" parameterType="cmmnMap">

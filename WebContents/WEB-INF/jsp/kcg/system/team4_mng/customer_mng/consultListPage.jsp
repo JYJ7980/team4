@@ -39,7 +39,7 @@
 				style="font-size: 18px; font-weight: bold; color: black;">${userInfoVO.name}</span><span
 				style="font-size: 18px; color: black;">(${userInfoVO.dept})</span>&nbsp;
 			님 상담내역
-			
+
 			<div class="dataTables_wrapper" id="vueapp">
 				<template>
 					<table class="table table-bordered datatable dataTable"
@@ -83,100 +83,94 @@
 
 </body>
 <script>
-	var vueapp = new Vue(
-			{
-				el : "#vueapp",
-				data : {
-					dataList : [],
-					userId : '${userInfoVO.userId}', // 현재 사용자의 userId를 저장하는 변수
-					userName : '${userInfoVO.name}',
+	var vueapp = new Vue({
+		el : "#vueapp",
+		data : {
+			dataList : [],
+			userId : '${userInfoVO.userId}', // 현재 사용자의 userId를 저장하는 변수
+			userName : '${userInfoVO.name}',
 
-				},
-				mounted() {
-					// Vue 인스턴스가 마운트된 후에 실행되는 부분
-					this.getAllList();
-				},
-				methods : {
-					getList : function(isInit) {
+		},
+		mounted () {
+			this.getAllList();
+		},
+		methods : {
+			getList : function(isInit) {
 
-						cv_pagingConfig.func = this.getList;
+				cv_pagingConfig.func = this.getList;
 
-						if (isInit === true) {
-							cv_pagingConfig.pageNo = 1;
-						}
-						var params = {
-							user_id : this.userId,
-						
-						};
-				
-						cv_sessionStorage.setItem('pagingConfig',
-								cv_pagingConfig).setItem('params', params);
+				if (isInit === true) {
+					cv_pagingConfig.pageNo = 1;
+				}
+				var params = {
+					user_id : this.userId,
 
-						cf_ajax("/system/team4/getAllconsult", params,
-								this.getListCB);
-					},
-					getListCB : function(data) {
-						this.dataList = data.list;
-						cv_pagingConfig.renderPagenation("system");
-					},
-					
-					getListMyConsult : function(isInit) {
-						cv_pagingConfig.func = this.getListMyConsult;
+				};
 
-						if (isInit === true) {
-							cv_pagingConfig.pageNo = 1;
-						}
+				cv_sessionStorage.setItem('pagingConfig', cv_pagingConfig)
+						.setItem('params', params);
 
-						var params = {
-							user_id : this.userId,
-							user_name : this.userName
-						};
+				cf_ajax("/system/team4/getAllconsult", params, this.getListCB);
+			},
+			getListCB : function(data) {
+				this.dataList = data.list;
+				cv_pagingConfig.renderPagenation("system");
+			},
 
-						cv_sessionStorage.setItem('pagingConfig',
-								cv_pagingConfig).setItem('params', params);
+			getListMyConsult : function(isInit) {
+				cv_pagingConfig.func = this.getListMyConsult;
+				var params = {
+					user_id_number : this.userId,
+					user_name : this.userName
+				};
 
-						cf_ajax("/system/team4/getAllMyconsult", params,
-								this.getListFilter);
-					},
-					getListFilter : function(data) {
-						this.dataList = data.list;
-						cv_pagingConfig.renderPagenation("system");
-					},
-					
-					filterList:function() {
-						var fromDtl = cf_getUrlParam("fromDtl");
-						var pagingConfig = cv_sessionStorage
-								.getItem("pagingConfig");
-						if (!cf_isEmpty(pagingConfig)) {
-							cv_pagingConfig.pageNo = pagingConfig.pageNo;
-							cv_pagingConfig.orders = pagingConfig.orders;
+				cv_sessionStorage.setItem('pagingConfig', cv_pagingConfig)
+						.setItem('params', params);
 
-							this.getListMyConsult();
-						} else {
-							cv_sessionStorage.removeItem("pagingConfig")
-									.removeItem("params");
-							this.getListMyConsult(true);
-						}
-					},
-					
-					getAllList:function(){
-						var fromDtl = cf_getUrlParam("fromDtl");
-						var pagingConfig = cv_sessionStorage
-								.getItem("pagingConfig");
-						if (!cf_isEmpty(pagingConfig)) {
-							cv_pagingConfig.pageNo = pagingConfig.pageNo;
-							cv_pagingConfig.orders = pagingConfig.orders;
+				cf_ajax("/system/team4/getAllMyconsult", params,
+						this.getListFilter);
+			},
+			
+			
+			
+			getListFilter : function(data) {
+				this.dataList = data.list;
+				cv_pagingConfig.renderPagenation("system");
+			},
 
-							this.getList();
-						} else {
-							cv_sessionStorage.removeItem("pagingConfig")
-									.removeItem("params");
-							this.getList(true);
-						}
-					}
+			filterList : function() {
+				if (cv_pagingConfig.pageNo != 1) {
+					cv_pagingConfig.pageNo = 1;
+				};
+				var fromDtl = cf_getUrlParam("fromDtl");
+				var pagingConfig = cv_sessionStorage.getItem("pagingConfig");
+				if ("Y" === fromDtl &&!cf_isEmpty(pagingConfig)) {
+					cv_pagingConfig.pageNo = pagingConfig.pageNo;
+					cv_pagingConfig.orders = pagingConfig.orders;
+					this.getListMyConsult();
+				} else {
+					cv_sessionStorage.removeItem("pagingConfig").removeItem(
+							"params");
+					this.getListMyConsult(true);
+				}
+			},
+			
+			getAllList:function() {
+				var fromDtl = cf_getUrlParam("fromDtl");
+				var pagingConfig = cv_sessionStorage.getItem("pagingConfig");
+				if ("Y" === fromDtl && !cf_isEmpty(pagingConfig)) {
+					cv_pagingConfig.pageNo = pagingConfig.pageNo;
+					cv_pagingConfig.orders = pagingConfig.orders;
 
+					this.getList();
+				} else {
+					cv_sessionStorage.removeItem("pagingConfig").removeItem(
+							"params");
+					this.getList(true);
+				}
+			}
 
-				},
-			})
+		},
+	})
 </script>
 </html>

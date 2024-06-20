@@ -133,10 +133,10 @@ public class T4customerMngSvc {
 	}
 	
 	public PageList<CmmnMap> getAllMyconsult(CmmnMap params, PagingConfig pagingConfig) {
-		String user_id = params.getString("user_id");
+		String user_id_number = params.getString("user_id_number");
 		String user_name = params.getString("user_name");
 		
-	    params.put("user_id", user_id);
+	    params.put("user_id_number", user_id_number);
 	    params.put("user_name", user_name);
 		PageList<CmmnMap> rslt = cmmnDao.selectListPage("system.t4_customer_mng.getAllMyconsult", params, pagingConfig);
 		return rslt;
