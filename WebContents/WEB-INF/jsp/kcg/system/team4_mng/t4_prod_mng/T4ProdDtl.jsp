@@ -45,6 +45,7 @@
 						<option value="예금">예금</option>
 						<option value="적금">적금</option>
 						<option value="대출">대출</option>
+						<option value="목돈">목돈마련</option>
 					</select>
 				</div>
 				<div class="form-group">
@@ -127,12 +128,8 @@
 				<div class="form-group">
 					<div>
 						<button type="button" class="btn btn-green btn-icon btn-small"
-							@click="save">
+							@click="save" v-if="key">
 							저장 <i class="entypo-check"></i>
-						</button>
-						<button type="button" id="btn_delete"
-							class="btn btn-red btn-icon btn-small" @click="delInfo">
-							삭제 <i class="entypo-trash"></i>
 						</button>
 						<button type="button" class="btn btn-blue btn-icon btn-small"
 							@click="gotoList">
@@ -148,6 +145,8 @@
 				{
 					el : "#vueapp",
 					data : {
+						jikgub_nm : '${userInfoVO.jikgubNm}',
+						key : "",
 						info1 : "",
 						info : {
 							product_id : "${product_id}",
@@ -156,6 +155,11 @@
 					},
 
 					mounted : function() {
+						if(this.jikgub_nm==="이사"){
+							this.key = true;
+						} else {
+							this.key = false;
+						}
 						if (!cf_isEmpty(this.info.product_id)) {
 							this.getInfo();
 						}
@@ -233,17 +237,19 @@
 								var highestMoney = parseInt(this.info.highest_money);
 								var lowestRate = parseInt(this.info.lowest_rate);
 								var highestRate = parseInt(this.info.highest_rate);
+								if (this.info.product_id.length != 5) {
+									alert("상품코드는 5자리입니다.")
+									this.$refs.product_id.focus();
+									return;
+								}
 								if (lowestMoney >= highestMoney) {
 									alert("최대가입금액은 최소가입금액보다 커야합니다.");
+									this.$refs.lowest_money.focus();
 									return;
 								}
 								if (lowestRate >= highestRate) {
 									alert("최대적용이율은 최소적용이율보다 커야합니다.");
-									return;
-								}
-
-								if (this.info.product_id.length != 5) {
-									alert("상품코드는 5자리입니다.")
+									this.$refs.lowest_rate.focus();
 									return;
 								}
 								cf_ajax("/system/team4/product/checkName",

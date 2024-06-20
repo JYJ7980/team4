@@ -40,10 +40,5 @@ public class T4MainMng_Ctl {
 	public String newCreateManagementForm(){
 		return "kcg/system/team4_mng/employee/emcreateform";
 	}
-	
-
-	
-
 }
-
-
+	

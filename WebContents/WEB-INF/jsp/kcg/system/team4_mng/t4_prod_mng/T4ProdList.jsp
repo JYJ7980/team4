@@ -23,9 +23,9 @@
 				<option value="청년">청년</option>
 			</select>
 		</div>
-		<div>
+		<div v-if="key">
 			<button type="button"
-				class="btn btn-orange btn-icon icon-left btn-small"
+				class="btn btn-orange btn-icon icon-left btn-small" 
 				@click="cf_movePage('/system/team4/product/dtl')">
 				등록 <i class="entypo-plus"></i>
 			</button>
@@ -36,7 +36,7 @@
 				<button type="button"
 					class="btn btn-blue btn-icon icon-left form-control "
 					@click="getListCond(true)">
-					조건검색 <i class="entypo-search"></i>
+					조건조회 <i class="entypo-search"></i>
 				</button>
 			</div>
 		</div>
@@ -50,7 +50,8 @@
 				</button>
 			</div>
 		</div>
-		<table class="table table-bordered datatable dataTable" id="grid_app" style="border: 1px solid #999999;">
+		<table class="table table-bordered datatable dataTable" id="grid_app"
+			style="border: 1px solid #999999;">
 			<thead>
 				<tr>
 					<th>상품명</th>
@@ -89,15 +90,21 @@
 						possible_member : "",
 						all_srch : "N",
 						message : '전체조회',
+						jikgub_nm: '${userInfoVO.jikgubNm}',
+						key : "",
 					},
 					mounted : function() {
 						var fromDtl = cf_getUrlParam("fromDtl");
 						var pagingConfig = cv_sessionStorage
 								.getItem("pagingConfig");
+						if(this.jikgub_nm==="이사"){
+							this.key = true;
+						} else {
+							this.key = false;
+						}
 						if ("Y" === fromDtl && !cf_isEmpty(pagingConfig)) {
 							cv_pagingConfig.pageNo = pagingConfig.pageNo;
 							cv_pagingConfig.orders = pagingConfig.orders;
-
 							this.getList();
 						} else {
 							cv_sessionStorage.removeItem("pagingConfig")
@@ -142,9 +149,9 @@
 							}
 							cv_pagingConfig.renderPagenation("system");
 						},
-						gotoDtl : function(product_id){
+						gotoDtl : function(product_id) {
 							var params = {
-									product_id : cf_defaultIfEmpty(product_id, ""),
+								product_id : cf_defaultIfEmpty(product_id, ""),
 							}
 							cf_movePage("/system/team4/product/dtl", params);
 						},

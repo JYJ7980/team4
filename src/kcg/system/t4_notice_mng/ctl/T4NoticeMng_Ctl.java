@@ -75,5 +75,6 @@ public class T4NoticeMng_Ctl {
 		System.out.println(" ===================================== controller update log = " +params);
 		return t4NoticeMng_Svc.updateNotice(params);
 	}
-	
+
 }
+
