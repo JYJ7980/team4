@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import common.dao.CmmnDao;
 import common.utils.common.CmmnMap;
+import common.utils.common.PagingConfig;
+import common.utils.mybatis_paginator.domain.PageList;
 import kcg.common.svc.CommonSvc;
 import kcg.system.t4_notice_mng.svc.T4NoticeMng_Svc;
 
@@ -67,6 +69,14 @@ public class T4NoticeMng_Ctl {
 	@GetMapping("/noticeTest")
 	public String NoticeTest() {
 		return "kcg/system/team4_mng/notice/noticeTest";
+	}
+	
+
+	//공지사항 페이징
+	@RequestMapping("/getAllNotice")
+	public PageList<CmmnMap> getAllNotice(CmmnMap params,PagingConfig pagingConfig) {
+		PageList<CmmnMap> pageList = t4NoticeMng_Svc.getAllNotice(params,pagingConfig);
+		return pageList;
 	}
 
 }
