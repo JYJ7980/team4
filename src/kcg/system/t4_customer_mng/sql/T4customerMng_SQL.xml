@@ -127,6 +127,30 @@
 		#{user_id};
 	</select>
 
+	<select id="getAllMyconsult" parameterType="cmmnMap"
+		resultType="cmmnMap">
+		SELECT
+		con.*,
+		tu.*,
+		cc.*,
+		ci.*,
+		rep.name AS representative_name
+		FROM
+		kcgbd.db4_consult con
+		JOIN
+		kcgbd.t_user tu ON con.user_id =
+		tu.user_id
+		JOIN
+		kcgbd.db4_cust_con cc ON con.con_id = cc.con_id
+		JOIN
+		kcgbd.db4_customer_info ci ON cc.customer_id = ci.customer_id
+		JOIN
+		kcgbd.t_user rep ON ci.user_id = rep.user_id
+		WHERE
+		con.user_id =
+		#{user_id} and rep.name=#{user_name};
+	</select>
+
 	<insert id="addConsult" parameterType="cmmnMap">
 		INSERT INTO
 		kcgbd.db4_consult(

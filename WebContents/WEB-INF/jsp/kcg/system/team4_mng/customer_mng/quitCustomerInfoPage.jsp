@@ -117,7 +117,7 @@
 			                    axios.post('/system/team4/releaseQuitCust', { params: params })
 			                        .then(response => {
 			                            if (response.data.status === 'OK') {
-			                                alert('고객 계정이 복구처리 되었습니다./n담당자 변경은 관리자에게 문의하세요');
+			                                alert('고객 계정이 복구처리 되었습니다.\n담당자 변경은 관리자에게 문의하세요');
 			                                this.getList(); // 고객 목록을 다시 불러옵니다.
 			              
 			                            } else {
@@ -130,14 +130,6 @@
 			                }
 			            }
 			        },
-					getListAll : function(isInit) {
-						this.all_srch = "Y";
-						this.getList(isInit);
-					},
-					getListCond : function(isInit) {
-						this.all_srch = "N";
-						this.getList(isInit);
-					},
 					getList : function(isInit) {
 
 						cv_pagingConfig.func = this.getList;

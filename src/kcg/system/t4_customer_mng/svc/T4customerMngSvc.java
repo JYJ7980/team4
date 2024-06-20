@@ -123,14 +123,26 @@ public class T4customerMngSvc {
 		return new CmmnMap().put("status", "OK");
 
 	}
-
-	public List<CmmnMap> getAllconsult(CmmnMap params) {
-		List<CmmnMap> consultList = cmmnDao.selectList("getAllconsult", params);
-		// System.out.println(consultList);
+	
+	
+	public PageList<CmmnMap> getAllconsult(CmmnMap params, PagingConfig pagingConfig) {
 		String user_id = params.getString("user_id");
 		params.put("user_id", user_id);
-		return consultList;
+		PageList<CmmnMap> rslt = cmmnDao.selectListPage("system.t4_customer_mng.getAllconsult", params, pagingConfig);
+		return rslt;
 	}
+	
+	public PageList<CmmnMap> getAllMyconsult(CmmnMap params, PagingConfig pagingConfig) {
+		String user_id = params.getString("user_id");
+		String user_name = params.getString("user_name");
+		
+	    params.put("user_id", user_id);
+	    params.put("user_name", user_name);
+		PageList<CmmnMap> rslt = cmmnDao.selectListPage("system.t4_customer_mng.getAllMyconsult", params, pagingConfig);
+		return rslt;
+	}
+
+	
 
 	public CmmnMap addConsult(CmmnMap params) {
 		String user_id = params.getString("user_id");
@@ -158,5 +170,8 @@ public class T4customerMngSvc {
 		cmmnDao.update("system.t4_customer_mng.releaseQuitCust", params);
 		return new CmmnMap().put("status", "OK");
 	}
+
+
+
 
 }

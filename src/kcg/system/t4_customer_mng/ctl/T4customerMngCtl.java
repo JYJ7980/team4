@@ -93,11 +93,21 @@ public class T4customerMngCtl {
 	}
 
 	// 상담내역 전체 조회
-	@GetMapping("/getAllconsult")
-	public List<CmmnMap> getAllconsult(CmmnMap params) {
-		return svc.getAllconsult(params);
+	@RequestMapping("/getAllconsult")
+	public PageList<CmmnMap> getAllconsult(CmmnMap params,PagingConfig pagingConfig) {
+		PageList<CmmnMap> pageList = svc.getAllconsult(params,pagingConfig);
+		return pageList;
 	}
-
+	
+	//상담 내역 조회 필터링(내 담당 고객만)
+	@RequestMapping("/getAllMyconsult")
+	public PageList<CmmnMap> getAllMyconsult(CmmnMap params,PagingConfig pagingConfig) {
+		PageList<CmmnMap> pageList = svc.getAllMyconsult(params,pagingConfig);
+		return pageList;
+	}
+	
+	
+	
 	// 상담내역 추가 페이지로 이동
 	@GetMapping("/insertConsult")
 	public String insertConsultPage() {
