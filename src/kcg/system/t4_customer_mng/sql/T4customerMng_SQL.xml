@@ -14,23 +14,42 @@
 		resultType="cmmnMap">
 		select customer_id_number
 		FROM kcgbd.db4_customer_info
-		where customer_id_number = #{customer_id_number}
+		where
+		customer_id_number = #{customer_id_number}
 		and use_yn = 'Y'
 	</select>
 	<select id="getQuitCustIdNumber" parameterType="cmmnMap"
 		resultType="cmmnMap">
 		select customer_id_number
 		FROM kcgbd.db4_customer_info
-		where customer_id_number = #{customer_id_number}
+		where
+		customer_id_number = #{customer_id_number}
 		and use_yn = 'N'
 	</select>
 	<select id="getCustPhone" parameterType="cmmnMap"
 		resultType="cmmnMap">
 		select customer_phone
 		FROM kcgbd.db4_customer_info
-		where customer_phone = #{customer_phone}
+		where
+		customer_phone = #{customer_phone}
 		and use_yn = 'Y'
 	</select>
+	<select id="getQuitCustInfo" parameterType="cmmnMap"
+		resultType="cmmnMap">
+		SELECT *
+		FROM kcgbd.db4_customer_info cust join kcgbd.t_user
+		tu on cust.user_id =
+		tu.user_id
+		where cust.use_yn ='N' order by
+		customer_sub_date
+	</select>
+	<update id="releaseQuitCust" parameterType="cmmnMap">
+		update
+		kcgbd.db4_customer_info
+		set use_yn = 'Y'
+		where customer_id =
+		CAST(#{customer_id} AS integer)
+	</update>
 	<update id="deleteCust" parameterType="cmmnMap">
 		update
 		kcgbd.db4_customer_info
@@ -38,7 +57,6 @@
 		where customer_id =
 		CAST(#{customer_id} AS integer)
 	</update>
-
 	<update id="updateCust" parameterType="cmmnMap">
 		update
 		kcgbd.db4_customer_info

@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import common.dao.CmmnDao;
 import common.utils.common.CmmnMap;
+import common.utils.common.PagingConfig;
+import common.utils.mybatis_paginator.domain.PageList;
 
 @Service
 public class T4customerMngSvc {
@@ -46,38 +48,34 @@ public class T4customerMngSvc {
 		params.put("customer_email", customer_email);
 		params.put("customer_job", customer_job);
 		params.put("customer_addr", customer_addr);
-	
 
-	    // 전화번호 중복 체크
-	    CmmnMap existingCustomerPhone = cmmnDao.selectOne("system.t4_customer_mng.getCustPhone", params);
-	    if (existingCustomerPhone != null) {
-	        return new CmmnMap().put("status", "ERROR").put("message", "해당 전화번호로 등록된 고객이 이미 존재합니다. 다시 수정해 주세요.");
-	    }
+		// 전화번호 중복 체크
+		CmmnMap existingCustomerPhone = cmmnDao.selectOne("system.t4_customer_mng.getCustPhone", params);
+		if (existingCustomerPhone != null) {
+			return new CmmnMap().put("status", "ERROR").put("message", "해당 전화번호로 등록된 고객이 이미 존재합니다. 다시 수정해 주세요.");
+		}
 
 		cmmnDao.update("system.t4_customer_mng.updateCust", params);
 		return new CmmnMap().put("status", "OK");
 	}
-	
-	
-	//중복 환인용 주민번호 조회
+
+	// 중복 환인용 주민번호 조회
 	public List<CmmnMap> getCustIdNumber(CmmnMap params) {
 		List<CmmnMap> dataList = cmmnDao.selectList("getCustIdNumber", params);
 		return dataList;
 	}
-	
-	//중복 환인용 탈퇴 회원 주민번호 조회
+
+	// 중복 환인용 탈퇴 회원 주민번호 조회
 	public List<CmmnMap> getQuitCustIdNumber(CmmnMap params) {
 		List<CmmnMap> dataList = cmmnDao.selectList("getQuitCustIdNumber", params);
 		return dataList;
 	}
 
-	
-	//중복 확인용 전화번호 조회
+	// 중복 확인용 전화번호 조회
 	public List<CmmnMap> getCustPhone(CmmnMap params) {
 		List<CmmnMap> dataList = cmmnDao.selectList("getCustPhone", params);
 		return dataList;
 	}
-
 
 	public CmmnMap addCust(CmmnMap params) {
 
@@ -105,24 +103,24 @@ public class T4customerMngSvc {
 			// 이미 존재하는 경우 처리
 			return new CmmnMap().put("status", "ERROR").put("message", "해당 주민번호로 등록된 고객이 이미 존재합니다");
 		}
-		
-		
+
 		// 탈퇴한 고객 주민번호 중복 체크
 		CmmnMap existingQuitCustomer = cmmnDao.selectOne("system.t4_customer_mng.getQuitCustIdNumber", params);
 		if (existingQuitCustomer != null) {
 			// 이미 존재하는 경우 처리
-			return new CmmnMap().put("status", "ERROR").put("message", "해당 주민번호로 등록된 고객은 휴면상태입니다.\n휴면 고객 처리는 관리자에게 문의하세요");
+			return new CmmnMap().put("status", "ERROR").put("message",
+					"해당 주민번호로 등록된 고객은 휴면상태입니다.\n휴면 고객 처리는 관리자에게 문의하세요");
 		}
-		
-	    // 전화번호 중복 체크
-	    CmmnMap existingCustomerPhone = cmmnDao.selectOne("system.t4_customer_mng.getCustPhone", params);
-	    if (existingCustomerPhone != null) {
-	        return new CmmnMap().put("status", "ERROR").put("message", "해당 전화번호로 등록된 고객이 이미 존재합니다.");
-	    }
 
-	    // 중복이 없는 경우 고객 등록
-	    cmmnDao.insert("system.t4_customer_mng.addCust", params);
-	    return new CmmnMap().put("status", "OK");
+		// 전화번호 중복 체크
+		CmmnMap existingCustomerPhone = cmmnDao.selectOne("system.t4_customer_mng.getCustPhone", params);
+		if (existingCustomerPhone != null) {
+			return new CmmnMap().put("status", "ERROR").put("message", "해당 전화번호로 등록된 고객이 이미 존재합니다.");
+		}
+
+		// 중복이 없는 경우 고객 등록
+		cmmnDao.insert("system.t4_customer_mng.addCust", params);
+		return new CmmnMap().put("status", "OK");
 
 	}
 
@@ -149,8 +147,16 @@ public class T4customerMngSvc {
 		return new CmmnMap().put("status", "OK");
 	}
 
+	public PageList<CmmnMap> getQuitCustInfo(CmmnMap params, PagingConfig pagingConfig) {
+		PageList<CmmnMap> rslt = cmmnDao.selectListPage("system.t4_customer_mng.getQuitCustInfo", params, pagingConfig);
+		return rslt;
+	}
 
-
-
+	public CmmnMap releaseQuitCust(CmmnMap params) {
+		String customer_id = params.getString("customer_id");
+		params.put("customer_id", customer_id);
+		cmmnDao.update("system.t4_customer_mng.releaseQuitCust", params);
+		return new CmmnMap().put("status", "OK");
+	}
 
 }
