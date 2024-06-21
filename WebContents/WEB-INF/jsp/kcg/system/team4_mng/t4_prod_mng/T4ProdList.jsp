@@ -6,10 +6,17 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<jsp:include page="/WEB-INF/jsp/kcg/_include/system/header_meta.jsp"
-	flush="false" />
+<jsp:include page="/WEB-INF/jsp/kcg/_include/system/header_meta.jsp" flush="false"/>
+	<!-- Imported styles on this page -->
+	<link rel="stylesheet" href="/static_resources/system/js/datatables/datatables.css">
+	<link rel="stylesheet" href="/static_resources/system/js/select2/select2-bootstrap.css">
+	<link rel="stylesheet" href="/static_resources/system/js/select2/select2.css">
 </head>
-<body>
+<body class="page-body">
+
+<div class="page-container">
+
+	<jsp:include page="/WEB-INF/jsp/kcg/_include/system/sidebar-menu.jsp" flush="false"/>
 	<div class="flex-column flex-gap-10" id="vueapp">
 		<div class="form-group flex-40">
 			<label class="form-control">상품명:</label> <input class="form-control"
@@ -160,6 +167,7 @@
 					},
 				});
 	</script>
+	</div>
 </body>
 
 
