@@ -5,46 +5,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-<<<<<<< HEAD
-    <meta charset="UTF-8">
-    <title>Customer InfoPage</title>
-    <!-- Vue.js CDN 추가 -->
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
-    <!-- axios CDN 추가 -->
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
-    <style>
-        /* 테이블 숨기기 */
-        #customerTable {
-            display: none;
-        }
-    </style>
-</head>
-<body>
-    <div id="app">
-        <h4>고객 정보 관리</h4>
-        <br>
-        <div>
-            <!-- 전체 조회 버튼 -->
-            <button @click="getAllCustomers">전체 조회</button>
-        </div>
-        <div id="customerTable">
-            <!-- 고객 정보 테이블 -->
-            <h2>전체 고객 정보</h2>
-            <table border='1'>
-                <tr>
-                    <th>Name</th>
-                    <th>Job</th>
-                </tr>
-                <tr v-for="customer in customers">
-                    <td>{{ customer.customer_name }}</td>
-                    <td>{{ customer.customer_job }}</td>
-                </tr>
-            </table>
-        </div>
-    </div>     
-=======
 <meta charset="UTF-8">
 <title>Customer InfoPage</title>
 <!-- Vue.js CDN 추가 -->
@@ -152,7 +112,6 @@
 				<button @click="deleteCustomer">삭제</button>
 				<button @click="updateCustomer">수정</button>
 				<button @click="resetForm">신규</button>
->>>>>>> 8c4760da6290db4b45b792c9e763e07766a5ea5f
 
 				<br> <br>
 				<h2>관리자 정보</h2>
@@ -363,12 +322,6 @@ new Vue({
             this.customerJob = ''; // 고객 직업 초기화
             this.customerAddr = ''; // 고객 주소 초기화
         }
-<<<<<<< HEAD
-    });
-    
-    
-    </script>
-=======
 
     },
     mounted: function() {
@@ -377,6 +330,6 @@ new Vue({
     }
 });
 </script>
->>>>>>> 8c4760da6290db4b45b792c9e763e07766a5ea5f
+
 </body>
 </html>

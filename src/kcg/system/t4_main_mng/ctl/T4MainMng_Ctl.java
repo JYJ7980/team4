@@ -19,7 +19,7 @@ import kcg.system.t4_notice_mng.svc.T4NoticeMng_Svc;
 public class T4MainMng_Ctl {
 	
 	@Autowired
-	T4MainMngSvc mainMngSvc;
+	T4MainMngSvc t4mainMngSvc;
 	
 	@Autowired
 	CommonSvc commonSvc;
@@ -32,6 +32,20 @@ public class T4MainMng_Ctl {
 		return "kcg/system/team4_mng/main";
 	}
 	
-
+	@GetMapping("/birthDay")
+	public CmmnMap birthDay() {
+		return t4mainMngSvc.birthDay();
+	}
+	
+	@GetMapping("/end")
+	public CmmnMap ending() {
+		return t4mainMngSvc.productEnd();
+	}
+	
+	@GetMapping("/noticeTop2")
+	public List<CmmnMap> noticeList(){
+		return t4mainMngSvc.noticeTop2();
+	}
+	
 
 }
