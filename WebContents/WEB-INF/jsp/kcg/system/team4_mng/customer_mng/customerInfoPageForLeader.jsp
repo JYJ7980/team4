@@ -514,6 +514,7 @@ new Vue({
 			this.selectedCustomer.name = manager.name;
 			this.selectedCustomer.dept = manager.dept;
 			this.selectedCustomer.jikgub_nm = manager.jikgub_nm;
+			this.selectedCustomer.user_id = manager.user_id;
 			
 			this.showPopup = false;
 		},
@@ -535,7 +536,7 @@ new Vue({
                 // 서버에 보낼 관리자 정보 준비
                 var params = {
                     customer_id: this.selectedCustomer.customer_id,
-                    user_id: this.selectedCustomer.user_id,
+                    user_id: this.selectedCustomer.user_id
                 };
 
                 // 서버에 PUT 또는 POST 요청 보내기 (수정에 따라 다름)
