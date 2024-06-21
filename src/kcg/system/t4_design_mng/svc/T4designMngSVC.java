@@ -54,6 +54,7 @@ public class T4designMngSVC {
 	}
 
 	public void saveCalulate(CmmnMap params) {
+		
 		cmmnDao.insert("saveCalulate", params);
 	}	
 

@@ -167,17 +167,17 @@
 	
 	<insert id="saveCalulate" parameterType="cmmnMap">
 	    INSERT INTO kcgbd.db4_product_design 
-	    (v_select_month, v_interest_rate, tax_rate, 
-	    sub_money, rec_before_tax, rec_after_tax,
+	    (v_select_month, v_interest_rate, rate, 
+	    sub_money, rec_before_tax, final_money,
 	    profit_rate, net_profit_rate, interest_type,
 	    interest_tax, f_select_month, f_interest_rate, 
-	    before_interest, after_interest, product_id, customer_id)
+	    before_interest, final_interest, product_id, customer_id)
 	    VALUES 
-	    (CAST(#{v_select_month} AS INTEGER), CAST(#{v_interest_rate} AS NUMERIC), CAST(#{tax_rate} AS NUMERIC), 
-	    CAST(#{sub_money} AS BIGINT), CAST(#{rec_before_tax} AS BIGINT), CAST(#{rec_after_tax} AS BIGINT),
+	    (CAST(#{v_select_month} AS INTEGER), CAST(#{v_interest_rate} AS NUMERIC), CAST(#{rate} AS NUMERIC), 
+	    CAST(#{sub_money} AS BIGINT), CAST(#{rec_before_tax} AS BIGINT), CAST(#{final_money} AS BIGINT),
 	    CAST(#{profit_rate} AS NUMERIC),CAST(#{net_profit_rate} AS NUMERIC) ,#{interest_type} ,
 	    CAST(#{interest_tax} AS BIGINT),CAST(#{f_select_month} AS INTEGER),CAST(#{f_interest_rate} AS NUMERIC),
-	    CAST(#{before_interest} AS BIGINT),CAST(#{after_interest} AS BIGINT), #{product_id}, CAST(#{customer_id} AS BIGINT))
+	    CAST(#{before_interest} AS BIGINT),CAST(#{final_interest} AS BIGINT), #{product_id}, CAST(#{customer_id} AS BIGINT))
 	</insert>
 	
 

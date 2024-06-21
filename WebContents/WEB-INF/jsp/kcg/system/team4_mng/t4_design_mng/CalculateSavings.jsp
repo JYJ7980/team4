@@ -32,7 +32,7 @@
 			<li class="active"><strong>금융계산기</strong></li>
 		</ol>
 	
-		<h2>상품관리 > 금융계산기 (적금 설계)</h2>
+		<h2>프로모션 > 금융계산기 (적금 설계)</h2>
 		<br/>
 		
 		<div class="row">
@@ -42,128 +42,134 @@
 				<div class="left flex-column flex-gap-10 flex-40" v-if="info.simpl_ty_cd == '1'">
                     <label>고객정보:</label>
                     <div class="form-group">
-                        <label>작성일자:</label>
-                        <input class="form-control" v-model="info.wrt_dt" disabled />
-                    </div>
-                    <div class="form-group">
                         <label>성명:</label>
-                        <input class="form-control" v-model="custInfo.cust_nm" disabled />
+                        <input class="form-control" v-model="custInfo.customer_name" disabled />
                         <button type="button" class="btn" @click="popupCust()">
                              <i class="fa fa-search"></i>
                          </button>
                     </div>
                     <div class="form-group">
-                        <label>실명번호:</label>
-                        <input class="form-control" v-model="custInfo.rrno" disabled />
+                        <label>주민번호:</label>
+                        <input class="form-control" v-model="custInfo.customer_id_number" disabled />
                     </div>
                     <div class="form-group">
                         <label>E-mail:</label>
-                        <input class="form-control" v-model="custInfo.cust_eml_addr" disabled />
+                        <input class="form-control" v-model="custInfo.customer_email" disabled />
                     </div>
                     <div class="form-group">
                         <label>전화번호:</label>
-                        <input class="form-control" v-model="custInfo.co_telno" disabled />
+                        <input class="form-control" v-model="custInfo.customer_phone" disabled />
                     </div>
                     <div class="form-group">
-                        <label>핸드폰번호:</label>
-                        <input class="form-control" v-model="custInfo.cust_mbl_telno" disabled />
+                        <label>비상연락처:</label>
+                        <input class="form-control" v-model="custInfo.customer_sub_tel" disabled />
                     </div>
                     <div class="form-group">
                         <label>직업:</label>
-                        <input class="form-control" v-model="custInfo.occp_ty_cd_nm" disabled />
+                        <input class="form-control" v-model="custInfo.customer_job" disabled />
                     </div>
                     <div class="form-group">
                         <label>주소:</label>
-                        <input class="form-control" v-model="custInfo.cust_addr" disabled />
+                        <input class="form-control" v-model="custInfo.customer_addr" disabled />
+                    </div>
+                    <div class="form-group">
+                        <label>관리담당자ID:</label>
+                        <input class="form-control" v-model="custInfo.user_id" disabled />
                     </div>
                     <div class="form-group">
                         <label>관리담당자:</label>
-                        <input class="form-control" v-model="custInfo.pic_nm" disabled />
+                        <input class="form-control" v-model="custInfo.name" disabled />
                     </div>
+                    
                     <div class="form-group">
                         <label>부서:</label>
-                        <input class="form-control" v-model="custInfo.dept_nm" disabled />
+                        <input class="form-control" v-model="custInfo.dept" disabled />
                     </div>
                     <div class="form-group">
                         <label>직위:</label>
-                        <input class="form-control" v-model="custInfo.jbps_ty_cd_nm" disabled />
-                    </div>
-                    <div class="form-group">
-                        <label>연락처:</label>
-                        <input class="form-control" v-model="custInfo.pic_mbl_telno" disabled />
+                        <input class="form-control" v-model="custInfo.jikgub_nm" disabled />
                     </div>
                 </div>
-                
                 
 				<div class="right flex-column flex-100">
                     <div class="right-top">
                         <ul class="nav">
-                            <input type="hidden" id="dsg_ty_cd" v-model="info.dsg_ty_cd">
                             <li class="nav-tab active" @click="tabChange(1)">적금 설계</li>
                             <li class="nav-tab" @click="tabChange(2)">목돈마련적금 설계</li>
-                            <li class="nav-tab" @click="tabChange(3)">예금 설계</li>
+                            <li class="nav-tab " @click="tabChange(3)">예금 설계</li>
                             <li class="nav-tab" @click="tabChange(4)">대출 설계</li>
                         </ul>
                         <div class="nav-content flex-column flex-gap-10">
                         	<div class="form-group" style="justify-content: left">
                                 <label>설계번호:</label>
-                                <input class="form-control" id="prod_ds_sn" v-model="info.prod_ds_sn" disabled />
+                                <input class="form-control" id="design_id" v-model="info.prod_ds_sn" disabled />
                             </div>
                             <div class="form-group" style="justify-content: left">
                                 <label>상품선택:</label>
-                                <input class="form-control" id="prod_cd" v-model="info.prod_cd" disabled />
-                                <input class="form-control" id="prod_nm" v-model="info.prod_nm" disabled />
+                                <input class="form-control" id="prod_cd" v-model="proInfo.product_id" disabled />
+                                <input class="form-control" id="prod_nm" v-model="proInfo.product_name" />
                                 <button type="button" class="btn" @click="popupProd()">
                                     <i class="fa fa-search"></i>
                                 </button>
                             </div>
                             <div class="form-group" style="justify-content: left">
-                                <label>납입주기:</label>
-                                <select class="form-control" id="pay_ty_cd" v-model="info.pay_ty_cd" style="padding-top: 3px;" disabled>
-									<option value="1">월납</option>
-									<option value="2">년납</option>
-									<option value="3">일시납</option>
-								</select>
-                            </div>
-                            <div class="form-group" style="justify-content: left">
-                                <label>목표금액 (원):</label>
-                                <input class="form-control flex-50" type="text" id="circle_acml_amt" v-model="info.circle_acml_amt" style="width: 700px;"/>
+                                <label>불입금액 (원):</label>
+                                <input class="form-control flex-50" type="text" id="dpst_amt" v-model="info.cycle_money" style="width: 700px;"/>
                                 <button type="button" class="btn btn-transparent flex-20" @click="setCircleAcmlAmt(10)">+10만원</button>
                                 <button type="button" class="btn btn-transparent flex-20" @click="setCircleAcmlAmt(50)">+50만원</button>
                                 <button type="button" class="btn btn-transparent flex-20" @click="setCircleAcmlAmt(100)">+100만원</button>
                                 <button type="button" class="btn btn-navy flex-20" @click="setCircleAcmlAmt(0)">정정</button>
                             </div>
                             <div class="form-group" style="justify-content: left">
-                                <label>목표기간 (개월):</label>
-                                <input class="form-control flex-50" type="text" id="goal_prd" v-model="info.goal_prd" style="width: 700px;"/>
-                                <button type="button" class="btn btn-transparent flex-20" @click="setGoalPrd(3)">+3개월</button>
-                                <button type="button" class="btn btn-transparent flex-20" @click="setGoalPrd(6)">+6개월</button>
-                                <button type="button" class="btn btn-transparent flex-20" @click="setGoalPrd(12)">+12개월</button>
-                                <button type="button" class="btn btn-navy flex-20" @click="setGoalPrd(0)">정정</button>
+                                <label>이자유형:</label>
+								<select class="form-control" id="int_tax_ty_cd" v-model="info.interest_type" style="padding-top: 3px;">
+									<option value="단리">단리</option>
+									<option value="복리">복리</option>
+								</select>
+                            </div>
+                            
+                            <div class="form-group" style="justify-content: left">
+                                <label>고정금리 (%):</label>
+                                <input class="form-control" type="text" id="aply_rate" v-model="info.f_interest_rate" />
                             </div>
                             <div class="form-group" style="justify-content: left">
-                                <label>적용금리 (%):</label>
-                                <input class="form-control" type="text" id="aply_rate" v-model="info.aply_rate" />
+                                <label> 고정금리 예치기간 (개월):</label>
+                                <input class="form-control flex-50" type="text" id="dpst_prd" v-model="info.f_select_month" style="width: 700px;"/>
+                                <button type="button" class="btn btn-transparent flex-20" @click="fSetGoalPrd(3)">+3개월</button>
+                                <button type="button" class="btn btn-transparent flex-20" @click="fSetGoalPrd(6)">+6개월</button>
+                                <button type="button" class="btn btn-transparent flex-20" @click="fSetGoalPrd(12)">+12개월</button>
+                                <button type="button" class="btn btn-navy flex-20" @click="fSetGoalPrd(0)">정정</button>
                             </div>
+                            
+                            <div class="form-group" style="justify-content: left">
+                                <label>변동금리 (%):</label>
+                                <input class="form-control" type="text" id="aply_rate" v-model="info.v_interest_rate" />
+                            </div>
+                            <div class="form-group" style="justify-content: left">
+                                <label> 변동금리 예치기간 (개월):</label>
+                                <input class="form-control flex-50" type="text" id="dpst_prd" v-model="info.v_select_month" style="width: 700px;"/>
+                                <button type="button" class="btn btn-transparent flex-20" @click="vSetGoalPrd(3)">+3개월</button>
+                                <button type="button" class="btn btn-transparent flex-20" @click="vSetGoalPrd(6)">+6개월</button>
+                                <button type="button" class="btn btn-transparent flex-20" @click="vSetGoalPrd(12)">+12개월</button>
+                                <button type="button" class="btn btn-navy flex-20" @click="vSetGoalPrd(0)">정정</button>
+                            </div>
+                            
+                            
                             <div class="form-group" style="justify-content: left">
                                 <label>이자과세:</label>
-								<select class="form-control" id="int_tax_ty_cd" v-model="info.int_tax_ty_cd" style="padding-top: 3px;" disabled>
+								<select class="form-control" id="int_tax_ty_cd" v-model="info.tax_rate" style="padding-top: 3px;">
 									<option value="1">일반과세 (15.4%)</option>
 									<option value="2">세금우대 (9.5%)</option>
 									<option value="3">비과세</option>
 								</select>
                             </div>
-                            <div class="form-group" style="justify-content: left">
-                                <label>작성일자:</label>
-								<input class="form-control" v-model="info.wrt_dt" disabled />
-                            </div>
                         </div>
                     </div>
                     
 					<div class="dt-buttons" style="padding-top: 15px;">
-						<input id="external" type="radio" v-model="info.simpl_ty_cd" value="1" :disabled="info.prod_ds_sn!=''&&info.prod_ds_sn!=undefined">
+						<input id="external" type="radio" v-model="info.simpl_ty_cd" value="1">
 						<label class="tab_item" for="external">정상설계</label>
-						<input id="internal" type="radio" v-model="info.simpl_ty_cd"  value="0" :disabled="info.prod_ds_sn!=''&&info.prod_ds_sn!=undefined">
+						<input id="internal" type="radio" v-model="info.simpl_ty_cd"  value="0">
 						<label class="tab_item" for="internal">간편설계</label>
 					</div>
 					<div class="dataTables_filter">
@@ -173,67 +179,89 @@
 						<button type="button" class="btn btn-orange btn-small" @click="save()">
 							설계저장
 						</button>
+						<button type="button" class="btn btn-blue btn-icon btn-small" @click="gotoList()">
+							목록 <i class="entypo-list"></i>
+						</button>
 					</div>
 					
                     <ul class="nav">
                         <li class="nav-tab active">계산결과</li>
                     </ul>
+                    
                     <div class="right-bottom flex-100">
-                        <form class="form flex-column" method="POST" action="#">
-	                        <table>
-	                        	<tr>
-	                        		<td class="center" style="width: 42%; vertical-align: top;">
-	                        			<div class="form-wrapper flex flex-wrap flex-gap-10">
-			                                <div class="form-group">
-			                                    <label>불입금액합계:</label>
-			                                    <input class="form-control" id="tot_dpst_amt" v-model="info.tot_dpst_amt" disabled />
-			                                </div>
-			                                <div class="form-group">
-			                                    <label>세전이자:</label>
-			                                    <input class="form-control" id="tot_dpst_int" v-model="info.tot_dpst_int" disabled />
-			                                </div>
-			                                <div class="form-group">
-			                                    <label>세전수령액:</label>
-			                                    <input class="form-control" id="bfo_rcve_amt" v-model="info.bfo_rcve_amt" disabled />
-			                                </div>
-			                                <div class="form-group">
-			                                    <label>이자과세금:</label>
-			                                    <input class="form-control" id="int_tax_amt" v-model="info.int_tax_amt" disabled />
-			                                </div>
-			                                <div class="form-group">
-			                                    <label>세후수령액:</label>
-			                                    <input class="form-control" id="atx_rcve_amt" v-model="info.atx_rcve_amt" disabled />
-			                                </div>
-			                            </div>	
-			                            
-			                            <div class="panel-heading">
-											<div class="panel-title">계산결과 CHART</div>
-										</div>
-										<div id="chart" class="bottom-right-bottom flex-100"></div>
+	                       <table>
+	                        <tr>
+	                        	<td class="center" style="width: 40%; vertical-align: top;">
+	                        		<div class="form-wrapper flex flex-wrap flex-gap-10">
+			                               <div class="form-group">
+			                                   <label>불입금액합계:</label>
+			                                   <input class="form-control" id="tot_dpst_amt" v-model="info.total_cycle_money" disabled />
+			                               </div>
+			                               <div class="form-group">
+			                                   <label>세전이자:</label>
+			                                   <input class="form-control" id="tot_dpst_int" v-model="info.before_interest" disabled />
+			                               </div>
+			                               <div class="form-group">
+			                                   <span>수익률:</span>
+			                                   <span id="tot_dpst_int"disabled>{{ info.profit_rate }}%</span>
+			                               </div>
+			                               			                                
+			                               <div class="form-group">
+			                                   <label>세전수령액:</label>
+			                                   <input class="form-control" id="bfo_rcve_amt" v-model="info.rec_before_tax" disabled />
+			                               </div>
+			                               <div class="form-group">
+			                                   <label>이자과세금:</label>
+			                                   <input class="form-control" id="int_tax_amt" v-model="info.interest_tax" disabled />
+			                               </div>
+			                               <div class="form-group">
+			                                   <label>세후수령액:</label>
+			                                   <input class="form-control" id="atx_rcve_amt" v-model="info.rec_after_tax" disabled />
+			                               </div>
+			                               <div class="form-group">
+			                                   <span>순수익률:</span>
+			                                   <span id="tot_dpst_int" disabled>{{ info.net_profit_rate }}%</span>
+			                               </div>
+			                               
+			                           </div>	
+			                           
+		                            <div class="panel-heading">
+										<div class="panel-title">계산결과 CHART</div>
+									</div>										
+									<div id="chart" class="bottom-right-bottom flex-100"></div>
 	                        		</td>
 	                        		<td class="center" style="width: 3%;">
 	                        		</td>
-	                        		<td class="center" style="width: 55%; vertical-align: top;">
+	                        		<td class="center" style="width: 57%; vertical-align: top;">
 			                            <table class="table table-bordered datatable dataTable" id="grid_app">
 											<thead>
 												<tr class="replace-inputs">
 													<th style="width: 10%;" class="center">회차</th>
-													<th style="width: 23%;" class="center">회차불입금액</th>
-													<th style="width: 23%;" class="center">누적불입금액</th>
-													<th style="width: 21%;" class="center">회차이자</th>
-													<th style="width: 23%;" class="center">회차원리금</th>
+													<th style="width: 10%;" class="center">회차불입금액</th>
+													<th style="width: 10%;" class="center">누적불입금액</th>
+													<th style="width: 10%;" class="center">회차이자</th>
+													<th style="width: 10%;" class="center">누적이자</th>
+													<th style="width: 10%;" class="center">회차원리금</th>
 												</tr>
 											</thead>
 											<tbody id="grid_tbody">
+												<tr v-for="item in calculate_arr" style="cursor: pointer;">
+													<td class="right" style="text-align: right;">{{item.round_num}}</td>
+													<td class="right" style="text-align: right;">{{item.round_cycle_money}}</td>
+													<td class="right" style="text-align: right;">{{item.round_acc_cycle_money}}</td>
+													<td class="right" style="text-align: right;">{{item.round_interest}}</td>
+													<td class="right" style="text-align: right;">{{item.acc_interest}}</td>
+													<td class="right" style="text-align: right;">{{item.round_total}}</td>
+												</tr>
+											
 											</tbody>
 										</table>
 	                        		</td>
 	                        	</tr>
 	                        </table>
-                        </form>
                     </div>
                 </div>
-                
+				
 			</template>
 			</div>
 		</div>
@@ -245,130 +273,138 @@
 	</div>
 </div>
 
-<!-- 상품팝업 -->
-<div class="modal fade" id="pop_prod">
-<template>
-	<div class="modal-dialog" style="width: 500px;">
-		<div class="modal-content">
-			<div class="modal-body">
-				<div class="dataTables_wrapper">					
-					<div class="dt-buttons">
-						<div>
-							<label>코드:</label>
-							<input type="search" id="pop_prod_cd" style="width: 80px;" v-model="pop_prod_cd">
-							<label>코드명:</label>
-							<input type="search" id="pop_prod_nm" style="width: 200px;" v-model="pop_prod_nm">
-							<button type="button" class="btn btn-red" style="margin-left: 5px;" @click="getList">
-								검색
-							</button>
+			<!-- 상품팝업 -->
+			<div class="modal fade" id="pop_prod">
+				<template>
+					<div class="modal-dialog" style="width: 500px;">
+						<div class="modal-content">
+							<div class="modal-body">
+								<div class="dataTables_wrapper">
+									<div class="dt-buttons">
+											<label>상품명:</label>
+											<input type="search" id="pop_product_name" style="width: 200px;"
+												v-model="pop_product_name">
+											<button type="button" class="btn btn-red"
+												style="margin-left: 5px;" @click="getList">검색</button>
+									</div>
+								</div>
+								<div style="height: 400px; overflow: auto;"
+									class="dataTables_wrapper">
+									<table class="table table-bordered datatable dataTable">
+										<thead style="position: sticky; top: 0px;">
+											<tr>
+												<th class="center" style="width: 25%;">상품ID</th>
+												<th class="center" style="width: 50%;">상품명</th>
+												<th class="center" style="width: 25%;">상품 유형</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr v-for="item in dataList" @click="selProd(item.product_id)"
+												style="cursor: pointer;">
+												<td class="center">{{item.product_id}}</td>
+												<td class="left">{{item.product_name}}</td>
+												<td class="left">{{item.product_type}}</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
 						</div>
 					</div>
-				</div>
-				<div style="height: 400px;overflow: auto;" class="dataTables_wrapper">		
-					<table class="table table-bordered datatable dataTable">
-						<thead style="position: sticky;top: 0px;">
-							<tr>
-								<th class="center" style="width: 25%;">상품코드</th>
-								<th class="center" style="width: 50%;">상품명</th>
-								<th class="center" style="width: 25%;">가입대상</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr v-for="item in dataList" @click="selProd(item.prod_cd)" style="cursor: pointer;">
-								<td class="center">{{item.prod_cd}}</td>
-								<td class="left">{{item.prod_nm}}</td>
-								<td class="left">{{item.sbstg_ty_cd_nm}}</td>
-							</tr>
-						</tbody>
-					</table>	
-				</div>				
+				</template>
 			</div>
-		</div>
-	</div>
-</template>
-</div>
 
-<!-- 고객팝업 -->
-<div class="modal fade" id="pop_cust">
-<template>
-	<div class="modal-dialog" style="width: 500px;">
-		<div class="modal-content">
-			<div class="modal-body">
-				<div class="dataTables_wrapper">					
-					<div class="dt-buttons">
-						<div>
-							<label>고객명:</label>
-							<input type="search" id="pop_cust_nm" style="width: 250px;" v-model="pop_cust_nm">
-							<button type="button" class="btn btn-red" style="margin-left: 5px;" @click="getList">
-								검색
-							</button>
+			<!-- 고객팝업 -->
+			<div class="modal fade" id="pop_cust">
+				<template>
+					<div class="modal-dialog" style="width: 500px;">
+						<div class="modal-content">
+							<div class="modal-body">
+								<div class="dataTables_wrapper">
+									<div class="dt-buttons">
+										<div>
+											<label>고객명:</label> <input type="search" id="pop_customer_name"
+												style="width: 250px;" v-model="pop_customer_name">
+											<button type="button" class="btn btn-red"
+												style="margin-left: 5px;" @click="getList">검색</button>
+										</div>
+									</div>
+								</div>
+								<div style="height: 400px; overflow: auto;"
+									class="dataTables_wrapper">
+									<table class="table table-bordered datatable dataTable">
+										<thead style="position: sticky; top: 0px;">
+											<tr>
+												<th class="center" style="width: 25%;">고객ID</th>											
+												<th class="center" style="width: 25%;">고객명</th>
+												<th class="center" style="width: 20%;">생년월일</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr v-for="item in dataList" @click="selCust(item.customer_id)"
+												style="cursor: pointer;">
+												<td class="center">{{item.customer_id}}</td>
+												<td class="center">{{item.customer_name}}</td>
+												<td class="center">{{item.customer_brdt}}</td>
+											</tr>
+										</tbody>
+									</table>
+									<div class="dataTables_paginate paging_simple_numbers"
+										id="div_paginate"></div>
+								</div>
+							</div>
 						</div>
 					</div>
-				</div>
-				<div style="height: 400px;overflow: auto;" class="dataTables_wrapper">		
-					<table class="table table-bordered datatable dataTable">
-						<thead style="position: sticky;top: 0px;">
-							<tr>
-								<th class="center" style="width: 25%;">고객명</th>
-								<th class="center" style="width: 20%;">생년월일</th>
-								<th class="center" style="width: 30%;">핸드폰번호</th>
-								<th class="center" style="width: 25%;">담당자</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr v-for="item in dataList" @click="selCust(item)" style="cursor: pointer;">
-								<td class="center">{{item.cust_nm}}</td>
-								<td class="center">{{item.rrno}}</td>
-								<td class="center">{{item.cust_mbl_telno}}</td>
-								<td class="center">{{item.pic_nm}}</td>
-							</tr>
-						</tbody>
-					</table>
-					<div class="dataTables_paginate paging_simple_numbers" id="div_paginate">
-					</div>  
-				</div>				
+				</template>
 			</div>
-		</div>
-		</template>
-</div>
-</div>
 
 </body>
 <script>
 var vueapp = new Vue({
 	el : "#vueapp",
 	data : {
+		calculate_arr: [],
+
 		info : {
 			prod_ds_sn : "${prod_ds_sn}",
 			cust_mbl_telno : "${cust_mbl_telno}",
-			dsg_ty_cd : "${dsg_ty_cd}",
+			prod_ty_cd : "${prod_ty_cd}",
 			simpl_ty_cd : "0",
-			wrt_dt : "",
-			int_cty_cd : "",
-			rrno : "",
-			prod_cd : "",
-			prod_nm : "",
-			goal_prd : "",
-			circle_acml_amt : "",
-			tot_dpst_amt : "",
-			tot_dpst_int : "",
-			int_tax_amt : "",
-			bfo_rcve_amt : "",
-			atx_rcve_amt : "",
+
+			f_interest_rate : "", //고정 금리
+			v_interest_rate : "", //변동 금리
+			tax_rate : "", //세금 비율
+			cycle_money : "", //불입 금액
+			before_interest : "", //세전 이자
+			after_interest : "", //세전 이자			
+			rec_before_tax : "", //세전 수령액
+			interest_tax : "", //이자과세금
+			interest_type: "", //단리인지 복리인지
+			rec_after_tax : "", //세후 수령액
+			v_select_month : "", //변동 금리 예치 기간
+			f_select_month : "", //고정 금리 예치 기간
+			profit_rate : "", //수익률
+			net_profit_rate : "", //순수익률
+			total_cycle_money: "", //불입금액합계
 		},
+		proInfo : {
+			product_id : "",
+			product_name : "",
+		},
+
 		custInfo : {
-			cust_mbl_telno : "",
-			cust_nm : "",
-			rrno : "",
-			cust_eml_addr : "",
-			co_telno : "",
-			occp_ty_cd_nm : "",
-			cust_addr : "",
-			pic_nm : "",
-			dept_nm : "",
-			jbps_ty_cd_nm : "",
-			pic_mbl_telno : "",
-			tsk_dtl_cn : "",
+			customer_phone : "",
+			customer_name : "",
+			customer_id_number : "",
+			customer_id : "",
+			customer_email : "",
+			customer_sub_tel : "",
+			customer_job : "",
+			customer_addr : "",
+			user_id : "",
+			name : "",
+			dept : "",
+			jikgub_nm : ""
 		},
 	},
 	mounted : function(){
@@ -390,9 +426,9 @@ var vueapp = new Vue({
 			
 			var params = {
 				cust_mbl_telno : cf_defaultIfEmpty(this.info.cust_mbl_telno, ""),
-				dsg_ty_cd : index,
+				prod_ty_cd : index,
 			}
-			cf_movePage("/promion_mng/dtl", params);
+			cf_movePage("/team4/calculate", params);
 			
 		},
 		getDsgInfo : function(){
@@ -409,56 +445,121 @@ var vueapp = new Vue({
 			if(this.info.simpl_ty_cd != "1"){
 				alert("정상설계만 저장할 수 있습니다.");
 				return;
-			}else if(cf_isEmpty(this.info.atx_rcve_amt) || this.info.atx_rcve_amt == 0){
-				alert("이자계산 후 저장할 수 있습니다.");
-				return;
-			}else if(cf_isEmpty(this.custInfo.cust_nm)){
+			}else if(cf_isEmpty(this.custInfo.customer_name)){
 				alert("고객정보를 선택하세요.");
 				return;
 			}
 			
-			if(!confirm("저장하시겠습니까?")) return;
-			
-			this.info.cust_mbl_telno = this.custInfo.cust_mbl_telno;
-			this.info.int_cty_cd = "1";
-			
-			cf_ajax("/promion_mng/save", this.info, this.saveCB);
-		},
-		saveCB : function(data){
-			alert("저장되었습니다.");
-			cf_movePage('/promion_mng/list');
-		},
-		getProdInfo : function(){
-			cf_ajax("/promion_mng/getProdInfo", this.info, this.getProdInfoCB);
-		},
-		getProdInfoCB : function(data){
-			this.info = data;
-			this.info.wrt_dt = getToday();
-		},
-		getCustInfo : function(){
+	        if (cf_isEmpty(this.info.before_interest) || cf_isEmpty(this.info.rec_before_tax) || 
+	                cf_isEmpty(this.info.interest_tax) || cf_isEmpty(this.info.after_interest) || 
+	                cf_isEmpty(this.info.rec_after_tax) || cf_isEmpty(this.info.profit_rate) || 
+	                cf_isEmpty(this.info.net_profit_rate)) {
+	                alert("이자 계산을 먼저 수행하세요.");
+	                return;
+	            }
+	        if(this.info.v_select_month == ""){
+	        	this.info.v_select_month = 0;
+	        }
+	        if(this.info.v_interest_rate == ""){
+	        	this.info.v_interest_rate = 0;
+	        }
+	        if(this.info.f_select_month == ""){
+	        	this.info.f_select_month = 0;
+	        }
+	        if(this.info.f_interest_rate == ""){
+	        	this.info.f_interest_rate = 0;
+	        }
+	       
+
 			var params = {
-				cust_mbl_telno : this.info.cust_mbl_telno,
+		            v_select_month: this.info.v_select_month,
+		            v_interest_rate: this.info.v_interest_rate,
+		            rate: this.info.tax_rate,
+		            cycle_money: this.info.cycle_money,
+		            rec_before_tax: removeCommas(this.info.rec_before_tax),
+		            final_money: removeCommas(this.info.rec_after_tax),
+		            profit_rate: this.info.profit_rate,
+		            net_profit_rate: this.info.net_profit_rate,
+		            interest_type: this.info.interest_type,
+		            interest_tax: removeCommas(this.info.interest_tax),
+		            f_select_month: this.info.f_select_month,
+		            f_interest_rate: this.info.f_interest_rate,
+		            before_interest: removeCommas(this.info.before_interest),
+		            final_interest: removeCommas(this.info.after_interest),
+		            product_id: this.proInfo.product_id,
+		            customer_id: this.custInfo.customer_id,
 			}
-			cf_ajax("/custMng/getCustCardInfo", params, this.getCustInfoCB);
+			console.log("=================================")
+			console.log(JSON.stringify(params))
+				console.log("=================================")
+				console.log("실행됨 이제 axios로 넘어가야함")
+	            axios.post('/team4/saveCalulate', {params : params})
+	        	.then(response => {
+					alert("정상등록되었습니다")
+	        	})
+	        	.catch(error => {
+	        	    console.error("Error:", error);
+	        	});				
 		},
-		getCustInfoCB : function(data){
-			this.custInfo = data;
-			this.info.simpl_ty_cd = "1";
-		},
+        getProdInfo: function() {
+            // 상품 정보를 가져오는 로직
+            console.log("1. 정상작동 하였습니다.")
+
+			var params = {
+			product_id : this.proInfo.product_id
+			}
+            
+            axios.get('/team4/proSelectOne', {params : params})
+            	.then(response => {
+    				console.log("2. 정상작동 하였습니다.")
+    				this.proInfo = response.data				            		
+            	})
+            	.catch(error => {
+            	    console.error("Error:", error);
+            	});
+        },
+        getCustInfo: function() {
+            // 고객 정보를 가져오는 로직
+            console.log("1. 정상작동 하였습니다.")
+
+			var params = {
+			customer_id : this.custInfo.customer_id
+			}
+            
+            axios.get('/team4/designCusInfo', {params : params})
+            	.then(response => {
+    				console.log("2. 정상작동 하였습니다.")
+    				this.custInfo = response.data	
+    				console.log(this.cus)
+
+            	})
+            	.catch(error => {
+            	    console.error("Error:", error);
+            	});
+
+        },
 		setCircleAcmlAmt : function(nAmt){
 			if(nAmt == 0) {
-				this.info.circle_acml_amt = 0;
+				this.info.cycle_money = 0;
 			}else {
-				this.info.circle_acml_amt = Number(this.info.circle_acml_amt) + nAmt*10000;
+				this.info.cycle_money = Number(this.info.cycle_money) + nAmt*10000;
 			}
 		},
-		setGoalPrd : function(nPrd){
+		fSetGoalPrd : function(nPrd){
 			if(nPrd == 0) {
-				this.info.goal_prd = 0;
+				this.info.f_select_month = 0;
 			}else {
-				this.info.goal_prd = Number(this.info.goal_prd) + nPrd;
+				this.info.f_select_month = Number(this.info.f_select_month) + nPrd;
 			}
 		},
+		vSetGoalPrd : function(nPrd){
+			if(nPrd == 0) {
+				this.info.v_select_month = 0;
+			}else {
+				this.info.v_select_month = Number(this.info.v_select_month) + nPrd;
+			}
+		},
+
 		popupProd : function(){
 			pop_prod.getList();
 			$("#pop_prod").modal("show");
@@ -469,95 +570,216 @@ var vueapp = new Vue({
 		},
 		prcCalc : function(){
 			
-			if(cf_isEmpty(this.info.prod_cd)){
+			var a = this.info.f_select_month
+			var b = this.info.v_select_month
+			console.log(a)
+			console.log(b)
+
+			if(cf_isEmpty(this.proInfo.product_id)){
 				alert("상품을 선택하세요.");
 				return;
-			}else if(cf_isEmpty(this.info.circle_acml_amt) || this.info.circle_acml_amt == 0){
+			}
+			
+
+			if(cf_isEmpty(this.info.cycle_money)){
 				alert("불입금액을 입력하세요.");
 				return;
-			}else if(cf_isEmpty(this.info.goal_prd) || this.info.goal_prd == 0){
-				alert("불입기간을 입력하세요.");
-				return;
-			}else if(cf_isEmpty(this.info.aply_rate) || this.info.aply_rate == 0){
-				alert("적용금리를 입력하세요.");
+			}
+			if(this.info.cycle_money == 0){
+				alert("불입금액을 입력하세요.");
 				return;
 			}
 			
-			var nPymAmt		= Math.round(this.info.circle_acml_amt); // 불입금액
-			var nRvcy		= Math.round(this.info.pay_ty_cd); // 납입주기
-			var nPrd		= Math.round(this.info.goal_prd); // 불입기간
-			var nApplItr	= Math.round(this.info.aply_rate); // 적용금리
-				nApplItr	= nApplItr / 12 / 100;
-			var nScIntLvy	= Math.round(this.info.pay_ty_cd); // 이자과세
+		    if (this.info.interest_type === '') {
+			       alert('이자유형을 선택하여주세요');
+			       return false;
+			}
+		    
+		    if ((this.info.f_interest_rate === '' || this.info.f_interest_rate == 0) && 
+				(this.info.v_interest_rate === '' || this.info.v_interest_rate == 0)) {
+				alert('이자율을 선택하여주세요');
+				return false;
+			}
+				          
+
+
+		    if ((this.info.f_select_month === '' || this.info.f_select_month == 0) && 
+		       (this.info.v_select_month === '' || this.info.v_select_month == 0)) {
+		        alert('예치기간을 작성해주세요');
+		        return false;
+		    }
+		          
+		    if (this.info.tax_rate === '') {
+		       alert('이자과세를 선택하여주세요');
+		       return false;
+		    }
+		          
 			
-			var nScPayAmt	= 0;	// 회차붙입금액
-			var nAcmPayAmt	= 0;	// 누적불입금액
-			var nScPniAmt	= 0;	// 회차원리금
-			var nScInt		= 0;	// 회차이자
-			var nAcmInt		= 0;	// 누적이자
-			var nTax		= 0;	// 이자과세
 			
-			var html = '';
-			for(var i=1; i<=nPrd; i++) {
+				var f_interest_rate = (this.info.f_interest_rate /100 /12);
+				var v_interest_rate = (this.info.v_interest_rate /100 /12);
+				var tax_rate ="";				
 				
-				if(nRvcy == 1) {
-					nScPayAmt = nPymAmt;
-				} else if(i % nRvcy == 1) {
-					nScPayAmt = nPymAmt * nRvcy;
-				} else {
-					nAmt = 0;
+				if(this.info.tax_rate == "1") {
+					tax_rate =(15.4/100);
+				}
+				if(this.info.tax_rate == "2") {
+					tax_rate =(9.5/100);
+				}
+				if(this.info.tax_rate == "3") {
+					tax_rate = 0;
 				}
 				
-				nAcmPayAmt += nScPayAmt;
-				nScInt = nAcmPayAmt * nApplItr;
-				nScPniAmt = nScPniAmt + nScPayAmt + nScInt;
-				nAcmInt += nScInt;
+				if(this.info.interest_type == "단리"){
+					var length = this.info.f_select_month + this.info.v_select_month //총 납입 기간 숫자 확인
+					var r_interest =  0;
+					var accumulate_interest = 0;
+					var money = this.info.cycle_money
+					for(var i = 1; i <= this.info.f_select_month; i++ ){
+						r_interest = money * f_interest_rate * i
+						accumulate_interest = accumulate_interest + r_interest;
+						var params = {
+							round_num : i,
+							round_cycle_money : formatNumberWithCommas(money),
+							round_acc_cycle_money : formatNumberWithCommas(money * i),
+					        round_interest: formatNumberWithCommas(r_interest.toFixed(0)),
+							acc_interest : formatNumberWithCommas(accumulate_interest.toFixed(0)),
+							round_total : formatNumberWithCommas((money*i + accumulate_interest).toFixed(0))
+						}
+						this.calculate_arr.push(params);
+
+					}
+					for(var i = 1 ; i <= this.info.v_select_month ; i++) {
+						r_interest = r_interest + money * v_interest_rate
+						accumulate_interest = accumulate_interest + r_interest;
+						var params = {
+								round_num : i + this.info.f_select_month,
+								round_cycle_money : formatNumberWithCommas(money),
+								round_acc_cycle_money : formatNumberWithCommas(money * (i+this.info.f_select_month)),
+						        round_interest: formatNumberWithCommas(r_interest.toFixed(0)),
+								acc_interest : formatNumberWithCommas(accumulate_interest.toFixed(0)),
+								round_total : formatNumberWithCommas((money*(i+this.info.f_select_month) + accumulate_interest).toFixed(0))
+							}
+						this.calculate_arr.push(params);
+					}
+					
+					var lastParams = this.calculate_arr[this.calculate_arr.length - 1];
+					console.log('round_interest의 값:', lastParams.round_interest);
+					console.log('round_total의 값:', lastParams.round_total);
+					
+					var rec_before_tax = removeCommas(lastParams.round_total); //세전 최종 금액
+					var before_interest =removeCommas(lastParams.acc_interest); //세전 이자
+					var interest_tax = before_interest * tax_rate; //이자에 대한 세금
+					var after_interest = before_interest - interest_tax; //세후 이자
+					var rec_after_tax = this.info.cycle_money * length + after_interest //최종금액
+					var profit_rate =  ((before_interest / (this.info.cycle_money*length)) * 100).toFixed(2) ;//수익률
+					var net_profit_rate = ((after_interest / (this.info.cycle_money*length)) * 100).toFixed(2); //순수익률
+					var total_cycle_money = this.info.cycle_money * length; //불입금액합계
+
+					
+					var formattedBeforeInterest = formatNumberWithCommas(before_interest);
+					var formattedRecBeforeTax = formatNumberWithCommas(rec_before_tax);
+					var formattedInterestTax = formatNumberWithCommas(interest_tax);
+					var formattedAfterInterest = formatNumberWithCommas(after_interest);
+					var formattedRecAfterTax = formatNumberWithCommas(rec_after_tax);
+					var formattedTotalCycleMoney = formatNumberWithCommas(total_cycle_money); //불입금액합계
+
+
+					this.info.total_cycle_money = formattedTotalCycleMoney;
+					this.info.before_interest = formattedBeforeInterest;
+					this.info.rec_before_tax = formattedRecBeforeTax;
+					this.info.interest_tax = formattedInterestTax;
+					this.info.after_interest = formattedAfterInterest;
+					this.info.rec_after_tax = formattedRecAfterTax;
+					this.info.profit_rate = profit_rate;
+					this.info.net_profit_rate = net_profit_rate;
+				}
 				
-				html += '<tr>';
-				html += '<td class="right" style="text-align: right;">' + i + '</td>';
-				html += '<td class="right" style="text-align: right;">' + numberFormat(Math.round(nScPayAmt)) + '</td>';
-				html += '<td class="right" style="text-align: right;">' + numberFormat(Math.round(nAcmPayAmt)) + '</td>';
-				html += '<td class="right" style="text-align: right;">' + numberFormat(Math.round(nScInt)) + '</td>';
-				html += '<td class="right" style="text-align: right;">' + numberFormat(Math.round(nScPniAmt)) + '</td>';
-				html += '</tr>';
-			}
-			
-			if(this.info.int_tax_ty_cd == "1") {		// 일반과세
-				nTax = Math.round(nAcmInt * 15.4 / 100);
-			} else if(this.info.int_tax_ty_cd == "2") {	// 세금우대
-				nTax = Math.round(nAcmInt * 9.5 / 100);
-			}else {										// 비과세
-				nTax = 0;
-			}
-			nScPniAmt = Math.round(nScPniAmt);
-			
-			this.info.tot_dpst_amt = (Math.round(nAcmPayAmt));
-			this.info.tot_dpst_int = (Math.round(nAcmInt));
-			this.info.int_tax_amt = (Math.round(nTax));
-			this.info.bfo_rcve_amt = (Math.round(nScPniAmt));
-			this.info.atx_rcve_amt = (Math.round(nScPniAmt - nTax));
-        
-			$("#grid_tbody").html(html);
-			
-			// 차트
-			var chart = bb.generate({
-                data: {
-                    columns: [
-                        ["불입금액합계"	, nAcmPayAmt],
-                        ["세전이자"	, nAcmInt],
-                        ["세전수령액"	, nScPniAmt],
-                        ["이자과세금"	, nTax],
-                        ["세후수령액"	, nScPniAmt - nTax],
-                    ],
-                    type: "bar",
-                    groups: [
-                        []
-                    ],
-                    order: null
-                },
-                bindto: "#chart"
-            });
-			
+				if(this.info.interest_type == "복리"){
+					
+					var length = this.info.f_select_month + this.info.v_select_month; // 총 기간
+					var accumulate_interest = 0; // 누적 이자
+					var money = this.info.cycle_money; // 매달 납입 금액
+					var rec_before_tax = 0; // 세전 총액
+					var previous_rec_before_tax = 0; // 이전 회차 세전 총액
+
+					// 고정 금리 기간에 대한 계산
+					for (var i = 1; i <= this.info.f_select_month; i++) {
+					    rec_before_tax = (rec_before_tax + money) * (1 + f_interest_rate);
+					    var r_interest = rec_before_tax - previous_rec_before_tax - money;
+					    accumulate_interest = rec_before_tax - (money * i);
+
+					    var params = {
+					        round_num: i,
+					        round_cycle_money: formatNumberWithCommas(money),
+					        round_acc_cycle_money: formatNumberWithCommas(money * i),
+					        round_interest: formatNumberWithCommas(r_interest.toFixed(0)),
+					        acc_interest: formatNumberWithCommas(accumulate_interest.toFixed(0)),
+					        round_total: formatNumberWithCommas(rec_before_tax.toFixed(0))
+					    };
+
+					    this.calculate_arr.push(params);
+					    previous_rec_before_tax = rec_before_tax;
+					}
+
+					// 변동 금리 기간에 대한 계산
+					for (var i = 1; i <= this.info.v_select_month; i++) {
+					    rec_before_tax = (rec_before_tax + money) * (1 + v_interest_rate);
+					    var r_interest = rec_before_tax - previous_rec_before_tax - money;
+					    accumulate_interest = rec_before_tax - (money * (i + this.info.f_select_month));
+
+					    var params = {
+					        round_num: i + this.info.f_select_month,
+					        round_cycle_money: formatNumberWithCommas(money),
+					        round_acc_cycle_money: formatNumberWithCommas(money * (i + this.info.f_select_month)),
+					        round_interest: formatNumberWithCommas(r_interest.toFixed(0)),
+					        acc_interest: formatNumberWithCommas(accumulate_interest.toFixed(0)),
+					        round_total: formatNumberWithCommas((money * (i + this.info.f_select_month) + accumulate_interest).toFixed(0))
+					    };
+
+					    this.calculate_arr.push(params);
+					    previous_rec_before_tax = rec_before_tax;
+					}
+
+					console.log("========================================")
+					console.log(JSON.stringify(this.calculate_arr))
+					
+					var lastParams = this.calculate_arr[this.calculate_arr.length - 1];
+					console.log('round_interest의 값:', lastParams.round_interest);
+					console.log('round_total의 값:', lastParams.round_total);
+					
+					var rec_before_tax = removeCommas(lastParams.round_total); //세전 최종 금액
+					var before_interest =removeCommas(lastParams.acc_interest); //세전 이자
+					var interest_tax = before_interest * tax_rate; //이자에 대한 세금
+					var after_interest = before_interest - interest_tax; //세후 이자
+					var rec_after_tax = this.info.cycle_money * length + after_interest //최종금액
+					var profit_rate =  ((before_interest / (this.info.cycle_money*length)) * 100).toFixed(2) ;//수익률
+					var net_profit_rate = ((after_interest / (this.info.cycle_money*length)) * 100).toFixed(2); //순수익률
+					var total_cycle_money = this.info.cycle_money * length; //불입금액합계
+
+					
+					var formattedBeforeInterest = formatNumberWithCommas(before_interest);
+					var formattedRecBeforeTax = formatNumberWithCommas(rec_before_tax);
+					var formattedInterestTax = formatNumberWithCommas(interest_tax);
+					var formattedAfterInterest = formatNumberWithCommas(after_interest);
+					var formattedRecAfterTax = formatNumberWithCommas(rec_after_tax);
+					var formattedTotalCycleMoney = formatNumberWithCommas(total_cycle_money); //불입금액합계
+
+
+					this.info.total_cycle_money = formattedTotalCycleMoney;
+					this.info.before_interest = formattedBeforeInterest;
+					this.info.rec_before_tax = formattedRecBeforeTax;
+					this.info.interest_tax = formattedInterestTax;
+					this.info.after_interest = formattedAfterInterest;
+					this.info.rec_after_tax = formattedRecAfterTax;
+					this.info.profit_rate = profit_rate;
+					this.info.net_profit_rate = net_profit_rate;
+					
+				}
+
+		},
+		gotoList : function(){
+			cf_movePage('/promion_mng/list');
 		},
 	}
 });
@@ -566,29 +788,35 @@ var pop_prod = new Vue({
 	el : "#pop_prod",
 	data : {
 		dataList : [],
-		pop_prod_cd : "",
-		pop_prod_nm : "",
+		pop_product_name: "",
+		pop_product_id:"",
+		pop_product_type:"적금",
+
 	},
 	mounted : function(){
-		//this.getList();
+		this.getList();
 	},
+
 	methods : {
 		getList : function(){
 			this.dataList = [];
 			var params = {
-				prod_cd : this.prod_cd,
-				prod_nm : this.prod_nm,
+				product_name : this.pop_product_name,
+				product_type : this.pop_product_type,
 			}
-			cf_ajax("/prod_mng/getList", params, function(data){
-				pop_prod.dataList = data;
+			console.log("==params값");
+			console.log(JSON.stringify(params));
+			cf_ajax("/team4/typeProductList", params, function(proList){
+				pop_prod.dataList = proList;
+				console.log("==받아온 데이터 값");
+				console.log(JSON.stringify(pop_prod.dataList));
 			});
 		},
-		selProd : function(prod_cd){
-			
-			vueapp.info.prod_cd = prod_cd;
-			vueapp.getProdInfo();
-			
+		selProd : function(product_id){
+			vueapp.proInfo.product_id = product_id;
 			$("#pop_prod").modal("hide");
+			vueapp.getProdInfo();	
+
 		},
 	},
 });
@@ -597,28 +825,27 @@ var pop_cust = new Vue({
 	el : "#pop_cust",
 	data : {
 		dataList : [],
-		pop_cust_nm  : "",
-	},
-	mounted : function(){
-		//this.getList();
+		pop_customer_name  : "",
+		pop_customer_id : "",
+		pop_customer_brdt: "",
 	},
 	methods : {
-		getList : function(isInit){
+		getList : function(){
 			var params = {
-				cust_nm : this.pop_cust_nm,
-				cust_evt_ty_cd : "",
-				dept_nm : "",
-				wrt_dt : "",
+				customer_name : this.pop_customer_name,
 			}
-			cf_ajax("/prod_mng/getCustList", params, function(data){
+			console.log(params);
+			cf_ajax("/team4/customerList", params, function(data){
 				pop_cust.dataList = data;
 			});
 		},
-		selCust : function(item){
-			vueapp.info.cust_mbl_telno = item.cust_mbl_telno;
-			vueapp.getCustInfo();
-			
+		selCust : function(customer_id){
+			console.log("==============================")
+			console.log(customer_id)
+			vueapp.custInfo.customer_id = customer_id;			
 			$("#pop_cust").modal("hide");
+			vueapp.getCustInfo();
+
 		},
 	},
 });
@@ -639,6 +866,20 @@ var pop_cust = new Vue({
     	
     	return year + "-" + month + "-" + day;
     }
-    
+    function formatNumberWithCommas(number) {
+        // 소수점 이하 제거
+        var wholeNumber = Math.trunc(number);
+        // 숫자를 문자열로 변환한 후 콤마 추가
+        return wholeNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    function removeCommas(stringWithCommas) {
+
+        // 콤마(,)를 제거하고 숫자만 남기기
+        var stringWithoutCommas = stringWithCommas.replace(/,/g, '');
+        // 숫자로 변환하여 반환
+        return parseFloat(stringWithoutCommas);
+    }
+
 </script>
 </html>

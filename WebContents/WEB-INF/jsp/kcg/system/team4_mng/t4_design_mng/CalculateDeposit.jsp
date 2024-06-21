@@ -102,7 +102,7 @@
                         <div class="nav-content flex-column flex-gap-10">
                         	<div class="form-group" style="justify-content: left">
                                 <label>설계번호:</label>
-                                <input class="form-control" id="design_id" v-model="info.design_id" disabled />
+                                <input class="form-control" id="design_id" v-model="info.prod_ds_sn" disabled />
                             </div>
                             <div class="form-group" style="justify-content: left">
                                 <label>상품선택:</label>
@@ -240,7 +240,7 @@
 													<th style="width: 23%;" class="center">회차예치금액</th>
 													<th style="width: 23%;" class="center">회차이자</th>
 													<th style="width: 21%;" class="center">누적이자</th>
-													<th style="width: 23%;" class="center">회차 총 금액</th>
+													<th style="width: 23%;" class="center">회차 원리금</th>
 												</tr>
 											</thead>
 											<tbody id="grid_tbody">
@@ -364,7 +364,11 @@ var vueapp = new Vue({
 		calculate_arr: [],
 
 		info : {
-			design_id : "", //설계아이디
+			prod_ds_sn : "${prod_ds_sn}",
+			cust_mbl_telno : "${cust_mbl_telno}",
+			prod_ty_cd : "${prod_ty_cd}",
+			simpl_ty_cd : "0",
+
 			f_interest_rate : "", //고정 금리
 			v_interest_rate : "", //변동 금리
 			tax_rate : "", //세금 비율
@@ -421,7 +425,7 @@ var vueapp = new Vue({
 				cust_mbl_telno : cf_defaultIfEmpty(this.info.cust_mbl_telno, ""),
 				prod_ty_cd : index,
 			}
-			cf_movePage("/promion_mng/dtl", params);
+			cf_movePage("/team4/calculate", params);
 			
 		},
 		getDsgInfo : function(){
@@ -450,14 +454,29 @@ var vueapp = new Vue({
 	                alert("이자 계산을 먼저 수행하세요.");
 	                return;
 	            }
+	        
+	        if(this.info.v_select_month == ""){
+	        	this.info.v_select_month = 0;
+	        }
+	        if(this.info.v_interest_rate == ""){
+	        	this.info.v_interest_rate = 0;
+	        }
+	        if(this.info.f_select_month == ""){
+	        	this.info.f_select_month = 0;
+	        }
+	        if(this.info.f_interest_rate == ""){
+	        	this.info.f_interest_rate = 0;
+	        }
+	       
+
 
 			var params = {
 		            v_select_month: this.info.v_select_month,
 		            v_interest_rate: this.info.v_interest_rate,
-		            tax_rate: this.info.tax_rate,
+		            rate: this.info.tax_rate,
 		            sub_money: removeCommas(this.info.sub_money),
 		            rec_before_tax: removeCommas(this.info.rec_before_tax),
-		            rec_after_tax: removeCommas(this.info.rec_after_tax),
+		            final_money: removeCommas(this.info.rec_after_tax),
 		            profit_rate: this.info.profit_rate,
 		            net_profit_rate: this.info.net_profit_rate,
 		            interest_type: this.info.interest_type,
@@ -465,7 +484,7 @@ var vueapp = new Vue({
 		            f_select_month: this.info.f_select_month,
 		            f_interest_rate: this.info.f_interest_rate,
 		            before_interest: removeCommas(this.info.before_interest),
-		            after_interest: removeCommas(this.info.after_interest),
+		            final_interest: removeCommas(this.info.after_interest),
 		            product_id: this.proInfo.product_id,
 		            customer_id: this.custInfo.customer_id,
 			}
@@ -659,9 +678,9 @@ var vueapp = new Vue({
 							var params = {
 								round_num : i,
 								round_sub_money : money,
-								round_interest : money * v_interest_rate,
-								round_before_interest : accumulate_interest,
-								round_total : money + accumulate_interest
+								round_interest : (money * v_interest_rate).toFixed(0),
+								acc_interest : accumulate_interest.toFixed(0),
+								round_total : (money + accumulate_interest).toFixed(0)
 							}
 							this.calculate_arr.push(params);
 						}
@@ -697,6 +716,41 @@ var vueapp = new Vue({
 					this.info.rec_after_tax = formattedRecAfterTax;
 					this.info.profit_rate = profit_rate;
 					this.info.net_profit_rate = net_profit_rate;
+					
+					var length = this.info.f_select_month + this.info.v_select_month;
+					var accumulate_interest = 0;
+					var money = removeCommas(this.info.sub_money)
+					for(var i = 1; i <= length; i++ ){
+						
+						if(i <= this.info.f_select_month){
+							money = money + money * f_interest_rate; //회차당 누적되는 돈
+							r_interest = (money * f_interest_rate).toFixed(0); //회차당 이자
+							accumulate_interest = (accumulate_interest + (money * f_interest_rate));
+							var params = {
+								round_num : i,
+								round_sub_money : removeCommas(this.info.sub_money),
+					            round_interest: r_interest,
+								acc_interest : accumulate_interest.toFixed(0),
+								round_total : money.toFixed(0)
+							}
+							this.calculate_arr.push(params);
+						} else{
+							money = money + money * v_interest_rate; //회차당 누적되는 돈
+							r_interest = (money * v_interest_rate).toFixed(0); //회차당 이자
+							accumulate_interest = (accumulate_interest + (money * v_interest_rate));
+							var params = {
+								round_num : i,
+								round_sub_money : removeCommas(this.info.sub_money),
+					            round_interest: r_interest,
+								acc_interest : accumulate_interest.toFixed(0),
+								round_total : money.toFixed(0)
+							}
+							this.calculate_arr.push(params);
+						}
+					}
+					console.log("========================================")
+					console.log(JSON.stringify(this.calculate_arr))
+
 
 				}
 

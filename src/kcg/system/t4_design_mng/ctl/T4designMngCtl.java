@@ -124,19 +124,29 @@ public class T4designMngCtl {
 		return "kcg/system/team4_mng/t4_design_mng/SubscriptionList";
     }
     
-    //계산기파트
-    @GetMapping("calculate")
-    public String calculate(CmmnMap params) {
-    	if (params.get("product_type") == "예금") {
-    		return "kcg/system/team4_mng/t4_design_mng/CalculateDeposit";
-    	} else if(params.get("product_type") == "적금"){
-    		return "kcg/system/team4_mng/t4_design_mng/CalculateSavings";
-    	} else if(params.get("product_type") == "대출") {
-    		return "kcg/system/team4_mng/t4_design_mng/CalculateLoan";
-    	} else {
-    		return "kcg/system/team4_mng/t4_design_mng/CalculateDeposit";
-    	}
-    }
+    
+	@RequestMapping("/calculate")
+	public String openPageDtl(Model model, CmmnMap params) {
+		
+		String sProdTyCd = params.getString("prod_ty_cd", "1");
+		model.addAttribute("prod_ds_sn", params.getString("prod_ds_sn", ""));			// 설계설계번호
+		model.addAttribute("cust_mbl_telno", params.getString("cust_mbl_telno", ""));	// 고객KEY
+		model.addAttribute("prod_ty_cd", sProdTyCd);										// 설계타입코드 : 1.적금설계, 2.목돈마련설계, 3.예금설계, 4.대출설계
+		
+		
+		String sRsltUrl = "";
+		if("1".equals(sProdTyCd)) {
+			sRsltUrl = "kcg/system/team4_mng/t4_design_mng/CalculateSavings";
+		}else if("2".equals(sProdTyCd)) {
+			sRsltUrl = "kcg/system/team4_mng/t4_design_mng/CalculateLump";
+		}else if("3".equals(sProdTyCd)) {
+			sRsltUrl = "kcg/system/team4_mng/t4_design_mng/CalculateDeposit";
+		}else if("4".equals(sProdTyCd)) {
+			sRsltUrl = "kcg/system/team4_mng/t4_design_mng/CalculateLoan";
+		}
+		
+		return sRsltUrl;
+	}
     
 	@RequestMapping("designCusInfo")
 	public CmmnMap designCusInfo(CmmnMap params) {
@@ -147,10 +157,8 @@ public class T4designMngCtl {
 	@RequestMapping("saveCalulate")
 	public String saveCalulate(CmmnMap params) {
 		System.out.println("===========================================");
-		System.out.println("===========================================");
-		System.out.println("===========================================");
-		System.out.println("===========================================");
 		System.out.println("params: " + params.toString());
+		
 
 		svc.saveCalulate(params);
 		return "kcg/system/team4_mng/t4_design_mng/CalculateDeposit";
