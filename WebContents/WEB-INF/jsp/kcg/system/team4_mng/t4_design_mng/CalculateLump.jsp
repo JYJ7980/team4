@@ -919,7 +919,7 @@ var pop_cust = new Vue({
         // 소수점 이하 제거
         var wholeNumber = Math.trunc(number);
         // 숫자를 문자열로 변환한 후 콤마 추가
-        return wholeNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+         return wholeNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
     function removeCommas(stringWithCommas) {
