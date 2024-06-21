@@ -268,4 +268,8 @@
 	</script>
 	</div>
 </body>
+<<<<<<< HEAD
 </html>
+=======
+</html>
+>>>>>>> 23b3514df8f0f58caeda31bdbc964c8281449e23

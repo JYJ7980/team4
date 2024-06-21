@@ -22,6 +22,7 @@ public class T4MainMngSvc {
 	@Autowired
 	CommonSvc commonSvc;
 	
+<<<<<<< HEAD
 	public PageList<CmmnMap> getList(CmmnMap params, PagingConfig pagingConfig){
 		return cmmnDao.selectListPage("system.t4_cust_mng.getList", params, pagingConfig);
 	}
@@ -30,4 +31,7 @@ public class T4MainMngSvc {
 		PageList<CmmnMap> pageList = cmmnDao.selectListPage("system.t4_main_mng.getAllNotice", params, pagingConfig);
 		return pageList;
 	}
+=======
+
+>>>>>>> 23b3514df8f0f58caeda31bdbc964c8281449e23
 }

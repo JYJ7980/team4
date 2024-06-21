@@ -10,6 +10,25 @@
 		cust.customer_id = dcc.customer_id where
 		cust.use_yn = 'Y';
 	</select>
+<<<<<<< HEAD
+=======
+	<select id="getUserInfo" parameterType="cmmnMap"
+		resultType="cmmnMap">
+		SELECT *
+		FROM kcgbd.t_user
+		WHERE CONCAT(email, '') LIKE
+		'%@team4%';
+	</select>
+	<select id="getCustAndUserInfo" parameterType="cmmnMap"
+		resultType="cmmnMap">
+		select *
+		FROM kcgbd.db4_customer_info cust join
+		kcgbd.t_user
+		tu on
+		cust.user_id = tu.user_id where
+		cust.use_yn = 'Y';
+	</select>
+>>>>>>> 23b3514df8f0f58caeda31bdbc964c8281449e23
 	<select id="getCustIdNumber" parameterType="cmmnMap"
 		resultType="cmmnMap">
 		select customer_id_number
@@ -31,11 +50,29 @@
 		select customer_phone
 		FROM kcgbd.db4_customer_info
 		where
+<<<<<<< HEAD
 		customer_phone = #{customer_phone}
+=======
+		customer_phone =
+		#{customer_phone}
+		and use_yn = 'Y'
+		<if test="customer_id != null">
+			and customer_id != CAST(#{customer_id} AS integer)
+		</if>
+	</select>
+	<select id="getCustById" parameterType="cmmnMap"
+		resultType="cmmnMap">
+		select customer_id
+		FROM kcgbd.db4_customer_info
+		where
+		customer_id =
+		CAST(#{customer_id} AS integer)
+>>>>>>> 23b3514df8f0f58caeda31bdbc964c8281449e23
 		and use_yn = 'Y'
 	</select>
 	<select id="getQuitCustInfo" parameterType="cmmnMap"
 		resultType="cmmnMap">
+<<<<<<< HEAD
 		select *
 		FROM kcgbd.db4_customer_info
 		where use_yn = 'N'
@@ -96,6 +133,81 @@
 		)
 	</insert>
 	<select id="getAllconsult" parameterType="cmmnMap"
+=======
+		SELECT *
+		FROM kcgbd.db4_customer_info cust join kcgbd.t_user
+		tu on cust.user_id =
+		tu.user_id
+		where cust.use_yn ='N' order by
+		customer_sub_date
+	</select>
+	<update id="releaseQuitCust" parameterType="cmmnMap">
+		update
+		kcgbd.db4_customer_info
+		set use_yn = 'Y'
+		where customer_id =
+		CAST(#{customer_id} AS integer)
+	</update>
+	<update id="deleteCust" parameterType="cmmnMap">
+		update
+		kcgbd.db4_customer_info
+		set use_yn = 'N'
+		where customer_id =
+		CAST(#{customer_id} AS integer)
+	</update>
+	<update id="updateCust" parameterType="cmmnMap">
+		update
+		kcgbd.db4_customer_info
+		set
+		customer_name = #{customer_name},
+		customer_level = #{customer_level},
+		customer_phone
+		= #{customer_phone},
+		customer_sub_tel = #{customer_sub_tel},
+		customer_email =
+		#{customer_email},
+		customer_job = #{customer_job},
+		customer_addr =
+		#{customer_addr}
+		where customer_id =
+		CAST(#{customer_id} AS integer)
+	</update>
+	<update id="updateUser">
+		update
+		kcgbd.db4_customer_info
+		set user_id = #{user_id}
+		where customer_id =
+		CAST(#{customer_id} AS integer)
+	</update>
+	<insert id="addCust" parameterType="cmmnMap">
+		INSERT INTO
+		kcgbd.db4_customer_info(
+		customer_name
+		,customer_id_number
+		,customer_brdt
+		,customer_phone
+		,customer_sub_tel
+		,customer_email
+		,customer_job
+		,customer_addr
+		,customer_sub_date
+		,user_id
+		,use_yn
+		)VALUES(
+		#{customer_name}
+		,#{customer_id_number}
+		,substring(#{customer_id_number}, 1, 6)
+		,#{customer_phone}
+		,#{customer_sub_tel}
+		,#{customer_email}
+		,#{customer_job}
+		,#{customer_addr}
+		,CURRENT_DATE
+		,#{user_id}
+		,'Y'
+		)
+	</insert>
+	<select id="getAllconsult" parameterType="cmmnMap"
 		resultType="cmmnMap">
 		SELECT
 		con.*,
@@ -117,6 +229,35 @@
 		WHERE
 		con.user_id =
 		#{user_id};
+	</select>
+
+	<select id="getAllMyconsult" parameterType="cmmnMap"
+>>>>>>> 23b3514df8f0f58caeda31bdbc964c8281449e23
+		resultType="cmmnMap">
+		SELECT
+		con.*,
+		tu.*,
+		cc.*,
+		ci.*,
+		rep.name AS representative_name
+		FROM
+		kcgbd.db4_consult con
+		JOIN
+		kcgbd.t_user tu ON con.user_id =
+		tu.user_id
+		JOIN
+		kcgbd.db4_cust_con cc ON con.con_id = cc.con_id
+		JOIN
+		kcgbd.db4_customer_info ci ON cc.customer_id = ci.customer_id
+		JOIN
+		kcgbd.t_user rep ON ci.user_id = rep.user_id
+		WHERE
+		con.user_id =
+<<<<<<< HEAD
+		#{user_id};
+=======
+		#{user_id_number} and rep.name=#{user_name};
+>>>>>>> 23b3514df8f0f58caeda31bdbc964c8281449e23
 	</select>
 
 	<insert id="addConsult" parameterType="cmmnMap">
