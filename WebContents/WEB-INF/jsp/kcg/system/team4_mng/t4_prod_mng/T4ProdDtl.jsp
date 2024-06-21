@@ -84,6 +84,25 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label for="rate_condition" class="fix-width-33">이율변동조건 :</label>
+					<div class="form-control">
+						<textarea id="rate_condition" ref="rate_condition"
+							v-model="info.rate_condition"
+							style="resize: none; width: 100%; height: 80px;"
+							:disabled="info.writer_name!=''&&info.writer_name!=null"></textarea>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="pay_type" class="fix-width-33">납입주기:</label> <select
+						class="form-control" id="pay_type" ref="pay_type"
+						v-model="info.pay_type"
+						:disabled="info.writer_name!=''&&info.writer_name!=null">
+						<option value="월납">월납</option>
+						<option value="연납">연납</option>
+						<option value="일시납">일시납</option>
+					</select>
+				</div>
+				<div class="form-group">
 					<label for="lowest_date" class="fix-width-33">적용기간:</label>
 					<div class="form-control">
 						<input type="number" id="lowest_date" ref="lowest_date"
@@ -127,14 +146,25 @@
 				</div>
 				<div class="form-group">
 					<div>
-						<button type="button" class="btn btn-green btn-icon btn-small"
-							@click="save" v-if="key">
-							저장 <i class="entypo-check"></i>
-						</button>
-						<button type="button" class="btn btn-blue btn-icon btn-small"
-							@click="gotoList">
-							목록 <i class="entypo-list"></i>
-						</button>
+						<div
+							v-if="info.product_status =='9' || new Date(info.product_sale_end_date) < new Date(currentDate)">
+							<button type="button" class="btn btn-blue btn-icon btn-small"
+								@click="gotoList">
+								목록 <i class="entypo-list"></i>
+							</button>
+						</div>
+						<div v-else>
+							<button type="button" class="btn btn-green btn-icon btn-small"
+								@click="save" v-if="key">
+								저장 <i class="entypo-check"></i>
+							</button>
+
+							<button type="button" class="btn btn-blue btn-icon btn-small"
+								@click="gotoList">
+								목록 <i class="entypo-list"></i>
+							</button>
+						</div>
+
 					</div>
 				</div>
 			</div>
@@ -148,14 +178,17 @@
 						jikgub_nm : '${userInfoVO.jikgubNm}',
 						key : "",
 						info1 : "",
+						currentDate : "",
 						info : {
 							product_id : "${product_id}",
 							save_mode : "insert",
+							product_sale_end_date : "${product_sale_end_date}",
+							product_status : "${product_status}",
 						},
 					},
 
 					mounted : function() {
-						if(this.jikgub_nm==="이사"){
+						if (this.jikgub_nm === "이사") {
 							this.key = true;
 						} else {
 							this.key = false;
@@ -171,8 +204,31 @@
 									this.getInfoCB);
 						},
 						getInfoCB : function(data) {
+							// 현재 날짜와 시간을 포함하는 Date 객체 생성
+							let currentDate = new Date();
+
+							// 연, 월, 일 정보 가져오기
+							let year = currentDate.getFullYear(); // 연도 가져오기 (네 자리 숫자)
+							let month = currentDate.getMonth() + 1; // 월 가져오기 (0부터 시작하므로 +1을 해줘야 함)
+							let day = currentDate.getDate(); // 일 가져오기
+
+							// 월과 일이 한 자리 수일 경우 두 자리로 만들기 위해 문자열 처리
+							if (month < 10) {
+								month = '0' + month; // 한 자리 숫자면 앞에 0을 붙임
+							}
+							if (day < 10) {
+								day = '0' + day; // 한 자리 숫자면 앞에 0을 붙임
+							}
+
+							// 연-월-일 형식으로 조합하여 표시
+							let formattedDate = year + '-' + month + '-' + day;
+							this.currentDate = formattedDate;
+							console.log(formattedDate); // 예: "2024-06-21"
 							this.info = data;
+							console.log(this.info.product_status);
+							console.log(this.info.product_sale_end_date);
 							this.info.save_mode = "update";
+
 						},
 						save : function() {
 							if ("insert" === this.info.save_mode) {
@@ -207,6 +263,10 @@
 								} else if (cf_isEmpty(this.info.highest_rate)) {
 									alert("최대적용이율을 입력하세요.");
 									this.$refs.highest_rate.focus();
+									return;
+								} else if (cf_isEmpty(this.info.pay_type)) {
+									alert("납입주기를 입력하세요.");
+									this.$refs.pay_type();
 									return;
 								} else if (cf_isEmpty(this.info.lowest_date)) {
 									alert("최소적용기간을 입력하세요.");
@@ -259,6 +319,9 @@
 									return;
 								cf_ajax("/system/team4/product/save",
 										this.info, this.saveCB)
+							} else if ("disable" === this.info.save_mode) {
+								alert("판매종료된 상품은 수정이 불가능합니다.")
+								return;
 							}
 						},
 						saveCB : function(data) {

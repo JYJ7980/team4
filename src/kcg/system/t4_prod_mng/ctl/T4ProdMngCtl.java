@@ -28,6 +28,11 @@ public class T4ProdMngCtl {
 		return "/kcg/system/team4_mng/t4_prod_mng/T4ProdList";
 	}
 	
+	@RequestMapping("/endList")
+	public String endList(Model model) {
+		return "/kcg/system/team4_mng/t4_prod_mng/T4ProdEndList";
+	}
+	
 	@RequestMapping("/getList")
 	public List<CmmnMap> getList(CmmnMap params) {
 		List<CmmnMap> dataList = t4ProdMngSvc.getList(params);
@@ -69,6 +74,11 @@ public class T4ProdMngCtl {
 	@RequestMapping("/checkId")
 	public CmmnMap checkId(CmmnMap params) {
 		return t4ProdMngSvc.checkId(params);
+	}
+	
+	@RequestMapping("/getEndListPaging")
+	public PageList<CmmnMap> getEndListPaging(CmmnMap params, PagingConfig pagingConfig){
+		return t4ProdMngSvc.getEndListPaging(params, pagingConfig);
 	}
 
 }

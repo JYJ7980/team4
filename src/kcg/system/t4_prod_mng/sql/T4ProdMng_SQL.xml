@@ -1,37 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="system.t4_prod_mng">
-	<select id="getList" parameterType="cmmnMap"
-		resultType="cmmnMap">
-		/* system.t4_prod_mng.getList */
-		SELECT product_id
-		, product_name
-		, product_type
-		, possible_member
-		, lowest_rate
-		, highest_rate
-		, rate_condition
-		, lowest_date
-		, highest_date
-		, product_status
-		, taxation
-		, lowest_money
-		, highest_money
-		, product_sale_start_date
-		, product_sale_end_date
-		, writer_name
-		FROM kcgbd.db4_product_info
-		WHERE 1=1
-		<if test='product_id != null and product_id != ""'>
-			and product_id = #{product_id}
-		</if>
-		<if test='product_name != null and product_name != ""'>
-			and product_name like concat('%',#{product_name},'%')
-		</if>
-		<if test='possible_member != null and possible_member != ""'>
-			and possible_member = #{possible_member}
-		</if>
+	<select id="getList" parameterType="cmmnMap" resultType="cmmnMap">
+    <!-- system.t4_prod_mng.getList -->
+    <![CDATA[
+	    SELECT product_id
+	         , product_name
+	         , product_type
+	         , possible_member
+	         , lowest_rate
+	         , highest_rate
+	         , rate_condition
+	         , lowest_date
+	         , highest_date
+	         , product_status
+	         , taxation
+	         , lowest_money
+	         , highest_money
+	         , to_char(to_date(product_sale_start_date,'yyyymmdd'), 'yyyy-mm-dd') as product_sale_start_date
+	         , to_char(to_date(product_sale_end_date,'yyyymmdd'), 'yyyy-mm-dd') as product_sale_end_date
+	         , writer_name
+	         , pay_type
+	    FROM kcgbd.db4_product_info
+	    WHERE 1=1
+	        AND (product_status != '9' AND DATE(product_sale_end_date) > DATE(now()))
+	    ]]>
+	    <if test='product_id != null and product_id != ""'>
+	        AND product_id = #{product_id}
+	    </if>
+	    <if test='product_name != null and product_name != ""'>
+	        AND product_name LIKE concat('%', #{product_name}, '%')
+	    </if>
+	    <if test='possible_member != null and possible_member != ""'>
+	        AND possible_member = #{possible_member}
+	    </if>
 	</select>
+
 	<insert id="insertInfo" parameterType="cmmnMap">
 		/*
 		system.t4_prod_mng.insertinfo */
@@ -52,14 +56,15 @@
 		, product_sale_start_date
 		, product_sale_end_date
 		, writer_name
+		, pay_type
 		)
 		VALUES (
 		#{product_id}
 		, #{product_name}
 		, #{product_type}
 		, #{possible_member}
-		, cast(#{lowest_rate} as int4)
-		, cast(#{highest_rate} as int4)
+		, cast(#{lowest_rate} as numeric(5,2))
+		, cast(#{highest_rate} as numeric(5,2))
 		, #{rate_condition}
 		, cast(#{lowest_date} as int4)
 		, cast(#{highest_date} as int4)
@@ -67,9 +72,10 @@
 		, #{taxation}
 		, cast(#{lowest_money} as int4)
 		, cast(#{highest_money} as int4)
-		, cast(#{product_sale_start_date} as date)
-		, cast(#{product_sale_end_date} as date)
+		, replace(#{product_sale_start_date},'-','')
+		, replace(#{product_sale_end_date},'-','')
 		, #{user_id}
+		, #{pay_type}
 		)
 	</insert>
 	<update id="updateInfo" parameterType="cmmnMap">
@@ -78,8 +84,8 @@
 		SET product_name			= #{product_name}
 		, product_type				= #{product_type}
 		, possible_member			= #{possible_member}
-		, lowest_rate				= cast(#{lowest_rate} as int4)
-		, highest_rate				= cast(#{highest_rate} as int4)
+		, lowest_rate				= cast(#{lowest_rate} as numeric(5,2))
+		, highest_rate				= cast(#{highest_rate} as numeric(5,2))
 		, rate_condition			= #{rate_condition}
 		, lowest_date				= cast(#{lowest_date} as int4)
 		, highest_date				= cast(#{highest_date} as int4)
@@ -87,8 +93,9 @@
 		, taxation					= #{taxation}
 		, lowest_money				= cast(#{lowest_money} as int4)
 		, highest_money				= cast(#{highest_money} as int4)
-		, product_sale_start_date	= cast(#{product_sale_start_date} as date)
-		, product_sale_end_date		= cast(#{product_sale_end_date} as date)
+		, product_sale_start_date	= replace(#{product_sale_start_date},'-','')
+		, product_sale_end_date		= replace(#{product_sale_end_date},'-','')
+		, pay_type					= #{pay_type}
 		WHERE product_id = #{product_id}
 	</update>
 	<delete id="deleteInfo" parameterType="cmmnMap">
@@ -98,14 +105,81 @@
 	</delete>
 	<select id="checkName" parameterType="cmmnMap" resultType="cmmnMap">
 		/* system.t4_prod_mng.checkName */
-		SELECT * FROM kcgbd.db4_product_info
+		SELECT product_id
+		, product_name
+		, product_type
+		, possible_member
+		, lowest_rate
+		, highest_rate
+		, rate_condition
+		, lowest_date
+		, highest_date
+		, product_status
+		, taxation
+		, lowest_money
+		, highest_money
+		, to_char(to_date(product_sale_start_date,'yyyymmdd'), 'yyyy-mm-dd')product_sale_start_date
+		, to_char(to_date(product_sale_end_date,'yyyymmdd'), 'yyyy-mm-dd')product_sale_end_date
+		, writer_name
+		, pay_type
+		FROM kcgbd.db4_product_info
 		WHERE 1=1
 		AND product_name = #{product_name}
 	</select>
 	<select id="checkId" parameterType="cmmnMap" resultType="cmmnMap">
 		/* system.t4_prod_mng.checkId */
-		SELECT * FROM kcgbd.db4_product_info
+		SELECT product_id
+		, product_name
+		, product_type
+		, possible_member
+		, lowest_rate
+		, highest_rate
+		, rate_condition
+		, lowest_date
+		, highest_date
+		, product_status
+		, taxation
+		, lowest_money
+		, highest_money
+		, to_char(to_date(product_sale_start_date,'yyyymmdd'), 'yyyy-mm-dd')product_sale_start_date
+		, to_char(to_date(product_sale_end_date,'yyyymmdd'), 'yyyy-mm-dd')product_sale_end_date
+		, writer_name
+		, pay_type
+		FROM kcgbd.db4_product_info
 		WHERE 1=1
 		AND product_id = #{product_id}
+	</select>
+	<select id="getEndList" parameterType="cmmnMap"
+		resultType="cmmnMap">
+		/* system.t4_prod_mng.getList */
+		SELECT product_id
+		, product_name
+		, product_type
+		, possible_member
+		, lowest_rate
+		, highest_rate
+		, rate_condition
+		, lowest_date
+		, highest_date
+		, product_status
+		, taxation
+		, lowest_money
+		, highest_money
+		, to_char(to_date(product_sale_start_date,'yyyymmdd'), 'yyyy-mm-dd')product_sale_start_date
+		, to_char(to_date(product_sale_end_date,'yyyymmdd'), 'yyyy-mm-dd')product_sale_end_date
+		, writer_name
+		, pay_type
+		FROM kcgbd.db4_product_info
+		WHERE 1=1 and
+		(product_status = '9' or <![CDATA[DATE(product_sale_end_date) < DATE(now())]]>)
+		<if test='product_id != null and product_id != ""'>
+			and product_id = #{product_id}
+		</if>
+		<if test='product_name != null and product_name != ""'>
+			and product_name like concat('%',#{product_name},'%')
+		</if>
+		<if test='possible_member != null and possible_member != ""'>
+			and possible_member = #{possible_member}
+		</if>
 	</select>
 </mapper>

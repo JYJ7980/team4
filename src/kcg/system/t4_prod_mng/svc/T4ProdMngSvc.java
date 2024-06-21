@@ -40,6 +40,11 @@ public class T4ProdMngSvc {
 		PageList<CmmnMap> pageList = cmmnDao.selectListPage("system.t4_prod_mng.getList", params, pagingConfig);
 		return pageList;
 	}
+	
+	public PageList<CmmnMap> getEndListPaging(CmmnMap params, PagingConfig pagingConfig) {
+		PageList<CmmnMap> pageList = cmmnDao.selectListPage("system.t4_prod_mng.getEndList", params, pagingConfig);
+		return pageList;
+	}
 
 	public CmmnMap save(CmmnMap params) {
 		UserInfoVO userInfoVO = commonSvc.getLoginInfo();

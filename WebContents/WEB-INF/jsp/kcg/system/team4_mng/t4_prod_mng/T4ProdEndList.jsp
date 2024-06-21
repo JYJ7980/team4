@@ -23,13 +23,6 @@
 				<option value="청년">청년</option>
 			</select>
 		</div>
-		<div v-if="key">
-			<button type="button"
-				class="btn btn-orange btn-icon icon-left btn-small" 
-				@click="cf_movePage('/system/team4/product/dtl')">
-				등록 <i class="entypo-plus"></i>
-			</button>
-		</div>
 		<div
 			class="flex-wrap flex-33 flex flex-center flex-gap-10 flex-padding-10">
 			<div class="form-group" style="width: 45%;">
@@ -72,8 +65,8 @@
 					<td @click="gotoDtl(product.product_id)">{{product.possible_member}}</td>
 					<td @click="gotoDtl(product.product_id)">{{product.lowest_money}}</td>
 					<td @click="gotoDtl(product.product_id)">{{product.highest_money}}</td>
-					<td @click="gotoDtl(product.product_id)">{{product.lowest_rate}}</td>
-					<td @click="gotoDtl(product.product_id)">{{product.highest_rate}}</td>
+					<td @click="gotoDtl(product.product_id)">{{product.lowest_rate}}%</td>
+					<td @click="gotoDtl(product.product_id)">{{product.highest_rate}}%</td>
 					<td @click="gotoDtl(product.product_id)">{{product.pay_type}}</td>
 					<td @click="gotoDtl(product.product_id)">{{product.taxation}}</td>
 				</tr>
@@ -92,18 +85,11 @@
 						possible_member : "",
 						all_srch : "N",
 						message : '전체조회',
-						jikgub_nm: '${userInfoVO.jikgubNm}',
-						key : "",
 					},
 					mounted : function() {
 						var fromDtl = cf_getUrlParam("fromDtl");
 						var pagingConfig = cv_sessionStorage
 								.getItem("pagingConfig");
-						if(this.jikgub_nm==="이사"){
-							this.key = true;
-						} else {
-							this.key = false;
-						}
 						if ("Y" === fromDtl && !cf_isEmpty(pagingConfig)) {
 							cv_pagingConfig.pageNo = pagingConfig.pageNo;
 							cv_pagingConfig.orders = pagingConfig.orders;
@@ -138,7 +124,7 @@
 							cv_sessionStorage.setItem('pagingConfig',
 									cv_pagingConfig).setItem('params', params);
 
-							cf_ajax("/system/team4/product/getListPaging",
+							cf_ajax("/system/team4/product/getEndListPaging",
 									params, this.getListCB);
 						},
 						getListCB : function(data) {
