@@ -25,5 +25,9 @@ public class T4MainMngSvc {
 	public PageList<CmmnMap> getList(CmmnMap params, PagingConfig pagingConfig){
 		return cmmnDao.selectListPage("system.t4_cust_mng.getList", params, pagingConfig);
 	}
-	
+
+	public PageList<CmmnMap> getAllNotice(CmmnMap params, PagingConfig pagingConfig) {
+		PageList<CmmnMap> pageList = cmmnDao.selectListPage("system.t4_main_mng.getAllNotice", params, pagingConfig);
+		return pageList;
+	}
 }

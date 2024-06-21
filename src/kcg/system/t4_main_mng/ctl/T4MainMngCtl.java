@@ -28,5 +28,7 @@ public class T4MainMngCtl {
 	public String noticeMain() {
 		return "kcg/system/team4_mng/notice/notice_main";
 	}
+	
+	
 
 }
