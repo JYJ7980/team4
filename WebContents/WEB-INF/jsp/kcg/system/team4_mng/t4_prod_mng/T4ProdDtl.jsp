@@ -129,15 +129,15 @@
 					<div class="form-control">
 						<input type="date" id="product_sale_start_date"
 							ref="product_sale_start_date"
-							v-model="info.product_sale_start_date"> <label> ~</label>
+							v-model="info.product_sale_start_date" :disabled="new Date(info.product_sale_start_date) < new Date(currentDate)"> <label> ~</label>
 						<input type="date" id="product_sale_end_date"
-							ref="product_sale_end_date" v-model="info.product_sale_end_date">
+							ref="product_sale_end_date" v-model="info.product_sale_end_date" :disabled="info.product_status =='9'">
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="product_status" class="fix-width-33">판매상태:</label> <select
 						class="form-control" id="product_status" ref="product_status"
-						v-model="info.product_status">
+						v-model="info.product_status" :disabled="info.product_status =='9'">
 						<option value="0">정상(판매)</option>
 						<option value="1">판매준비</option>
 						<option value="2">판매인가</option>

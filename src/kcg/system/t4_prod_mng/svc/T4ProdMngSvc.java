@@ -37,6 +37,7 @@ public class T4ProdMngSvc {
 	}
 
 	public PageList<CmmnMap> getListPaging(CmmnMap params, PagingConfig pagingConfig) {
+		cmmnDao.update("system.t4_prod_mng.updateStatus");
 		PageList<CmmnMap> pageList = cmmnDao.selectListPage("system.t4_prod_mng.getList", params, pagingConfig);
 		return pageList;
 	}
@@ -63,7 +64,7 @@ public class T4ProdMngSvc {
 	}
 
 	public CmmnMap getInfo(CmmnMap params) {
-		CmmnMap resultInfo = cmmnDao.selectOne("system.t4_prod_mng.getList", params);
+		CmmnMap resultInfo = cmmnDao.selectOne("system.t4_prod_mng.getInfo", params);
 		return resultInfo;
 	}
 
