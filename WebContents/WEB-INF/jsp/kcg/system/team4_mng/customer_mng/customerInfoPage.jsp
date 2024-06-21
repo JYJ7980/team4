@@ -107,13 +107,9 @@
 					<div class="input-form">
 						<label for="customerIdNumber">고객 주민번호</label> <input type="text"
 							id="customerIdNumber"
-<<<<<<< HEAD
-							v-model="selectedCustomer.customer_id_number" readonly>
-=======
 							:value="maskIdNumber(selectedCustomer.customer_id_number)"
 							readonly>
 						<button @click="toggleMasking">확인</button>
->>>>>>> 23b3514df8f0f58caeda31bdbc964c8281449e23
 					</div>
 					<div class="input-form">
 						<label for="customerLevel">고객 등급</label> <select
@@ -178,13 +174,8 @@
 					</div>
 					<div class="input-form">
 						<label for="customerIdNumber">**고객 주민번호</label> <input type="text"
-<<<<<<< HEAD
-							id="customerIdNumber" v-model="customerIdNumber" required maxlength="14">
-						<small>예시: YYMMDD-1234567</small>
-=======
 							id="customerIdNumber" v-model="customerIdNumber" required
 							maxlength="14"> <small>예시: YYMMDD-1234567</small>
->>>>>>> 23b3514df8f0f58caeda31bdbc964c8281449e23
 					</div>
 					<div class="input-form">
 						<label for="customerPhone">**고객 전화번호</label> <input type="text"
@@ -246,12 +237,8 @@ new Vue({
         customerJob: '', 
         customerAddr: '',
         searchKeyword: '', // 검색 키워드 저장
-<<<<<<< HEAD
-        errorMessage: '' // 오류 메시지 저장
-=======
         errorMessage: '', // 오류 메시지 저장
         showFullIdNumber: false, // 주민등록번호 표시 여부를 저장하는 데이터 변수
->>>>>>> 23b3514df8f0f58caeda31bdbc964c8281449e23
     },
     methods: {
         getAllCustomers: function() {
@@ -271,9 +258,6 @@ new Vue({
             // userInfoVO.userId와 customer.user_id가 같은 고객만 필터링
             this.filteredCustomers = this.customers.filter(customer => customer.user_id === this.userId);
         },
-<<<<<<< HEAD
-        
-=======
         toggleMasking: function() {
             // 현재 마스킹 상태를 확인하여 토글
             this.showFullIdNumber = !this.showFullIdNumber;
@@ -293,7 +277,6 @@ new Vue({
             }
         },
 
->>>>>>> 23b3514df8f0f58caeda31bdbc964c8281449e23
         searchCustomers: function() {
             if (this.searchKeyword.trim() === '') {
                 alert('검색어를 입력하세요.');
@@ -352,12 +335,8 @@ new Vue({
                     customer_job: this.selectedCustomer.customer_job,
                     customer_addr: this.selectedCustomer.customer_addr
                 };
-<<<<<<< HEAD
-
-=======
              
  
->>>>>>> 23b3514df8f0f58caeda31bdbc964c8281449e23
                 // 서버에 PUT 또는 POST 요청 보내기 (수정에 따라 다름)
                 axios.put('/system/team4/updateCust', { params: params })
                     .then(response => {
@@ -450,9 +429,4 @@ new Vue({
 </script>
 	</div>
 </body>
-<<<<<<< HEAD
 </html>
-=======
-</html>
-
->>>>>>> 23b3514df8f0f58caeda31bdbc964c8281449e23

@@ -27,20 +27,11 @@ public class T4MainMng_Ctl {
 	@Autowired
 	T4NoticeMng_Svc t4NoticeMng_Svc;
 	
-	@GetMapping("/main")
+	@GetMapping("/home")
 	public String team4Main() {
 		return "kcg/system/team4_mng/main";
 	}
 	
-<<<<<<< HEAD:src/kcg/system/t4_main_mng/ctl/T4MainMngCtl.java
-	@GetMapping("notice_main")
-	public String noticeMain() {
-		return "kcg/system/team4_mng/notice/notice_main";
-	}
-	
-	
-=======
 
->>>>>>> 23b3514df8f0f58caeda31bdbc964c8281449e23:src/kcg/system/t4_main_mng/ctl/T4MainMng_Ctl.java
 
 }
