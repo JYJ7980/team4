@@ -60,11 +60,15 @@ public class T4customerMngCtl {
 		return svc.getQuitCustIdNumber(params);
 	}
 
-	// 고객 전화번호 중복 확인용 조회
+	
+	//고객 전화번호 중복 확인용 고객 조회
 	@GetMapping("/getCustPhone")
 	public List<CmmnMap> getCustPhone(CmmnMap params) {
 		return svc.getCustPhone(params);
 	}
+
+	
+	
 
 	// 고객 추가
 	@RequestMapping("/addCust")
@@ -140,5 +144,12 @@ public class T4customerMngCtl {
 		return svc.releaseQuitCust(params);
 
 	}
+	
+	//부장용 고객관리 페이지 이동
+	@GetMapping("/customerInfoPageForLeader")
+	public String customerInfoPageForLeader() {
+		return "kcg/system/team4_mng/customer_mng/customerInfoPageForLeader";
+	}
+	
 
 }

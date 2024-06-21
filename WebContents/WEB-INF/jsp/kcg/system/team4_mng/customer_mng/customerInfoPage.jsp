@@ -335,7 +335,8 @@ new Vue({
                     customer_job: this.selectedCustomer.customer_job,
                     customer_addr: this.selectedCustomer.customer_addr
                 };
-
+             
+ 
                 // 서버에 PUT 또는 POST 요청 보내기 (수정에 따라 다름)
                 axios.put('/system/team4/updateCust', { params: params })
                     .then(response => {

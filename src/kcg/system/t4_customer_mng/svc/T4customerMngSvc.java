@@ -58,7 +58,19 @@ public class T4customerMngSvc {
 		cmmnDao.update("system.t4_customer_mng.updateCust", params);
 		return new CmmnMap().put("status", "OK");
 	}
+//	
+	// 중복 확인용 전화번호 조회
+	public List<CmmnMap> getCustPhone(CmmnMap params) {
+		List<CmmnMap> dataList = cmmnDao.selectList("getCustPhone", params);
+		return dataList;
+	}
+	
+	public List<CmmnMap> getCustById(CmmnMap params) {
+		List<CmmnMap> dataList = cmmnDao.selectList("getCustById", params);
+		return dataList;
+	}
 
+	
 	// 중복 환인용 주민번호 조회
 	public List<CmmnMap> getCustIdNumber(CmmnMap params) {
 		List<CmmnMap> dataList = cmmnDao.selectList("getCustIdNumber", params);
@@ -71,11 +83,7 @@ public class T4customerMngSvc {
 		return dataList;
 	}
 
-	// 중복 확인용 전화번호 조회
-	public List<CmmnMap> getCustPhone(CmmnMap params) {
-		List<CmmnMap> dataList = cmmnDao.selectList("getCustPhone", params);
-		return dataList;
-	}
+
 
 	public CmmnMap addCust(CmmnMap params) {
 
@@ -96,6 +104,9 @@ public class T4customerMngSvc {
 		params.put("customer_job", customer_job);
 		params.put("customer_addr", customer_addr);
 		params.put("user_id", user_id);
+		
+		
+		
 
 		// 사용중인 고객 주민번호 중복 체크
 		CmmnMap existingCustomer = cmmnDao.selectOne("system.t4_customer_mng.getCustIdNumber", params);
@@ -170,6 +181,7 @@ public class T4customerMngSvc {
 		cmmnDao.update("system.t4_customer_mng.releaseQuitCust", params);
 		return new CmmnMap().put("status", "OK");
 	}
+
 
 
 

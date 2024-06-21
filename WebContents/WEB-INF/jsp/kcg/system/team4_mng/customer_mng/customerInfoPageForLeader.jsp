@@ -5,22 +5,14 @@
 <!DOCTYPE html>
 <html>
 <head>
+<jsp:include page="/WEB-INF/jsp/kcg/_include/system/header_meta.jsp"
+	flush="false" />
 <meta charset="UTF-8">
 <title>Customer InfoPage</title>
 <!-- Vue.js CDN 추가 -->
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
 <!-- axios CDN 추가 -->
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<jsp:include page="/WEB-INF/jsp/kcg/_include/system/header_meta.jsp"
-	flush="false" />
-<!-- Imported styles on this page -->
-<link rel="stylesheet"
-	href="/static_resources/system/js/datatables/datatables.css">
-<link rel="stylesheet"
-	href="/static_resources/system/js/select2/select2-bootstrap.css">
-<link rel="stylesheet"
-	href="/static_resources/system/js/select2/select2.css">
-
 <style>
 .input-form {
 	margin-bottom: 10px;
@@ -47,6 +39,8 @@
 	flex: 1;
 }
 </style>
+
+
 </head>
 <body class="page-body">
 
@@ -54,170 +48,186 @@
 
 		<jsp:include page="/WEB-INF/jsp/kcg/_include/system/sidebar-menu.jsp"
 			flush="false" />
+		<div class="main-content">
+			<jsp:include page="/WEB-INF/jsp/kcg/_include/system/header.jsp"
+				flush="false" />
+			<ol class="breadcrumb bc-3">
+				<li><a href="#none" onclick="cf_movePage('/system/team4/main')"><i
+						class="fa fa-home"></i>Home</a></li>
+				<li class="active"><strong>고객정보 관리</strong></li>
+			</ol>
+			<div id="app" style="margin-left: 70px;">
+				<div id="customerTable" class="customer-container">
+					<div class="customer-table">
 
-		<div id="app" style="margin-left: 70px;">
-			<span style="font-size: 18px; font-weight: bold; color: black;">${userInfoVO.userId}</span>&nbsp;님
-			화면 <br> <a href="/system/team4/main">메인으로 돌아가기</a><br>
-			<div id="customerTable" class="customer-container">
-				<div class="customer-table">
-					<h4>고객 정보 관리</h4>
-					<div>
-						<br> <input id="keywordInput" type="text" name="keyword"
-							v-model="searchKeyword" class="inputtext" placeholder="이름을 입력하세요">
-						<button @click="searchCustomers">조건 검색</button>
-					</div>
-					<br>
-					<div>
-						<!-- 전체 조회 버튼 -->
+						<h2>고객관리 > 고객정보 관리</h2>
+						<br /> <span
+							style="font-size: 18px; font-weight: bold; color: black;">${userInfoVO.dept}</span>&nbsp;
+						고객관리 화면 <br> <a href="/system/team4/main">메인으로 돌아가기</a><br>
+
+
+						<div>
+							<br> <input id="keywordInput" type="text" name="keyword"
+								v-model="searchKeyword" class="inputtext"
+								placeholder="이름을 입력하세요">
+							<button @click="searchCustomers">조건 검색</button>
+						</div>
 						<br>
-						<button @click="getAllCustomers">전체 조회</button>
+						<div>
+							<!-- 전체 조회 버튼 -->
+							<br>
+							<button @click="getAllCustomers">전체 조회</button>
+							<br>
+						</div>
+						<h2 v-show="filteredCustomers.length > 0">전체 고객 정보</h2>
+						<table border='1' v-show="filteredCustomers.length > 0">
+							<tr>
+								<th>Select</th>
+								<th>이름</th>
+								<th>생년월일</th>
+							</tr>
+							<tr v-for="customer in filteredCustomers"
+								:key="customer.customer_id">
+								<td><input type="radio" name="selectedCustomer"
+									v-model="selectedCustomer" :value="customer"></td>
+								<td>{{ customer.customer_name }}</td>
+								<td>{{ customer.customer_brdt }}</td>
+							</tr>
+						</table>
+					</div>
+					<!-- 선택된 고객의 상세 정보 입력 폼 -->
+					<div class="customer-details" v-if="selectedCustomer !== null">
+						<h2>고객 정보</h2>
+						<div class="input-form">
+							<label for="customerSubDate">등록일</label> <input type="text"
+								id="customerSubDate"
+								v-model="selectedCustomer.customer_sub_date" readonly>
+						</div>
+						<div class="input-form">
+							<label for="customerName">고객 이름</label> <input type="text"
+								id="customerName" v-model="selectedCustomer.customer_name">
+						</div>
+						<div class="input-form">
+							<label for="customerIdNumber">고객 주민번호</label> <input type="text"
+								id="customerIdNumber"
+								:value="maskIdNumber(selectedCustomer.customer_id_number)"
+								readonly>
+							<button @click="toggleMasking">확인</button>
+						</div>
+						<div class="input-form">
+							<label for="customerLevel">고객 등급</label> <select
+								id="customerLevel" v-model="selectedCustomer.customer_level">
+								<option value="1">일반</option>
+								<option value="2">우수</option>
+								<option value="3">VIP</option>
+								<option value="4">VVIP</option>
+								<option value="5">플래티넘</option>
+							</select>
+
+						</div>
+						<div class="input-form">
+							<label for="customerPhone">고객 전화번호</label> <input type="text"
+								id="customerPhone" v-model="selectedCustomer.customer_phone">
+						</div>
+						<div class="input-form">
+							<label for="customerSubTel">고객 비상연락망</label> <input type="text"
+								id="customerSubTel" v-model="selectedCustomer.customer_sub_tel">
+						</div>
+						<div class="input-form">
+							<label for="customerEmail">고객 이메일</label> <input type="text"
+								id="customerEmail" v-model="selectedCustomer.customer_email">
+						</div>
+						<div class="input-form">
+							<label for="customerJob">고객 직업</label> <input type="text"
+								id="customerJob" v-model="selectedCustomer.customer_job">
+						</div>
+						<div class="input-form">
+							<label for="customerAddr">고객 주소</label> <input type="text"
+								id="customerAddr" v-model="selectedCustomer.customer_addr">
+						</div>
 						<br>
-					</div>
-					<!--       <div id="customerTable" class="customer-container"> -->
-					<!--          <div class="customer-table"> -->
-					<!-- 고객 정보 테이블 -->
-					<h2 v-show="filteredCustomers.length > 0">전체 고객 정보</h2>
-					<table border='1' v-show="filteredCustomers.length > 0">
-						<tr>
-							<th>Select</th>
-							<th>이름</th>
-							<th>생년월일</th>
-						</tr>
-						<tr v-for="customer in filteredCustomers"
-							:key="customer.customer_id">
-							<td><input type="radio" name="selectedCustomer"
-								v-model="selectedCustomer" :value="customer"></td>
-							<td>{{ customer.customer_name }}</td>
-							<td>{{ customer.customer_brdt }}</td>
-						</tr>
-					</table>
-				</div>
-				<!-- 선택된 고객의 상세 정보 입력 폼 -->
-				<div class="customer-details" v-if="selectedCustomer !== null">
-					<h2>고객 정보</h2>
-					<div class="input-form">
-						<label for="customerSubDate">등록일</label> <input type="text"
-							id="customerSubDate" v-model="selectedCustomer.customer_sub_date"
-							readonly>
-					</div>
-					<div class="input-form">
-						<label for="customerName">고객 이름</label> <input type="text"
-							id="customerName" v-model="selectedCustomer.customer_name">
-					</div>
-					<div class="input-form">
-						<label for="customerIdNumber">고객 주민번호</label> <input type="text"
-							id="customerIdNumber"
-							v-model="selectedCustomer.customer_id_number" readonly>
-					</div>
-					<div class="input-form">
-						<label for="customerLevel">고객 등급</label> <select
-							id="customerLevel" v-model="selectedCustomer.customer_level">
-							<option value="1">일반</option>
-							<option value="2">우수</option>
-							<option value="3">VIP</option>
-							<option value="4">VVIP</option>
-							<option value="5">플래티넘</option>
-						</select>
+						<button @click="deleteCustomer">삭제</button>
+						<button @click="updateCustomer">수정</button>
+						<button @click="resetForm">신규</button>
 
+						<br> <br>
+						<h2>관리자 정보</h2>
+						<div class="input-form">
+							<label for="userName">관리자 이름</label> <input type="text"
+								id="userName" value="${userInfoVO.name}" disabled>
+						</div>
+						<div class="input-form">
+							<label for="userDept">관리자 부서</label> <input type="text"
+								id="userDept" value="${userInfoVO.dept}" disabled>
+						</div>
+						<div class="input-form">
+							<label for="userjikgub">관리자 직급</label> <input type="text"
+								id="userjikgub" value="${userInfoVO.jikgubNm}" disabled>
+						</div>
+						<!-- 필요한 입력 폼 추가 -->
 					</div>
-					<div class="input-form">
-						<label for="customerPhone">고객 전화번호</label> <input type="text"
-							id="customerPhone" v-model="selectedCustomer.customer_phone">
-					</div>
-					<div class="input-form">
-						<label for="customerSubTel">고객 비상연락망</label> <input type="text"
-							id="customerSubTel" v-model="selectedCustomer.customer_sub_tel">
-					</div>
-					<div class="input-form">
-						<label for="customerEmail">고객 이메일</label> <input type="text"
-							id="customerEmail" v-model="selectedCustomer.customer_email">
-					</div>
-					<div class="input-form">
-						<label for="customerJob">고객 직업</label> <input type="text"
-							id="customerJob" v-model="selectedCustomer.customer_job">
-					</div>
-					<div class="input-form">
-						<label for="customerAddr">고객 주소</label> <input type="text"
-							id="customerAddr" v-model="selectedCustomer.customer_addr">
-					</div>
-					<br>
-					<button @click="deleteCustomer">삭제</button>
-					<button @click="updateCustomer">수정</button>
-					<button @click="resetForm">신규</button>
-
-					<br> <br>
-					<h2>관리자 정보</h2>
-					<div class="input-form">
-						<label for="userName">관리자 이름</label> <input type="text"
-							id="userName" value="${userInfoVO.name}" disabled>
-					</div>
-					<div class="input-form">
-						<label for="userDept">관리자 부서</label> <input type="text"
-							id="userDept" value="${userInfoVO.dept}" disabled>
-					</div>
-					<div class="input-form">
-						<label for="userjikgub">관리자 직급</label> <input type="text"
-							id="userjikgub" value="${userInfoVO.jikgubNm}" disabled>
-					</div>
-					<!-- 필요한 입력 폼 추가 -->
-				</div>
-				<div class="customer-details" v-else>
-					<!-- 선택된 고객이 없는 경우의 메시지 -->
-					<p>고객을 신규 등록해 주세요.</p>
-					<p>**표시는 필수 입력값 입니다. [최조 등록 시 고객 등급은 일반 등급으로 등록]</p>
-					<h2>고객 정보</h2>
-					<div class="input-form">
-						<label for="customerName">**고객 이름</label> <input type="text"
-							id="customerName" v-model="customerName" required>
-					</div>
-					<div class="input-form">
-						<label for="customerIdNumber">**고객 주민번호</label> <input type="text"
-							id="customerIdNumber" v-model="customerIdNumber" required maxlength="14">
-						<small>예시: YYMMDD-1234567</small>
-					</div>
-					<div class="input-form">
-						<label for="customerPhone">**고객 전화번호</label> <input type="text"
-							id="customerPhone" v-model="customerPhone" required>
-					</div>
-					<div class="input-form">
-						<label for="customerSubTel">**고객 비상연락망</label> <input type="text"
-							id="customerSubTel" v-model="customerSubTel">
-					</div>
-					<div class="input-form">
-						<label for="customerEmail">**고객 이메일</label> <input type="email"
-							id="customerEmail" v-model="customerEmail" required>
-					</div>
-					<div class="input-form">
-						<label for="customerJob">고객 직업</label> <input type="text"
-							id="customerJob" v-model="customerJob">
-					</div>
-					<div class="input-form">
-						<label for="customerAddr">고객 주소</label> <input type="text"
-							id="customerAddr" v-model="customerAddr">
-					</div>
-					<br>
+					<div class="customer-details" v-else>
+						<!-- 선택된 고객이 없는 경우의 메시지 -->
+						<p>고객을 신규 등록해 주세요.</p>
+						<p>**표시는 필수 입력값 입니다. [최조 등록 시 고객 등급은 일반 등급으로 등록]</p>
+						<h2>고객 정보</h2>
+						<div class="input-form">
+							<label for="customerName">**고객 이름</label> <input type="text"
+								id="customerName" v-model="customerName" required>
+						</div>
+						<div class="input-form">
+							<label for="customerIdNumber">**고객 주민번호</label> <input
+								type="text" id="customerIdNumber" v-model="customerIdNumber"
+								required maxlength="14"> <small>예시:
+								YYMMDD-1234567</small>
+						</div>
+						<div class="input-form">
+							<label for="customerPhone">**고객 전화번호</label> <input type="text"
+								id="customerPhone" v-model="customerPhone" required>
+						</div>
+						<div class="input-form">
+							<label for="customerSubTel">**고객 비상연락망</label> <input type="text"
+								id="customerSubTel" v-model="customerSubTel">
+						</div>
+						<div class="input-form">
+							<label for="customerEmail">**고객 이메일</label> <input type="email"
+								id="customerEmail" v-model="customerEmail" required>
+						</div>
+						<div class="input-form">
+							<label for="customerJob">고객 직업</label> <input type="text"
+								id="customerJob" v-model="customerJob">
+						</div>
+						<div class="input-form">
+							<label for="customerAddr">고객 주소</label> <input type="text"
+								id="customerAddr" v-model="customerAddr">
+						</div>
+						<br>
 
 
-					<button @click="addCustomer">등록</button>
-					<button @click="resetForm">초기화</button>
-					<h2>관리자 정보</h2>
-					<div class="input-form">
-						<label for="userName">관리자 이름</label> <input type="text"
-							id="userName" value="${userInfoVO.name}" disabled>
-					</div>
-					<div class="input-form">
-						<label for="userDept">관리자 부서</label> <input type="text"
-							id="userDept" value="${userInfoVO.dept}" disabled>
-					</div>
-					<div class="input-form">
-						<label for="userjikgub">관리자 직급</label> <input type="text"
-							id="userjikgub" value="${userInfoVO.jikgubNm}" disabled>
+						<button @click="addCustomer">등록</button>
+						<button @click="resetForm">초기화</button>
+						<h2>관리자 정보</h2>
+						<div class="input-form">
+							<label for="userName">관리자 이름</label> <input type="text"
+								id="userName" value="${userInfoVO.name}" disabled>
+						</div>
+						<div class="input-form">
+							<label for="userDept">관리자 부서</label> <input type="text"
+								id="userDept" value="${userInfoVO.dept}" disabled>
+						</div>
+						<div class="input-form">
+							<label for="userjikgub">관리자 직급</label> <input type="text"
+								id="userjikgub" value="${userInfoVO.jikgubNm}" disabled>
+						</div>
 					</div>
 				</div>
 			</div>
+			<jsp:include page="/WEB-INF/jsp/kcg/_include/system/footer.jsp"
+				flush="false" />
 		</div>
 	</div>
-	<script>
+</body>
+<script>
 new Vue({
     el: '#app',
     data: {
@@ -235,7 +245,8 @@ new Vue({
         customerJob: '', 
         customerAddr: '',
         searchKeyword: '', // 검색 키워드 저장
-        errorMessage: '' // 오류 메시지 저장
+        errorMessage: '', // 오류 메시지 저장
+        showFullIdNumber: false, // 주민등록번호 표시 여부를 저장하는 데이터 변수
     },
     methods: {
         getAllCustomers: function() {
@@ -255,7 +266,25 @@ new Vue({
             // userInfoVO.userId와 customer.user_id가 같은 고객만 필터링
             this.filteredCustomers = this.customers.filter(customer => customer.user_id === this.userId);
         },
-        
+        toggleMasking: function() {
+            // 현재 마스킹 상태를 확인하여 토글
+            this.showFullIdNumber = !this.showFullIdNumber;
+        },
+
+        maskIdNumber: function(idNumber) {
+            // 예시: 문자열로 변환 후 8자리까지만 표시하고 나머지는 '*'로 대체
+            if (!this.showFullIdNumber) {
+                if (idNumber && typeof idNumber === 'string') {
+                    return idNumber.substring(0, 8) + '*'.repeat(idNumber.length - 8);
+                } else {
+                    return '';
+                }
+            } else {
+                // 마스킹 해제 상태에서는 원래의 주민등록번호 표시
+                return idNumber;
+            }
+        },
+
         searchCustomers: function() {
             if (this.searchKeyword.trim() === '') {
                 alert('검색어를 입력하세요.');
@@ -405,7 +434,6 @@ new Vue({
     }
 });
 </script>
-	</div>
-</body>
+
 </html>
 
