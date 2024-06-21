@@ -82,7 +82,7 @@
 					<img src="/static_resources/system/images/person.png"
 						class="person_icon">
 					<div style="margin-left: 20px; font-size: 18px;">
-						<div style="font-weight: 700;">TODAY</div>
+						<div style="font-weight:700;">TODAY</div>
 						<div>
 							<a href="/system/team4/event/eventCalender"
 								style="text-decoration: none; color: white;">고객 생일 :
