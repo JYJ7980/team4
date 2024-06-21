@@ -38,6 +38,63 @@
 .customer-table {
 	flex: 1;
 }
+
+.popup {
+	display: none;
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	border: 1px solid #ccc;
+	background-color: #fff;
+	z-index: 1000;
+	width: 400px;
+	height: 450px;
+	overflow-y: auto;
+}
+
+.popup.active {
+	display: block;
+}
+
+.popup-overlay {
+	display: none;
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 999;
+}
+
+.popup-overlay.active {
+	display: block;
+}
+
+.popup-close {
+	position: absolute;
+	right: 10px;
+	top: 10px;
+	cursor: pointer;
+}
+
+.popup table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.popup table th, .popup table td {
+	border: 1px solid #ccc;
+	padding: 5px;
+	text-align: left;
+}
+
+.popup-search-container {
+	display: flex; /* Flexbox 사용 */
+	align-items: center; /* 요소들을 세로 중앙 정렬 */
+	gap: 10px; /* 요소들 사이 간격 조정 */
+}
 </style>
 
 
@@ -69,7 +126,7 @@
 						<div>
 							<br> <input id="keywordInput" type="text" name="keyword"
 								v-model="searchKeyword" class="inputtext"
-								placeholder="이름을 입력하세요">
+								placeholder="고객 이름을 입력하세요">
 							<button @click="searchCustomers">조건 검색</button>
 						</div>
 						<br>
@@ -85,6 +142,7 @@
 								<th>Select</th>
 								<th>이름</th>
 								<th>생년월일</th>
+								<th>담당자</th>
 							</tr>
 							<tr v-for="customer in filteredCustomers"
 								:key="customer.customer_id">
@@ -92,6 +150,7 @@
 									v-model="selectedCustomer" :value="customer"></td>
 								<td>{{ customer.customer_name }}</td>
 								<td>{{ customer.customer_brdt }}</td>
+								<td>{{ customer.name }}({{ customer.jikgub_nm }})</td>
 							</tr>
 						</table>
 					</div>
@@ -154,15 +213,21 @@
 						<h2>관리자 정보</h2>
 						<div class="input-form">
 							<label for="userName">관리자 이름</label> <input type="text"
-								id="userName" value="${userInfoVO.name}" disabled>
+								id="userName" v-model="selectedCustomer.name" disabled>
+							<button type="button" class="btn" @click="popupUser()">
+								<i class="fa fa-search"></i> 검색
+							</button>
+							<button @click="updateUser">수정</button>
+
+
 						</div>
 						<div class="input-form">
 							<label for="userDept">관리자 부서</label> <input type="text"
-								id="userDept" value="${userInfoVO.dept}" disabled>
+								id="userDept" v-model="selectedCustomer.dept" disabled>
 						</div>
 						<div class="input-form">
 							<label for="userjikgub">관리자 직급</label> <input type="text"
-								id="userjikgub" value="${userInfoVO.jikgubNm}" disabled>
+								id="userJikgub" v-model="selectedCustomer.jikgub_nm" disabled>
 						</div>
 						<!-- 필요한 입력 폼 추가 -->
 					</div>
@@ -217,9 +282,27 @@
 						</div>
 						<div class="input-form">
 							<label for="userjikgub">관리자 직급</label> <input type="text"
-								id="userjikgub" value="${userInfoVO.jikgubNm}" disabled>
+								id="userJikgub" value="${userInfoVO.jikgubNm}" disabled>
 						</div>
 					</div>
+				</div>
+				<div class="popup-overlay" :class="{active: showPopup}"
+					@click="closePopup"></div>
+				<div class="popup" :class="{active: showPopup}">
+					<div class="popup-close" @click="closePopup">X</div>
+					<br> <br>
+					<div class="popup-search-container"></div>
+					<br>
+					<table>
+						<tr>
+							<th>이름</th>
+							<th>생년월일</th>
+						</tr>
+						<tr v-for="manager in Managers" @click="selectManager(manager)">
+							<td>{{ manager.name }}</td>
+							<td>{{ manager.dept }}</td>
+						</tr>
+					</table>
 				</div>
 			</div>
 			<jsp:include page="/WEB-INF/jsp/kcg/_include/system/footer.jsp"
@@ -232,9 +315,11 @@ new Vue({
     el: '#app',
     data: {
         customers: [], // 고객 정보를 저장할 배열
+        Managers: [], //관리자 정보를 저장할 배열
         filteredCustomers: [], // 필터된 고객 정보를 저장할 배열
         selectedCustomer: null, // 선택된 고객 정보
         userId: '${userInfoVO.userId}', // 현재 사용자의 userId를 저장
+        userDept:'${userInfoVO.dept}',
         customerSubDate:'',
         customerName: '', // 고객 이름을 저장할 변수
         customerIdNumber:'',
@@ -247,11 +332,13 @@ new Vue({
         searchKeyword: '', // 검색 키워드 저장
         errorMessage: '', // 오류 메시지 저장
         showFullIdNumber: false, // 주민등록번호 표시 여부를 저장하는 데이터 변수
+        showPopup: false,
+     
     },
     methods: {
         getAllCustomers: function() {
             // AJAX 요청을 보내고 응답 데이터를 customers에 할당
-            axios.get('/system/team4/getCustInfo')
+            axios.get('/system/team4/getCustAndUserInfo')
                 .then(response => {
                     this.customers = response.data;
                     this.filterCustomers(); // 고객 필터링 함수 호출
@@ -263,8 +350,8 @@ new Vue({
                 });
         },
         filterCustomers: function() {
-            // userInfoVO.userId와 customer.user_id가 같은 고객만 필터링
-            this.filteredCustomers = this.customers.filter(customer => customer.user_id === this.userId);
+             //같은 부서 직원끼리 필터링
+            this.filteredCustomers = this.customers.filter(customer => customer.dept === this.userDept);
         },
         toggleMasking: function() {
             // 현재 마스킹 상태를 확인하여 토글
@@ -286,21 +373,19 @@ new Vue({
         },
 
         searchCustomers: function() {
-            if (this.searchKeyword.trim() === '') {
-                alert('검색어를 입력하세요.');
-                return;
-            }
-            axios.get('/system/team4/getCustInfo')
-                .then(response => {
-                    this.customers = response.data;
-                    this.filteredCustomers = this.customers.filter(customer => 
-                        customer.user_id === this.userId && 
-                        customer.customer_name.includes(this.searchKeyword)
-                    );
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
+        	  if (this.searchKeyword.trim() === '') {
+        	        alert('검색어를 입력하세요.');
+        	        return;
+        	    }
+        	    axios.get('/system/team4/getCustAndUserInfo')
+        	        .then(response => {
+        	            this.filteredCustomers = response.data.filter(customer => 
+        	                customer.customer_name.includes(this.searchKeyword) && customer.dept === this.userDept
+        	            );
+        	        })
+        	        .catch(error => {
+        	            console.error('Error:', error);
+        	        });
         },
         deleteCustomer: function() {
             if (this.selectedCustomer !== null) {
@@ -412,6 +497,26 @@ new Vue({
                     alert('고객 등록 중 오류가 발생했습니다.');
                 });
         },
+		popupUser: function() {
+			axios.get('/system/team4/getUserInfo')
+			.then(response => {
+				this.Managers = response.data;
+			})
+			.catch(error => {
+				console.error('Error:', error);
+			});
+			this.showPopup = true;
+		},
+		closePopup: function() {
+			this.showPopup = false;
+		},
+		selectManager: function(manager) {
+			this.selectedCustomer.name = manager.name;
+			this.selectedCustomer.dept = manager.dept;
+			this.selectedCustomer.jikgub_nm = manager.jikgub_nm;
+			
+			this.showPopup = false;
+		},
         resetForm: function() {
             // 입력 폼 데이터 초기화
             this.selectedCustomer = null; // 선택된 고객 초기화
@@ -423,6 +528,33 @@ new Vue({
             this.customerEmail = ''; // 고객 이메일 초기화
             this.customerJob = ''; // 고객 직업 초기화
             this.customerAddr = ''; // 고객 주소 초기화
+        },
+        updateUser: function() {
+            // 선택된 고객이 존재하는지 확인
+            if (this.selectedCustomer !== null) {
+                // 서버에 보낼 관리자 정보 준비
+                var params = {
+                    customer_id: this.selectedCustomer.customer_id,
+                    user_id: this.selectedCustomer.user_id,
+                };
+
+                // 서버에 PUT 또는 POST 요청 보내기 (수정에 따라 다름)
+                axios.post('/system/team4/updateUser', { params: params })
+                    .then(response => {
+                        if (response.data.status === 'OK') {
+                            alert('관리자 정보가 수정되었습니다.');
+                            this.getAllCustomers();
+                        } else if (response.data.status === 'ERROR') {
+                            alert(response.data.message); // 서버로부터 받은 에러 메시지를 표시
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('관리자 정보 수정 중 오류가 발생했습니다.');
+                    });
+            } else {
+                alert('수정할 관리자를 선택해주세요.');
+            }
         }
     },
     

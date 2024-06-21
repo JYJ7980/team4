@@ -47,6 +47,21 @@ public class T4customerMngCtl {
 	public List<CmmnMap> getCustInfo(CmmnMap params) {
 		return svc.getAllCustomers(params);
 	}
+	
+	//관리자 정보 전체 조회
+	@GetMapping("/getUserInfo")
+	public List<CmmnMap> getUserInfo(CmmnMap params) {
+		return svc.getUserInfo(params);
+	}
+	
+	//고객정보+담당 관리자정보 전체 조회
+	@GetMapping("/getCustAndUserInfo")
+	public List<CmmnMap> getCustAndUserInfo(CmmnMap params) {
+		return svc.getCustAndUserInfo(params);
+	}
+	
+
+	
 
 	// 고객 주민번호 중복 확인용 조회
 	@GetMapping("/getCustIdNumber")
@@ -89,6 +104,13 @@ public class T4customerMngCtl {
 	public CmmnMap updateCust(CmmnMap params) {
 		return svc.updateCust(params);
 	}
+	
+	//관리자 수정
+	@RequestMapping("/updateUser")
+	public CmmnMap updateUser(CmmnMap params) {
+		return svc.updateUser(params);
+	}
+	
 
 	// 고객 상담내역 페이지로 이동
 	@GetMapping("/consultListPage")

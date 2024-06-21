@@ -10,6 +10,22 @@
 		cust.customer_id = dcc.customer_id where
 		cust.use_yn = 'Y';
 	</select>
+	<select id="getUserInfo" parameterType="cmmnMap"
+		resultType="cmmnMap">
+		SELECT *
+		FROM kcgbd.t_user
+		WHERE CONCAT(email, '') LIKE
+		'%@team4%';
+	</select>
+	<select id="getCustAndUserInfo" parameterType="cmmnMap"
+		resultType="cmmnMap">
+		select *
+		FROM kcgbd.db4_customer_info cust join
+		kcgbd.t_user
+		tu on
+		cust.user_id = tu.user_id where
+		cust.use_yn = 'Y';
+	</select>
 	<select id="getCustIdNumber" parameterType="cmmnMap"
 		resultType="cmmnMap">
 		select customer_id_number
@@ -87,7 +103,13 @@
 		where customer_id =
 		CAST(#{customer_id} AS integer)
 	</update>
-
+	<update id="updateUser">
+		update
+		kcgbd.db4_customer_info
+		set user_id = #{user_id}
+		where customer_id =
+		CAST(#{customer_id} AS integer)
+	</update>
 	<insert id="addCust" parameterType="cmmnMap">
 		INSERT INTO
 		kcgbd.db4_customer_info(

@@ -22,8 +22,5 @@ public class T4MainMngSvc {
 	@Autowired
 	CommonSvc commonSvc;
 	
-	public PageList<CmmnMap> getList(CmmnMap params, PagingConfig pagingConfig){
-		return cmmnDao.selectListPage("system.t4_cust_mng.getList", params, pagingConfig);
-	}
-	
+
 }

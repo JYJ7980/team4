@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.mysql.cj.util.DnsSrv.SrvRecord;
+
 import common.dao.CmmnDao;
 import common.utils.common.CmmnMap;
 import common.utils.common.PagingConfig;
@@ -21,6 +23,22 @@ public class T4customerMngSvc {
 //		System.out.println(dataList);
 		return dataList;
 	}
+	
+
+	public List<CmmnMap> getUserInfo(CmmnMap params) {
+		List<CmmnMap> dataList = cmmnDao.selectList("getUserInfo", params);
+//		System.out.println(dataList);
+		return dataList;
+	}
+
+
+	
+	public List<CmmnMap> getCustAndUserInfo(CmmnMap params) {
+		List<CmmnMap> dataList = cmmnDao.selectList("getCustAndUserInfo", params);
+//		System.out.println(dataList);
+		return dataList;
+	}
+	
 
 	public CmmnMap deleteCust(CmmnMap params) {
 		String customer_id = params.getString("customer_id");
@@ -29,6 +47,27 @@ public class T4customerMngSvc {
 		return new CmmnMap().put("status", "OK");
 
 	}
+	
+	
+
+	public CmmnMap updateUser(CmmnMap params) {
+		String customer_id = params.getString("customer_id");
+		String user_id = params.getString("user_id");
+ 		String user_name = params.getString("user_name");
+		String user_dept = params.getString("user_dept");
+		String user_jikgub_nm = params.getString("user_jikgub_nm");
+		
+		params.put("customer_id", customer_id);
+		params.put("user_id", user_id);
+		params.put("user_name",user_name);
+		params.put("user_dept", user_dept);
+		params.put("user_jikgub_nm",user_jikgub_nm);
+		
+		cmmnDao.update("system.t4_customer_mng.updateUser", params);
+		return new CmmnMap().put("status", "OK");
+	}
+
+	
 
 	public CmmnMap updateCust(CmmnMap params) {
 		String customer_id = params.getString("customer_id");
@@ -181,6 +220,8 @@ public class T4customerMngSvc {
 		cmmnDao.update("system.t4_customer_mng.releaseQuitCust", params);
 		return new CmmnMap().put("status", "OK");
 	}
+
+
 
 
 
