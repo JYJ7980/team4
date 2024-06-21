@@ -25,8 +25,7 @@
 
 		대시보드 페이지 <br> <br>
 		<div style="margin-left: 70px;">
-			<a href="/system/team4/notice/">공지사항 메인</a><br>
-			<a href="/system/team4/notice/noticeTest">공지사항 페이징 테스트</a><br> <a
+			<a href="/system/team4/notice/">공지사항 메인</a><br> <a
 				href="/system/team4/customerInfoPage">고객관리 페이지</a><br> <a
 				href="/system/team4/consultListPage">상담내역 페이지</a><br> <a
 				href="/system/team4/quitCustomerInfoPage">탈퇴고객 관리페이지</a>
