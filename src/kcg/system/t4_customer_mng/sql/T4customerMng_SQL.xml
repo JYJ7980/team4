@@ -197,6 +197,24 @@
 
 	</select>
 
+	<select id="getSubProductInfo" parameterType="cmmnMap"
+		resultType="cmmnMap">
+		SELECT * FROM kcgbd.db4_product_sub ps join
+		kcgbd.db4_product_info dpi on ps.product_id = dpi.product_id where
+		sub_quit ='Y' and
+		ps.customer_id = CAST(#{customer_id} AS
+		integer)
+	</select>
+
+	<select id="getDesignProductInfo" parameterType="cmmnMap"
+		resultType="cmmnMap">
+		SELECT *
+		FROM kcgbd.db4_product_design pd join kcgbd.db4_product_info dpi on
+		pd.product_id = dpi.product_id where
+		pd.customer_id = CAST(#{customer_id} AS
+		integer)
+	</select>
+
 	<insert id="addConsult" parameterType="cmmnMap">
 		INSERT INTO
 		kcgbd.db4_consult(

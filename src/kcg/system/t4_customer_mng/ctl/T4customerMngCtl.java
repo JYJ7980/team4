@@ -60,6 +60,18 @@ public class T4customerMngCtl {
 		return svc.getCustAndUserInfo(params);
 	}
 	
+	
+	//고객 가입 상품 조회
+	@GetMapping("/getSubProductInfo")
+	public List<CmmnMap> getSubProductInfo(CmmnMap params) {
+		return svc.getSubProductInfo(params);
+	}
+	
+	//고객 설계 상품 조회
+	@GetMapping("/getDesignProductInfo")
+	public List<CmmnMap> getDesignProductInfo(CmmnMap params) {
+		return svc.getDesignProductInfo(params);
+	}
 
 	
 
@@ -181,6 +193,8 @@ public class T4customerMngCtl {
 	public String customerInfoPageForLeader() {
 		return "kcg/system/team4_mng/customer_mng/customerInfoPageForLeader";
 	}
+	
+	
 	
 
 }

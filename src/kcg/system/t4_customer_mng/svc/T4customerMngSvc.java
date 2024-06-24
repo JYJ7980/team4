@@ -234,6 +234,24 @@ public class T4customerMngSvc {
 	}
 
 
+	public List<CmmnMap> getSubProductInfo(CmmnMap params) {
+		List<CmmnMap> dataList = cmmnDao.selectList("getSubProductInfo", params);
+		String customer_id = params.getString("customer_id");
+		params.put("customer_id", customer_id);
+//		System.out.println(dataList);
+		return dataList;
+	}
+
+
+	public List<CmmnMap> getDesignProductInfo(CmmnMap params) {
+		List<CmmnMap> dataList = cmmnDao.selectList("getDesignProductInfo", params);
+		String customer_id = params.getString("customer_id");
+		params.put("customer_id", customer_id);
+//		System.out.println(dataList);
+		return dataList;
+	}
+
+
 
 
 

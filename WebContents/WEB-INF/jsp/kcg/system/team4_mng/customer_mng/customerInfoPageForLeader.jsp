@@ -18,6 +18,7 @@
 	display: flex;
 	flex-direction: column; /* 세로로 정렬 */
 	gap: 10px; /* 요소들 사이의 간격 설정 */
+	padding: 10px;
 }
 
 .input-form {
@@ -48,9 +49,24 @@
 	gap: 10px;
 }
 
-.customer-info, .manager-info {
+.customer-info, .other-info {
 	flex: 1; /* 각 섹션이 동일한 너비를 갖도록 설정 */
 	padding: 5px;
+	border: 1px solid #ccc;
+}
+
+.manager-info {
+	flex: 1; /* 각 섹션이 동일한 너비를 갖도록 설정 */
+	padding: 5px;
+	border: 1px solid #ccc;
+}
+
+.sub-product, .design-product {
+	flex: 1; /* 각 섹션이 동일한 너비를 갖도록 설정 */
+	padding: 5px;
+	width: 500px;
+	height: 250px;
+	overflow-y: auto;
 	border: 1px solid #ccc;
 }
 
@@ -214,8 +230,6 @@
 						</div>
 						<div class="customer-list" v-if="selectedCustomer !== null">
 							<h3>상담내역</h3>
-							
-
 							<div v-if="consults.length > 0">
 								<div class="table-header">
 									<div class="table-cell">상담일</div>
@@ -240,7 +254,7 @@
 					<div class="customer-details" v-if="selectedCustomer !== null">
 						<div class="details-container">
 							<div class="customer-info">
-								<h2>고객 정보</h2>
+								<h3>고객 정보</h3>
 								<div class="input-form">
 									<label for="customerSubDate">등록일</label> <input type="text"
 										id="customerSubDate"
@@ -294,23 +308,66 @@
 								<button @click="updateCustomer">수정</button>
 								<button @click="resetForm">신규</button>
 							</div>
-							<div class="manager-info">
-								<h2>관리자 정보</h2>
-								<div class="input-form">
-									<label for="userName">관리자 이름</label> <input type="text"
-										id="userName" v-model="selectedCustomer.name" disabled>
-									<button type="button" class="btn" @click="popupUser()">
-										<i class="fa fa-search"></i> 검색
-									</button>
+							<div class="other-info">
+								<div class="manager-info">
+									<h3>관리자 정보</h3>
+									<div class="input-form">
+										<label for="userName">관리자 이름</label> <input type="text"
+											id="userName" v-model="selectedCustomer.name" disabled>
+										<button type="button" class="btn" @click="popupUser()">
+											<i class="fa fa-search"></i> 검색
+										</button>
+									</div>
+									<div class="input-form">
+										<label for="userDept">관리자 부서</label> <input type="text"
+											id="userDept" v-model="selectedCustomer.dept" disabled>
+									</div>
+									<div class="input-form">
+										<label for="userjikgub">관리자 직급</label> <input type="text"
+											id="userJikgub" v-model="selectedCustomer.jikgub_nm" disabled>
+										<button @click="updateUser">수정</button>
+									</div>
 								</div>
-								<div class="input-form">
-									<label for="userDept">관리자 부서</label> <input type="text"
-										id="userDept" v-model="selectedCustomer.dept" disabled>
+								<br>
+								<div class="sub-product">
+
+									<h3>가입상품 정보</h3>
+									<div v-if="subProducts.length > 0">
+										<div class="table-header">
+											<div class="table-cell">가입일</div>
+											<div class="table-cell">가입 상품</div>
+										</div>
+
+										<!-- Iterate over consults array to display each consultation item -->
+										<div class="customer-item" v-for="subProduct in subProducts">
+											<div class="table-cell">{{ subProduct.sub_start_date }}</div>
+											<div class="table-cell">{{ subProduct.product_name }}</div>
+										</div>
+									</div>
+									<div v-else>
+										<p>가입상품 내역이 없습니다.</p>
+									</div>
+
 								</div>
-								<div class="input-form">
-									<label for="userjikgub">관리자 직급</label> <input type="text"
-										id="userJikgub" v-model="selectedCustomer.jikgub_nm" disabled>
-									<button @click="updateUser">수정</button>
+								<br>
+								<div class="design-product">
+									<h3>설계상품 정보</h3>
+									<div v-if="designProducts.length > 0">
+										<div class="table-header">
+											<div class="table-cell">설계일</div>
+											<div class="table-cell">설계 상품</div>
+										</div>
+
+										<!-- Iterate over consults array to display each consultation item -->
+										<div class="customer-item" v-for="designProduct in designProducts">
+											<div class="table-cell">{{ designProduct.design_date }}</div>
+											<div class="table-cell">{{ designProduct.product_name }}</div>
+										</div>
+									</div>
+									<div v-else>
+										<p>설계상품 내역이 없습니다.</p>
+									</div>
+
 								</div>
 							</div>
 						</div>
@@ -321,7 +378,7 @@
 								<!-- 선택된 고객이 없는 경우의 메시지 -->
 								<p>고객을 신규 등록해 주세요.</p>
 								<p>**표시는 필수 입력값 입니다. [최조 등록 시 고객 등급은 일반 등급으로 등록]</p>
-								<h2>고객 정보</h2>
+								<h3>고객 정보</h3>
 								<div class="input-form">
 									<label for="customerName">**고객 이름</label> <input type="text"
 										id="customerName" v-model="customerName" required>
@@ -356,7 +413,7 @@
 								<button @click="resetForm">초기화</button>
 							</div>
 							<div class="manager-info">
-								<h2>관리자 정보</h2>
+								<h3>관리자 정보</h3>
 								<div class="input-form">
 									<label for="userName">관리자 이름</label> <input type="text"
 										id="userName" value="${userInfoVO.name}" disabled>
@@ -406,6 +463,8 @@ new Vue({
         Managers: [], //관리자 정보를 저장할 배열
         filteredCustomers: [], // 필터된 고객 정보를 저장할 배열
         consults:[], // 고객 별 상담내역
+        subProducts:[], //고객 별 가입상품 내역
+        designProducts:[], //고객 별 설계상품 내역
         selectedCustomer: null, // 선택된 고객 정보
         userId: '${userInfoVO.userId}', // 현재 사용자의 userId를 저장
         userDept:'${userInfoVO.dept}',
@@ -431,9 +490,13 @@ new Vue({
             if (newCustomer !== null) {
                 // 선택된 고객이 변경되면 상담 내역을 가져오는 메서드를 호출합니다.
                 this.getCustConsults();
+                this.getSubProducts();
+                this.getDesignProducts();
             } else {
                 // 선택된 고객이 없으면 상담 내역 배열을 초기화합니다.
                 this.consults = [];
+                this.subProducts = [];
+                this.designProducts=[];
             }
         },
     },
@@ -471,10 +534,40 @@ new Vue({
                     customer_id: this.selectedCustomer.customer_id,
                     
                 };
-            // AJAX 요청을 보내고 응답 데이터를 customers에 할당
+      
             axios.get('/system/team4/getCustConsult',{ params: params })
                 .then(response => {
                     this.consults = response.data;
+                    
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        },
+        getSubProducts: function() {
+        	var params = {
+                    customer_id: this.selectedCustomer.customer_id,
+                    
+                };
+         
+            axios.get('/system/team4/getSubProductInfo',{ params: params })
+                .then(response => {
+                    this.subProducts = response.data;
+                    
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        },
+        getDesignProducts: function() {
+        	var params = {
+                    customer_id: this.selectedCustomer.customer_id,
+                    
+                };
+         
+            axios.get('/system/team4/getDesignProductInfo',{ params: params })
+                .then(response => {
+                    this.designProducts = response.data;
                     
                 })
                 .catch(error => {
