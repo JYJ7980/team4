@@ -125,12 +125,21 @@ public class T4customerMngCtl {
 		return pageList;
 	}
 	
+	
 	//상담 내역 조회 필터링(내 담당 고객만)
 	@RequestMapping("/getAllMyconsult")
 	public PageList<CmmnMap> getAllMyconsult(CmmnMap params,PagingConfig pagingConfig) {
 		PageList<CmmnMap> pageList = svc.getAllMyconsult(params,pagingConfig);
 		return pageList;
 	}
+	
+	
+	//고객 별 상담내역 
+	@GetMapping("/getCustConsult")
+	public List<CmmnMap> getCustConsult(CmmnMap params) {
+		return svc.getCustConsult(params);
+	}
+	
 	
 	
 	

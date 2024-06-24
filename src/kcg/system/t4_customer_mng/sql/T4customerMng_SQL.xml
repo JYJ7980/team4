@@ -103,10 +103,10 @@
 		where customer_id =
 		CAST(#{customer_id} AS integer)
 	</update>
-	<update id="updateUser">
+	<update id="updateUser" parameterType="cmmnMap">
 		update
 		kcgbd.db4_customer_info
-		set user_id = #{user_id}
+		set user_id = #{manager_id}
 		where customer_id =
 		CAST(#{customer_id} AS integer)
 	</update>
@@ -184,6 +184,17 @@
 		WHERE
 		con.user_id =
 		#{user_id_number} and rep.name=#{user_name};
+	</select>
+
+	<select id="getCustConsult" parameterType="cmmnMap"
+		resultType="cmmnMap">
+		SELECT * FROM kcgbd.db4_consult dc join kcgbd.db4_cust_con
+		dcc on dc.con_id = dcc.con_id join kcgbd.t_user tu on dc.user_id =
+		tu.user_id
+		where dcc.customer_id =
+		CAST(#{customer_id} AS
+		integer)
+
 	</select>
 
 	<insert id="addConsult" parameterType="cmmnMap">
