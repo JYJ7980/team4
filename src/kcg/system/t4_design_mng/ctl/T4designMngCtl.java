@@ -213,6 +213,10 @@ public class T4designMngCtl {
 		
 		String sProdTyCd = params.getString("prod_ty_cd");
 		List<CmmnMap> list = new ArrayList<>();
+		
+		System.out.println("===========================");
+		System.out.println("sProdTyCd: " + sProdTyCd);
+		System.out.println("params: " + params.toString());
 
 		if("1".equals(sProdTyCd)) {
 			

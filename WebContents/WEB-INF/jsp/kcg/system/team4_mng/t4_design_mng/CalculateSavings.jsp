@@ -158,9 +158,9 @@
                             <div class="form-group" style="justify-content: left">
                                 <label>이자과세:</label>
 								<select class="form-control" id="int_tax_ty_cd" v-model="info.tax_rate" style="padding-top: 3px;">
-									<option value="1">일반과세 (15.4%)</option>
-									<option value="2">세금우대 (9.5%)</option>
-									<option value="3">비과세</option>
+									<option value="15.4">일반과세 (15.4%)</option>
+									<option value="9.5">세금우대 (9.5%)</option>
+									<option value="0">비과세</option>
 								</select>
                             </div>
                         </div>
@@ -216,7 +216,7 @@
 			                               </div>
 			                               <div class="form-group">
 			                                   <label>세후수령액:</label>
-			                                   <input class="form-control" id="atx_rcve_amt" v-model="info.rec_after_tax" disabled />
+			                                   <input class="form-control" id="atx_rcve_amt" v-model="info.final_money" disabled />
 			                               </div>
 			                               <div class="form-group">
 			                                   <span>순수익률:</span>
@@ -376,11 +376,11 @@ var vueapp = new Vue({
 			tax_rate : "", //세금 비율
 			cycle_money : "", //불입 금액
 			before_interest : "", //세전 이자
-			after_interest : "", //세전 이자			
+			final_interest : "", //세후 이자			
 			rec_before_tax : "", //세전 수령액
 			interest_tax : "", //이자과세금
 			interest_type: "", //단리인지 복리인지
-			rec_after_tax : "", //세후 수령액
+			final_money : "", //세후 수령액
 			v_select_month : "", //변동 금리 예치 기간
 			f_select_month : "", //고정 금리 예치 기간
 			profit_rate : "", //수익률
@@ -616,162 +616,206 @@ var vueapp = new Vue({
 				var v_interest_rate = (this.info.v_interest_rate /100 /12);
 				var tax_rate ="";				
 				
-				if(this.info.tax_rate == "1") {
+				if(this.info.tax_rate == "15.4") {
 					tax_rate =(15.4/100);
 				}
-				if(this.info.tax_rate == "2") {
+				if(this.info.tax_rate == "9.5") {
 					tax_rate =(9.5/100);
 				}
-				if(this.info.tax_rate == "3") {
+				if(this.info.tax_rate == "0") {
 					tax_rate = 0;
 				}
 				
-				if(this.info.interest_type == "단리"){
-					var length = this.info.f_select_month + this.info.v_select_month //총 납입 기간 숫자 확인
-					var r_interest =  0;
-					var accumulate_interest = 0;
-					var money = this.info.cycle_money
-					for(var i = 1; i <= this.info.f_select_month; i++ ){
-						r_interest = money * f_interest_rate * i
-						accumulate_interest = accumulate_interest + r_interest;
-						var params = {
-							round_num : i,
-							round_cycle_money : formatNumberWithCommas(money),
-							round_acc_cycle_money : formatNumberWithCommas(money * i),
-					        round_interest: formatNumberWithCommas(r_interest.toFixed(0)),
-							acc_interest : formatNumberWithCommas(accumulate_interest.toFixed(0)),
-							round_total : formatNumberWithCommas((money*i + accumulate_interest).toFixed(0))
-						}
-						this.calculate_arr.push(params);
-
-					}
-					for(var i = 1 ; i <= this.info.v_select_month ; i++) {
-						r_interest = r_interest + money * v_interest_rate
-						accumulate_interest = accumulate_interest + r_interest;
-						var params = {
-								round_num : i + this.info.f_select_month,
-								round_cycle_money : formatNumberWithCommas(money),
-								round_acc_cycle_money : formatNumberWithCommas(money * (i+this.info.f_select_month)),
-						        round_interest: formatNumberWithCommas(r_interest.toFixed(0)),
-								acc_interest : formatNumberWithCommas(accumulate_interest.toFixed(0)),
-								round_total : formatNumberWithCommas((money*(i+this.info.f_select_month) + accumulate_interest).toFixed(0))
-							}
-						this.calculate_arr.push(params);
-					}
-					
-					var lastParams = this.calculate_arr[this.calculate_arr.length - 1];
-					console.log('round_interest의 값:', lastParams.round_interest);
-					console.log('round_total의 값:', lastParams.round_total);
-					
-					var rec_before_tax = removeCommas(lastParams.round_total); //세전 최종 금액
-					var before_interest =removeCommas(lastParams.acc_interest); //세전 이자
-					var interest_tax = before_interest * tax_rate; //이자에 대한 세금
-					var after_interest = before_interest - interest_tax; //세후 이자
-					var rec_after_tax = this.info.cycle_money * length + after_interest //최종금액
-					var profit_rate =  ((before_interest / (this.info.cycle_money*length)) * 100).toFixed(2) ;//수익률
-					var net_profit_rate = ((after_interest / (this.info.cycle_money*length)) * 100).toFixed(2); //순수익률
-					var total_cycle_money = this.info.cycle_money * length; //불입금액합계
-
-					
-					var formattedBeforeInterest = formatNumberWithCommas(before_interest);
-					var formattedRecBeforeTax = formatNumberWithCommas(rec_before_tax);
-					var formattedInterestTax = formatNumberWithCommas(interest_tax);
-					var formattedAfterInterest = formatNumberWithCommas(after_interest);
-					var formattedRecAfterTax = formatNumberWithCommas(rec_after_tax);
-					var formattedTotalCycleMoney = formatNumberWithCommas(total_cycle_money); //불입금액합계
-
-
-					this.info.total_cycle_money = formattedTotalCycleMoney;
-					this.info.before_interest = formattedBeforeInterest;
-					this.info.rec_before_tax = formattedRecBeforeTax;
-					this.info.interest_tax = formattedInterestTax;
-					this.info.after_interest = formattedAfterInterest;
-					this.info.rec_after_tax = formattedRecAfterTax;
-					this.info.profit_rate = profit_rate;
-					this.info.net_profit_rate = net_profit_rate;
+				var params = {
+						cycle_money : this.info.cycle_money,
+						interest_type : this.info.interest_type,
+						f_interest_rate : f_interest_rate,
+						f_select_month : this.info.f_select_month,
+						v_interest_rate : v_interest_rate,
+						v_select_month : this.info.v_select_month,
+						prod_ty_cd : "1",
 				}
 				
-				if(this.info.interest_type == "복리"){
-					
-					var length = this.info.f_select_month + this.info.v_select_month; // 총 기간
-					var accumulate_interest = 0; // 누적 이자
-					var money = this.info.cycle_money; // 매달 납입 금액
-					var rec_before_tax = 0; // 세전 총액
-					var previous_rec_before_tax = 0; // 이전 회차 세전 총액
-
-					// 고정 금리 기간에 대한 계산
-					for (var i = 1; i <= this.info.f_select_month; i++) {
-					    rec_before_tax = (rec_before_tax + money) * (1 + f_interest_rate);
-					    var r_interest = rec_before_tax - previous_rec_before_tax - money;
-					    accumulate_interest = rec_before_tax - (money * i);
-
-					    var params = {
-					        round_num: i,
-					        round_cycle_money: formatNumberWithCommas(money),
-					        round_acc_cycle_money: formatNumberWithCommas(money * i),
-					        round_interest: formatNumberWithCommas(r_interest.toFixed(0)),
-					        acc_interest: formatNumberWithCommas(accumulate_interest.toFixed(0)),
-					        round_total: formatNumberWithCommas(rec_before_tax.toFixed(0))
-					    };
-
-					    this.calculate_arr.push(params);
-					    previous_rec_before_tax = rec_before_tax;
-					}
-
-					// 변동 금리 기간에 대한 계산
-					for (var i = 1; i <= this.info.v_select_month; i++) {
-					    rec_before_tax = (rec_before_tax + money) * (1 + v_interest_rate);
-					    var r_interest = rec_before_tax - previous_rec_before_tax - money;
-					    accumulate_interest = rec_before_tax - (money * (i + this.info.f_select_month));
-
-					    var params = {
-					        round_num: i + this.info.f_select_month,
-					        round_cycle_money: formatNumberWithCommas(money),
-					        round_acc_cycle_money: formatNumberWithCommas(money * (i + this.info.f_select_month)),
-					        round_interest: formatNumberWithCommas(r_interest.toFixed(0)),
-					        acc_interest: formatNumberWithCommas(accumulate_interest.toFixed(0)),
-					        round_total: formatNumberWithCommas((money * (i + this.info.f_select_month) + accumulate_interest).toFixed(0))
-					    };
-
-					    this.calculate_arr.push(params);
-					    previous_rec_before_tax = rec_before_tax;
-					}
-
-					console.log("========================================")
-					console.log(JSON.stringify(this.calculate_arr))
-					
+	            axios.post('/team4/calculator', { params : params })
+	            .then(response => {
+	            	console.log("111222정상 작동 되었습니다.")
+	            	this.calculate_arr =response.data
+	            	console.log("=======================")
+	            	console.log(JSON.stringify(this.calculate_arr))
+	            	
 					var lastParams = this.calculate_arr[this.calculate_arr.length - 1];
-					console.log('round_interest의 값:', lastParams.round_interest);
-					console.log('round_total의 값:', lastParams.round_total);
+					var rec_before_tax = lastParams.round_total; //세전금액
+					var total_cycle_money = lastParams.round_acc_cycle_money; //총 납입금액
+					var before_interest = lastParams.acc_interest //세전이자
+					var interest_tax = (before_interest * tax_rate).toFixed(0); //이자에 대한 세금
+					var final_interest = before_interest - interest_tax; //세후 이자
+					var final_money = total_cycle_money + final_interest; //세후 금액
+					var profit_rate =  ((before_interest / total_cycle_money) * 100).toFixed(2) ;//수익률
+					var net_profit_rate = ((final_interest / total_cycle_money) * 100).toFixed(2); //순수익률
 					
-					var rec_before_tax = removeCommas(lastParams.round_total); //세전 최종 금액
-					var before_interest =removeCommas(lastParams.acc_interest); //세전 이자
-					var interest_tax = before_interest * tax_rate; //이자에 대한 세금
-					var after_interest = before_interest - interest_tax; //세후 이자
-					var rec_after_tax = this.info.cycle_money * length + after_interest //최종금액
-					var profit_rate =  ((before_interest / (this.info.cycle_money*length)) * 100).toFixed(2) ;//수익률
-					var net_profit_rate = ((after_interest / (this.info.cycle_money*length)) * 100).toFixed(2); //순수익률
-					var total_cycle_money = this.info.cycle_money * length; //불입금액합계
+					this.info.total_cycle_money = total_cycle_money;
+					this.info.final_money = final_money; //세후 금액
+					this.info.final_interest = final_interest; //세후 이자
+					this.info.rec_before_tax = rec_before_tax; //세전 금액
+					this.info.interest_tax = interest_tax; //이자에 대한 세금
+
+					this.info.before_interest = before_interest; //세전 이자
+				    this.$set(this.info, 'profit_rate', profit_rate);  // 수익률 갱신
+				    this.$set(this.info, 'net_profit_rate', net_profit_rate);  // 순수익률 갱신
+
+	            	})
+	            .catch(error => {
+
+	                console.error('항목 삭제 중 에러 발생:', error);
+	            });
+
+				
+// 				if(this.info.interest_type == "단리"){
+// 					var length = this.info.f_select_month + this.info.v_select_month //총 납입 기간 숫자 확인
+// 					var r_interest =  0;
+// 					var accumulate_interest = 0;
+// 					var money = this.info.cycle_money
+// 					for(var i = 1; i <= this.info.f_select_month; i++ ){
+// 						r_interest = money * f_interest_rate * i
+// 						accumulate_interest = accumulate_interest + r_interest;
+// 						var params = {
+// 							round_num : i,
+// 							round_cycle_money : formatNumberWithCommas(money),
+// 							round_acc_cycle_money : formatNumberWithCommas(money * i),
+// 					        round_interest: formatNumberWithCommas(r_interest.toFixed(0)),
+// 							acc_interest : formatNumberWithCommas(accumulate_interest.toFixed(0)),
+// 							round_total : formatNumberWithCommas((money*i + accumulate_interest).toFixed(0))
+// 						}
+// 						this.calculate_arr.push(params);
+
+// 					}
+// 					for(var i = 1 ; i <= this.info.v_select_month ; i++) {
+// 						r_interest = r_interest + money * v_interest_rate
+// 						accumulate_interest = accumulate_interest + r_interest;
+// 						var params = {
+// 								round_num : i + this.info.f_select_month,
+// 								round_cycle_money : formatNumberWithCommas(money),
+// 								round_acc_cycle_money : formatNumberWithCommas(money * (i+this.info.f_select_month)),
+// 						        round_interest: formatNumberWithCommas(r_interest.toFixed(0)),
+// 								acc_interest : formatNumberWithCommas(accumulate_interest.toFixed(0)),
+// 								round_total : formatNumberWithCommas((money*(i+this.info.f_select_month) + accumulate_interest).toFixed(0))
+// 							}
+// 						this.calculate_arr.push(params);
+// 					}
+					
+// 					var lastParams = this.calculate_arr[this.calculate_arr.length - 1];
+// 					console.log('round_interest의 값:', lastParams.round_interest);
+// 					console.log('round_total의 값:', lastParams.round_total);
+					
+// 					var rec_before_tax = removeCommas(lastParams.round_total); //세전 최종 금액
+// 					var before_interest =removeCommas(lastParams.acc_interest); //세전 이자
+// 					var interest_tax = before_interest * tax_rate; //이자에 대한 세금
+// 					var after_interest = before_interest - interest_tax; //세후 이자
+// 					var rec_after_tax = this.info.cycle_money * length + after_interest //최종금액
+// 					var profit_rate =  ((before_interest / (this.info.cycle_money*length)) * 100).toFixed(2) ;//수익률
+// 					var net_profit_rate = ((after_interest / (this.info.cycle_money*length)) * 100).toFixed(2); //순수익률
+// 					var total_cycle_money = this.info.cycle_money * length; //불입금액합계
 
 					
-					var formattedBeforeInterest = formatNumberWithCommas(before_interest);
-					var formattedRecBeforeTax = formatNumberWithCommas(rec_before_tax);
-					var formattedInterestTax = formatNumberWithCommas(interest_tax);
-					var formattedAfterInterest = formatNumberWithCommas(after_interest);
-					var formattedRecAfterTax = formatNumberWithCommas(rec_after_tax);
-					var formattedTotalCycleMoney = formatNumberWithCommas(total_cycle_money); //불입금액합계
+// 					var formattedBeforeInterest = formatNumberWithCommas(before_interest);
+// 					var formattedRecBeforeTax = formatNumberWithCommas(rec_before_tax);
+// 					var formattedInterestTax = formatNumberWithCommas(interest_tax);
+// 					var formattedAfterInterest = formatNumberWithCommas(after_interest);
+// 					var formattedRecAfterTax = formatNumberWithCommas(rec_after_tax);
+// 					var formattedTotalCycleMoney = formatNumberWithCommas(total_cycle_money); //불입금액합계
 
 
-					this.info.total_cycle_money = formattedTotalCycleMoney;
-					this.info.before_interest = formattedBeforeInterest;
-					this.info.rec_before_tax = formattedRecBeforeTax;
-					this.info.interest_tax = formattedInterestTax;
-					this.info.after_interest = formattedAfterInterest;
-					this.info.rec_after_tax = formattedRecAfterTax;
-					this.info.profit_rate = profit_rate;
-					this.info.net_profit_rate = net_profit_rate;
+// 					this.info.total_cycle_money = formattedTotalCycleMoney;
+// 					this.info.before_interest = formattedBeforeInterest;
+// 					this.info.rec_before_tax = formattedRecBeforeTax;
+// 					this.info.interest_tax = formattedInterestTax;
+// 					this.info.after_interest = formattedAfterInterest;
+// 					this.info.rec_after_tax = formattedRecAfterTax;
+// 					this.info.profit_rate = profit_rate;
+// 					this.info.net_profit_rate = net_profit_rate;
+// 				}
+				
+// 				if(this.info.interest_type == "복리"){
 					
-				}
+// 					var length = this.info.f_select_month + this.info.v_select_month; // 총 기간
+// 					var accumulate_interest = 0; // 누적 이자
+// 					var money = this.info.cycle_money; // 매달 납입 금액
+// 					var rec_before_tax = 0; // 세전 총액
+// 					var previous_rec_before_tax = 0; // 이전 회차 세전 총액
+
+// 					// 고정 금리 기간에 대한 계산
+// 					for (var i = 1; i <= this.info.f_select_month; i++) {
+// 					    rec_before_tax = (rec_before_tax + money) * (1 + f_interest_rate);
+// 					    var r_interest = rec_before_tax - previous_rec_before_tax - money;
+// 					    accumulate_interest = rec_before_tax - (money * i);
+
+// 					    var params = {
+// 					        round_num: i,
+// 					        round_cycle_money: formatNumberWithCommas(money),
+// 					        round_acc_cycle_money: formatNumberWithCommas(money * i),
+// 					        round_interest: formatNumberWithCommas(r_interest.toFixed(0)),
+// 					        acc_interest: formatNumberWithCommas(accumulate_interest.toFixed(0)),
+// 					        round_total: formatNumberWithCommas(rec_before_tax.toFixed(0))
+// 					    };
+
+// 					    this.calculate_arr.push(params);
+// 					    previous_rec_before_tax = rec_before_tax;
+// 					}
+
+// 					// 변동 금리 기간에 대한 계산
+// 					for (var i = 1; i <= this.info.v_select_month; i++) {
+// 					    rec_before_tax = (rec_before_tax + money) * (1 + v_interest_rate);
+// 					    var r_interest = rec_before_tax - previous_rec_before_tax - money;
+// 					    accumulate_interest = rec_before_tax - (money * (i + this.info.f_select_month));
+
+// 					    var params = {
+// 					        round_num: i + this.info.f_select_month,
+// 					        round_cycle_money: formatNumberWithCommas(money),
+// 					        round_acc_cycle_money: formatNumberWithCommas(money * (i + this.info.f_select_month)),
+// 					        round_interest: formatNumberWithCommas(r_interest.toFixed(0)),
+// 					        acc_interest: formatNumberWithCommas(accumulate_interest.toFixed(0)),
+// 					        round_total: formatNumberWithCommas((money * (i + this.info.f_select_month) + accumulate_interest).toFixed(0))
+// 					    };
+
+// 					    this.calculate_arr.push(params);
+// 					    previous_rec_before_tax = rec_before_tax;
+// 					}
+
+// 					console.log("========================================")
+// 					console.log(JSON.stringify(this.calculate_arr))
+					
+// 					var lastParams = this.calculate_arr[this.calculate_arr.length - 1];
+// 					console.log('round_interest의 값:', lastParams.round_interest);
+// 					console.log('round_total의 값:', lastParams.round_total);
+					
+// 					var rec_before_tax = removeCommas(lastParams.round_total); //세전 최종 금액
+// 					var before_interest =removeCommas(lastParams.acc_interest); //세전 이자
+// 					var interest_tax = before_interest * tax_rate; //이자에 대한 세금
+// 					var after_interest = before_interest - interest_tax; //세후 이자
+// 					var rec_after_tax = this.info.cycle_money * length + after_interest //최종금액
+// 					var profit_rate =  ((before_interest / (this.info.cycle_money*length)) * 100).toFixed(2) ;//수익률
+// 					var net_profit_rate = ((after_interest / (this.info.cycle_money*length)) * 100).toFixed(2); //순수익률
+// 					var total_cycle_money = this.info.cycle_money * length; //불입금액합계
+
+					
+// 					var formattedBeforeInterest = formatNumberWithCommas(before_interest);
+// 					var formattedRecBeforeTax = formatNumberWithCommas(rec_before_tax);
+// 					var formattedInterestTax = formatNumberWithCommas(interest_tax);
+// 					var formattedAfterInterest = formatNumberWithCommas(after_interest);
+// 					var formattedRecAfterTax = formatNumberWithCommas(rec_after_tax);
+// 					var formattedTotalCycleMoney = formatNumberWithCommas(total_cycle_money); //불입금액합계
+
+
+// 					this.info.total_cycle_money = formattedTotalCycleMoney;
+// 					this.info.before_interest = formattedBeforeInterest;
+// 					this.info.rec_before_tax = formattedRecBeforeTax;
+// 					this.info.interest_tax = formattedInterestTax;
+// 					this.info.after_interest = formattedAfterInterest;
+// 					this.info.rec_after_tax = formattedRecAfterTax;
+// 					this.info.profit_rate = profit_rate;
+// 					this.info.net_profit_rate = net_profit_rate;
+					
+// 				}
 
 		},
 		gotoList : function(){
