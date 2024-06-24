@@ -1,5 +1,6 @@
 package kcg.system.t4_design_mng.ctl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import common.utils.common.CmmnMap;
 import common.utils.common.PagingConfig;
 import common.utils.mybatis_paginator.domain.PageList;
 import kcg.common.svc.CommonSvc;
+import kcg.system.t4_design_mng.svc.Calculator;
 import kcg.system.t4_design_mng.svc.T4designMngSVC;
 
 @Controller
@@ -26,7 +28,10 @@ public class T4designMngCtl {
 
 	@Autowired
 	T4designMngSVC svc;
-
+	
+	@Autowired
+	Calculator cal;
+	
 	@Autowired
 	CommonSvc commonSvc;
 
@@ -62,7 +67,6 @@ public class T4designMngCtl {
 		List<CmmnMap> productList = cmmnDao.selectList("selectTypeProductList", params);
 		return productList;
 	}
-
 
 	@RequestMapping("customerList")
 	public List<CmmnMap> customerList(CmmnMap params){
@@ -131,18 +135,22 @@ public class T4designMngCtl {
 		String sProdTyCd = params.getString("prod_ty_cd", "1");
 		model.addAttribute("prod_ds_sn", params.getString("prod_ds_sn", ""));			// 설계설계번호
 		model.addAttribute("cust_mbl_telno", params.getString("cust_mbl_telno", ""));	// 고객KEY
-		model.addAttribute("prod_ty_cd", sProdTyCd);										// 설계타입코드 : 1.적금설계, 2.목돈마련설계, 3.예금설계, 4.대출설계
-		
+		model.addAttribute("prod_ty_cd", sProdTyCd);	
+		// 설계타입코드 : 1.적금설계, 2.목돈마련설계, 3.예금설계, 4.대출설계
+		model.addAttribute("design_id", params.getString("design_id", ""));	// 고객KEY
+		model.addAttribute("product_id", params.getString("product_id", ""));	// 고객KEY
+		model.addAttribute("customer_id", params.getString("customer_id", ""));	// 고객KEY
+
 		
 		String sRsltUrl = "";
 		if("1".equals(sProdTyCd)) {
-			sRsltUrl = "kcg/system/team4_mng/t4_design_mng/CalculateSavings";
-		}else if("2".equals(sProdTyCd)) {
-			sRsltUrl = "kcg/system/team4_mng/t4_design_mng/CalculateLump";
+			sRsltUrl = "kcg/system/team4_mng/t4_design_mng/CalculateSavings"; //적금
+		}else if("2".equals(sProdTyCd)) { 
+			sRsltUrl = "kcg/system/team4_mng/t4_design_mng/CalculateLump"; //목돈
 		}else if("3".equals(sProdTyCd)) {
-			sRsltUrl = "kcg/system/team4_mng/t4_design_mng/CalculateDeposit";
+			sRsltUrl = "kcg/system/team4_mng/t4_design_mng/CalculateDeposit"; //예금
 		}else if("4".equals(sProdTyCd)) {
-			sRsltUrl = "kcg/system/team4_mng/t4_design_mng/CalculateLoan";
+			sRsltUrl = "kcg/system/team4_mng/t4_design_mng/CalculateLoan"; //대출
 		}
 		
 		return sRsltUrl;
@@ -163,5 +171,68 @@ public class T4designMngCtl {
 		svc.saveCalulate(params);
 		return "kcg/system/team4_mng/t4_design_mng/CalculateDeposit";
 	}
+	
+	@GetMapping("designList")
+	public String designList() {
+		return "kcg/system/team4_mng/t4_design_mng/DesignList";
+	}
+	
+	@RequestMapping("/designListPaging")
+	public PageList<CmmnMap> designListPaging(CmmnMap params, PagingConfig pagingConfig) {
+		
+		return svc.designListPaging(params, pagingConfig);
+	}
+	
+	
+    @PostMapping("/moveDesignInfoForm")
+    public CmmnMap moveDesignInfoForm(CmmnMap params) {
+    	
+        return svc.moveDesignInfoForm(params);
+    }
+    
+    @PostMapping("/deleteDesign")
+    public List<CmmnMap> deleteDesign(CmmnMap params) {
+    	
+        svc.deleteDesign(params);
+    	return svc.selectAllDes(params);
+    }
+	
+    
+    @PostMapping("/deleteSingleDesign")
+    public List<CmmnMap> deleteSingleDesign(CmmnMap params) {
+
+    	System.out.println("==========================");
+    	System.out.println("=params: " + params.toString());
+
+    	svc.deleteSingleDesign(params);
+    	return svc.selectAllDes(params);
+    }
+    
+	@RequestMapping("/calculator")
+	public List<CmmnMap> calculator(CmmnMap params) {
+		
+		String sProdTyCd = params.getString("prod_ty_cd");
+		List<CmmnMap> list = new ArrayList<>();
+
+		if("1".equals(sProdTyCd)) {
+			
+			list = cal.calculateSavings(params);
+			return list;
+		}else if("2".equals(sProdTyCd)) {
+			
+			list = cal.calculateLump(params);
+			return list;
+		}else if("3".equals(sProdTyCd)) {
+
+			list = cal.calculateDeposit(params);
+			return list;
+			
+		}else{
+			list = cal.calculateLoan(params);
+			return list;
+		}
+	}
+	
+	
 
 }

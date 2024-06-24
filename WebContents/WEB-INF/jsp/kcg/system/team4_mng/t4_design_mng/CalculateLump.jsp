@@ -375,7 +375,7 @@ var vueapp = new Vue({
 			cust_mbl_telno : "${cust_mbl_telno}",
 			prod_ty_cd : "${prod_ty_cd}",
 			simpl_ty_cd : "0",
-
+			design_id: "${design_id}",
 			f_interest_rate : "", //고정 금리
 			v_interest_rate : "", //변동 금리
 			tax_rate : "", //세금 비율
@@ -394,7 +394,7 @@ var vueapp = new Vue({
 			total_cycle_money: "", //불입금액합계
 		},
 		proInfo : {
-			product_id : "",
+			product_id : "${product_id}",
 			product_name : "",
 		},
 
@@ -402,7 +402,7 @@ var vueapp = new Vue({
 			customer_phone : "",
 			customer_name : "",
 			customer_id_number : "",
-			customer_id : "",
+			customer_id : "${customer_id}",
 			customer_email : "",
 			customer_sub_tel : "",
 			customer_job : "",
@@ -415,10 +415,10 @@ var vueapp = new Vue({
 	},
 	mounted : function(){
 		
-		if(!cf_isEmpty(this.info.cust_mbl_telno)){
+		if(!cf_isEmpty(this.custInfo.customer_id)){
 			this.getCustInfo();
 		}
-		if(!cf_isEmpty(this.info.prod_ds_sn)){
+		if(!cf_isEmpty(this.info.design_id)){
 			this.getDsgInfo();
 		}
 	},
@@ -438,7 +438,7 @@ var vueapp = new Vue({
 			
 		},
 		getDsgInfo : function(){
-			cf_ajax("/promion_mng/getDsgInfo", this.info, this.getDsgInfoCB);
+			cf_ajax("/team4/getDsgInfo", this.info, this.getDsgInfoCB);
 		},
 		getDsgInfoCB : function(data){
 			this.info = data;
@@ -468,6 +468,7 @@ var vueapp = new Vue({
 		            v_select_month: this.info.v_select_month,
 		            v_interest_rate: this.info.v_interest_rate,
 		            rate: this.info.tax_rate,
+		            sub_money: this.info.sub_money,
 		            cycle_money: this.info.cycle_money,
 		            rec_before_tax: removeCommas(this.info.rec_before_tax),
 		            final_money: removeCommas(this.info.rec_after_tax),
@@ -482,13 +483,14 @@ var vueapp = new Vue({
 		            product_id: this.proInfo.product_id,
 		            customer_id: this.custInfo.customer_id,
 			}
-			console.log("=================================")
+			console.log("================params 값=================")
 			console.log(JSON.stringify(params))
 				console.log("=================================")
 				console.log("실행됨 이제 axios로 넘어가야함")
 	            axios.post('/team4/saveCalulate', {params : params})
 	        	.then(response => {
 					alert("정상등록되었습니다")
+                    window.location.href = "/team4/designList";
 	        	})
 	        	.catch(error => {
 	        	    console.error("Error:", error);
@@ -588,18 +590,13 @@ var vueapp = new Vue({
 			       return false;
 			}
 		    
-		    if ((this.info.f_interest_rate === '' || this.info.f_interest_rate == 0) && 
-				(this.info.v_interest_rate === '' || this.info.v_interest_rate == 0)) {
-				alert('이자율을 선택하여주세요');
-				return false;
-			}
-				          
-
-
-		    if ((this.info.f_select_month === '' || this.info.f_select_month == 0) && 
-		       (this.info.v_select_month === '' || this.info.v_select_month == 0)) {
-		        alert('예치기간을 작성해주세요');
-		        return false;
+		    
+		    if(this.info.f_interest_rate === '' || this.info.f_interest_rate == 0){
+		    	alert('고정금리를 설정해주세요')
+		    }
+		    
+		    if(this.info.f_select_month === '' || this.info.f_select_month == 0){
+		    	alert('고정금리 기간을 설정해주세요')
 		    }
 		          
 		    if (this.info.tax_rate === '') {
@@ -837,9 +834,9 @@ var pop_prod = new Vue({
 	el : "#pop_prod",
 	data : {
 		dataList : [],
-		pop_product_name: "",
+		pop_product_name: "목돈",
 		pop_product_id:"",
-		pop_product_type:"목돈마련적금",
+		pop_product_type:"적금",
 
 	},
 	mounted : function(){
@@ -919,7 +916,7 @@ var pop_cust = new Vue({
         // 소수점 이하 제거
         var wholeNumber = Math.trunc(number);
         // 숫자를 문자열로 변환한 후 콤마 추가
-         return wholeNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return wholeNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
     function removeCommas(stringWithCommas) {

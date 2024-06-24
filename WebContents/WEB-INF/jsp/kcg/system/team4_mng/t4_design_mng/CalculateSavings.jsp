@@ -370,7 +370,7 @@ var vueapp = new Vue({
 			cust_mbl_telno : "${cust_mbl_telno}",
 			prod_ty_cd : "${prod_ty_cd}",
 			simpl_ty_cd : "0",
-
+			design_id: "${design_id}",
 			f_interest_rate : "", //고정 금리
 			v_interest_rate : "", //변동 금리
 			tax_rate : "", //세금 비율
@@ -388,7 +388,7 @@ var vueapp = new Vue({
 			total_cycle_money: "", //불입금액합계
 		},
 		proInfo : {
-			product_id : "",
+			product_id : "${product_id}",
 			product_name : "",
 		},
 
@@ -396,7 +396,7 @@ var vueapp = new Vue({
 			customer_phone : "",
 			customer_name : "",
 			customer_id_number : "",
-			customer_id : "",
+			customer_id : "${customer_id}",
 			customer_email : "",
 			customer_sub_tel : "",
 			customer_job : "",
@@ -496,6 +496,7 @@ var vueapp = new Vue({
 	            axios.post('/team4/saveCalulate', {params : params})
 	        	.then(response => {
 					alert("정상등록되었습니다")
+                    window.location.href = "/team4/designList";
 	        	})
 	        	.catch(error => {
 	        	    console.error("Error:", error);
@@ -595,18 +596,13 @@ var vueapp = new Vue({
 			       return false;
 			}
 		    
-		    if ((this.info.f_interest_rate === '' || this.info.f_interest_rate == 0) && 
-				(this.info.v_interest_rate === '' || this.info.v_interest_rate == 0)) {
-				alert('이자율을 선택하여주세요');
-				return false;
-			}
-				          
-
-
-		    if ((this.info.f_select_month === '' || this.info.f_select_month == 0) && 
-		       (this.info.v_select_month === '' || this.info.v_select_month == 0)) {
-		        alert('예치기간을 작성해주세요');
-		        return false;
+		    
+		    if(this.info.f_interest_rate === '' || this.info.f_interest_rate == 0){
+		    	alert('고정금리를 설정해주세요')
+		    }
+		    
+		    if(this.info.f_select_month === '' || this.info.f_select_month == 0){
+		    	alert('고정금리 기간을 설정해주세요')
 		    }
 		          
 		    if (this.info.tax_rate === '') {

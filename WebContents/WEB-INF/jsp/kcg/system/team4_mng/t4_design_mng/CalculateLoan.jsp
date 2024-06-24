@@ -120,16 +120,16 @@
                                 <button type="button" class="btn btn-transparent flex-20" @click="setCircleAcmlAmt(100)">+100만원</button>
                                 <button type="button" class="btn btn-navy flex-20" @click="setCircleAcmlAmt(0)">정정</button>
                             </div>
-
+                                                        
                             <div class="form-group" style="justify-content: left">
-                                <label>상환방식:</label>
+                                <label>이자유형:</label>
 								<select class="form-control" id="int_tax_ty_cd" v-model="info.loan_repayment_type" style="padding-top: 3px;">
-									<option value="원리금균등">원리금 균등 상환방식</option>
-									<option value="원금균등">원금 균등 상환방식</option>
-									<option value="만기일시">만기일시상환방식</option>
-									
+									<option value="원리금 균등">원리금 균등 상환방식</option>
+									<option value="원금 균등">원금 균등 상환방식</option>
+									<option value="만기 일시">만기일시상환방식</option>
 								</select>
                             </div>
+                            
 
                             <div class="form-group" style="justify-content: left">
                                 <label>고정금리 (%):</label>
@@ -191,6 +191,11 @@
 	                        	<td class="center" style="width: 40%; vertical-align: top;">
 	                        		<div class="form-wrapper flex flex-wrap flex-gap-10">
 
+			                               <div class="form-group" v-if="info.loan_repayment_type ==='원리금 균등'">
+			                                   <label>매 회차 납입 금액:</label>
+			                                   <input class="form-control" id="int_tax_amt" v-model="info.cycle_money" disabled />
+			                               </div>
+
 			                               <div class="form-group">
 			                                   <label>총 납입 이자:</label>
 			                                   <input class="form-control" id="int_tax_amt" v-model="info.final_interest" disabled />
@@ -213,13 +218,13 @@
 			                            <table class="table table-bordered datatable dataTable" id="grid_app">
 											<thead>
 												<tr class="replace-inputs">
-													<th style="width: 10%;" class="center">회차</th>
-													<th style="width: 10%;" class="center">회차별 납입금액</th>
-													<th style="width: 10%;" class="center">회차별 원리금액</th>
-													<th style="width: 10%;" class="center">회차별 이자</th>
-													<th style="width: 10%;" class="center">누적 납입원금</th>
-													<th style="width: 10%;" class="center">잔금</th>
-													<th style="width: 10%;" class="center">중도상환시 수수료</th>
+													<th style="width: 8%;" class="center">회차</th>
+													<th style="width: 10%;" class="center">납입금액</th>
+													<th style="width: 10%;" class="center">원리금액</th>
+													<th style="width: 7%;" class="center">이자</th>
+													<th style="width: 10%;" class="center">누적 이자</th>
+													<th style="width: 7%;" class="center">잔금</th>
+													<th style="width: 15%;" class="center">중도상환 수수료</th>
 													
 												</tr>
 											</thead>
@@ -350,19 +355,20 @@ var vueapp = new Vue({
 			cust_mbl_telno : "${cust_mbl_telno}",
 			prod_ty_cd : "${prod_ty_cd}",
 			simpl_ty_cd : "0",
-
+			design_id: "${design_id}",
 			sub_money : "", //대출 금액
-			loan_repayment_type: ""//상환 방식
+			loan_repayment_type: "",//상환 방식
 			f_interest_rate : "", //고정 금리
 			f_select_month : "", //고정 금리 예치 기간
 			v_interest_rate : "", //변동 금리
 			v_select_month : "", //변동 금리 예치 기간
 			rate : "", //중도상환 수수료
+			cycle_money: "", //매 회차 납입 금액			
 			final_money : "", //총 상환금액
 			final_interest : "", //총 납입 이자			
 		},
 		proInfo : {
-			product_id : "",
+			product_id : "${product_id}",
 			product_name : "",
 		},
 
@@ -370,7 +376,7 @@ var vueapp = new Vue({
 			customer_phone : "",
 			customer_name : "",
 			customer_id_number : "",
-			customer_id : "",
+			customer_id :"${customer_id}",
 			customer_email : "",
 			customer_sub_tel : "",
 			customer_job : "",
@@ -424,31 +430,22 @@ var vueapp = new Vue({
 				return;
 			}
 			
-	        if (cf_isEmpty(this.info.before_interest) || cf_isEmpty(this.info.rec_before_tax) || 
-	                cf_isEmpty(this.info.interest_tax) || cf_isEmpty(this.info.after_interest) || 
-	                cf_isEmpty(this.info.rec_after_tax) || cf_isEmpty(this.info.profit_rate) || 
-	                cf_isEmpty(this.info.net_profit_rate)) {
+	        if (cf_isEmpty(this.info.final_money) || cf_isEmpty(this.info.final_interest)){
 	                alert("이자 계산을 먼저 수행하세요.");
 	                return;
 	            }	       
 
 			var params = {
-		            v_select_month: this.info.v_select_month,
-		            v_interest_rate: this.info.v_interest_rate,
-		            tax_rate: this.info.tax_rate,
-		            cycle_money: this.info.cycle_money,
-		            rec_before_tax: removeCommas(this.info.rec_before_tax),
-		            rec_after_tax: removeCommas(this.info.rec_after_tax),
-		            profit_rate: this.info.profit_rate,
-		            net_profit_rate: this.info.net_profit_rate,
-		            interest_type: this.info.interest_type,
-		            interest_tax: removeCommas(this.info.interest_tax),
-		            f_select_month: this.info.f_select_month,
-		            f_interest_rate: this.info.f_interest_rate,
-		            before_interest: removeCommas(this.info.before_interest),
-		            after_interest: removeCommas(this.info.after_interest),
-		            product_id: this.proInfo.product_id,
-		            customer_id: this.custInfo.customer_id,
+		            v_select_month: this.info.v_select_month, //ok
+		            v_interest_rate: this.info.v_interest_rate, //ok
+		            rate: this.info.rate, //ok
+		            cycle_money: this.info.cycle_money, //ok
+		            final_money: removeCommas(this.info.final_money), //ok
+		            f_select_month: this.info.f_select_month, //ok
+		            f_interest_rate: this.info.f_interest_rate, //ok
+		            final_interest: removeCommas(this.info.final_interest),//ok
+		            product_id: this.proInfo.product_id,//ok
+		            customer_id: this.custInfo.customer_id,//ok
 			}
 			console.log("=================================")
 			console.log(JSON.stringify(params))
@@ -457,6 +454,7 @@ var vueapp = new Vue({
 	            axios.post('/team4/saveCalulate', {params : params})
 	        	.then(response => {
 					alert("정상등록되었습니다")
+                    window.location.href = "/team4/designList";
 	        	})
 	        	.catch(error => {
 	        	    console.error("Error:", error);
@@ -471,7 +469,7 @@ var vueapp = new Vue({
 			}
             
             axios.get('/team4/proSelectOne', {params : params})
-            	.then(response => {
+             	.then(response => {
     				console.log("2. 정상작동 하였습니다.")
     				this.proInfo = response.data				            		
             	})
@@ -552,26 +550,19 @@ var vueapp = new Vue({
 			}
 			
 			
-		    if (info.loan_repayment_type === '') {
+		    if (this.info.loan_repayment_type === '') {
 			       alert('상환방법을 선택하여주세요');
 			       return false;
 			}
-
-					    
-		    if ((this.info.f_interest_rate === '' || this.info.f_interest_rate == 0) && 
-				(this.info.v_interest_rate === '' || this.info.v_interest_rate == 0)) {
-				alert('이자율을 선택하여주세요');
-				return false;
-			}
-				          
-
-
-		    if ((this.info.f_select_month === '' || this.info.f_select_month == 0) && 
-		       (this.info.v_select_month === '' || this.info.v_select_month == 0)) {
-		        alert('대출기간을 작성해주세요');
-		        return false;
+		    
+		    if(this.info.f_interest_rate === ''){
+		    	alert('고정금리를 설정해주세요')
 		    }
-		          
+		    
+		    if(this.info.f_interest_rate === ''){
+		    	alert('고정금리 기간을 설정해주세요')
+		    }
+				  		          
 		    if (this.info.rate === '') {
 		       alert('중도상환 수수료를 작성하여주세요');
 		       return false;
@@ -579,7 +570,7 @@ var vueapp = new Vue({
 
 		    	var f_interest_rate = (this.info.f_interest_rate /100 /12);
 				var v_interest_rate = (this.info.v_interest_rate /100 /12);
-				var rate =(this.inf0.rate /100);				
+				var rate =(this.info.rate /100);				
 								
 		        if(this.info.v_select_month == ""){
 		        	this.info.v_select_month = 0;
@@ -598,50 +589,377 @@ var vueapp = new Vue({
 		        
 		        var m = this.info.sub_money;
 		        var f_n = this.info.f_select_month;
+		        var f_r = f_interest_rate;
 		        var v_n = this.info.v_select_month;
+		        var v_r = v_interest_rate;
 		        var rate = this.info.rate;
+		        var length = f_n + v_n;
 		        
-		        if(this.info.loan_payment_type == "원리금균등") {
-		        	
-		        		for(var i = 1; i <= f_n; i++){
-		        			
-			        		var round_cycle_money = m * f_interest_rate / (1 - Math.pow(1+f_interest, f_n));
-				        	var round_interest = m * f_interest_rate;
-				        	var round_total = 
+	        	console.log("v_n: "+ v_n);
+	        	console.log("v_r: "+ v_r);
+	        	
+	        	
+		        if(v_n == 0 || v_r == 0){
+		        	console.log("고정금리만 일 때 정상작동")
+		        	console.log("loan type은? " + this.info.loan_repayment_type)
 
+			        if(this.info.loan_repayment_type == "원리금 균등") {
+			        	
+			        	var x = m*f_r/(Math.pow(1+f_r, f_n)-1) + m*f_r;
+			        	
+			        	var acc_interest = 0;
+			        	var round_interest = 0;
+			        	var round_pri_cycle_money = 0;
+			        	var round_total = 0;
+			        	
+			        	for(var i = 1; i <= f_n; i++){
+	
+		        			round_interest =m * f_r;
+		        			acc_interest = acc_interest + round_interest;
+		        			round_pri_cycle_money = x - round_interest;
+		        			round_total = m - round_pri_cycle_money;
 		        			
-		        			var params = {
-		        				round_num: i,
-		        				round_cycle_money: round_cycle_money,
-		        				round_pri_cycle_money: ,
-		        				round_interest: ,
-		        				acc_interest: ,
-		        				round_total: ,
-		        				early_repayment_fee: 
-		        					
+		        			if(i == f_n){
+				        		var params = {
+					        		round_num: i,
+					        		round_cycle_money: (m+round_interest).toFixed(0),
+					        		round_pri_cycle_money: m.toFixed(0),
+					        		round_interest: round_interest.toFixed(0),
+					        		acc_interest: acc_interest.toFixed(0),
+					        		round_total: 0,
+					        		early_repayment_fee: (round_total * rate * (length -i) /length).toFixed(0),
+					        		}
+								this.calculate_arr.push(params);
+		        			}else{
+				        		var params = {
+					        		round_num: i,
+					        		round_cycle_money: x.toFixed(0),
+					        		round_pri_cycle_money: round_pri_cycle_money.toFixed(0),
+					        		round_interest: round_interest.toFixed(0),
+					        		acc_interest: acc_interest.toFixed(0),
+					        		round_total: round_total.toFixed(0),
+					        		early_repayment_fee: (round_total * rate * (length -i) /length).toFixed(0),
+					        		}
+				        		m = round_total;	
+								this.calculate_arr.push(params);
+		        			}
+			        	}
+			        	
+						var lastParams = this.calculate_arr[this.calculate_arr.length - 1];
+						console.log('acc_interest의 값:', lastParams.acc_interest);
+						console.log('final_moeny 값:', x * (length-1) + lastParams.round_pri_cycle_money +lastParams.acc_interest);
+						this.info.cycle_money = x.toFixed(0);
+						this.info.final_interest = acc_interest.toFixed(0);
+						this.info.final_money = (x*(length-1) + m + acc_interest).toFixed(0);
+			        	
+			        	
+			        	
+			        }
+			        
+			        if(this.info.loan_repayment_type == "원금 균등") {
+	
+			        	var a = m / length;
+			        	
+			        	var acc_interest = 0;
+			        	var round_interest = 0;
+			        	var round_cycle_money = 0;
+			        	var round_total = 0;
+			        	var acc_money = 0;
+			        	
+			        	for(var i = 1; i <= f_n; i++){
+	
+		        			round_interest =m * f_r;
+		        			acc_interest = acc_interest + round_interest;
+		        			round_cycle_money = a + round_interest;
+		        			round_total = m - a;
+		        			if(i == f_n){
+				        		var params = {
+					        			round_num: i,
+					        			round_cycle_money: m.toFixed(0),
+					        			round_pri_cycle_money: a.toFixed(0),
+					        			round_interest: round_interest.toFixed(0),
+					        			acc_interest: acc_interest.toFixed(0),
+					        			round_total: 0,
+					        			early_repayment_fee: (round_total * rate * (length -i) /length).toFixed(0),
+					        			}
+				        		
+								this.calculate_arr.push(params);
+		        			}else{
+				        		var params = {
+					        			round_num: i,
+					        			round_cycle_money: round_cycle_money.toFixed(0),
+					        			round_pri_cycle_money: a.toFixed(0),
+					        			round_interest: round_interest.toFixed(0),
+					        			acc_interest: acc_interest.toFixed(0),
+					        			round_total: round_total.toFixed(0),
+					        			early_repayment_fee: (round_total * rate * (length -i) /length).toFixed(0),
+					        			}
+				        		m = round_total;	
+				        		acc_money = acc_money + round_cycle_money
+								this.calculate_arr.push(params);
+		        			}
+			        	}
+
+			        	var lastParams = this.calculate_arr[this.calculate_arr.length - 1];
+						console.log('acc_interest의 값:', lastParams.acc_interest);
+						this.info.final_interest = (lastParams.acc_interest);
+						this.info.final_money = acc_money.toFixed(0);
+			        	
+			        	
+			        	
+			        }
+			        
+			        if(this.info.loan_repayment_type == "만기 일시") {
+			        	
+			        	var acc_interest = 0;
+			        	var round_interest = 0;
+			        	var round_pri_cycle_money = 0;
+			        	
+			        	for(var i = 1; i <= f_n; i++){
+	
+		        			round_interest =m * f_r;
+		        			acc_interest = acc_interest + round_interest;
+		        			round_pri_cycle_money = x - round_interest;
+		        			if(i == f_n){
+				        		var params = {
+					        			round_num: i,
+					        			round_cycle_money: (m+round_interest).toFixed(0),
+					        			round_pri_cycle_money: m.toFixed(0),
+					        			round_interest: round_interest.toFixed(0),
+					        			acc_interest: acc_interest.toFixed(0),
+					        			round_total: m.toFixed(0),
+					        			early_repayment_fee: (m * rate * (length -i) /length).toFixed(0),
+					        		}
+								this.calculate_arr.push(params);
+		        			} else{
+				        		var params = {
+					        			round_num: i,
+					        			round_cycle_money: round_interest.toFixed(0),
+					        			round_pri_cycle_money: 0,
+					        			round_interest: round_interest.toFixed(0),
+					        			acc_interest: acc_interest.toFixed(0),
+					        			round_total: m.toFixed(0),
+					        			early_repayment_fee: (m * rate * (length -i) /length).toFixed(0),
+					        		}
+								this.calculate_arr.push(params);
 		        			}
 		        		}
-	   
-		        		for(var i = 1; i <= v_n; i++){
+			        	
+						this.info.final_interest = acc_interest.toFixed(0);
+						this.info.final_money = (m + acc_interest).toFixed(0);
+			        }
+		        	
+		        }else{
+			        if(this.info.loan_repayment_type == "원리금 균등") {
+	
+			        	var f = (Math.pow(1+f_r , f_n) - 1)/f_r;
+			        	var v = (Math.pow(1+v_r , v_n) - 1)/v_r;
+			        	var a = (m + m*v_r*v -m*f_r*v)/(v + f + f*v_r*v);
+			        	var x = (a + m*f_r);
+			        	
+			        	var acc_interest = 0;
+			        	var round_interest = 0;
+			        	var round_pri_cycle_money = 0;
+			        	var round_total = 0;
+			        	
+			        	for(var i = 1; i <= f_n; i++){
+	
+		        			round_interest =m * f_r;
+		        			acc_interest = acc_interest + round_interest;
+		        			round_pri_cycle_money = x - round_interest;
+		        			round_total = m - round_pri_cycle_money;
+		        				
+			        		var params = {
+			        			round_num: i,
+			        			round_cycle_money: x.toFixed(0),
+			        			round_pri_cycle_money: round_pri_cycle_money.toFixed(0),
+			        			round_interest: round_interest.toFixed(0),
+			        			acc_interest: acc_interest.toFixed(0),
+			        			round_total: round_total.toFixed(0),
+			        			early_repayment_fee: (round_total * rate * (length -i) /length).toFixed(0),
+			        			}
+		        			m = round_total;	
+							this.calculate_arr.push(params);
+			        	}
+		   
+			        	for(var i = 1; i <= v_n; i++){
+			        		
+		        			round_interest =m * v_r;
+		        			acc_interest = acc_interest + round_interest;
+		        			round_pri_cycle_money = x - round_interest;
+		        			round_total = m - round_pri_cycle_money;
+	
+		        			if(i == v_n) {
+				        		var params = {
+					        			round_num: (i + f_n).toFixed(0),
+					        			round_cycle_money: (m + round_interest).toFixed(0),
+					        			round_pri_cycle_money: m.toFixed(0),
+					        			round_interest: round_interest.toFixed(0),
+					        			acc_interest: acc_interest.toFixed(0),
+					        			round_total: 0,
+					        			early_repayment_fee: (round_total * rate * (length -(i + f_n)) /length).toFixed(0)
+					        			}
+								this.calculate_arr.push(params);
+		        			}else{
+				        		var params = {
+					        			round_num: (i + f_n).toFixed(0),
+					        			round_cycle_money: x.toFixed(0),
+					        			round_pri_cycle_money: round_pri_cycle_money.toFixed(0),
+					        			round_interest: round_interest.toFixed(0),
+					        			acc_interest: acc_interest.toFixed(0),
+					        			round_total: round_total.toFixed(0),
+					        			early_repayment_fee: (round_total * rate * (length -(i + f_n)) /length).toFixed(0)
+					        			}
+				        		m = round_total;	
+								this.calculate_arr.push(params);
+		        			}
+			        	}
+						var lastParams = this.calculate_arr[this.calculate_arr.length - 1];
+						console.log('acc_interest의 값:', lastParams.acc_interest);
+						console.log('final_moeny 값:', x * (length-1) + lastParams.round_pri_cycle_money +lastParams.acc_interest);
+						this.info.cycle_money = x.toFixed(0);
+						this.info.final_interest = acc_interest.toFixed(0);
+						this.info.final_money = (x*(length-1) + round_pri_cycle_money + acc_interest).toFixed(0);
+			        	
+			        	
+			        	
+			        }
+			        
+			        if(this.info.loan_repayment_type == "원금 균등") {
+	
+			        	var a = m / length;
+			        	
+			        	var acc_interest = 0;
+			        	var round_interest = 0;
+			        	var round_cycle_money = 0;
+			        	var round_total = 0;
+			        	var acc_money = 0;
+			        	
+			        	for(var i = 1; i <= f_n; i++){
+	
+		        			round_interest =m * f_r;
+		        			acc_interest = acc_interest + round_interest;
+		        			round_cycle_money = a + round_interest;
+		        			round_total = m - a;
+		        				
+			        		var params = {
+			        			round_num: i,
+			        			round_cycle_money: round_cycle_money.toFixed(0),
+			        			round_pri_cycle_money: a.toFixed(0),
+			        			round_interest: round_interest.toFixed(0),
+			        			acc_interest: acc_interest.toFixed(0),
+			        			round_total: round_total.toFixed(0),
+			        			early_repayment_fee: (round_total * rate * (length -i) /length).toFixed(0),
+			        			}
+		        			m = round_total;	
+		        			acc_money = acc_money + round_cycle_money
+	
+							this.calculate_arr.push(params);
+			        	}
+		   
+			        	for(var i = 1; i <= v_n; i++){
+		        			round_interest =m * f_r;
+		        			acc_interest = acc_interest + round_interest;
+		        			round_cycle_money = a + round_interest;
+		        			round_total = m - a;
 		        			
-		        		}
-
-		        	
+		        			if(i == v_n) {
+				        		var params = {
+					        			round_num: (i + f_n).toFixed(0),
+					        			round_cycle_money: (m+round_interest).toFixed(0),
+					        			round_pri_cycle_money: m.toFixed(0),
+					        			round_interest: round_interest.toFixed(0),
+					        			acc_interest: acc_interest.toFixed(0),
+					        			round_total: 0,
+					        			early_repayment_fee: (round_total * rate * (length -(i + f_n)) /length).toFixed(0)
+					        			}
+								this.calculate_arr.push(params);
+		        			}else{
+				        		var params = {
+					        			round_num: (i + f_n).toFixed(0),
+					        			round_cycle_money: round_cycle_money.toFixed(0),
+					        			round_pri_cycle_money: a.toFixed(0),
+					        			round_interest: round_interest.toFixed(0),
+					        			acc_interest: acc_interest.toFixed(0),
+					        			round_total: round_total.toFixed(0),
+					        			early_repayment_fee: (round_total * rate * (length -(i + f_n)) /length).toFixed(0)
+					        			}
+				        		m = round_total;	
+			        			acc_money = acc_money + round_cycle_money
+								this.calculate_arr.push(params);
+		        			}
+		        			
+			        	}
+						var lastParams = this.calculate_arr[this.calculate_arr.length - 1];
+						console.log('acc_interest의 값:', lastParams.acc_interest);
+						this.info.final_interest = (lastParams.acc_interest);
+						this.info.final_money = acc_money.toFixed(0);
+			        	
+			        	
+			        	
+			        }
+			        
+			        if(this.info.loan_repayment_type == "만기 일시") {
+			        	
+			        	var acc_interest = 0;
+			        	var round_interest = 0;
+			        	var round_pri_cycle_money = 0;
+			        	
+			        	for(var i = 1; i <= f_n; i++){
+	
+		        			round_interest =m * f_r;
+		        			acc_interest = acc_interest + round_interest;
+		        			round_pri_cycle_money = x - round_interest;
+		        				
+			        		var params = {
+			        			round_num: i,
+			        			round_cycle_money: round_interest.toFixed(0),
+			        			round_pri_cycle_money: 0,
+			        			round_interest: round_interest.toFixed(0),
+			        			acc_interest: acc_interest.toFixed(0),
+			        			round_total: m.toFixed(0),
+			        			early_repayment_fee: (m * rate * (length -i) /length).toFixed(0),
+			        			}
+							this.calculate_arr.push(params);
+			        	}
+		   
+			        	for(var i = 1; i <= v_n; i++){
+		        			round_interest =m * v_r;
+		        			acc_interest = acc_interest + round_interest;
+		        			round_pri_cycle_money = x - round_interest;
+	
+		        			if(i == v_n) {
+				        		var params = {
+					        			round_num: (i + f_n).toFixed(0),
+					        			round_cycle_money: (m + round_interest).toFixed(0),
+					        			round_pri_cycle_money: m.toFixed(0),
+					        			round_interest: round_interest.toFixed(0),
+					        			acc_interest: acc_interest.toFixed(0),
+					        			round_total: 0,
+					        			early_repayment_fee: (m * rate * (length -(i + f_n)) /length).toFixed(0)
+					        			}
+								this.calculate_arr.push(params);
+		        			}else{
+				        		var params = {
+					        			round_num: (i + f_n).toFixed(0),
+					        			round_cycle_money: round_interest.toFixed(0),
+					        			round_pri_cycle_money: 0,
+					        			round_interest: round_interest.toFixed(0),
+					        			acc_interest: acc_interest.toFixed(0),
+					        			round_total: m.toFixed(0),
+					        			early_repayment_fee: (m * rate * (length -(i + f_n)) /length).toFixed(0)
+					        			}
+								this.calculate_arr.push(params);
+		        			}
+			        	}
+						var lastParams = this.calculate_arr[this.calculate_arr.length - 1];
+						console.log('acc_interest의 값:', lastParams.acc_interest);
+						console.log('final_moeny 값:', x * (length-1) + lastParams.round_pri_cycle_money +lastParams.acc_interest);
+						this.info.final_interest = lastParams.acc_interest;
+						this.info.final_money = m + acc_interest;
+			        }
 		        }
-		        
-		        if(this.info.loan_payment_type == "원금균등") {
-		        	
 
-		        	
-		        	
-		        }
-		        
-		        if(this.info.loan_payment_type == "만기일시") {
-		        	
-
-		        	
-		        	
-		        }
 
 		        
 		},
@@ -657,7 +975,7 @@ var pop_prod = new Vue({
 		dataList : [],
 		pop_product_name: "",
 		pop_product_id:"",
-		pop_product_type:"목돈마련적금",
+		pop_product_type:"대출",
 
 	},
 	mounted : function(){
