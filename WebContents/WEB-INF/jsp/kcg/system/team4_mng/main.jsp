@@ -144,13 +144,13 @@
 	<div class="page-container" class="main-content"
 		style="background-image: url('/static_resources/system/images/money-background.png'); background-size: cover; background-position: center; repeat: no-repeat">
 
-		<jsp:include page="/WEB-INF/jsp/kcg/_include/system/sidebar-menu.jsp"
+		<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/sidebar-menu.jsp"
 			flush="false" />
 
 		<div style="opacity: 0.9">
 
 			<!-- 헤더 -->
-			<jsp:include page="/WEB-INF/jsp/kcg/_include/system/header.jsp"
+			<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/header.jsp"
 				flush="false" />
 
 			<ol class="breadcrumb bc-3">

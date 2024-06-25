@@ -93,7 +93,7 @@
 
 	<div class="page-container">
 
-		<jsp:include page="/WEB-INF/jsp/kcg/_include/system/sidebar-menu.jsp"
+		<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/sidebar-menu.jsp"
 			flush="false" />
 
 		<div id="app" style="margin-left: 70px;">

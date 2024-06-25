@@ -20,7 +20,7 @@
 
 <div class="page-container">
 
-	<jsp:include page="/WEB-INF/jsp/kcg/_include/system/sidebar-menu.jsp" flush="false"/>
+	<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/sidebar-menu.jsp" flush="false"/>
 	<div class="flex-column flex-gap-10" id="vueapp">
 		<div class="form-group flex-40">
 			<label class="form-control">상품명:</label> <input class="form-control"
