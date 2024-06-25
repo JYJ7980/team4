@@ -28,7 +28,8 @@
 }
 
 .event {
-	color: white; display : flex;
+	color: white;
+	display: flex;
 	align-items: center;
 	margin-left: 50px;
 	width: 300px;
@@ -56,6 +57,86 @@
 	border-radius: 50px;
 	width: 700px;
 }
+
+.product {
+	position: fixed;
+	width: 1300px;
+	height: 220px;
+	margin-left: 200px;
+	margin-right: 100px;
+	margin-top: 20%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.productdiv {
+	display: flex;
+	justify-content: center;
+	width: 200px;
+	height: 200px;
+	margin: 10px;
+	background-color: white;
+	flex-direction: column;
+	align-items: center;
+	background-color: #8ABCFF;
+	border-radius: 20px;
+}
+
+.productType {
+	width: 60px;
+	height: 25px;
+	border: 2px solid;
+	justify-content: center;
+	display: flex;
+	border-color: #0075B5;
+	border-radius: 50px;
+	text-align: center;
+	align-items: center;
+	margin-top: 10px;
+	color: #0075B5;
+}
+
+.pig_icon {
+	margin-top: 10px;
+	margin-left: -10px;
+	width: 100px;
+	height: 100px;
+}
+
+.home_icon {
+	margin-top: 20px;
+	width: 140px;
+	height: 90px;
+}
+
+.loan_icon {
+	margin-top: 24px;
+	margin-bottom: 13px; width : 100px;
+	height: 70px;
+	width: 100px;
+}
+
+.pri_icon {
+	margin-top: 15px;
+	width: 120px;
+	height: 100px;
+	margin-bottom: -5px;
+}
+
+.event_icon {
+	margin-top: 15px;
+	width: 110px;
+	height: 100px;
+	margin-bottom: -5px;
+}
+
+.icons {
+	position: fixed;
+	margin-top: 15%;
+	margin-left: 15%;
+}
+
 </style>
 </head>
 <body class="page-body" data-url="http://neon.dev">
@@ -82,7 +163,7 @@
 					<img src="/static_resources/system/images/person.png"
 						class="person_icon">
 					<div style="margin-left: 20px; font-size: 18px;">
-						<div style="font-weight:700;">TODAY</div>
+						<div style="font-weight: 700;">TODAY</div>
 						<div>
 							<a href="/system/team4/event/eventCalender"
 								style="text-decoration: none; color: white;">고객 생일 :
@@ -95,6 +176,81 @@
 						</div>
 					</div>
 				</div>
+
+				<div class="product" style="display: flex;">
+					<div class="productdiv">
+						<div class="productType">예금</div>
+						<div class="">
+							<img src="/static_resources/system/images/pig.png"
+								class="pig_icon"  @click="gotoDtl(deposit.product_id)">
+						</div>
+						<br>
+						<div
+							style="align-items: center; justify-content: center; color: white;">
+							<div align="center">
+								{{deposit.product_name}}<br> 대상 :
+								{{deposit.possible_member}}
+							</div>
+						</div>
+					</div>
+					<div class="productdiv">
+						<div class="productType">적금</div>
+						<img src="/static_resources/system/images/home.png"
+							class="home_icon" @click="gotoDtl(savings.product_id)"><br>
+						<div
+							style="align-items: center; justify-content: center; color: white;">
+							<div align="center">
+								{{savings.product_name}}<br> 대상 :
+								{{savings.possible_member}}
+							</div>
+						</div>
+					</div>
+					<div class="productdiv">
+						<div class="productType">대출</div>
+						<img src="/static_resources/system/images/loan.png"
+							class="loan_icon" @click="gotoDtl(loan.product_id)"><br>
+						<div
+							style="align-items: center; justify-content: center; color: white;">
+							<div align="center">
+								{{loan.product_name}}<br> 대상 : {{loan.possible_member}}
+							</div>
+						</div>
+					</div>
+					<div class="productdiv">
+						<div class="productType">특별</div>
+						<img src="/static_resources/system/images/프리미엄.png"
+							class="pri_icon" @click="gotoDtl(event.product_id)"><br>
+						<div
+							style="align-items: center; justify-content: center; color: white;">
+							<div align="center">
+								{{event.product_name}}<br> 대상 : {{event.possible_member}}
+							</div>
+						</div>
+					</div>
+					<div class="productdiv">
+						<div class="productType">인기</div>
+						<img src="/static_resources/system/images/event.png"
+							class="event_icon"  @click="gotoDtl(popular.product_id)"><br>
+						<div
+							style="align-items: center; justify-content: center; color: white;">
+							<div align="center">
+								{{popular.product_name}}<br> 대상 : {{popular.possible_member}}
+							</div>
+						</div>
+					</div>
+					<div class="productdiv">
+						
+						<img src="/static_resources/system/images/바로가기.png"
+							class="pri_icon" @click="gotoList"><br>
+						<div
+							style="align-items: center; justify-content: center; color: white;">
+							<div align="center" style="font-size: 18px;">
+								상품목록보기
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- 				공지사항 -->
 				<div class="noticediv">
 					<img src="/static_resources/system/images/megaphone.png"
 						class="notice_icon">
@@ -102,7 +258,7 @@
 						<div v-for="notice in notices">
 							<a href="/system/team4/notice/"
 								style="text-decoration: none; color: white;">ㆍ
-								{{notice.notice_title}} ( {{notice.cor_date}})</a>
+								{{notice.notice_title}} ( {{notice.cor_date}} )</a>
 						</div>
 
 					</div>
@@ -118,6 +274,11 @@
 			birthDay: '',
 			end:'',
 			notices : [],
+			deposit : [],
+			savings : [],
+			loan : [],
+			event : [],
+			popular : [],
 		},
 		 mounted() {
             this.getAll();
@@ -148,7 +309,47 @@
                 .catch(error => {
                     console.error('Error:', error);
                 });
-               
+               //최신 예금 상품
+                axios.get('/system/team4/deposit')
+                .then(response => {
+                	this.deposit = response.data;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+                //최신 적금 상품
+                axios.get('/system/team4/savings')
+                .then(response => {
+                	this.savings = response.data;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+                //최신 대출 상품
+                axios.get('/system/team4/loan')
+                .then(response => {
+                	this.loan = response.data;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+                //최신 이벤트 상품
+                axios.get('/system/team4/event')
+                .then(response => {
+                	this.event = response.data;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+                //인기 상품
+                axios.get('/system/team4/popular')
+                .then(response => {
+                	this.popular = response.data;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+
                 
         	},
         	 getBirthDayCB(data) {
@@ -167,6 +368,15 @@
                     console.error('올바르지 않은 데이터 형식입니다:', data);
                 }
             },
+            gotoDtl : function(product_id) {
+				var params = {
+					product_id : cf_defaultIfEmpty(product_id, ""),
+				}
+				cf_movePage("/system/team4/product/dtl", params);
+			},
+			gotoList : function() {
+				cf_movePage('/system/team4/product/list');
+			},
        
 	}
 	

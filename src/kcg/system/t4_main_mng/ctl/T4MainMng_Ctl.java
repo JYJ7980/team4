@@ -46,6 +46,31 @@ public class T4MainMng_Ctl {
 		return t4mainMngSvc.noticeTop2();
 	}
 	
+	@GetMapping("/deposit")
+	public CmmnMap deposit(){
+		return t4mainMngSvc.deposit();
+	}
+	
+	@GetMapping("/savings")
+	public CmmnMap savings(){
+		return t4mainMngSvc.savings();
+	}
+	
+	@GetMapping("/loan")
+	public CmmnMap loan(){
+		return t4mainMngSvc.loan();
+	}
+	
+	@GetMapping("/event")
+	public CmmnMap event(){
+		return t4mainMngSvc.event();
+	}
+
+	@GetMapping("/popular")
+	public CmmnMap popular() {
+		return t4mainMngSvc.popular();
+	}
+	
 
 }
 
