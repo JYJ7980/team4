@@ -38,7 +38,7 @@ body {
 /* Flex ��Ÿ�� */
 .flex {display: flex};
 .flex-right {justify-content: flex-end;};
-.flex-center { justify-items:  center; justify-content:space-between; }
+.flex-center { justify-items: center; justify-content:center; }
 .flex-column { display: flex; flex-direction: column;}
 .flex-wrap { flex-wrap: wrap; border: 1px solid #999999; }
 .align-items-center { align-items: center; }
