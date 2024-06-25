@@ -26,15 +26,8 @@ public class T4MainMngSvc {
 	@Autowired
 	CommonSvc commonSvc;
 	
-//	public PageList<CmmnMap> getList(CmmnMap params, PagingConfig pagingConfig){
-//		return cmmnDao.selectListPage("system.t4_cust_mng.getList", params, pagingConfig);
-//	}
-//
-//
-//	public void createManagement(CmmnMap params) {
-//		cmmnDao.insert("kcg.system.t4_main_mng.newCreateManagement", params);
-//	}
-//	
+
+
 	public CmmnMap birthDay() {
 		CmmnMap params = new CmmnMap();
 		 UserInfoVO uerInfoVo = commonSvc.getLoginInfo();
@@ -82,3 +75,4 @@ public class T4MainMngSvc {
 	}
 	
 }
+

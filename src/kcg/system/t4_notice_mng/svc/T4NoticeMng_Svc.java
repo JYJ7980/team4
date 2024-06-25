@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import common.dao.CmmnDao;
 import common.utils.common.CmmnMap;
 import common.utils.common.PagingConfig;
+import common.utils.mybatis_paginator.domain.PageList;
 import kcg.common.svc.CommonSvc;
 
 @Service
@@ -63,6 +64,11 @@ public class T4NoticeMng_Svc {
 		
 	      return new CmmnMap().put("status", "OK");
 
+	}
+	
+	public PageList<CmmnMap> getAllNotice(CmmnMap params, PagingConfig pagingConfig) {
+		PageList<CmmnMap> pageList = cmmnDao.selectListPage("system.t4_notice_mng.getAllNotice", params, pagingConfig);
+		return pageList;
 	}
 	
 	
