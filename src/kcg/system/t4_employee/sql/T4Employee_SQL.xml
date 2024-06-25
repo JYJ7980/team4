@@ -2,30 +2,101 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace='system.t4_employee'>
 
-	<!-- <select id="getEmployeelist" parameterType="cmmnMap" resultType="cmmnMap"> 
-		SELECT*FROM kcgbd.t_user </select> -->
+	<!-- 전체 담당자 리스트 이름으로 가져오기 -->
+	<select id="employeelist" parameterType="cmmnMap"
+		resultType="cmmnMap">
+		SELECT * FROM kcgbd.t_user
+		WHERE 1=1
+		and email like '%@team4.com'
+		<if test='user_id != null and user_id != ""'>
+			and user_id = #{user_id}
+		</if>
+		<if test='name != null and name != ""'>
+			and name = #{name}
+		</if>
+	</select>
+
+	<!-- 이름으로 조건 검색 -->
+	<select id="searchEmployee" parameterType="cmmnMap"
+		resultType="cmmnMap">
+		SELECT * FROM kcgbd.t_user
+		WHERE
+		name LIKE CONCAT('%',
+		#{name}, '%')
+		AND email like '%@team4.com'
+	</select>
+	
+
+	<!-- user_id에 해당하는 정보를 가져오기 -->
+	<select id="selectOne" parameterType="cmmnMap" resultType="cmmnMap">
+		SELECT user_id , name, status_cd, jikgub_nm, dept, user_pw , to_char(reg_dt, 'YYYY-MM-DD') AS reg_dt
+		FROM
+		kcgbd.t_user
+		WHERE user_id = #{user_id}
+		AND email like '%@team4.com'
+	</select>
+
+	<!-- 비밀번호 수정 업데이트 -->
+	<update id="updatePw" parameterType="cmmnMap">
+        UPDATE kcgbd.t_user
+        SET user_pw = #{user_pw}
+        WHERE user_id = #{user_id}
+    </update>
+
+	<!-- 계정 정보 수정 -->
+	<update id="updateEmployee" parameterType="cmmnMap">
+		UPDATE kcgbd.t_user
+		SET
+		name = #{name},
+		status_cd = #{status_cd},
+		jikgub_nm = #{jikgub_nm},
+		dept = #{dept},
+		del_yn = #{del_yn},
+		iam_yn = #{iam_yn}
+		WHERE user_id = #{user_id}
+	</update>
+
+	<!-- 계정 정보 삭제 -->
+	<delete id="deleteEmployee" parameterType="cmmnMap">
+		DELETE FROM
+		kcgbd.t_user
+		WHERE user_id = #{user_id}
+	</delete>
+
+	<!-- 신규 계정 생성 -->
 	<insert id="insertEmp" parameterType="cmmnMap">
 		INSERT INTO kcgbd.t_user
-		(reg_dt
-		, user_id
-		, user_pw
-		, iam_yn
-		, name
-		, auth_cd 
-		, status_cd
-		, jikgub_nm
-		, dept
-		, email)
+		(reg_dt ,
+		user_id,
+		user_pw,
+		iam_yn,
+		name,
+		auth_cd,
+		status_cd,
+		jikgub_cd,
+		tdept_nm,
+		gis_auth,
+		jikgub_nm,
+		dept,
+		email,
+		del_yn)
 		VALUES
-		(#{reg_dt}
-		, #{user_id}
-		, #{user_pw}
-		, #{iam_yn}
-		, #{name}
-		, #{auth_cd} 
-		, #{status_cd}
-		, #{jikgub_nm}
-		, #{dept}
-		, #{email})
+		(#{reg_dt},
+		#{user_id},
+		#{user_pw},
+		#{iam_yn},
+		#{name},
+		#{auth_cd},
+		'재직',
+		#{jikgub_cd},
+		#{tdept_nm},
+		#{gis_auth},
+		#{jikgub_nm},
+		#{dept},
+		#{email} ,
+		#{del_yn})
+	</insert>
+	<insert id="insertCal" parameterType="CmmnMap">
+	INSERT INTO kcgbd.db4_bn_cal_mag (manager_id) values (#{user_id});
 	</insert>
 </mapper>

@@ -72,11 +72,11 @@
 
 			<h2>활동관리 > 공지사항 조회</h2>
 			<br />
-			
+
 			<div class="dataTables_wrapper" id="vueapp">
 				<template>
-				<button @click="window.location.href = 'insert'">공지사항
-				추가</button><br>
+					<button @click="showInsertForm">공지사항 추가</button>
+					<br>
 					<table class="table table-bordered datatable dataTable"
 						id="grid_app">
 						<thead>
@@ -132,6 +132,30 @@
 							</div>
 						</div>
 					</div>
+
+
+					<div v-if="insertForm" class="modal">
+						<div class="modal-content">
+							<span class="close" @click="closeInsertForm">&times;</span>
+							<div>
+								<label for="insertTitle">제목 : </label>
+								<div>
+									<input type="text" id="insertNotice.insertTitle"
+										v-model="insertNotice.insertTitle">
+								</div>
+							</div>
+							<div>
+								<label for="insertContent">내용 : </label>
+							</div>
+							<div>
+								<textarea rows="5" id="insertNotice.insertContent"
+									v-model="insertNotice.insertContent" placeholder="내용을 입력하세요."></textarea>
+							</div>
+							<div>
+								<button type="button" @click="save">저장</button>
+							</div>
+						</div>
+					</div>
 				</template>
 
 			</div>
@@ -139,8 +163,8 @@
 			<jsp:include page="/WEB-INF/jsp/kcg/_include/system/footer.jsp"
 				flush="false" />
 
-</div>
-</div>
+		</div>
+	</div>
 
 
 </body>
@@ -153,9 +177,12 @@
         	selectedNotice: null,
         	update_title:"",
         	update_content:"",
-        	delete_id:""
-			
-
+        	delete_id:"",
+        	insertForm: false,
+			insertNotice: {
+				insertTitle:"",
+				insertContent:""
+			},
 		},
 		mounted() {
 			this.getAllList();
@@ -193,6 +220,12 @@
         	closeEditModal() {
         		this.showModal = false;
         		this.selectedNotice = null;
+        	},
+        	showInsertForm() {
+        		this.insertForm = true;
+        	},
+        	closeInsertForm() {
+        		this.insertForm = false;
         	},
         	updateNotice : function() {
         		if (!this.selectedNotice.notice_title.trim()) {
@@ -260,7 +293,41 @@
     						"params");
     				this.getList(true);
     			}
-    		}
+    		},
+    		
+    		save: function () {
+				// 제목과 내용이 비어있는지 검사
+				if (!this.insertNotice.insertTitle.trim()) {
+					alert("제목을 입력하세요.");
+					return;
+				}
+				if (!this.insertNotice.insertContent.trim()) {
+					alert("내용을 입력하세요.");
+					return;
+				}
+
+				// 저장 요청 보내기
+				if (!confirm("저장하시겠습니까?")) return;
+				
+				var params = {
+					title: this.insertNotice.insertTitle,
+					content: this.insertNotice.insertContent
+				};
+				
+				console.log(params);
+				axios.post("/system/team4/notice/save", {params:params})
+					.then(response => {
+						if (response.data.status === "OK") {
+							alert("저장되었습니다.");
+							window.location.href = '/system/team4/notice/'; // 저장 후 목록으로 이동
+						} else {
+							alert("저장 실패: " + response.data.message);
+						}
+					})
+					.catch(error => {
+						alert("오류 발생: " + error);
+					});
+			},
 
 		},
 	})

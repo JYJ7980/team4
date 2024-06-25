@@ -50,6 +50,7 @@ public class T4customerMngCtl {
 	public List<CmmnMap> getCustInfo(CmmnMap params) {
 		return svc.getAllCustomers(params);
 	}
+
 	
 	//관리자 정보 전체 조회
 	@GetMapping("/getUserInfo")
@@ -75,8 +76,6 @@ public class T4customerMngCtl {
 	public List<CmmnMap> getDesignProductInfo(CmmnMap params) {
 		return svc.getDesignProductInfo(params);
 	}
-
-	
 
 	// 고객 주민번호 중복 확인용 조회
 	@GetMapping("/getCustIdNumber")
@@ -108,7 +107,6 @@ public class T4customerMngCtl {
 	}
 
 	//고객 삭제
-
 	@RequestMapping("/deleteCust")
 	public CmmnMap deleteCust(CmmnMap params) {
 		return svc.deleteCust(params);

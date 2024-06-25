@@ -13,66 +13,56 @@
 </head>
 <body>
 	<div id="vueapp">
-		
+		<table class="createForm">
 			<h3>신규 직원 등록</h3>
-			<table border="1">
-				<tr>
-					<td for="reg_dt">입사일:</td>
-					<td><input type="text" id="reg_dt" v-model="employee.reg_dt"
-						disabled></td>
-				</tr>
-				<tr>
-					<td for="user_id">부여할 ID:</td>
-					<td><input type="text" id="user_id" v-model="employee.user_id"></td>
-				</tr>
-				<tr>
-					<td for="user_pw">초기 비밀번호:</td>
-					<td><input type="text" id="user_pw" v-model="employee.user_pw"></td>
-				</tr>
-			<!-- 	<tr>
-					<td><input type="hidden" id="email" v-model="employee.email"
-						disabled></td>
-				</tr> -->
-				<tr>
-					<td for="name">이름:</td>
-					<td><input type="text" id="name" v-model="employee.name"></td>
-				</tr>
-		<!-- 		<tr>
-					<td type="hidden" id="auth_cd" v-model="employee.auth_cd"></td>
-				</tr> -->
-				<tr>
-					<td for="status_cd">재직상태:</td>
-					<td><select id="status_cd" v-model="employee.status_cd">
-							<option value="재직">재직</option>
-					</select></td>
-				</tr>
-				<tr>
-					<td for="jikgub_nm">직급:</td>
-					<td><select id="jikgub_nm" v-model="employee.jikgub_nm">
-							<option value="부장">부장</option>
-							<option value="과장">과장</option>
-							<option value="대리">대리</option>
-							<option value="사원">사원</option>
-					</select></td>
-				</tr>
-				<tr>
-					<td for="dept">담당부서:</td>
-					<td><select id="dept" v-model="employee.dept">
-							<option value="총무">총무</option>
-							<option value="영업">영업</option>
-							<option value="개발">개발</option>
-					</select></td>
-				</tr>
-			</table>
-			<button type="button" @click="save"> 등록 </button>
+			<div for="user_id">
+				부여할 ID:
+				<div>
+					<input type="text" id="user_id" v-model="employee.user_id" :disabled="isIdChecked">
+					<input type="submit" value="ID중복확인" @click="checkId">
+				</div>
+				<br>
+				<div>초기 비밀번호:</div>
+				<div>
+					<input type="text" id="user_pw" v-model="employee.user_pw">
+				</div>
+				<div>이름:</div>
+				<div>
+					<input type="text" id="name" v-model="employee.name">
+				</div>
+				
+				<div>직급:</div>
+				<div>
+					<select id="jikgub_nm" v-model="employee.jikgub_nm">
+						<option value="수습">수습</option>
+						<option value="부장">부장</option>
+						<option value="차장">차장</option>
+						<option value="과장">과장</option>
+						<option value="대리">대리</option>
+						<option value="사원">사원</option>
+					</select>
+				</div>
+				<div>담당부서:</div>
+				<div>
+					<select id="dept" v-model="employee.dept">
+						<option value="">부서를 선택해주세요</option>
+						<option value="영업1팀">영업1팀</option>
+						<option value="영업2팀">영업2팀</option>
+						<option value="총무팀">총무팀</option>
+						<option value="개발팀">개발팀</option>
+					</select>
+				</div>
+		</table>
+		<br>
+		<button type="button" @click="save">등록</button>
 	</div>
-	
+
 	<script>
 var vueapp = new Vue({
 	el: "#vueapp",
 	data: {
+		isIdChecked: false, // ID 중복 확인 상태
 		employee: {
-			reg_dt:"",
 			user_id:"",
 			user_pw:"",
 			name:"",
@@ -83,11 +73,30 @@ var vueapp = new Vue({
 			email:""
 		}
 	},
-	mounted: function() {
-		// 필요한 경우 초기화 작업 수행
-	},
-	
 	methods: {
+		checkId: function(){
+			if(!this.employee.user_id.trim()){
+				alert("ID를 입력해주세요.");
+				return;
+			}
+			var params = {
+				user_id: this.employee.user_id
+			};
+			console.log(params);
+			axios.post("/system/team4/employee/checkId/", params)
+				.then(response => {
+					if (response.data.user_id === params.user_id) {
+						alert("중복된 ID 입니다.");
+					} else {
+						alert("사용 가능한 ID 입니다.");
+						this.isIdChecked = true; // ID 확인 상태를 true로 변경
+					}
+				})
+				.catch(error => {
+					console.error("오류 발생: ", error);
+					alert("오류 발생: " + error.message);
+				});
+		},
 		save: function () {
 			// 제목과 내용이 비어있는지 검사
 			if (!this.employee.user_id.trim()) {
@@ -110,30 +119,30 @@ var vueapp = new Vue({
 				alert("부서를 선택하세요.");
 				return;
 			}
-		
+			if (!this.isIdChecked) {
+				alert("ID중복확인을 클릭해주세요.");
+				return;
+			}
 
 			// 저장 요청 보내기
 			if (!confirm("저장하시겠습니까?")) return;
-		
-			
-			 var params = {
-		                user_id: this.employee.user_id,
-		                user_pw: this.employee.user_pw,
-		                name: this.employee.name,
-		                /* auth_cd: this.employee.auth_cd, */
-		                status_cd: this.employee.status_cd,
-		                jikgub_nm: this.employee.jikgub_nm,
-		                dept: this.employee.dept,
-		                /* email: this.employee.email */
-		     };
-			 
+
+			var params = {
+				user_id: this.employee.user_id,
+				user_pw: this.employee.user_pw,
+				name: this.employee.name,
+				status_cd: this.employee.status_cd,
+				jikgub_nm: this.employee.jikgub_nm,
+				dept: this.employee.dept
+			};
+
 			console.log(params);
-			 
+
 			axios.post("/system/team4/employee/save/", {params:params})
 				.then(response => {
 					if (response.data.status === "OK") {
 						alert("저장되었습니다.");
-						window.location.href = '/system/team4/notice/'; // 저장 후 정보창으로 이동
+						window.location.href = '/system/team4/employee/employeelist'; // 저장 후 정보창으로 이동
 					} else {
 						alert("저장 실패: " + response.data.message);
 					}
@@ -143,7 +152,6 @@ var vueapp = new Vue({
 				});
 		}
 	}
-
 });
 
 </script>
