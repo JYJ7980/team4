@@ -37,7 +37,13 @@ public class T4ProdMngSvc {
 	}
 
 	public PageList<CmmnMap> getListPaging(CmmnMap params, PagingConfig pagingConfig) {
+		cmmnDao.update("system.t4_prod_mng.updateStatus");
 		PageList<CmmnMap> pageList = cmmnDao.selectListPage("system.t4_prod_mng.getList", params, pagingConfig);
+		return pageList;
+	}
+	
+	public PageList<CmmnMap> getEndListPaging(CmmnMap params, PagingConfig pagingConfig) {
+		PageList<CmmnMap> pageList = cmmnDao.selectListPage("system.t4_prod_mng.getEndList", params, pagingConfig);
 		return pageList;
 	}
 
@@ -58,7 +64,17 @@ public class T4ProdMngSvc {
 	}
 
 	public CmmnMap getInfo(CmmnMap params) {
-		CmmnMap resultInfo = cmmnDao.selectOne("system.t4_prod_mng.getList", params);
+		CmmnMap resultInfo = cmmnDao.selectOne("system.t4_prod_mng.getInfo", params);
+		return resultInfo;
+	}
+
+	public CmmnMap checkName(CmmnMap params) {
+		CmmnMap resultInfo = cmmnDao.selectOne("system.t4_prod_mng.checkName", params);
+		return resultInfo;
+	}
+	
+	public CmmnMap checkId(CmmnMap params) {
+		CmmnMap resultInfo = cmmnDao.selectOne("system.t4_prod_mng.checkId", params);
 		return resultInfo;
 	}
 

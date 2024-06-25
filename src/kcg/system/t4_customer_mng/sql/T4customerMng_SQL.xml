@@ -5,9 +5,80 @@
 	<select id="getAllCustomers" parameterType="cmmnMap"
 		resultType="cmmnMap">
 		select *
-		FROM kcgbd.db4_customer_info cust join kcgbd.db4_cust_con dcc on
-		cust.customer_id = dcc.customer_id where cust.use_yn = 'Y';
+		FROM kcgbd.db4_customer_info cust join
+		kcgbd.db4_cust_con dcc on
+		cust.customer_id = dcc.customer_id where
+		cust.use_yn = 'Y';
 	</select>
+	<select id="getUserInfo" parameterType="cmmnMap"
+		resultType="cmmnMap">
+		SELECT *
+		FROM kcgbd.t_user
+		WHERE CONCAT(email, '') LIKE
+		'%@team4%';
+	</select>
+	<select id="getCustAndUserInfo" parameterType="cmmnMap"
+		resultType="cmmnMap">
+		select *
+		FROM kcgbd.db4_customer_info cust join
+		kcgbd.t_user
+		tu on
+		cust.user_id = tu.user_id where
+		cust.use_yn = 'Y';
+	</select>
+	<select id="getCustIdNumber" parameterType="cmmnMap"
+		resultType="cmmnMap">
+		select customer_id_number
+		FROM kcgbd.db4_customer_info
+		where
+		customer_id_number = #{customer_id_number}
+		and use_yn = 'Y'
+	</select>
+	<select id="getQuitCustIdNumber" parameterType="cmmnMap"
+		resultType="cmmnMap">
+		select customer_id_number
+		FROM kcgbd.db4_customer_info
+		where
+		customer_id_number = #{customer_id_number}
+		and use_yn = 'N'
+	</select>
+	<select id="getCustPhone" parameterType="cmmnMap"
+		resultType="cmmnMap">
+		select customer_phone
+		FROM kcgbd.db4_customer_info
+		where
+		customer_phone =
+		#{customer_phone}
+		and use_yn = 'Y'
+		<if test="customer_id != null">
+			and customer_id != CAST(#{customer_id} AS integer)
+		</if>
+	</select>
+	<select id="getCustById" parameterType="cmmnMap"
+		resultType="cmmnMap">
+		select customer_id
+		FROM kcgbd.db4_customer_info
+		where
+		customer_id =
+		CAST(#{customer_id} AS integer)
+		and use_yn = 'Y'
+	</select>
+	<select id="getQuitCustInfo" parameterType="cmmnMap"
+		resultType="cmmnMap">
+		SELECT *
+		FROM kcgbd.db4_customer_info cust join kcgbd.t_user
+		tu on cust.user_id =
+		tu.user_id
+		where cust.use_yn ='N' order by
+		customer_sub_date
+	</select>
+	<update id="releaseQuitCust" parameterType="cmmnMap">
+		update
+		kcgbd.db4_customer_info
+		set use_yn = 'Y'
+		where customer_id =
+		CAST(#{customer_id} AS integer)
+	</update>
 	<update id="deleteCust" parameterType="cmmnMap">
 		update
 		kcgbd.db4_customer_info
@@ -15,7 +86,6 @@
 		where customer_id =
 		CAST(#{customer_id} AS integer)
 	</update>
-
 	<update id="updateCust" parameterType="cmmnMap">
 		update
 		kcgbd.db4_customer_info
@@ -33,14 +103,19 @@
 		where customer_id =
 		CAST(#{customer_id} AS integer)
 	</update>
-
+	<update id="updateUser" parameterType="cmmnMap">
+		update
+		kcgbd.db4_customer_info
+		set user_id = #{manager_id}
+		where customer_id =
+		CAST(#{customer_id} AS integer)
+	</update>
 	<insert id="addCust" parameterType="cmmnMap">
 		INSERT INTO
 		kcgbd.db4_customer_info(
 		customer_name
 		,customer_id_number
 		,customer_brdt
-		,customer_level
 		,customer_phone
 		,customer_sub_tel
 		,customer_email
@@ -53,7 +128,6 @@
 		#{customer_name}
 		,#{customer_id_number}
 		,substring(#{customer_id_number}, 1, 6)
-		,#{customer_level}
 		,#{customer_phone}
 		,#{customer_sub_tel}
 		,#{customer_email}
@@ -87,7 +161,60 @@
 		con.user_id =
 		#{user_id};
 	</select>
-	
+
+	<select id="getAllMyconsult" parameterType="cmmnMap"
+		resultType="cmmnMap">
+		SELECT
+		con.*,
+		tu.*,
+		cc.*,
+		ci.*,
+		rep.name AS representative_name
+		FROM
+		kcgbd.db4_consult con
+		JOIN
+		kcgbd.t_user tu ON con.user_id =
+		tu.user_id
+		JOIN
+		kcgbd.db4_cust_con cc ON con.con_id = cc.con_id
+		JOIN
+		kcgbd.db4_customer_info ci ON cc.customer_id = ci.customer_id
+		JOIN
+		kcgbd.t_user rep ON ci.user_id = rep.user_id
+		WHERE
+		con.user_id =
+		#{user_id_number} and rep.name=#{user_name};
+	</select>
+
+	<select id="getCustConsult" parameterType="cmmnMap"
+		resultType="cmmnMap">
+		SELECT * FROM kcgbd.db4_consult dc join kcgbd.db4_cust_con
+		dcc on dc.con_id = dcc.con_id join kcgbd.t_user tu on dc.user_id =
+		tu.user_id
+		where dcc.customer_id =
+		CAST(#{customer_id} AS
+		integer)
+
+	</select>
+
+	<select id="getSubProductInfo" parameterType="cmmnMap"
+		resultType="cmmnMap">
+		SELECT * FROM kcgbd.db4_product_sub ps join
+		kcgbd.db4_product_info dpi on ps.product_id = dpi.product_id where
+		sub_quit ='Y' and
+		ps.customer_id = CAST(#{customer_id} AS
+		integer)
+	</select>
+
+	<select id="getDesignProductInfo" parameterType="cmmnMap"
+		resultType="cmmnMap">
+		SELECT *
+		FROM kcgbd.db4_product_design pd join kcgbd.db4_product_info dpi on
+		pd.product_id = dpi.product_id where
+		pd.customer_id = CAST(#{customer_id} AS
+		integer)
+	</select>
+
 	<insert id="addConsult" parameterType="cmmnMap">
 		INSERT INTO
 		kcgbd.db4_consult(
@@ -97,12 +224,13 @@
 		consult_context,
 		con_id
 		)VALUES(
-		CURRENT_TIMESTAMP,
+		TO_CHAR(CURRENT_TIMESTAMP, 'YYYY-MM-DD HH24:MI:SS'),
 		#{user_id},
 		#{consult_title},
 		#{consult_context},
-		CAST(#{con_id} AS integer)
+		CAST(#{con_id} AS
+		integer)
 		)
 	</insert>
-	
+
 </mapper>

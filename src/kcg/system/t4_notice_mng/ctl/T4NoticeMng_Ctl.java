@@ -12,68 +12,72 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import common.dao.CmmnDao;
 import common.utils.common.CmmnMap;
+import common.utils.common.PagingConfig;
+import common.utils.mybatis_paginator.domain.PageList;
 import kcg.common.svc.CommonSvc;
 import kcg.system.t4_notice_mng.svc.T4NoticeMng_Svc;
 
 @Controller
 @RequestMapping("system/team4/notice")
 public class T4NoticeMng_Ctl {
-	
+
 	@Autowired
 	CommonSvc commonSvc;
-	
+
 	@Autowired
 	T4NoticeMng_Svc t4NoticeMng_Svc;
-	
+
 	@Autowired
 	CmmnDao cmmnDao;
 
-	
-	/*
-	 * @GetMapping("/") public String noticeMain(Model model) {
-	 * 
-	 * List<CmmnMap> noticeList = t4NoticeMng_Svc.getNoticeList();
-	 * 
-	 * System.out.println(noticeList.toString());
-	 * model.addAttribute("noticeList",noticeList); return
-	 * "kcg/system/team4_mng/notice/NoticeMain"; }
-	 */
-	
 	@GetMapping("/insert")
-	public String noticeInsert(Model model,CmmnMap params) {
+	public String noticeInsert(Model model, CmmnMap params) {
 		return "kcg/system/team4_mng/notice/NoticeInsert";
 	}
-	
-	   @GetMapping("/")
-	   public String customerInfoPage() {
-	      return "kcg/system/team4_mng/notice/NoticeMain";
-	   }
 
-	
-	
+	@GetMapping("/")
+	public String customerInfoPage() {
+		return "kcg/system/team4_mng/notice/NoticeMain";
+	}
+
 	@GetMapping("/show")
 	public List<CmmnMap> getNoticeList() {
-		 List<CmmnMap> dataList = cmmnDao.selectList("getNoticeList", null);
-		 
-	      return dataList;
+		List<CmmnMap> dataList = cmmnDao.selectList("getNoticeList", null);
+
+		return dataList;
 	}
-	
+
 	@PostMapping("/save")
 	public CmmnMap noticeInsertPost(CmmnMap params) {
-		System.out.println("controller log = "+ params);
+		System.out.println("controller log = " + params);
 		return t4NoticeMng_Svc.insertNotice(params);
 	}
-	
+
 	@PostMapping("/delete")
 	public CmmnMap noticeDelete(CmmnMap params) {
-		System.out.println(" ===================================== controller delete log = " +params);
+		System.out.println(" ===================================== controller delete log = " + params);
 		return t4NoticeMng_Svc.deleteNotice(params);
 	}
-	
+
 	@PostMapping("/update")
 	public CmmnMap noticeUpdate(CmmnMap params) {
-		System.out.println(" ===================================== controller update log = " +params);
+		System.out.println(" ===================================== controller update log = " + params);
 		return t4NoticeMng_Svc.updateNotice(params);
 	}
-	
+
+
+	// 페이징 테스트용 페이지
+	@GetMapping("/noticeTest")
+	public String NoticeTest() {
+		return "kcg/system/team4_mng/notice/noticeTest";
+	}
+	//공지사항 페이징
+	@RequestMapping("/getAllNotice")
+	public PageList<CmmnMap> getAllNotice(CmmnMap params,PagingConfig pagingConfig) {
+		PageList<CmmnMap> pageList = t4NoticeMng_Svc.getAllNotice(params,pagingConfig);
+		return pageList;
+	}
+
+
 }
+
