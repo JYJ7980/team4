@@ -26,7 +26,11 @@ public class T4MainEmployee_Ctl {
 
 	@Autowired
 	CmmnDao cmmnDao;
-
+	
+	@GetMapping("/employeeList")
+	public String employeeListMain() {
+		return "kcg/system/team4_mng/employee/employeelist";
+	}
 	/* 신규 계정 저장 */
 	@PostMapping("/save")
 	public CmmnMap createEmployee(CmmnMap params) {
