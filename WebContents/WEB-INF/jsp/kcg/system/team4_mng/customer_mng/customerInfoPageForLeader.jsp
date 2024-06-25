@@ -243,6 +243,7 @@
 						<option v-for="manager in filteredManager" :key="manager.user_id"
 							:value="manager.name">{{ manager.name }}({{
 							manager.jikgub_nm }})</option>
+
 					</select>
 
 				</div>
@@ -250,7 +251,11 @@
 				<div id="customerTable" class="customer-container">
 					<div class="customer-one">
 						<div class="customer-list">
-							<h3 v-show="filteredCustomers.length > 0">전체 고객 정보</h3>
+
+							<h3 v-show="filteredCustomers.length >= 0">전체 고객 정보</h3>
+							<div v-show="filteredCustomers.length == 0">
+								<p>담당고객이 없습니다</p>
+							</div>
 							<div v-show="filteredCustomers.length > 0">
 								<div class="table-header">
 									<div class="table-cell">선택</div>
@@ -586,6 +591,7 @@ new Vue({
                 this.getCustConsults();
                 this.getSubProducts();
                 this.getDesignProducts();
+              
             } else {
                 // 선택된 고객이 없으면 상담 내역 배열을 초기화합니다.
                 this.consults = [];
