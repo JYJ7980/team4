@@ -7,6 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Customer InfoPage</title>
+<<<<<<< HEAD
 <!-- Vue.js CDN 추가 -->
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
 <!-- axios CDN 추가 -->
@@ -35,6 +36,16 @@
 
 .customer-table {
    flex: 1;
+<jsp:include page="/WEB-INF/jsp/kcg/_include/system/header_meta.jsp"
+	flush="false" />
+<!-- Vue.js CDN 추가 -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script> -->
+<!-- axios CDN 추가 -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> -->
+<style>
+/* 테이블 숨기기 */
+#customerTable {
+	display: none;
 }
 </style>
 </head>
@@ -232,6 +243,34 @@ new Vue({
                 .catch(error => {
                     console.error('Error:', error);
                 });
+	<div id="app">
+		<h4>고객 정보 관리</h4>
+		<br>
+		<div>
+			<!-- 전체 조회 버튼 -->
+			<button @click="getAllCustomers">전체 조회</button>
+		</div>
+		<div id="customerTable">
+			<!-- 고객 정보 테이블 -->
+			<h2>전체 고객 정보</h2>
+			<table border='1'>
+				<tr>
+					<th>Name</th>
+					<th>Job</th>
+				</tr>
+				<tr v-for="customer in customers">
+					<td>{{ customer.customer_name }}</td>
+					<td>{{ customer.customer_job }}</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+
+	<script>
+    new Vue({
+        el: '#app',
+        data: {
+            customers: [] // 고객 정보를 저장할 배열
         },
         filterCustomers: function() {
             // userInfoVO.userId와 customer.user_id가 같은 고객만 필터링

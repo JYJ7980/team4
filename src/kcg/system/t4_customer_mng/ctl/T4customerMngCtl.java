@@ -45,17 +45,25 @@ public class T4customerMngCtl {
 	// 전체 조회
 	@GetMapping("/getCustInfo")
 	public List<CmmnMap> getCustInfo(CmmnMap params) {
+
         return svc.getAllCustomers(params);
     }
 	
 
 	
-	//고객 추가
-	@RequestMapping("/addCust")
-	public CmmnMap addCust(CmmnMap params){
-		return svc.addCust(params); 
-		
-	}
+	/*
+	 * //고객 추가
+	 * 
+	 * @RequestMapping("/addCust") public CmmnMap addCust(CmmnMap params){ return
+	 * svc.addCust(params);
+	 * 
+	 * 
+	 * // List<CmmnMap> dataList = cmmnDao.selectList("getAllCustomers", null); //
+	 * 여기서 params에 null을 전달하거나 필요한 경우 적절한 파라미터를 전달하세요. List<CmmnMap> dataList =
+	 * svc.getCustInfo(params); System.out.println(dataList); return dataList;
+	 * 
+	 * }
+	 */
 	
 	//담당 고객 삭제
 	@RequestMapping("/deleteCust")

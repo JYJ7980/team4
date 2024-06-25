@@ -26,9 +26,4 @@ public class T4MainMngSvc {
 		return cmmnDao.selectListPage("system.t4_cust_mng.getList", params, pagingConfig);
 	}
 
-	public void createManagement(CmmnMap params) {
-		cmmnDao.insert("kcg.system.t4_main_mng.newCreateManagement", params);
-	}
-	
-	
 }

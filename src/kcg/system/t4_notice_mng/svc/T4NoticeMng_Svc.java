@@ -64,8 +64,4 @@ public class T4NoticeMng_Svc {
 	      return new CmmnMap().put("status", "OK");
 
 	}
-	
-	
-
-	
 }

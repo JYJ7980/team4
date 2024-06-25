@@ -41,9 +41,11 @@ public class T4MainMng_Ctl {
 		return "kcg/system/team4_mng/employee/emcreateform";
 	}
 	
-
+	@GetMapping("/employee/employeelist")
+	public String employeeList(){
+		return "kcg/system/team4_mng/employee/employeelist";
+	}
 	
-
 }
 
 

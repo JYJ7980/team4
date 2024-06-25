@@ -29,15 +29,15 @@ public class T4NoticeMng_Ctl {
 	CmmnDao cmmnDao;
 
 	
-//	@GetMapping("/")
-//	public String noticeMain(Model model) {
-//		
-//		List<CmmnMap> noticeList = t4NoticeMng_Svc.getNoticeList();
-//		
-//		System.out.println(noticeList.toString());
-//		model.addAttribute("noticeList",noticeList);
-//		return "kcg/system/team4_mng/notice/NoticeMain";
-//	}
+	/*
+	 * @GetMapping("/") public String noticeMain(Model model) {
+	 * 
+	 * List<CmmnMap> noticeList = t4NoticeMng_Svc.getNoticeList();
+	 * 
+	 * System.out.println(noticeList.toString());
+	 * model.addAttribute("noticeList",noticeList); return
+	 * "kcg/system/team4_mng/notice/NoticeMain"; }
+	 */
 	
 	@GetMapping("/insert")
 	public String noticeInsert(Model model,CmmnMap params) {
