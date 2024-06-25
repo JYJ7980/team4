@@ -795,6 +795,7 @@ new Vue({
 			this.selectedCustomer.jikgub_nm = manager.jikgub_nm;
 			this.selectedCustomer.user_id = manager.user_id;
 			
+			
 			this.showPopup = false;
 		},
         resetForm: function() {
@@ -823,6 +824,7 @@ new Vue({
                     .then(response => {
                         if (response.data.status === 'OK') {
                             alert('관리자 정보가 수정되었습니다.');
+                            this.getAllCustomers();
                         } else if (response.data.status === 'ERROR') {
                             alert(response.data.message); // 서버로부터 받은 에러 메시지를 표시
                         }
