@@ -34,6 +34,7 @@ public class T4NoticeMng_Ctl {
 	CmmnDao cmmnDao;
 
 	@GetMapping("/insert")
+	public String noticeInsert(Model model, CmmnMap params) {
 		return "kcg/system/team4_mng/notice/NoticeInsert";
 	}
 

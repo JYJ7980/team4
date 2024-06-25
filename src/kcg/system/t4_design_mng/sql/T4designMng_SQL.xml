@@ -17,7 +17,9 @@
 	
 	
 	<select id="selectOneProduct" parameterType="cmmnMap" resultType="cmmnMap">
-    SELECT product_name, product_id, product_type FROM kcgbd.db4_product_info 
+    SELECT product_name, product_id, product_type, lowest_rate, highest_rate, highest_money, lowest_money,
+    	   highest_date, lowest_date
+    FROM kcgbd.db4_product_info 
     WHERE product_id = #{product_id}
 	</select> 
 	

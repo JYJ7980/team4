@@ -1070,7 +1070,7 @@ var vueapp = new Vue({
 		        
 		},
 		gotoList : function(){
-			cf_movePage('/promion_mng/list');
+			cf_movePage('/team4/designList');
 		},
 	}
 });
