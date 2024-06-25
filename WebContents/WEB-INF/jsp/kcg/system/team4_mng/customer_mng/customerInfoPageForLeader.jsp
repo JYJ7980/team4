@@ -118,7 +118,7 @@
 	border: 1px solid #ccc;
 	background-color: #fff;
 	z-index: 1000;
-	width: 400px;
+	width: 500px;
 	height: 450px;
 	overflow-y: auto;
 }
@@ -183,7 +183,8 @@
 	margin: 15% auto;
 	padding: 20px;
 	border: 1px solid #888;
-	width: 30%;
+	width: 450px;
+	height: 200px;
 }
 
 .modal-addconsult {
@@ -512,8 +513,17 @@
 					<div class="popup-close" @click="closePopup">X</div>
 					<br> <br>
 					<div class="popup-search-container"></div>
+					<label for="searchInput">관리자 이름:</label> <input type="text"
+						id="searchInput" v-model="searchManagerName">
+					<button @click="searchManager">
+						<i class="fa fa-search"></i>
+					</button>
+					<button @click="searchManagerReset">다시</button>
 					<br>
+
 					<table>
+
+						<br>
 						<tr>
 							<th>이름</th>
 							<th>소속 부서</th>
@@ -554,6 +564,7 @@ new Vue({
         customerJob: '', 
         customerAddr: '',
         searchKeyword: '', // 검색 키워드 저장
+        searchManagerName:'', // 관리자 이름 키워드 저장
         errorMessage: '', // 오류 메시지 저장
         showFullIdNumber: false, // 주민등록번호 표시 여부를 저장하는 데이터 변수
         showPopup: false,
@@ -818,6 +829,35 @@ new Vue({
 		closePopup: function() {
 			this.showPopup = false;
 		},
+		searchManager: function() {
+	            if (this.searchManagerName.trim() === '') {
+	                alert('검색어를 입력하세요.');
+	                return;
+	            }
+	            axios.get('/system/team4/getUserInfo')
+	                .then(response => {
+	                   	this.Managers = response.data;
+	                    this.Managers = this.Managers.filter(manager =>
+	                    manager.name.includes(this.searchManagerName)
+	                );
+	                    
+	                })
+	                .catch(error => {
+	                    console.error('Error:', error);
+	                });
+	        },
+	        searchManagerReset:function(){
+	        	axios.get('/system/team4/getUserInfo')
+				.then(response => {
+					this.Managers = response.data;
+					 this.searchManagerName = '';
+				})
+				.catch(error => {
+					console.error('Error:', error);
+				});
+	        	
+	        },
+		
 	    showConsultDetails(consult) {
 	        this.selectedConsult = consult;
 	        this.showModal = true;
