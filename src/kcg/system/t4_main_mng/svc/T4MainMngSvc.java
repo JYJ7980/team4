@@ -73,6 +73,32 @@ public class T4MainMngSvc {
 	public List<CmmnMap> noticeTop2() {
 		return cmmnDao.selectList("system.t4_main_mng.noticeTop2");
 	}
-	
-}
 
+	public CmmnMap deposit() {
+		return cmmnDao.selectOne("system.t4_main_mng.deposit");
+	}
+
+	public CmmnMap savings() {
+		return cmmnDao.selectOne("system.t4_main_mng.savings");
+	}
+	
+	public CmmnMap loan() {
+		CmmnMap test =  cmmnDao.selectOne("system.t4_main_mng.loan");
+		System.out.println(test);
+		return test;
+	}
+
+	public CmmnMap event() {
+		return cmmnDao.selectOne("system.t4_main_mng.event");
+	}
+
+	public CmmnMap findSubProductOne() {
+		return cmmnDao.selectOne("system.t4_main_mng.findSubProductOne");
+	}
+	
+	public CmmnMap popular() {
+		CmmnMap params = findSubProductOne();
+		System.out.println(params);
+		return cmmnDao.selectOne("system.t4_main_mng.popular",params);
+	}
+}

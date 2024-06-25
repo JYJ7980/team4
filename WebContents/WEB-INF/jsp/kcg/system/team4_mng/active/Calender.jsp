@@ -83,10 +83,11 @@
 
 .modal-content {
 	background-color: #fefefe;
-	margin: 5% auto;
+	margin: 10% auto;
 	padding: 20px;
 	border: 1px solid #888;
-	width: 80%;
+	width: 500px;
+	height: 400px;
 }
 
 .close {
@@ -100,6 +101,19 @@
 	color: black;
 	text-decoration: none;
 	cursor: pointer;
+}
+
+.form-group {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 17px;
+}
+
+.contentArea {
+	width: 300px;
+	height: 200px;
+	resize: none;
 }
 </style>
 <title>관리자시스템</title>
@@ -126,14 +140,15 @@
 			<br />
 			<div class="dataTables_wrapper" id="vueapp">
 
-				<div align="center">
+				<div align="center" style="font-size: 20px;">
 					<button @click="calendarData(-1)"><</button>
 					{{ year }}년 {{ month }}월
 					<button @click="calendarData(1)">></button>
+					
 				</div>
-				<div>
-					<button type="button" @click="openInsertForm">등록</button>
-				</div>
+				<div style="display: flex; justify-content: flex-end; margin-right: 200px;">
+						<button type="button" @click="openInsertForm">등록</button>
+					</div>
 				<table border="1" style="width: 80%;" align="center">
 					<thead>
 						<!-- 요일 -->
@@ -165,28 +180,39 @@
 				<div v-if="showModal" class="modal">
 					<div class="modal-content">
 						<span class="close" @click="closeEditModal">&times;</span>
+
 						<div class="form-group">
-							<label for="date">날짜</label> <input type="date" id="date"
-								v-model="selected.cal_date">
+
 							<div>
-								<label for="title">제목</label> <input type="text" id="title"
-									v-model="selected.cal_title">
+								<div>
+									<label for="date">날짜</label> <input type="date" id="date"
+										v-model="selected.cal_date">
+								</div>
+								<br>
+								<div>
+									<label for="title">제목</label> <input type="text" id="title"
+										v-model="selected.cal_title">
+								</div>
+								<div>
+									<div>
+										<label for="content">내용 : </label>
+									</div>
+									<div>
+										<textarea rows="5" id="content" v-model="selected.cal_content"
+											placeholder="내용을 입력하세요." class="contentArea"></textarea>
+									</div>
+
+								</div>
+								<div style="display: flex; justify-content: flex-end;">
+									<button type="button" @click="updateCal">
+										수정<i class="entypo-check"></i>
+									</button>
+									<button type="button" @click="deleteCal(selected.bn_cal_id)"
+										style="margin-left: 20px;">
+										삭제 <i class="entypo-check"></i>
+									</button>
+								</div>
 							</div>
-						</div>
-						<div class="form-group">
-							<label for="content">내용</label>
-							<div>
-								<textarea rows="5" id="content" v-model="selected.cal_content"
-									placeholder="내용을 입력하세요."></textarea>
-							</div>
-						</div>
-						<div class="form-group">
-							<button type="button" @click="updateCal">
-								수정<i class="entypo-check"></i>
-							</button>
-							<button type="button" @click="deleteCal(selected.bn_cal_id)">
-								삭제 <i class="entypo-check"></i>
-							</button>
 						</div>
 					</div>
 				</div>
@@ -197,26 +223,31 @@
 						<div class="form-group">
 
 							<div>
-							<div>
-								<label for="insert.date">날짜</label> : <input type="date" id="insert.date" v-model="insert.date">
+								<div>
+									<label for="insert.date">날짜</label> : <input type="date"
+										id="insert.date" v-model="insert.date">
 								</div>
 								<br>
 								<div>
-								 <label for="insert.title">제목</label> : <input type="text" id="insert.title"
-									v-model="insert.title">
+									<label for="insert.title">제목</label> : <input type="text"
+										id="insert.title" v-model="insert.title">
+								</div>
+								<div>
+									<div>
+										<label for="insert.content">내용 : </label>
 									</div>
-									<div class="form-group">
-							<label for="insert.content">내용</label>
-							<div>
-								<textarea rows="5" id="insert.content" v-model="insert.content"
-									placeholder="내용을 입력하세요."></textarea>
-							</div>
-							<div class="form-group">
-							<button type="button" @click="save">
-								등록<i class="entypo-check"></i>
-							</button>
-						</div>
-						</div>
+									<div>
+										<textarea rows="5" id="insert.content"
+											v-model="insert.content" placeholder="내용을 입력하세요."
+											class="contentArea"></textarea>
+									</div>
+
+								</div>
+								<div style="display: flex; justify-content: flex-end;">
+									<button type="button" @click="save">
+										등록<i class="entypo-check"></i>
+									</button>
+								</div>
 							</div>
 						</div>
 					</div>
