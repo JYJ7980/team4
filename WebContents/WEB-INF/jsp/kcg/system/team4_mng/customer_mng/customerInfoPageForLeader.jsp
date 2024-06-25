@@ -186,6 +186,15 @@
 	width: 30%;
 }
 
+.modal-addconsult {
+	background-color: #fefefe;
+	margin: 15% auto;
+	padding: 20px;
+	border: 1px solid #888;
+	width: 400px;
+	height: 450px;
+}
+
 .close {
 	color: #aaa;
 	float: right;
@@ -287,8 +296,30 @@
 								<div class="modal-content">
 									<span class="close" @click="closeModal">&times;</span>
 									<p>{{ selectedConsult.consult_context }}</p>
+
 								</div>
 							</div>
+							<!-- 							상담추가 모달 -->
+							<div class="modal" v-if="showAddConsultModal">
+								<div class="modal-addconsult">
+									<span class="close" @click="closeAddConsultModal">&times;</span>
+									<div class="input-form">
+										<label for="consultTitle">제목:</label> <input type="text"
+											id="consultTitle" v-model="consultTitle">
+
+									</div>
+									<div class="input-form">
+										<label for="consultContext">내용:</label>
+										<textArea rows="4" cols="35" id="consultContext"
+											v-model="consultContext"></textArea>
+									</div>
+
+									<br>
+									<button @click="addConsult">추가</button>
+									<button @click="resetConsultForm">취소</button>
+								</div>
+							</div>
+
 						</div>
 					</div>
 					<!-- 선택된 고객의 상세 정보 입력 폼 -->
@@ -304,8 +335,9 @@
 								<div class="input-form">
 									<label for="customerName">고객 이름</label> <input type="text"
 										id="customerName" v-model="selectedCustomer.customer_name">
-										<button type="button" class="btn" @click="openAddConsultModal()">상담추가</button>
-								</div> 
+									<button type="button" class="btn"
+										@click="openAddConsultModal()">상담추가</button>
+								</div>
 								<div class="input-form">
 									<label for="customerIdNumber">고객 주민번호</label> <input
 										type="text" id="customerIdNumber"
@@ -528,7 +560,12 @@ new Vue({
         selectedManager: '',
         filteredManager: [], 
         selectedConsult: null, // 선택된 상담 객체
-        showModal: false // 모달 표시 여부,
+        showModal: false, // 모달 표시 여부,
+        showAddConsultModal: false, //상담추가 모달 표시 여부
+        customerConId:'',
+		consultTitle: '',
+		consultContext: '',
+		
     },
     watch: {
         // selectedCustomer의 변경을 감지하는 watch
@@ -789,6 +826,54 @@ new Vue({
 	        this.selectedConsult = null;
 	        this.showModal = false;
 	    },
+	    
+	    openAddConsultModal() {
+            this.showAddConsultModal = true;
+        },
+        closeAddConsultModal() {
+            this.showAddConsultModal = false;
+        },
+		addConsult:function(){
+			
+		
+			   if (
+				        this.consultTitle.trim() === '' ||
+				        this.consultContext.trim() === ''
+				        
+				    ) {
+				        alert('모든 필수 입력 필드를 입력해주세요.');
+				        return; 
+				    }
+   
+			var params = {
+				user_id : this.userId,
+				consult_title : this.consultTitle,
+				consult_context : this.consultContext,
+				con_id : this.selectedCustomer.con_id,
+				
+			};
+			   //서버에 POST 요청으로 새로운 상담내용 등록
+         axios.post('/system/team4/addConsult', { params: params })
+             .then(response => {
+                 if (response.data.status === 'OK') {
+                     alert('새로운 상담내역이 등록되었습니다.');
+                     this.showAddConsultModal = false;
+                     this.getCustConsults();
+                 } else {
+                     alert('상담내역 등록에 실패했습니다.');
+                 }
+             })
+             .catch(error => {
+                 console.error('Error:', error);
+                 alert('상담내역 등록 중 오류가 발생했습니다.');
+             });
+			
+		},
+		resetConsultForm: function() {
+			this.consultTitle = '';
+			this.consultContext = '';
+		},
+        
 		selectManager: function(manager) {
 			this.selectedCustomer.name = manager.name;
 			this.selectedCustomer.dept = manager.dept;
