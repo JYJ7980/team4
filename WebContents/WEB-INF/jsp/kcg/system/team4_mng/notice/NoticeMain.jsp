@@ -139,9 +139,9 @@
 			<jsp:include page="/WEB-INF/jsp/kcg/_include/system/footer.jsp"
 				flush="false" />
 
-		</div>
+</div>
+</div>
 
-	</div>
 
 </body>
 <script>

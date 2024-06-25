@@ -65,6 +65,7 @@ public class T4NoticeMng_Ctl {
 		return t4NoticeMng_Svc.updateNotice(params);
 	}
 
+
 	// 페이징 테스트용 페이지
 	@GetMapping("/noticeTest")
 	public String NoticeTest() {
@@ -79,4 +80,6 @@ public class T4NoticeMng_Ctl {
 		return pageList;
 	}
 
+
 }
+

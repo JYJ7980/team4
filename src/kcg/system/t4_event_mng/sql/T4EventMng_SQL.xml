@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace='system.t4_event_mng'>
+
+
+	<select id="eventFind" parameterType="cmmnMap"
+		resultType="cmmnMap">
+			SELECT * FROM kcgbd.db4_customer_info
+			 WHERE user_id like #{user_id} and SUBSTRING(customer_brdt , 3, 2) = #{month};
+	</select>
+	
+	<select id="eventFindPlus" parameterType="cmmnMap" resultType="cmmnMap">
+	SELECT ci.*,sub.*,u.user_id
+	FROM kcgbd.db4_customer_info ci
+	join kcgbd.db4_product_sub sub
+	on ci.customer_id = sub.customer_id 
+	join kcgbd.t_user u
+	on ci.user_id = u.user_id 
+	WHERE ci.user_id like #{user_id}
+ 	and SUBSTRING(sub.sub_end_date , 1, 4) = #{year}
+  	and SUBSTRING(sub.sub_end_date , 6, 2) = #{month}
+   	and sub.sub_quit ='Y';
+	</select>
+</mapper>

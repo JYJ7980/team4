@@ -6,9 +6,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+
 import org.springframework.web.bind.annotation.PostMapping;
+
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -104,7 +107,8 @@ public class T4customerMngCtl {
 
 	}
 
-	// 담당 고객 삭제
+	//고객 삭제
+
 	@RequestMapping("/deleteCust")
 	public CmmnMap deleteCust(CmmnMap params) {
 		return svc.deleteCust(params);
@@ -117,6 +121,7 @@ public class T4customerMngCtl {
 		return svc.updateCust(params);
 	}
 	
+
 	//관리자 수정
 	@RequestMapping("/updateUser")
 	public CmmnMap updateUser(CmmnMap params) {
@@ -195,6 +200,7 @@ public class T4customerMngCtl {
 	}
 	
 	
+
 	
 
 }

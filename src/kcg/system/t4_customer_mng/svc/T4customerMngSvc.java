@@ -52,6 +52,7 @@ public class T4customerMngSvc {
 
 	
 
+
 	public CmmnMap deleteCust(CmmnMap params) {
 		String customer_id = params.getString("customer_id");
 		params.put("customer_id", customer_id);

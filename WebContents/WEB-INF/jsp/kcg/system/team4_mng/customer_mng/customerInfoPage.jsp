@@ -219,6 +219,7 @@
 			</div>
 		</div>
 	</div>
+
 	<script>
 new Vue({
     el: '#app',
@@ -427,7 +428,8 @@ new Vue({
     }
 });
 </script>
-	</div>
 </body>
 </html>
+
+
 

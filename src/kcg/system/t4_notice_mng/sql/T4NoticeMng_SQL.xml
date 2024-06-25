@@ -15,6 +15,7 @@
 		FROM kcgbd.db4_notice
 	</select>
 
+
 	<insert id="insertNotice" parameterType="cmmnMap">
 		INSERT INTO
 		kcgbd.db4_notice
