@@ -75,7 +75,9 @@
 
 			<div class="dataTables_wrapper" id="vueapp">
 				<template>
+				<c:if test="${userInfoVO.jikgubCd == '1'}">
 					<button @click="showInsertForm">공지사항 추가</button>
+					</c:if>
 					<br>
 					<table class="table table-bordered datatable dataTable"
 						id="grid_app">
@@ -93,8 +95,10 @@
 								<td>{{ notice.notice_id }}</td>
 								<td>{{ notice.notice_title }}</td>
 								<td>
+								<c:if test="${userInfoVO.jikgubCd == '1'}">
 									<button @click="openEditModal(notice)">수정</button>
 									<button @click="deleteNotice(notice.notice_id)">삭제</button>
+									</c:if>
 								</td>
 							</tr>
 						</tbody>
