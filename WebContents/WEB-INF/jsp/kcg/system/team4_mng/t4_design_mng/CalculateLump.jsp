@@ -102,7 +102,7 @@
                         <div class="nav-content flex-column flex-gap-10">
                         	<div class="form-group" style="justify-content: left">
                                 <label>설계번호:</label>
-                                <input class="form-control" id="design_id" v-model="info.prod_ds_sn" disabled />
+                                <input class="form-control" id="design_id" v-model="info.design_id" disabled />
                             </div>
                             <div class="form-group" style="justify-content: left">
                                 <label>상품선택:</label>
@@ -176,9 +176,12 @@
 						<button type="button" class="btn btn-red btn-small" @click="prcCalc()">
 							이자계산
 						</button>
-						<button type="button" class="btn btn-orange btn-small" @click="save()">
-							설계저장
-						</button>
+					    <button type="button" class="btn btn-orange btn-small" v-if="!info.design_id" @click="save()">
+					        설계저장
+					    </button>
+					    <button type="button" class="btn btn-orange btn-small" v-else @click="update()">
+					        변경
+					    </button>
 						<button type="button" class="btn btn-blue btn-icon btn-small" @click="gotoList()">
 							목록 <i class="entypo-list"></i>
 						</button>
@@ -382,7 +385,7 @@ var vueapp = new Vue({
 			sub_money : "", //목표 금액
 			cycle_money : "", //불입 금액
 			before_interest : "", //세전 이자
-			after_interest : "", //세전 이자			
+			final_interest : "", //세후 이자			
 			rec_before_tax : "", //세전 수령액
 			interest_tax : "", //이자과세금
 			interest_type: "", //단리인지 복리인지
@@ -421,6 +424,10 @@ var vueapp = new Vue({
 		if(!cf_isEmpty(this.info.design_id)){
 			this.getDsgInfo();
 		}
+		if(!cf_isEmpty(this.proInfo.proInfo)){
+			this.getProdInfo();
+		}
+
 	},
 	methods : {
 		tabChange : function(index) {
@@ -437,29 +444,70 @@ var vueapp = new Vue({
 			cf_movePage("/team4/calculate", params);
 			
 		},
-		getDsgInfo : function(){
-			cf_ajax("/team4/getDsgInfo", this.info, this.getDsgInfoCB);
-		},
 		getDsgInfoCB : function(data){
 			this.info = data;
 			this.info.simpl_ty_cd = "1";
 			
 			this.prcCalc();
 		},
+		
+		update : function(){
+			
+	        if (this.info.flag != "Y"){
+	                alert("이자 계산을 먼저 수행하세요.");
+	                return;
+	            }
+	        
+	        if(this.info.v_select_month == ""){
+	        	this.info.v_select_month = 0;
+	        }
+	        if(this.info.v_interest_rate == ""){
+	        	this.info.v_interest_rate = 0;
+	        }
+	        if(this.info.f_select_month == ""){
+	        	this.info.f_select_month = 0;
+	        }
+	        if(this.info.f_interest_rate == ""){
+	        	this.info.f_interest_rate = 0;
+	        }
+			var params = {
+		            v_select_month: this.info.v_select_month,
+		            v_interest_rate: this.info.v_interest_rate,
+		            rate: this.info.rate,
+		            sub_money: this.info.sub_money,
+		            cycle_money:this.info.cycle_money,
+		            rec_before_tax: this.info.rec_before_tax,
+		            final_money: this.info.final_money,
+		            profit_rate: this.info.profit_rate,
+		            net_profit_rate: this.info.net_profit_rate,
+		            interest_type: this.info.interest_type,
+		            interest_tax: this.info.interest_tax,
+		            f_select_month: this.info.f_select_month,
+		            f_interest_rate: this.info.f_interest_rate,
+		            before_interest: this.info.before_interest,
+		            final_interest: this.info.final_interest,
+		            product_id: this.proInfo.product_id,
+		            customer_id: this.custInfo.customer_id,
+		            design_id: this.info.design_id
+			}
+			console.log("=================================")
+			console.log(JSON.stringify(params))
+				console.log("=================================")
+				console.log("실행됨 이제 axios로 넘어가야함")
+	            axios.post('/team4/updateDes', {params : params})
+	        	.then(response => {
+					alert("정상적으로 변경되었습니다.")
+                    window.location.href = "/team4/designList";
+	        	})
+	        	.catch(error => {
+	        	    console.error("Error:", error);
+	        	});				
+		},
+
 		save : function(){
 			
-			if(this.info.simpl_ty_cd != "1"){
-				alert("정상설계만 저장할 수 있습니다.");
-				return;
-			}else if(cf_isEmpty(this.custInfo.customer_name)){
-				alert("고객정보를 선택하세요.");
-				return;
-			}
 			
-	        if (cf_isEmpty(this.info.before_interest) || cf_isEmpty(this.info.rec_before_tax) || 
-	                cf_isEmpty(this.info.interest_tax) || cf_isEmpty(this.info.after_interest) || 
-	                cf_isEmpty(this.info.rec_after_tax) || cf_isEmpty(this.info.profit_rate) || 
-	                cf_isEmpty(this.info.net_profit_rate)) {
+	        if (this.info.flag != "Y"){
 	                alert("이자 계산을 먼저 수행하세요.");
 	                return;
 	            }	       
@@ -467,19 +515,19 @@ var vueapp = new Vue({
 			var params = {
 		            v_select_month: this.info.v_select_month,
 		            v_interest_rate: this.info.v_interest_rate,
-		            rate: this.info.tax_rate,
+		            rate: this.info.rate,
 		            sub_money: this.info.sub_money,
 		            cycle_money: this.info.cycle_money,
-		            rec_before_tax: removeCommas(this.info.rec_before_tax),
-		            final_money: removeCommas(this.info.rec_after_tax),
+		            rec_before_tax: this.info.rec_before_tax,
+		            final_money: this.info.final_money,
 		            profit_rate: this.info.profit_rate,
 		            net_profit_rate: this.info.net_profit_rate,
 		            interest_type: this.info.interest_type,
-		            interest_tax: removeCommas(this.info.interest_tax),
+		            interest_tax: this.info.interest_tax,
 		            f_select_month: this.info.f_select_month,
 		            f_interest_rate: this.info.f_interest_rate,
-		            before_interest: removeCommas(this.info.before_interest),
-		            final_interest: removeCommas(this.info.after_interest),
+		            before_interest: this.info.before_interest,
+		            final_interest: this.info.final_interest,
 		            product_id: this.proInfo.product_id,
 		            customer_id: this.custInfo.customer_id,
 			}
@@ -496,6 +544,24 @@ var vueapp = new Vue({
 	        	    console.error("Error:", error);
 	        	});				
 		},
+		getDsgInfo: function() {
+            // 상품 정보를 가져오는 로직
+            console.log("1. 정상작동 하였습니다.")
+
+			var params = {
+			design_id : this.info.design_id
+			}
+            
+            axios.get('/team4/desSelectOne', {params : params})
+             	.then(response => {
+    				console.log("2. 정상작동 하였습니다.")
+    				this.info = response.data				            		
+            	})
+            	.catch(error => {
+            	    console.error("Error:", error);
+            	});
+        },
+
         getProdInfo: function() {
             // 상품 정보를 가져오는 로직
             console.log("1. 정상작동 하였습니다.")
@@ -505,7 +571,7 @@ var vueapp = new Vue({
 			}
             
             axios.get('/team4/proSelectOne', {params : params})
-            	.then(response => {
+             	.then(response => {
     				console.log("2. 정상작동 하였습니다.")
     				this.proInfo = response.data				            		
             	})
@@ -516,7 +582,7 @@ var vueapp = new Vue({
         getCustInfo: function() {
             // 고객 정보를 가져오는 로직
             console.log("1. 정상작동 하였습니다.")
-
+			this.info.simpl_ty_cd= "1";
 			var params = {
 			customer_id : this.custInfo.customer_id
 			}
@@ -564,7 +630,7 @@ var vueapp = new Vue({
 			$("#pop_cust").modal("show");
 		},
 		prcCalc : function(){
-			
+			this.info.flag = "Y"
 			var a = this.info.f_select_month
 			var b = this.info.v_select_month
 			console.log(a)
@@ -634,6 +700,7 @@ var vueapp = new Vue({
 		        	this.info.f_interest_rate = 0;
 		        	f_interest_rate = 0;
 		        }
+		        
 		        
 				var params = {
 						sub_money : this.info.sub_money,

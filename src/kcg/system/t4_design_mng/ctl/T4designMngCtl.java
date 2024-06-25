@@ -165,6 +165,9 @@ public class T4designMngCtl {
 	@RequestMapping("saveCalulate")
 	public String saveCalulate(CmmnMap params) {
 		System.out.println("===========================================");
+		System.out.println("===========================================");
+		System.out.println("========저장===============");
+
 		System.out.println("params: " + params.toString());
 		
 
@@ -182,7 +185,19 @@ public class T4designMngCtl {
 		
 		return svc.designListPaging(params, pagingConfig);
 	}
-	
+	@RequestMapping("updateDes")
+	public String updateDes(CmmnMap params) {
+		System.out.println("===========================================");
+		System.out.println("===========================================");
+		System.out.println("========변경===============");
+
+		System.out.println("params: " + params.toString());
+		
+
+		svc.updateDesign(params);
+		return "kcg/system/team4_mng/t4_design_mng/CalculateDeposit";
+	}
+
 	
     @PostMapping("/moveDesignInfoForm")
     public CmmnMap moveDesignInfoForm(CmmnMap params) {
@@ -233,10 +248,17 @@ public class T4designMngCtl {
 			
 		}else{
 			list = cal.calculateLoan(params);
+			System.out.println("===대출==");
+			System.out.println(list.toString());
+
 			return list;
 		}
 	}
 	
-	
+	@RequestMapping("desSelectOne")
+	public CmmnMap desSelectOne(CmmnMap params) {
+		return svc.desSelectOne(params);
+	}
+
 
 }

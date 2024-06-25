@@ -102,7 +102,7 @@
                         <div class="nav-content flex-column flex-gap-10">
                         	<div class="form-group" style="justify-content: left">
                                 <label>설계번호:</label>
-                                <input class="form-control" id="design_id" v-model="info.prod_ds_sn" disabled />
+                                <input class="form-control" id="design_id" v-model="info.design_id" disabled />
                             </div>
                             <div class="form-group" style="justify-content: left">
                                 <label>상품선택:</label>
@@ -173,9 +173,12 @@
 						<button type="button" class="btn btn-red btn-small" @click="prcCalc()">
 							이자계산
 						</button>
-						<button type="button" class="btn btn-orange btn-small" @click="save()">
-							설계저장
-						</button>
+					    <button type="button" class="btn btn-orange btn-small" v-if="!info.design_id" @click="save()">
+					        설계저장
+					    </button>
+					    <button type="button" class="btn btn-orange btn-small" v-else @click="update()">
+					        변경
+					    </button>
 						<button type="button" class="btn btn-blue btn-icon btn-small" @click="gotoList()">
 							목록 <i class="entypo-list"></i>
 						</button>
@@ -365,7 +368,8 @@ var vueapp = new Vue({
 			rate : "", //중도상환 수수료
 			cycle_money: "", //매 회차 납입 금액			
 			final_money : "", //총 상환금액
-			final_interest : "", //총 납입 이자			
+			final_interest : "", //총 납입 이자
+			flag: "N"
 		},
 		proInfo : {
 			product_id : "${product_id}",
@@ -389,12 +393,16 @@ var vueapp = new Vue({
 	},
 	mounted : function(){
 		
-		if(!cf_isEmpty(this.info.cust_mbl_telno)){
+		if(!cf_isEmpty(this.custInfo.customer_id)){
 			this.getCustInfo();
 		}
-		if(!cf_isEmpty(this.info.prod_ds_sn)){
+		if(!cf_isEmpty(this.info.design_id)){
 			this.getDsgInfo();
 		}
+		if(!cf_isEmpty(this.proInfo.proInfo)){
+			this.getProdInfo();
+		}
+
 	},
 	methods : {
 		tabChange : function(index) {
@@ -420,32 +428,81 @@ var vueapp = new Vue({
 			
 			this.prcCalc();
 		},
+		
+		update : function(){
+			
+	        if (this.info.flag != "Y"){
+	              alert("이자 계산을 먼저 수행하세요.");
+	              return;
+	            }
+	        
+	        if(this.info.v_select_month == ""){
+	        	this.info.v_select_month = 0;
+	        }
+	        if(this.info.v_interest_rate == ""){
+	        	this.info.v_interest_rate = 0;
+	        }
+	        if(this.info.f_select_month == ""){
+	        	this.info.f_select_month = 0;
+	        }
+	        if(this.info.f_interest_rate == ""){
+	        	this.info.f_interest_rate = 0;
+	        }
+			var params = {
+		            v_select_month: this.info.v_select_month,
+		            v_interest_rate: this.info.v_interest_rate,
+		            rate: this.info.rate,
+		            sub_money: this.info.sub_money,
+		            cycle_money: this.info.cycle_money,
+		            rec_before_tax: this.info.rec_before_tax,
+		            final_money: this.info.final_money,
+		            profit_rate: this.info.profit_rate,
+		            net_profit_rate: this.info.net_profit_rate,
+		            interest_type: this.info.interest_type,
+		            interest_tax: this.info.interest_tax,
+		            f_select_month: this.info.f_select_month,
+		            f_interest_rate: this.info.f_interest_rate,
+		            before_interest: this.info.before_interest,
+		            final_interest: this.info.final_interest,
+		            product_id: this.proInfo.product_id,
+		            customer_id: this.custInfo.customer_id,
+		            design_id: this.info.design_id
+			}
+			console.log("=================================")
+			console.log(JSON.stringify(params))
+				console.log("=================================")
+				console.log("실행됨 이제 axios로 넘어가야함")
+	            axios.post('/team4/updateDes', {params : params})
+	        	.then(response => {
+					alert("정상적으로 변경되었습니다.")
+                    window.location.href = "/team4/designList";
+	        	})
+	        	.catch(error => {
+	        	    console.error("Error:", error);
+	        	});				
+		},
+
 		save : function(){
 			
-			if(this.info.simpl_ty_cd != "1"){
-				alert("정상설계만 저장할 수 있습니다.");
-				return;
-			}else if(cf_isEmpty(this.custInfo.customer_name)){
-				alert("고객정보를 선택하세요.");
-				return;
-			}
-			
-	        if (cf_isEmpty(this.info.final_money) || cf_isEmpty(this.info.final_interest)){
+	        if (this.info.flag != "Y"){
 	                alert("이자 계산을 먼저 수행하세요.");
 	                return;
-	            }	       
+	        }	    
+	
 
 			var params = {
 		            v_select_month: this.info.v_select_month, //ok
 		            v_interest_rate: this.info.v_interest_rate, //ok
 		            rate: this.info.rate, //ok
+		            sub_money:this.info.sub_money,
 		            cycle_money: this.info.cycle_money, //ok
-		            final_money: removeCommas(this.info.final_money), //ok
+		            final_money: this.info.final_money, //ok
 		            f_select_month: this.info.f_select_month, //ok
 		            f_interest_rate: this.info.f_interest_rate, //ok
-		            final_interest: removeCommas(this.info.final_interest),//ok
+		            final_interest: this.info.final_interest,//ok
 		            product_id: this.proInfo.product_id,//ok
 		            customer_id: this.custInfo.customer_id,//ok
+		            loan_repayment_type: this.info.loan_repayment_type
 			}
 			console.log("=================================")
 			console.log(JSON.stringify(params))
@@ -460,6 +517,23 @@ var vueapp = new Vue({
 	        	    console.error("Error:", error);
 	        	});				
 		},
+		getDsgInfo: function() {
+            // 상품 정보를 가져오는 로직
+            console.log("1. 정상작동 하였습니다.")
+
+			var params = {
+			design_id : this.info.design_id
+			}
+            
+            axios.get('/team4/desSelectOne', {params : params})
+             	.then(response => {
+    				console.log("2. 정상작동 하였습니다.")
+    				this.info = response.data				            		
+            	})
+            	.catch(error => {
+            	    console.error("Error:", error);
+            	});
+        },
         getProdInfo: function() {
             // 상품 정보를 가져오는 로직
             console.log("1. 정상작동 하였습니다.")
@@ -477,10 +551,11 @@ var vueapp = new Vue({
             	    console.error("Error:", error);
             	});
         },
+
         getCustInfo: function() {
             // 고객 정보를 가져오는 로직
             console.log("1. 정상작동 하였습니다.")
-
+			this.info.simpl_ty_cd= "1";
 			var params = {
 			customer_id : this.custInfo.customer_id
 			}
@@ -528,7 +603,7 @@ var vueapp = new Vue({
 			$("#pop_cust").modal("show");
 		},
 		prcCalc : function(){
-			
+			this.info.flag = "Y"
 			var a = this.info.f_select_month
 			var b = this.info.v_select_month
 			console.log(a)
@@ -568,11 +643,11 @@ var vueapp = new Vue({
 		       return false;
 		    }
 
-		    	var f_interest_rate = (this.info.f_interest_rate /100 /12);
-				var v_interest_rate = (this.info.v_interest_rate /100 /12);
-				var rate =(this.info.rate /100);				
-								
-		        if(this.info.v_select_month == ""){
+		    var f_interest_rate = (this.info.f_interest_rate /100 /12);
+			var v_interest_rate = (this.info.v_interest_rate /100 /12);
+			var rate =(this.info.rate /100);				
+							
+		       if(this.info.v_select_month == ""){
 		        	this.info.v_select_month = 0;
 		        }
 		        if(this.info.v_interest_rate == ""){
@@ -587,378 +662,409 @@ var vueapp = new Vue({
 		        	f_interest_rate = 0;
 		        }
 		        
-		        var m = this.info.sub_money;
-		        var f_n = this.info.f_select_month;
-		        var f_r = f_interest_rate;
-		        var v_n = this.info.v_select_month;
-		        var v_r = v_interest_rate;
-		        var rate = this.info.rate;
-		        var length = f_n + v_n;
-		        
-	        	console.log("v_n: "+ v_n);
-	        	console.log("v_r: "+ v_r);
 	        	
-	        	
-		        if(v_n == 0 || v_r == 0){
-		        	console.log("고정금리만 일 때 정상작동")
-		        	console.log("loan type은? " + this.info.loan_repayment_type)
+				var params = {
+						sub_money : this.info.sub_money,
+						loan_repayment_type : this.info.loan_repayment_type,
+						f_interest_rate : f_interest_rate,
+						f_select_month : this.info.f_select_month,
+						v_interest_rate : v_interest_rate,
+						v_select_month : this.info.v_select_month,
+						rate : rate,
+						prod_ty_cd : "4",
+				}
+				
+	            axios.post('/team4/calculator', { params : params })
+	            .then(response => {
+	            	console.log("111222정상 작동 되었습니다.")
+	            	this.calculate_arr =response.data
+	            	console.log("=======================")
+	            	console.log(JSON.stringify(this.calculate_arr))
+	            	
+					var sub_money = parseInt(this.info.sub_money); // sub_money를 숫자로 변환
+					
+					var lastParams = this.calculate_arr[this.calculate_arr.length - 1];
+					var cycle_money = lastParams.cycle_money; // 원리금 균등 상환방식의 매 회차 납입금액을 숫자로 변환
+					var final_interest = parseInt(lastParams.acc_interest); // 최종 누적 이자를 숫자로 변환
+					var final_money = (sub_money + final_interest); // 최종 갚아야할 금액을 계산
+					
+					console.log("=========숫자인가======");
+					console.log("sub_money:" + sub_money);
+					console.log("cycle_money:" + cycle_money);
+					console.log("this.info.loan_repayment_type:" + this.info.loan_repayment_type);
+					console.log("final_money:" + final_money);
 
-			        if(this.info.loan_repayment_type == "원리금 균등") {
+					this.info.final_money = final_money; //최종 갚아야할 금액
+					this.info.final_interest = final_interest; //최종 누적 이자
+					this.info.cycle_money =cycle_money
+	            	})
+	            .catch(error => {
+
+	                console.error('항목 삭제 중 에러 발생:', error);
+	            });
+
+	        	
+	        	
+// 		        if(v_n == 0 || v_r == 0){
+// 		        	console.log("고정금리만 일 때 정상작동")
+// 		        	console.log("loan type은? " + this.info.loan_repayment_type)
+
+// 			        if(this.info.loan_repayment_type == "원리금 균등") {
 			        	
-			        	var x = m*f_r/(Math.pow(1+f_r, f_n)-1) + m*f_r;
+// 			        	var x = m*f_r/(Math.pow(1+f_r, f_n)-1) + m*f_r;
 			        	
-			        	var acc_interest = 0;
-			        	var round_interest = 0;
-			        	var round_pri_cycle_money = 0;
-			        	var round_total = 0;
+// 			        	var acc_interest = 0;
+// 			        	var round_interest = 0;
+// 			        	var round_pri_cycle_money = 0;
+// 			        	var round_total = 0;
 			        	
-			        	for(var i = 1; i <= f_n; i++){
+// 			        	for(var i = 1; i <= f_n; i++){
 	
-		        			round_interest =m * f_r;
-		        			acc_interest = acc_interest + round_interest;
-		        			round_pri_cycle_money = x - round_interest;
-		        			round_total = m - round_pri_cycle_money;
+// 		        			round_interest =m * f_r;
+// 		        			acc_interest = acc_interest + round_interest;
+// 		        			round_pri_cycle_money = x - round_interest;
+// 		        			round_total = m - round_pri_cycle_money;
 		        			
-		        			if(i == f_n){
-				        		var params = {
-					        		round_num: i,
-					        		round_cycle_money: (m+round_interest).toFixed(0),
-					        		round_pri_cycle_money: m.toFixed(0),
-					        		round_interest: round_interest.toFixed(0),
-					        		acc_interest: acc_interest.toFixed(0),
-					        		round_total: 0,
-					        		early_repayment_fee: (round_total * rate * (length -i) /length).toFixed(0),
-					        		}
-								this.calculate_arr.push(params);
-		        			}else{
-				        		var params = {
-					        		round_num: i,
-					        		round_cycle_money: x.toFixed(0),
-					        		round_pri_cycle_money: round_pri_cycle_money.toFixed(0),
-					        		round_interest: round_interest.toFixed(0),
-					        		acc_interest: acc_interest.toFixed(0),
-					        		round_total: round_total.toFixed(0),
-					        		early_repayment_fee: (round_total * rate * (length -i) /length).toFixed(0),
-					        		}
-				        		m = round_total;	
-								this.calculate_arr.push(params);
-		        			}
-			        	}
+// 		        			if(i == f_n){
+// 				        		var params = {
+// 					        		round_num: i,
+// 					        		round_cycle_money: (m+round_interest).toFixed(0),
+// 					        		round_pri_cycle_money: m.toFixed(0),
+// 					        		round_interest: round_interest.toFixed(0),
+// 					        		acc_interest: acc_interest.toFixed(0),
+// 					        		round_total: 0,
+// 					        		early_repayment_fee: (round_total * rate * (length -i) /length).toFixed(0),
+// 					        		}
+// 								this.calculate_arr.push(params);
+// 		        			}else{
+// 				        		var params = {
+// 					        		round_num: i,
+// 					        		round_cycle_money: x.toFixed(0),
+// 					        		round_pri_cycle_money: round_pri_cycle_money.toFixed(0),
+// 					        		round_interest: round_interest.toFixed(0),
+// 					        		acc_interest: acc_interest.toFixed(0),
+// 					        		round_total: round_total.toFixed(0),
+// 					        		early_repayment_fee: (round_total * rate * (length -i) /length).toFixed(0),
+// 					        		}
+// 				        		m = round_total;	
+// 								this.calculate_arr.push(params);
+// 		        			}
+// 			        	}
 			        	
-						var lastParams = this.calculate_arr[this.calculate_arr.length - 1];
-						console.log('acc_interest의 값:', lastParams.acc_interest);
-						console.log('final_moeny 값:', x * (length-1) + lastParams.round_pri_cycle_money +lastParams.acc_interest);
-						this.info.cycle_money = x.toFixed(0);
-						this.info.final_interest = acc_interest.toFixed(0);
-						this.info.final_money = (x*(length-1) + m + acc_interest).toFixed(0);
+// 						var lastParams = this.calculate_arr[this.calculate_arr.length - 1];
+// 						console.log('acc_interest의 값:', lastParams.acc_interest);
+// 						console.log('final_moeny 값:', x * (length-1) + lastParams.round_pri_cycle_money +lastParams.acc_interest);
+// 						this.info.cycle_money = x.toFixed(0);
+// 						this.info.final_interest = acc_interest.toFixed(0);
+// 						this.info.final_money = (x*(length-1) + m + acc_interest).toFixed(0);
 			        	
 			        	
 			        	
-			        }
+// 			        }
 			        
-			        if(this.info.loan_repayment_type == "원금 균등") {
+// 			        if(this.info.loan_repayment_type == "원금 균등") {
 	
-			        	var a = m / length;
+// 			        	var a = m / length;
 			        	
-			        	var acc_interest = 0;
-			        	var round_interest = 0;
-			        	var round_cycle_money = 0;
-			        	var round_total = 0;
-			        	var acc_money = 0;
+// 			        	var acc_interest = 0;
+// 			        	var round_interest = 0;
+// 			        	var round_cycle_money = 0;
+// 			        	var round_total = 0;
+// 			        	var acc_money = 0;
 			        	
-			        	for(var i = 1; i <= f_n; i++){
+// 			        	for(var i = 1; i <= f_n; i++){
 	
-		        			round_interest =m * f_r;
-		        			acc_interest = acc_interest + round_interest;
-		        			round_cycle_money = a + round_interest;
-		        			round_total = m - a;
-		        			if(i == f_n){
-				        		var params = {
-					        			round_num: i,
-					        			round_cycle_money: m.toFixed(0),
-					        			round_pri_cycle_money: a.toFixed(0),
-					        			round_interest: round_interest.toFixed(0),
-					        			acc_interest: acc_interest.toFixed(0),
-					        			round_total: 0,
-					        			early_repayment_fee: (round_total * rate * (length -i) /length).toFixed(0),
-					        			}
+// 		        			round_interest =m * f_r;
+// 		        			acc_interest = acc_interest + round_interest;
+// 		        			round_cycle_money = a + round_interest;
+// 		        			round_total = m - a;
+// 		        			if(i == f_n){
+// 				        		var params = {
+// 					        			round_num: i,
+// 					        			round_cycle_money: m.toFixed(0),
+// 					        			round_pri_cycle_money: a.toFixed(0),
+// 					        			round_interest: round_interest.toFixed(0),
+// 					        			acc_interest: acc_interest.toFixed(0),
+// 					        			round_total: 0,
+// 					        			early_repayment_fee: (round_total * rate * (length -i) /length).toFixed(0),
+// 					        			}
 				        		
-								this.calculate_arr.push(params);
-		        			}else{
-				        		var params = {
-					        			round_num: i,
-					        			round_cycle_money: round_cycle_money.toFixed(0),
-					        			round_pri_cycle_money: a.toFixed(0),
-					        			round_interest: round_interest.toFixed(0),
-					        			acc_interest: acc_interest.toFixed(0),
-					        			round_total: round_total.toFixed(0),
-					        			early_repayment_fee: (round_total * rate * (length -i) /length).toFixed(0),
-					        			}
-				        		m = round_total;	
-				        		acc_money = acc_money + round_cycle_money
-								this.calculate_arr.push(params);
-		        			}
-			        	}
+// 								this.calculate_arr.push(params);
+// 		        			}else{
+// 				        		var params = {
+// 					        			round_num: i,
+// 					        			round_cycle_money: round_cycle_money.toFixed(0),
+// 					        			round_pri_cycle_money: a.toFixed(0),
+// 					        			round_interest: round_interest.toFixed(0),
+// 					        			acc_interest: acc_interest.toFixed(0),
+// 					        			round_total: round_total.toFixed(0),
+// 					        			early_repayment_fee: (round_total * rate * (length -i) /length).toFixed(0),
+// 					        			}
+// 				        		m = round_total;	
+// 				        		acc_money = acc_money + round_cycle_money
+// 								this.calculate_arr.push(params);
+// 		        			}
+// 			        	}
 
-			        	var lastParams = this.calculate_arr[this.calculate_arr.length - 1];
-						console.log('acc_interest의 값:', lastParams.acc_interest);
-						this.info.final_interest = (lastParams.acc_interest);
-						this.info.final_money = acc_money.toFixed(0);
+// 			        	var lastParams = this.calculate_arr[this.calculate_arr.length - 1];
+// 						console.log('acc_interest의 값:', lastParams.acc_interest);
+// 						this.info.final_interest = (lastParams.acc_interest);
+// 						this.info.final_money = acc_money.toFixed(0);
 			        	
 			        	
 			        	
-			        }
+// 			        }
 			        
-			        if(this.info.loan_repayment_type == "만기 일시") {
+// 			        if(this.info.loan_repayment_type == "만기 일시") {
 			        	
-			        	var acc_interest = 0;
-			        	var round_interest = 0;
-			        	var round_pri_cycle_money = 0;
+// 			        	var acc_interest = 0;
+// 			        	var round_interest = 0;
+// 			        	var round_pri_cycle_money = 0;
 			        	
-			        	for(var i = 1; i <= f_n; i++){
+// 			        	for(var i = 1; i <= f_n; i++){
 	
-		        			round_interest =m * f_r;
-		        			acc_interest = acc_interest + round_interest;
-		        			round_pri_cycle_money = x - round_interest;
-		        			if(i == f_n){
-				        		var params = {
-					        			round_num: i,
-					        			round_cycle_money: (m+round_interest).toFixed(0),
-					        			round_pri_cycle_money: m.toFixed(0),
-					        			round_interest: round_interest.toFixed(0),
-					        			acc_interest: acc_interest.toFixed(0),
-					        			round_total: m.toFixed(0),
-					        			early_repayment_fee: (m * rate * (length -i) /length).toFixed(0),
-					        		}
-								this.calculate_arr.push(params);
-		        			} else{
-				        		var params = {
-					        			round_num: i,
-					        			round_cycle_money: round_interest.toFixed(0),
-					        			round_pri_cycle_money: 0,
-					        			round_interest: round_interest.toFixed(0),
-					        			acc_interest: acc_interest.toFixed(0),
-					        			round_total: m.toFixed(0),
-					        			early_repayment_fee: (m * rate * (length -i) /length).toFixed(0),
-					        		}
-								this.calculate_arr.push(params);
-		        			}
-		        		}
+// 		        			round_interest =m * f_r;
+// 		        			acc_interest = acc_interest + round_interest;
+// 		        			round_pri_cycle_money = x - round_interest;
+// 		        			if(i == f_n){
+// 				        		var params = {
+// 					        			round_num: i,
+// 					        			round_cycle_money: (m+round_interest).toFixed(0),
+// 					        			round_pri_cycle_money: m.toFixed(0),
+// 					        			round_interest: round_interest.toFixed(0),
+// 					        			acc_interest: acc_interest.toFixed(0),
+// 					        			round_total: m.toFixed(0),
+// 					        			early_repayment_fee: (m * rate * (length -i) /length).toFixed(0),
+// 					        		}
+// 								this.calculate_arr.push(params);
+// 		        			} else{
+// 				        		var params = {
+// 					        			round_num: i,
+// 					        			round_cycle_money: round_interest.toFixed(0),
+// 					        			round_pri_cycle_money: 0,
+// 					        			round_interest: round_interest.toFixed(0),
+// 					        			acc_interest: acc_interest.toFixed(0),
+// 					        			round_total: m.toFixed(0),
+// 					        			early_repayment_fee: (m * rate * (length -i) /length).toFixed(0),
+// 					        		}
+// 								this.calculate_arr.push(params);
+// 		        			}
+// 		        		}
 			        	
-						this.info.final_interest = acc_interest.toFixed(0);
-						this.info.final_money = (m + acc_interest).toFixed(0);
-			        }
+// 						this.info.final_interest = acc_interest.toFixed(0);
+// 						this.info.final_money = (m + acc_interest).toFixed(0);
+// 			        }
 		        	
-		        }else{
-			        if(this.info.loan_repayment_type == "원리금 균등") {
+// 		        }else{
+// 			        if(this.info.loan_repayment_type == "원리금 균등") {
 	
-			        	var f = (Math.pow(1+f_r , f_n) - 1)/f_r;
-			        	var v = (Math.pow(1+v_r , v_n) - 1)/v_r;
-			        	var a = (m + m*v_r*v -m*f_r*v)/(v + f + f*v_r*v);
-			        	var x = (a + m*f_r);
+// 			        	var f = (Math.pow(1+f_r , f_n) - 1)/f_r;
+// 			        	var v = (Math.pow(1+v_r , v_n) - 1)/v_r;
+// 			        	var a = (m + m*v_r*v -m*f_r*v)/(v + f + f*v_r*v);
+// 			        	var x = (a + m*f_r);
 			        	
-			        	var acc_interest = 0;
-			        	var round_interest = 0;
-			        	var round_pri_cycle_money = 0;
-			        	var round_total = 0;
+// 			        	var acc_interest = 0;
+// 			        	var round_interest = 0;
+// 			        	var round_pri_cycle_money = 0;
+// 			        	var round_total = 0;
 			        	
-			        	for(var i = 1; i <= f_n; i++){
+// 			        	for(var i = 1; i <= f_n; i++){
 	
-		        			round_interest =m * f_r;
-		        			acc_interest = acc_interest + round_interest;
-		        			round_pri_cycle_money = x - round_interest;
-		        			round_total = m - round_pri_cycle_money;
+// 		        			round_interest =m * f_r;
+// 		        			acc_interest = acc_interest + round_interest;
+// 		        			round_pri_cycle_money = x - round_interest;
+// 		        			round_total = m - round_pri_cycle_money;
 		        				
-			        		var params = {
-			        			round_num: i,
-			        			round_cycle_money: x.toFixed(0),
-			        			round_pri_cycle_money: round_pri_cycle_money.toFixed(0),
-			        			round_interest: round_interest.toFixed(0),
-			        			acc_interest: acc_interest.toFixed(0),
-			        			round_total: round_total.toFixed(0),
-			        			early_repayment_fee: (round_total * rate * (length -i) /length).toFixed(0),
-			        			}
-		        			m = round_total;	
-							this.calculate_arr.push(params);
-			        	}
+// 			        		var params = {
+// 			        			round_num: i,
+// 			        			round_cycle_money: x.toFixed(0),
+// 			        			round_pri_cycle_money: round_pri_cycle_money.toFixed(0),
+// 			        			round_interest: round_interest.toFixed(0),
+// 			        			acc_interest: acc_interest.toFixed(0),
+// 			        			round_total: round_total.toFixed(0),
+// 			        			early_repayment_fee: (round_total * rate * (length -i) /length).toFixed(0),
+// 			        			}
+// 		        			m = round_total;	
+// 							this.calculate_arr.push(params);
+// 			        	}
 		   
-			        	for(var i = 1; i <= v_n; i++){
+// 			        	for(var i = 1; i <= v_n; i++){
 			        		
-		        			round_interest =m * v_r;
-		        			acc_interest = acc_interest + round_interest;
-		        			round_pri_cycle_money = x - round_interest;
-		        			round_total = m - round_pri_cycle_money;
+// 		        			round_interest =m * v_r;
+// 		        			acc_interest = acc_interest + round_interest;
+// 		        			round_pri_cycle_money = x - round_interest;
+// 		        			round_total = m - round_pri_cycle_money;
 	
-		        			if(i == v_n) {
-				        		var params = {
-					        			round_num: (i + f_n).toFixed(0),
-					        			round_cycle_money: (m + round_interest).toFixed(0),
-					        			round_pri_cycle_money: m.toFixed(0),
-					        			round_interest: round_interest.toFixed(0),
-					        			acc_interest: acc_interest.toFixed(0),
-					        			round_total: 0,
-					        			early_repayment_fee: (round_total * rate * (length -(i + f_n)) /length).toFixed(0)
-					        			}
-								this.calculate_arr.push(params);
-		        			}else{
-				        		var params = {
-					        			round_num: (i + f_n).toFixed(0),
-					        			round_cycle_money: x.toFixed(0),
-					        			round_pri_cycle_money: round_pri_cycle_money.toFixed(0),
-					        			round_interest: round_interest.toFixed(0),
-					        			acc_interest: acc_interest.toFixed(0),
-					        			round_total: round_total.toFixed(0),
-					        			early_repayment_fee: (round_total * rate * (length -(i + f_n)) /length).toFixed(0)
-					        			}
-				        		m = round_total;	
-								this.calculate_arr.push(params);
-		        			}
-			        	}
-						var lastParams = this.calculate_arr[this.calculate_arr.length - 1];
-						console.log('acc_interest의 값:', lastParams.acc_interest);
-						console.log('final_moeny 값:', x * (length-1) + lastParams.round_pri_cycle_money +lastParams.acc_interest);
-						this.info.cycle_money = x.toFixed(0);
-						this.info.final_interest = acc_interest.toFixed(0);
-						this.info.final_money = (x*(length-1) + round_pri_cycle_money + acc_interest).toFixed(0);
+// 		        			if(i == v_n) {
+// 				        		var params = {
+// 					        			round_num: (i + f_n).toFixed(0),
+// 					        			round_cycle_money: (m + round_interest).toFixed(0),
+// 					        			round_pri_cycle_money: m.toFixed(0),
+// 					        			round_interest: round_interest.toFixed(0),
+// 					        			acc_interest: acc_interest.toFixed(0),
+// 					        			round_total: 0,
+// 					        			early_repayment_fee: (round_total * rate * (length -(i + f_n)) /length).toFixed(0)
+// 					        			}
+// 								this.calculate_arr.push(params);
+// 		        			}else{
+// 				        		var params = {
+// 					        			round_num: (i + f_n).toFixed(0),
+// 					        			round_cycle_money: x.toFixed(0),
+// 					        			round_pri_cycle_money: round_pri_cycle_money.toFixed(0),
+// 					        			round_interest: round_interest.toFixed(0),
+// 					        			acc_interest: acc_interest.toFixed(0),
+// 					        			round_total: round_total.toFixed(0),
+// 					        			early_repayment_fee: (round_total * rate * (length -(i + f_n)) /length).toFixed(0)
+// 					        			}
+// 				        		m = round_total;	
+// 								this.calculate_arr.push(params);
+// 		        			}
+// 			        	}
+// 						var lastParams = this.calculate_arr[this.calculate_arr.length - 1];
+// 						console.log('acc_interest의 값:', lastParams.acc_interest);
+// 						console.log('final_moeny 값:', x * (length-1) + lastParams.round_pri_cycle_money +lastParams.acc_interest);
+// 						this.info.cycle_money = x.toFixed(0);
+// 						this.info.final_interest = acc_interest.toFixed(0);
+// 						this.info.final_money = (x*(length-1) + round_pri_cycle_money + acc_interest).toFixed(0);
 			        	
 			        	
 			        	
-			        }
+// 			        }
 			        
-			        if(this.info.loan_repayment_type == "원금 균등") {
+// 			        if(this.info.loan_repayment_type == "원금 균등") {
 	
-			        	var a = m / length;
+// 			        	var a = m / length;
 			        	
-			        	var acc_interest = 0;
-			        	var round_interest = 0;
-			        	var round_cycle_money = 0;
-			        	var round_total = 0;
-			        	var acc_money = 0;
+// 			        	var acc_interest = 0;
+// 			        	var round_interest = 0;
+// 			        	var round_cycle_money = 0;
+// 			        	var round_total = 0;
+// 			        	var acc_money = 0;
 			        	
-			        	for(var i = 1; i <= f_n; i++){
+// 			        	for(var i = 1; i <= f_n; i++){
 	
-		        			round_interest =m * f_r;
-		        			acc_interest = acc_interest + round_interest;
-		        			round_cycle_money = a + round_interest;
-		        			round_total = m - a;
+// 		        			round_interest =m * f_r;
+// 		        			acc_interest = acc_interest + round_interest;
+// 		        			round_cycle_money = a + round_interest;
+// 		        			round_total = m - a;
 		        				
-			        		var params = {
-			        			round_num: i,
-			        			round_cycle_money: round_cycle_money.toFixed(0),
-			        			round_pri_cycle_money: a.toFixed(0),
-			        			round_interest: round_interest.toFixed(0),
-			        			acc_interest: acc_interest.toFixed(0),
-			        			round_total: round_total.toFixed(0),
-			        			early_repayment_fee: (round_total * rate * (length -i) /length).toFixed(0),
-			        			}
-		        			m = round_total;	
-		        			acc_money = acc_money + round_cycle_money
+// 			        		var params = {
+// 			        			round_num: i,
+// 			        			round_cycle_money: round_cycle_money.toFixed(0),
+// 			        			round_pri_cycle_money: a.toFixed(0),
+// 			        			round_interest: round_interest.toFixed(0),
+// 			        			acc_interest: acc_interest.toFixed(0),
+// 			        			round_total: round_total.toFixed(0),
+// 			        			early_repayment_fee: (round_total * rate * (length -i) /length).toFixed(0),
+// 			        			}
+// 		        			m = round_total;	
+// 		        			acc_money = acc_money + round_cycle_money
 	
-							this.calculate_arr.push(params);
-			        	}
+// 							this.calculate_arr.push(params);
+// 			        	}
 		   
-			        	for(var i = 1; i <= v_n; i++){
-		        			round_interest =m * f_r;
-		        			acc_interest = acc_interest + round_interest;
-		        			round_cycle_money = a + round_interest;
-		        			round_total = m - a;
+// 			        	for(var i = 1; i <= v_n; i++){
+// 		        			round_interest =m * f_r;
+// 		        			acc_interest = acc_interest + round_interest;
+// 		        			round_cycle_money = a + round_interest;
+// 		        			round_total = m - a;
 		        			
-		        			if(i == v_n) {
-				        		var params = {
-					        			round_num: (i + f_n).toFixed(0),
-					        			round_cycle_money: (m+round_interest).toFixed(0),
-					        			round_pri_cycle_money: m.toFixed(0),
-					        			round_interest: round_interest.toFixed(0),
-					        			acc_interest: acc_interest.toFixed(0),
-					        			round_total: 0,
-					        			early_repayment_fee: (round_total * rate * (length -(i + f_n)) /length).toFixed(0)
-					        			}
-								this.calculate_arr.push(params);
-		        			}else{
-				        		var params = {
-					        			round_num: (i + f_n).toFixed(0),
-					        			round_cycle_money: round_cycle_money.toFixed(0),
-					        			round_pri_cycle_money: a.toFixed(0),
-					        			round_interest: round_interest.toFixed(0),
-					        			acc_interest: acc_interest.toFixed(0),
-					        			round_total: round_total.toFixed(0),
-					        			early_repayment_fee: (round_total * rate * (length -(i + f_n)) /length).toFixed(0)
-					        			}
-				        		m = round_total;	
-			        			acc_money = acc_money + round_cycle_money
-								this.calculate_arr.push(params);
-		        			}
+// 		        			if(i == v_n) {
+// 				        		var params = {
+// 					        			round_num: (i + f_n).toFixed(0),
+// 					        			round_cycle_money: (m+round_interest).toFixed(0),
+// 					        			round_pri_cycle_money: m.toFixed(0),
+// 					        			round_interest: round_interest.toFixed(0),
+// 					        			acc_interest: acc_interest.toFixed(0),
+// 					        			round_total: 0,
+// 					        			early_repayment_fee: (round_total * rate * (length -(i + f_n)) /length).toFixed(0)
+// 					        			}
+// 								this.calculate_arr.push(params);
+// 		        			}else{
+// 				        		var params = {
+// 					        			round_num: (i + f_n).toFixed(0),
+// 					        			round_cycle_money: round_cycle_money.toFixed(0),
+// 					        			round_pri_cycle_money: a.toFixed(0),
+// 					        			round_interest: round_interest.toFixed(0),
+// 					        			acc_interest: acc_interest.toFixed(0),
+// 					        			round_total: round_total.toFixed(0),
+// 					        			early_repayment_fee: (round_total * rate * (length -(i + f_n)) /length).toFixed(0)
+// 					        			}
+// 				        		m = round_total;	
+// 			        			acc_money = acc_money + round_cycle_money
+// 								this.calculate_arr.push(params);
+// 		        			}
 		        			
-			        	}
-						var lastParams = this.calculate_arr[this.calculate_arr.length - 1];
-						console.log('acc_interest의 값:', lastParams.acc_interest);
-						this.info.final_interest = (lastParams.acc_interest);
-						this.info.final_money = acc_money.toFixed(0);
+// 			        	}
+// 						var lastParams = this.calculate_arr[this.calculate_arr.length - 1];
+// 						console.log('acc_interest의 값:', lastParams.acc_interest);
+// 						this.info.final_interest = (lastParams.acc_interest);
+// 						this.info.final_money = acc_money.toFixed(0);
 			        	
 			        	
 			        	
-			        }
+// 			        }
 			        
-			        if(this.info.loan_repayment_type == "만기 일시") {
+// 			        if(this.info.loan_repayment_type == "만기 일시") {
 			        	
-			        	var acc_interest = 0;
-			        	var round_interest = 0;
-			        	var round_pri_cycle_money = 0;
+// 			        	var acc_interest = 0;
+// 			        	var round_interest = 0;
+// 			        	var round_pri_cycle_money = 0;
 			        	
-			        	for(var i = 1; i <= f_n; i++){
+// 			        	for(var i = 1; i <= f_n; i++){
 	
-		        			round_interest =m * f_r;
-		        			acc_interest = acc_interest + round_interest;
-		        			round_pri_cycle_money = x - round_interest;
+// 		        			round_interest =m * f_r;
+// 		        			acc_interest = acc_interest + round_interest;
+// 		        			round_pri_cycle_money = x - round_interest;
 		        				
-			        		var params = {
-			        			round_num: i,
-			        			round_cycle_money: round_interest.toFixed(0),
-			        			round_pri_cycle_money: 0,
-			        			round_interest: round_interest.toFixed(0),
-			        			acc_interest: acc_interest.toFixed(0),
-			        			round_total: m.toFixed(0),
-			        			early_repayment_fee: (m * rate * (length -i) /length).toFixed(0),
-			        			}
-							this.calculate_arr.push(params);
-			        	}
+// 			        		var params = {
+// 			        			round_num: i,
+// 			        			round_cycle_money: round_interest.toFixed(0),
+// 			        			round_pri_cycle_money: 0,
+// 			        			round_interest: round_interest.toFixed(0),
+// 			        			acc_interest: acc_interest.toFixed(0),
+// 			        			round_total: m.toFixed(0),
+// 			        			early_repayment_fee: (m * rate * (length -i) /length).toFixed(0),
+// 			        			}
+// 							this.calculate_arr.push(params);
+// 			        	}
 		   
-			        	for(var i = 1; i <= v_n; i++){
-		        			round_interest =m * v_r;
-		        			acc_interest = acc_interest + round_interest;
-		        			round_pri_cycle_money = x - round_interest;
+// 			        	for(var i = 1; i <= v_n; i++){
+// 		        			round_interest =m * v_r;
+// 		        			acc_interest = acc_interest + round_interest;
+// 		        			round_pri_cycle_money = x - round_interest;
 	
-		        			if(i == v_n) {
-				        		var params = {
-					        			round_num: (i + f_n).toFixed(0),
-					        			round_cycle_money: (m + round_interest).toFixed(0),
-					        			round_pri_cycle_money: m.toFixed(0),
-					        			round_interest: round_interest.toFixed(0),
-					        			acc_interest: acc_interest.toFixed(0),
-					        			round_total: 0,
-					        			early_repayment_fee: (m * rate * (length -(i + f_n)) /length).toFixed(0)
-					        			}
-								this.calculate_arr.push(params);
-		        			}else{
-				        		var params = {
-					        			round_num: (i + f_n).toFixed(0),
-					        			round_cycle_money: round_interest.toFixed(0),
-					        			round_pri_cycle_money: 0,
-					        			round_interest: round_interest.toFixed(0),
-					        			acc_interest: acc_interest.toFixed(0),
-					        			round_total: m.toFixed(0),
-					        			early_repayment_fee: (m * rate * (length -(i + f_n)) /length).toFixed(0)
-					        			}
-								this.calculate_arr.push(params);
-		        			}
-			        	}
-						var lastParams = this.calculate_arr[this.calculate_arr.length - 1];
-						console.log('acc_interest의 값:', lastParams.acc_interest);
-						console.log('final_moeny 값:', x * (length-1) + lastParams.round_pri_cycle_money +lastParams.acc_interest);
-						this.info.final_interest = lastParams.acc_interest;
-						this.info.final_money = m + acc_interest;
-			        }
-		        }
+// 		        			if(i == v_n) {
+// 				        		var params = {
+// 					        			round_num: (i + f_n).toFixed(0),
+// 					        			round_cycle_money: (m + round_interest).toFixed(0),
+// 					        			round_pri_cycle_money: m.toFixed(0),
+// 					        			round_interest: round_interest.toFixed(0),
+// 					        			acc_interest: acc_interest.toFixed(0),
+// 					        			round_total: 0,
+// 					        			early_repayment_fee: (m * rate * (length -(i + f_n)) /length).toFixed(0)
+// 					        			}
+// 								this.calculate_arr.push(params);
+// 		        			}else{
+// 				        		var params = {
+// 					        			round_num: (i + f_n).toFixed(0),
+// 					        			round_cycle_money: round_interest.toFixed(0),
+// 					        			round_pri_cycle_money: 0,
+// 					        			round_interest: round_interest.toFixed(0),
+// 					        			acc_interest: acc_interest.toFixed(0),
+// 					        			round_total: m.toFixed(0),
+// 					        			early_repayment_fee: (m * rate * (length -(i + f_n)) /length).toFixed(0)
+// 					        			}
+// 								this.calculate_arr.push(params);
+// 		        			}
+// 			        	}
+// 						var lastParams = this.calculate_arr[this.calculate_arr.length - 1];
+// 						console.log('acc_interest의 값:', lastParams.acc_interest);
+// 						console.log('final_moeny 값:', x * (length-1) + lastParams.round_pri_cycle_money +lastParams.acc_interest);
+// 						this.info.final_interest = lastParams.acc_interest;
+// 						this.info.final_money = m + acc_interest;
+// 			        }
+// 		        }
 
 
 		        

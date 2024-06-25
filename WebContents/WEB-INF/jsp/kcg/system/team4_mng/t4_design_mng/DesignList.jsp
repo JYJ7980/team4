@@ -200,7 +200,11 @@
 							    	<span>원</span>       
 							    </div>
                         </div>           
-                        <div class="form-group">
+                        <div class="form-group" v-if="info.product_type === '대출'">
+                            <label for="err_eng_nm" class="fix-width-33">대출 유형:</label>
+                            <input type="text" class="form-control" id="pop_info.loan_repayment_type" v-model="info.loan_repayment_type" readonly>
+                        </div>
+                        <div class="form-group" v-else>
                             <label for="err_eng_nm" class="fix-width-33">이자 유형:</label>
                             <input type="text" class="form-control" id="pop_info.interest_type" v-model="info.interest_type" readonly>
                         </div>
@@ -515,8 +519,8 @@ function pop_sub_info(mapData) {
 						prod_ty_cd: this.info.prod_ty_cd
 						
 					};		
-					console.log("================================")
-                console.log(JSON.stringify(params));
+					console.log("========update params값=================")
+               		console.log(JSON.stringify(params));
 		            if (confirm('이 항목을 변경하시겠습니까?')) {
 		    			cf_movePage("/team4/calculate", params);
 		            }

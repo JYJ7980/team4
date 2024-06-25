@@ -10,11 +10,16 @@ import common.dao.CmmnDao;
 import common.utils.common.CmmnMap;
 import common.utils.common.PagingConfig;
 import common.utils.mybatis_paginator.domain.PageList;
+import kcg.common.svc.CommonSvc;
+import kcg.login.vo.UserInfoVO;
 @Service
 public class T4designMngSVC {
 
 	@Autowired
 	CmmnDao cmmnDao;
+	
+	@Autowired
+	CommonSvc commonSvc;
 	
 	//design 나중에 옮겨야 할 코드
 
@@ -56,12 +61,29 @@ public class T4designMngSVC {
 	}
 
 	public void saveCalulate(CmmnMap params) {
+		UserInfoVO uerInfoVo = commonSvc.getLoginInfo();
+		params.put("user_id", uerInfoVo.getUserId());
+		params = handleEmptyStringAsNull(params);
 		
+		if(params.getString("customer_id")==null) {
+			int customer_id = 0;
+			params.put("customer_id", customer_id);
+		}
+		
+		params = handleEmptyStringAsNull(params);
+        System.out.println("=====================================");
+        System.out.println("==========설계 저장 user_id==========");
+		System.out.println("params: " + params.toString());
 		cmmnDao.insert("saveCalulate", params);
 	}
 
 	public PageList<CmmnMap> designListPaging(CmmnMap params, PagingConfig pagingConfig) {
 		
+		UserInfoVO uerInfoVo = commonSvc.getLoginInfo();
+		params.put("user_id", uerInfoVo.getUserId());
+        System.out.println("=====================================");
+        System.out.println("==========list뽑기 user_id==========");
+		System.out.println("params: " + params.toString());
 		return cmmnDao.selectListPage("getDesignListPaging", params, pagingConfig);
 	}
 
@@ -109,8 +131,27 @@ public class T4designMngSVC {
 	public CmmnMap getDsgInfo(CmmnMap params) {
 		return cmmnDao.selectOne("system.t4_design_mng.selectUpdateInfo", params);
 	}
-	
-	
 
+	public CmmnMap desSelectOne(CmmnMap params) {
+		CmmnMap getOne = cmmnDao.selectOne("system.t4_design_mng.selectOneDes", params);
+		System.out.println(getOne.toString());
+		return getOne;
+	}
+
+	public int updateDesign(CmmnMap params) {
+		return cmmnDao.update("updateDes", params);
+	}
+	
+	
+	
+	private CmmnMap handleEmptyStringAsNull(CmmnMap params) {
+	    params.forEach((key, value) -> {
+	        if (value instanceof String && ((String) value).isEmpty()) {
+	            params.put(key, null);
+	        }
+	    });
+	    return params;
+	}
+	
 
 }
