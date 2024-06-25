@@ -19,7 +19,7 @@
 				부여할 ID:
 				<div>
 					<input type="text" id="user_id" v-model="employee.user_id" :disabled="isIdChecked">
-					<input type="submit" value="ID중복확인" @click="checkId">
+					<input type="submit" id="user_id" value="ID중복확인" @click="checkId">
 				</div>
 				<br>
 				<div>초기 비밀번호:</div>
@@ -83,13 +83,13 @@ var vueapp = new Vue({
 				user_id: this.employee.user_id
 			};
 			console.log(params);
-			axios.post("/system/team4/employee/checkId/", params)
+			axios.post("/system/team4/employee/checkId/", {params:params})
 				.then(response => {
-					if (response.data.user_id === params.user_id) {
+					if (response.data.user_id === this.employee.user_id) {
 						alert("중복된 ID 입니다.");
 					} else {
 						alert("사용 가능한 ID 입니다.");
-						this.isIdChecked = true; // ID 확인 상태를 true로 변경
+						this.isIdChecked = true; 
 					}
 				})
 				.catch(error => {
