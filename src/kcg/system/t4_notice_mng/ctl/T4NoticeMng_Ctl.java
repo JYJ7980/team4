@@ -71,8 +71,6 @@ public class T4NoticeMng_Ctl {
 	public String NoticeTest() {
 		return "kcg/system/team4_mng/notice/noticeTest";
 	}
-	
-
 	//공지사항 페이징
 	@RequestMapping("/getAllNotice")
 	public PageList<CmmnMap> getAllNotice(CmmnMap params,PagingConfig pagingConfig) {

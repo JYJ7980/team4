@@ -430,6 +430,3 @@ new Vue({
 </script>
 </body>
 </html>
-
-
-

@@ -40,7 +40,7 @@ public class T4MainMng_Ctl {
 	public CmmnMap ending() {
 		return t4mainMngSvc.productEnd();
 	}
-	
+
 	@GetMapping("/noticeTop2")
 	public List<CmmnMap> noticeList(){
 		return t4mainMngSvc.noticeTop2();
@@ -69,8 +69,8 @@ public class T4MainMng_Ctl {
 	@GetMapping("/popular")
 	public CmmnMap popular() {
 		return t4mainMngSvc.popular();
+
 	}
 	
-
 }
 

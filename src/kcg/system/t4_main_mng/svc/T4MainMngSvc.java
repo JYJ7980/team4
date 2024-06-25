@@ -101,4 +101,5 @@ public class T4MainMngSvc {
 		System.out.println(params);
 		return cmmnDao.selectOne("system.t4_main_mng.popular",params);
 	}
+
 }
