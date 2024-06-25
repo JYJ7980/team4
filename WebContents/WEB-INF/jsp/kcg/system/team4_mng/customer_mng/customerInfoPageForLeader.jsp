@@ -165,6 +165,39 @@
 	align-items: center; /* 요소들을 세로 중앙 정렬 */
 	gap: 10px; /* 요소들 사이 간격 조정 */
 }
+
+.modal {
+	display: block;
+	position: fixed;
+	z-index: 1000;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	overflow: auto;
+}
+
+.modal-content {
+	background-color: #fefefe;
+	margin: 15% auto;
+	padding: 20px;
+	border: 1px solid #888;
+	width: 30%;
+}
+
+.close {
+	color: #aaa;
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
+}
+
+.close:hover, .close:focus {
+	color: black;
+	text-decoration: none;
+	cursor: pointer;
+}
 </style>
 
 
@@ -238,7 +271,8 @@
 								</div>
 
 								<!-- Iterate over consults array to display each consultation item -->
-								<div class="customer-item" v-for="consult in consults">
+								<div class="customer-item" v-for="consult in consults"
+									@click="showConsultDetails(consult)">
 									<div class="table-cell">{{ consult.con_date }}</div>
 									<div class="table-cell">{{ consult.consult_title }}</div>
 									<div class="table-cell">{{ consult.name }} ({{
@@ -247,6 +281,13 @@
 							</div>
 							<div v-else>
 								<p>상담 내역이 없습니다.</p>
+							</div>
+							<!-- 							상세내역 모달 -->
+							<div class="modal" v-if="selectedConsult !== null">
+								<div class="modal-content">
+									<span class="close" @click="closeModal">&times;</span>
+									<p>{{ selectedConsult.consult_context }}</p>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -263,7 +304,8 @@
 								<div class="input-form">
 									<label for="customerName">고객 이름</label> <input type="text"
 										id="customerName" v-model="selectedCustomer.customer_name">
-								</div>
+										<button type="button" class="btn" @click="openAddConsultModal()">상담추가</button>
+								</div> 
 								<div class="input-form">
 									<label for="customerIdNumber">고객 주민번호</label> <input
 										type="text" id="customerIdNumber"
@@ -359,9 +401,11 @@
 										</div>
 
 										<!-- Iterate over consults array to display each consultation item -->
-										<div class="customer-item" v-for="designProduct in designProducts">
+										<div class="customer-item"
+											v-for="designProduct in designProducts">
 											<div class="table-cell">{{ designProduct.design_date }}</div>
-											<div class="table-cell">{{ designProduct.product_name }}</div>
+											<div class="table-cell">{{ designProduct.product_name
+												}}</div>
 										</div>
 									</div>
 									<div v-else>
@@ -440,7 +484,7 @@
 					<table>
 						<tr>
 							<th>이름</th>
-							<th>생년월일</th>
+							<th>소속 부서</th>
 						</tr>
 						<tr v-for="manager in Managers" @click="selectManager(manager)">
 							<td>{{ manager.name }}</td>
@@ -483,6 +527,8 @@ new Vue({
         showPopup: false,
         selectedManager: '',
         filteredManager: [], 
+        selectedConsult: null, // 선택된 상담 객체
+        showModal: false // 모달 표시 여부,
     },
     watch: {
         // selectedCustomer의 변경을 감지하는 watch
@@ -735,6 +781,14 @@ new Vue({
 		closePopup: function() {
 			this.showPopup = false;
 		},
+	    showConsultDetails(consult) {
+	        this.selectedConsult = consult;
+	        this.showModal = true;
+	    },
+	    closeModal() {
+	        this.selectedConsult = null;
+	        this.showModal = false;
+	    },
 		selectManager: function(manager) {
 			this.selectedCustomer.name = manager.name;
 			this.selectedCustomer.dept = manager.dept;
