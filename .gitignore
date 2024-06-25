@@ -3,7 +3,18 @@
 퍼블리셔작업(모바일)/
 작업폴더/
 WebContents/root/
-WebContents/static_resources
+WebContents/static_resources/admin
+WebContents/static_resources/asset
+WebContents/static_resources/datemap
+WebContents/static_resources/download
+WebContents/static_resources/gis
+WebContents/static_resources/img
+WebContents/static_resources/js
+WebContents/static_resources/lib
+WebContents/static_resources/login
+WebContents/static_resources/portal
+WebContents/static_resources/system
+WebContents/static_resources/test
 WebContents/WEB-INF/lib
 WebContents/WEB-INF/jsp/temp
 WebContents/WEB-INF/jsp/kcg/_include
@@ -62,3 +73,17 @@ src/logback_local_win.xml
 src/logback_prod.xml
 src/logback_temp_dev.xml
 
+WebContents/static_resources/datamap/css/biz/cmm/cmm/style_cmmCustom.css
+WebContents/static_resources/datamap/css/biz/cmm/tcs/common.css
+WebContents/static_resources/datamap/css/biz/cmm/tcs/
+WebContents/static_resources/datamap/css/biz/cmm/cmm/
+WebContents/static_resources/datamap/css/biz/eds/ndm/
+WebContents/static_resources/datamap/developers.kakao.com/sdk/js/
+WebContents/static_resources/datamap/images/biz/common/btn/
+WebContents/static_resources/datamap/images/biz/common/ico/
+WebContents/static_resources/datamap/images/biz/data-search/common/bg/
+WebContents/static_resources/datamap/images/biz/data-search/common/btn/btn-arr-left.png
+WebContents/static_resources/datamap/images/biz/data-search/common/
+WebContents/static_resources/datamap/js/biz/
+WebContents/static_resources/datamap/
+WebContents/static_resources/findUserId.css

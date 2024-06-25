@@ -21,6 +21,7 @@
 	         , to_char(to_date(product_sale_end_date,'yyyymmdd'), 'yyyy-mm-dd') as product_sale_end_date
 	         , writer_name
 	         , pay_type
+	         , event_yn
 	    FROM kcgbd.db4_product_info
 	    WHERE 1=1
 	        AND (product_status != '9' AND DATE(product_sale_end_date) > DATE(now()))
@@ -33,6 +34,9 @@
 	    </if>
 	    <if test='possible_member != null and possible_member != ""'>
 	        AND possible_member = #{possible_member}
+	    </if>
+	    <if test='product_type != null and product_type != ""'>
+	        AND product_type = #{product_type}
 	    </if>
 	</select>
 
@@ -57,6 +61,7 @@
 		, product_sale_end_date
 		, writer_name
 		, pay_type
+		, event_yn
 		)
 		VALUES (
 		#{product_id}
@@ -76,6 +81,7 @@
 		, replace(#{product_sale_end_date},'-','')
 		, #{user_id}
 		, #{pay_type}
+		, #{event_yn}
 		)
 	</insert>
 	<update id="updateInfo" parameterType="cmmnMap">
@@ -96,6 +102,7 @@
 		, product_sale_start_date	= replace(#{product_sale_start_date},'-','')
 		, product_sale_end_date		= replace(#{product_sale_end_date},'-','')
 		, pay_type					= #{pay_type}
+		, event_yn					= #{event_yn}
 		WHERE product_id = #{product_id}
 	</update>
 	<delete id="deleteInfo" parameterType="cmmnMap">
@@ -122,6 +129,7 @@
 		, to_char(to_date(product_sale_end_date,'yyyymmdd'), 'yyyy-mm-dd')product_sale_end_date
 		, writer_name
 		, pay_type
+		, event_yn
 		FROM kcgbd.db4_product_info
 		WHERE 1=1
 		AND product_name = #{product_name}
@@ -145,6 +153,7 @@
 		, to_char(to_date(product_sale_end_date,'yyyymmdd'), 'yyyy-mm-dd')product_sale_end_date
 		, writer_name
 		, pay_type
+		, event_yn
 		FROM kcgbd.db4_product_info
 		WHERE 1=1
 		AND product_id = #{product_id}
@@ -169,6 +178,7 @@
 		, to_char(to_date(product_sale_end_date,'yyyymmdd'), 'yyyy-mm-dd')product_sale_end_date
 		, writer_name
 		, pay_type
+		, event_yn
 		FROM kcgbd.db4_product_info
 		WHERE 1=1 and
 		(product_status = '9' or <![CDATA[DATE(product_sale_end_date) < DATE(now())]]>)
@@ -181,6 +191,9 @@
 		<if test='possible_member != null and possible_member != ""'>
 			and possible_member = #{possible_member}
 		</if>
+		<if test='product_type != null and product_type != ""'>
+	        AND product_type = #{product_type}
+	    </if>
 	</select>
 	<update id="updateStatus">
 		<!-- system.t4_prod_mng.updateStatus -->
@@ -192,7 +205,7 @@
 	    ]]>
 	</update>
 	<select id="getInfo" parameterType="cmmnMap" resultType="cmmnMap">
-    <!-- system.t4_prod_mng.getList -->
+    <!-- system.t4_prod_mng.getInfo -->
     <![CDATA[
 	    SELECT product_id
 	         , product_name
@@ -211,6 +224,7 @@
 	         , to_char(to_date(product_sale_end_date,'yyyymmdd'), 'yyyy-mm-dd') as product_sale_end_date
 	         , writer_name
 	         , pay_type
+	         , event_yn
 	    FROM kcgbd.db4_product_info
 	    WHERE 1=1
 	    ]]>
@@ -222,6 +236,9 @@
 	    </if>
 	    <if test='possible_member != null and possible_member != ""'>
 	        AND possible_member = #{possible_member}
+	    </if>
+	    <if test='product_type != null and product_type != ""'>
+	        AND product_type = #{product_type}
 	    </if>
 	</select>
 </mapper>

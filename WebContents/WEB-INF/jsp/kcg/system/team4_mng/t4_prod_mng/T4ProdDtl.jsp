@@ -147,6 +147,12 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label for="event_yn" class="fix-width-33">행사여부:</label>
+					<input type="radio" name="event_yn" value="N" id="event_yn" v-model="info.event_yn" :disabled="info.writer_name!=''&&info.writer_name!=null">비행사상품
+					<input type="radio" name="event_yn" value="Y" id="event_yn" v-model="info.event_yn" :disabled="info.writer_name!=''&&info.writer_name!=null">행사상품
+					
+				</div>
+				<div class="form-group">
 					<label for="product_status" class="fix-width-33">판매상태:</label> <select
 						class="form-control" id="product_status" ref="product_status"
 						v-model="info.product_status" :disabled="info.product_status =='9'">
@@ -196,6 +202,7 @@
 							save_mode : "insert",
 							product_sale_end_date : "${product_sale_end_date}",
 							product_status : "${product_status}",
+							event_yn : "N",
 						},
 					},
 
@@ -307,8 +314,8 @@
 								}
 								var lowestMoney = parseInt(this.info.lowest_money);
 								var highestMoney = parseInt(this.info.highest_money);
-								var lowestRate = parseInt(this.info.lowest_rate);
-								var highestRate = parseInt(this.info.highest_rate);
+								var lowestRate = parseFloat(this.info.lowest_rate);
+								var highestRate = parseFloat(this.info.highest_rate);
 								if (this.info.product_id.length != 5) {
 									alert("상품코드는 5자리입니다.")
 									this.$refs.product_id.focus();
