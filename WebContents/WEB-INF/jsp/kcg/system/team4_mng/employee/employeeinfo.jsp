@@ -14,7 +14,7 @@
 <body>
 	
 	<script>
-var vueapp = new Vue({
+({
 	el: "#vueapp",
 	data: {
 			 user_id:"";

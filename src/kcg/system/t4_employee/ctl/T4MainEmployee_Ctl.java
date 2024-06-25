@@ -31,6 +31,11 @@ public class T4MainEmployee_Ctl {
 	public String employeeListMain() {
 		return "kcg/system/team4_mng/employee/employeelist";
 	}
+	
+	@GetMapping("/emp")
+	public String emp() {
+		return "kcg/system/team4_mng/employee/emcreateform";
+	}
 	/* 신규 계정 저장 */
 	@PostMapping("/save")
 	public CmmnMap createEmployee(CmmnMap params) {

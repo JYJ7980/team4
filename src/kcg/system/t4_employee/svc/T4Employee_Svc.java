@@ -50,8 +50,32 @@ public class T4Employee_Svc {
 		String userPw = params.getString("user_pw");
 		if (userPw == null || userPw.isEmpty()) {
 			throw new IllegalArgumentException("Password cannot be null or empty");
-		}
-
+		};
+		
+		switch (params.getString("jikgub_nm")) {
+		case "이사":
+			jikgub_cd = "1";
+			break;
+		case "부장":
+			jikgub_cd = "2";
+			break;
+		case "과장":
+			jikgub_cd = "3";
+			break;
+		case "차장":
+			jikgub_cd = "4";
+			break;
+		case "대리":
+			jikgub_cd = "5";
+			break;
+		case "사원":
+			jikgub_cd = "6";
+			break;
+		case "수습":
+			jikgub_cd = "7";
+			break;
+		};
+		
 		String hashedPw = CryptUtil.hashSHA512HexString(userPw);
 
 		params.put("user_pw", hashedPw); // PW 암호화
