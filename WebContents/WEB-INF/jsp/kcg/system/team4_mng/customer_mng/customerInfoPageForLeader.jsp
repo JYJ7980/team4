@@ -230,7 +230,7 @@
 				<br /> <span
 					style="font-size: 18px; font-weight: bold; color: black;">${userInfoVO.dept}</span>&nbsp;
 				고객관리 화면 <br> <a href="/system/team4/main">메인으로 돌아가기</a> <br>
-				<div>
+	
 					<br> <input id="keywordInput" type="text" name="keyword"
 						v-model="searchKeyword" class="inputtext"
 						placeholder="고객 이름을 입력하세요">
@@ -246,7 +246,7 @@
 
 					</select>
 
-				</div>
+
 				<br>
 				<div id="customerTable" class="customer-container">
 					<div class="customer-one">
