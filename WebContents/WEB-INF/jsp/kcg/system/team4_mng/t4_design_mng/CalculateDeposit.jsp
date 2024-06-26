@@ -25,7 +25,7 @@
 
 	<div class="main-content">
 
-		<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/header.jsp" flush="false"/>
+		<jsp:include page="/WEB-INF/jsp/kcg/_include/system/header.jsp" flush="false"/>
 		
 		<ol class="breadcrumb bc-3">
 			<li><a href="#none" onclick="cf_movePage('/system')"><i class="fa fa-home"></i>Home</a></li>
@@ -157,10 +157,10 @@
                             
                             <div class="form-group" style="justify-content: left">
                                 <label>이자과세:</label>
-								<select class="form-control" id="int_tax_ty_cd" v-model="info.tax_rate" style="padding-top: 3px;">
-									<option value="1">일반과세 (15.4%)</option>
-									<option value="2">세금우대 (9.5%)</option>
-									<option value="3">비과세</option>
+								<select class="form-control" id="int_tax_ty_cd" v-model="info.rate" style="padding-top: 3px;">
+									<option value="15.4">일반과세 (15.4%)</option>
+									<option value="9.5">세금우대 (9.5%)</option>
+									<option value="0">비과세</option>
 								</select>
                             </div>
                         </div>
@@ -176,9 +176,13 @@
 						<button type="button" class="btn btn-red btn-small" @click="prcCalc()">
 							이자계산
 						</button>
-						<button type="button" class="btn btn-orange btn-small" @click="save()">
-							설계저장
-						</button>
+					    <button type="button" class="btn btn-orange btn-small" v-if="!info.design_id" @click="save()">
+					        설계저장
+					    </button>
+					    <button type="button" class="btn btn-orange btn-small" v-else @click="update()">
+					        변경
+					    </button>
+						
 						<button type="button" class="btn btn-blue btn-icon btn-small" @click="gotoList()">
 							목록 <i class="entypo-list"></i>
 						</button>
@@ -187,48 +191,48 @@
                     <ul class="nav">
                         <li class="nav-tab active">계산결과</li>
                     </ul>
+                    
                     <div class="right-bottom flex-100">
-                        <form class="form flex-column" method="POST" action="#">
-	                        <table>
-	                        	<tr>
-	                        		<td class="center" style="width: 40%; vertical-align: top;">
-	                        			<div class="form-wrapper flex flex-wrap flex-gap-10">
-			                                <div class="form-group">
-			                                    <label>예치금액:</label>
-			                                    <input class="form-control" id="tot_dpst_amt" v-model="info.sub_money" disabled />
-			                                </div>
-			                                <div class="form-group">
-			                                    <label>세전이자:</label>
-			                                    <input class="form-control" id="tot_dpst_int" v-model="info.before_interest" disabled />
-			                                </div>
-			                                <div class="form-group">
-			                                    <span>수익률:</span>
-			                                    <span id="tot_dpst_int"disabled>{{ info.profit_rate }}%</span>
-			                                </div>
-			                                			                                
-			                                <div class="form-group">
-			                                    <label>세전수령액:</label>
-			                                    <input class="form-control" id="bfo_rcve_amt" v-model="info.rec_before_tax" disabled />
-			                                </div>
-			                                <div class="form-group">
-			                                    <label>이자과세금:</label>
-			                                    <input class="form-control" id="int_tax_amt" v-model="info.interest_tax" disabled />
-			                                </div>
-			                                <div class="form-group">
-			                                    <label>세후수령액:</label>
-			                                    <input class="form-control" id="atx_rcve_amt" v-model="info.rec_after_tax" disabled />
-			                                </div>
-			                                <div class="form-group">
-			                                    <span>순수익률:</span>
-			                                    <span id="tot_dpst_int" disabled>{{ info.net_profit_rate }}%</span>
-			                                </div>
-			                                
-			                            </div>	
-			                            
-			                            <div class="panel-heading">
-											<div class="panel-title">계산결과 CHART</div>
-										</div>
-										<div id="chart" class="bottom-right-bottom flex-100"></div>
+	                       <table>
+	                        <tr>
+	                        	<td class="center" style="width: 40%; vertical-align: top;">
+	                        		<div class="form-wrapper flex flex-wrap flex-gap-10">
+			                               <div class="form-group">
+			                                   <label>예치금액:</label>
+			                                   <input class="form-control" id="tot_dpst_amt" v-model="info.sub_money" disabled />
+			                               </div>
+			                               <div class="form-group">
+			                                   <label>세전이자:</label>
+			                                   <input class="form-control" id="tot_dpst_int" v-model="info.before_interest" disabled />
+			                               </div>
+			                               <div class="form-group">
+			                                   <span>수익률:</span>
+			                                   <span id="tot_dpst_int"disabled>{{info.profit_rate }}%</span>
+			                               </div>
+			                               			                                
+			                               <div class="form-group">
+			                                   <label>세전수령액:</label>
+			                                   <input class="form-control" id="bfo_rcve_amt" v-model="info.rec_before_tax" disabled />
+			                               </div>
+			                               <div class="form-group">
+			                                   <label>이자과세금:</label>
+			                                   <input class="form-control" id="int_tax_amt" v-model="info.interest_tax" disabled />
+			                               </div>
+			                               <div class="form-group">
+			                                   <label>세후수령액:</label>
+			                                   <input class="form-control" id="atx_rcve_amt" v-model="info.final_money" disabled />
+			                               </div>
+			                               <div class="form-group">
+			                                   <span>순수익률:</span>
+			                                   <span id="tot_dpst_int" disabled>{{info.net_profit_rate }}%</span>
+			                               </div>
+			                               
+			                           </div>	
+			                           
+		                            <div class="panel-heading">
+										<div class="panel-title">계산결과 CHART</div>
+									</div>										
+									<div id="chart" class="bottom-right-bottom flex-100"></div>
 	                        		</td>
 	                        		<td class="center" style="width: 3%;">
 	                        		</td>
@@ -238,18 +242,25 @@
 												<tr class="replace-inputs">
 													<th style="width: 10%;" class="center">회차</th>
 													<th style="width: 23%;" class="center">회차예치금액</th>
-													<th style="width: 23%;" class="center">누적예치금액</th>
-													<th style="width: 21%;" class="center">회차이자</th>
-													<th style="width: 23%;" class="center">회차원리금</th>
+													<th style="width: 23%;" class="center">회차이자</th>
+													<th style="width: 21%;" class="center">누적이자</th>
+													<th style="width: 23%;" class="center">회차 원리금</th>
 												</tr>
 											</thead>
 											<tbody id="grid_tbody">
+												<tr v-for="item in calculate_arr" style="cursor: pointer;">
+													<td class="right" style="text-align: right;">{{item.round_num}}</td>
+													<td class="right" style="text-align: right;">{{item.round_sub_money}}</td>
+													<td class="right" style="text-align: right;">{{item.round_interest}}</td>
+													<td class="right" style="text-align: right;">{{item.acc_interest}}</td>
+													<td class="right" style="text-align: right;">{{item.round_total}}</td>
+												</tr>
+											
 											</tbody>
 										</table>
 	                        		</td>
 	                        	</tr>
 	                        </table>
-                        </form>
                     </div>
                 </div>
 				
@@ -354,52 +365,60 @@
 var vueapp = new Vue({
 	el : "#vueapp",
 	data : {
-		info : {
-			design_id : "", //설계아이디
-			f_interest_rate : "", //고정 금리
-			v_interest_rate : "", //변동 금리
-			tax_rate : "", //세금 비율
-			sub_money : "", //예치 금액
-			before_interest : "", //세전 이자
-			after_interest : "", //세전 이자			
-			rec_before_tax : "", //세전 수령액
-			interest_tax : "", //이자과세금
-			interest_type: "", //단리인지 복리인지
-			rec_after_tax : "", //세후 수령액
-			v_select_month : "", //변동 금리 예치 기간
-			f_select_month : "", //고정 금리 예치 기간
-			profit_rate : "", //수익률
-			net_profit_rate : "", //순수익률
+		calculate_arr: [],
 
+		info: {
+		    prod_ds_sn: "${prod_ds_sn}",
+		    cust_mbl_telno: "${cust_mbl_telno}",
+		    prod_ty_cd: "${prod_ty_cd}",
+		    simpl_ty_cd: "0",
+		    design_id: "${design_id}",
+		    f_interest_rate: "", // 고정 금리
+		    v_interest_rate: "", // 변동 금리
+		    rate: "", // 세금 비율
+		    sub_money: "", // 예치 금액
+		    before_interest: "", // 세전 이자
+		    final_interest: "", // 세후 이자
+		    rec_before_tax: "", // 세전 수령액
+		    interest_tax: "", // 이자 과세금
+		    interest_type: "", // 단리인지 복리인지
+		    final_money: "", // 세후 수령액
+		    v_select_month: "", // 변동 금리 예치 기간
+		    f_select_month: "", // 고정 금리 예치 기간
+		    profit_rate: "", // 수익률
+		    net_profit_rate: "" // 순수익률
 		},
-		proInfo : {
-			product_id : "",
-			product_name : "",
+		proInfo: {
+		    product_id: "${product_id}",
+		    product_name: ""
 		},
-
-		custInfo : {
-			customer_phone : "",
-			customer_name : "",
-			customer_id_number : "",
-			customer_id : "",
-			customer_email : "",
-			customer_sub_tel : "",
-			customer_job : "",
-			customer_addr : "",
-			user_id : "",
-			name : "",
-			dept : "",
-			jikgub_nm : ""
-		},
+		custInfo: {
+		    customer_phone: "",
+		    customer_name: "",
+		    customer_id_number: "",
+		    customer_id: "${customer_id}",
+		    customer_email: "",
+		    customer_sub_tel: "",
+		    customer_job: "",
+		    customer_addr: "",
+		    user_id: "",
+		    name: "",
+		    dept: "",
+		    jikgub_nm: ""
+		}
 	},
 	mounted : function(){
 		
-		if(!cf_isEmpty(this.info.cust_mbl_telno)){
+		if(!cf_isEmpty(this.custInfo.customer_id)){
 			this.getCustInfo();
 		}
-		if(!cf_isEmpty(this.info.prod_ds_sn)){
+		if(!cf_isEmpty(this.info.design_id)){
 			this.getDsgInfo();
 		}
+		if(!cf_isEmpty(this.proInfo.proInfo)){
+			this.getProdInfo();
+		}
+
 	},
 	methods : {
 		tabChange : function(index) {
@@ -413,51 +432,95 @@ var vueapp = new Vue({
 				cust_mbl_telno : cf_defaultIfEmpty(this.info.cust_mbl_telno, ""),
 				prod_ty_cd : index,
 			}
-			cf_movePage("/promion_mng/dtl", params);
+			cf_movePage("/team4/calculate", params);
 			
 		},
-		getDsgInfo : function(){
-			cf_ajax("/promion_mng/getDsgInfo", this.info, this.getDsgInfoCB);
-		},
-		getDsgInfoCB : function(data){
-			this.info = data;
-			this.info.simpl_ty_cd = "1";
+		update : function(){
 			
-			this.prcCalc();
-		},
-		save : function(){
-			
-			if(this.info.simpl_ty_cd != "1"){
-				alert("정상설계만 저장할 수 있습니다.");
-				return;
-			}else if(cf_isEmpty(this.custInfo.customer_name)){
-				alert("고객정보를 선택하세요.");
-				return;
-			}
-			
-	        if (cf_isEmpty(this.info.before_interest) || cf_isEmpty(this.info.rec_before_tax) || 
-	                cf_isEmpty(this.info.interest_tax) || cf_isEmpty(this.info.after_interest) || 
-	                cf_isEmpty(this.info.rec_after_tax) || cf_isEmpty(this.info.profit_rate) || 
-	                cf_isEmpty(this.info.net_profit_rate)) {
+	        if (this.info.flag != "Y"){
 	                alert("이자 계산을 먼저 수행하세요.");
 	                return;
 	            }
-
+	        
+	        if(this.info.v_select_month == ""){
+	        	this.info.v_select_month = 0;
+	        }
+	        if(this.info.v_interest_rate == ""){
+	        	this.info.v_interest_rate = 0;
+	        }
+	        if(this.info.f_select_month == ""){
+	        	this.info.f_select_month = 0;
+	        }
+	        if(this.info.f_interest_rate == ""){
+	        	this.info.f_interest_rate = 0;
+	        }
 			var params = {
 		            v_select_month: this.info.v_select_month,
 		            v_interest_rate: this.info.v_interest_rate,
-		            tax_rate: this.info.tax_rate,
-		            sub_money: removeCommas(this.info.sub_money),
-		            rec_before_tax: removeCommas(this.info.rec_before_tax),
-		            rec_after_tax: removeCommas(this.info.rec_after_tax),
+		            rate: this.info.rate,
+		            sub_money: this.info.sub_money,
+		            rec_before_tax: this.info.rec_before_tax,
+		            final_money: this.info.final_money,
 		            profit_rate: this.info.profit_rate,
 		            net_profit_rate: this.info.net_profit_rate,
 		            interest_type: this.info.interest_type,
-		            interest_tax: removeCommas(this.info.interest_tax),
+		            interest_tax: this.info.interest_tax,
 		            f_select_month: this.info.f_select_month,
 		            f_interest_rate: this.info.f_interest_rate,
-		            before_interest: removeCommas(this.info.before_interest),
-		            after_interest: removeCommas(this.info.after_interest),
+		            before_interest: this.info.before_interest,
+		            final_interest: this.info.final_interest,
+		            product_id: this.proInfo.product_id,
+		            customer_id: this.custInfo.customer_id,
+		            design_id: this.info.design_id
+			}
+			console.log("=================================")
+			console.log(JSON.stringify(params))
+				console.log("=================================")
+				console.log("실행됨 이제 axios로 넘어가야함")
+	            axios.post('/team4/updateDes', {params : params})
+	        	.then(response => {
+					alert("정상적으로 변경되었습니다.")
+                    window.location.href = "/team4/designList";
+	        	})
+	        	.catch(error => {
+	        	    console.error("Error:", error);
+	        	});				
+		},
+
+		save : function(){
+			
+			if (this.info.flag != "Y"){
+	                alert("이자 계산을 먼저 수행하세요.");
+	                return;
+	            }
+	        
+	        if(this.info.v_select_month == ""){
+	        	this.info.v_select_month = 0;
+	        }
+	        if(this.info.v_interest_rate == ""){
+	        	this.info.v_interest_rate = 0;
+	        }
+	        if(this.info.f_select_month == ""){
+	        	this.info.f_select_month = 0;
+	        }
+	        if(this.info.f_interest_rate == ""){
+	        	this.info.f_interest_rate = 0;
+	        }
+			var params = {
+		            v_select_month: this.info.v_select_month,
+		            v_interest_rate: this.info.v_interest_rate,
+		            rate: this.info.rate,
+		            sub_money: this.info.sub_money,
+		            rec_before_tax: this.info.rec_before_tax,
+		            final_money: this.info.final_money,
+		            profit_rate: this.info.profit_rate,
+		            net_profit_rate: this.info.net_profit_rate,
+		            interest_type: this.info.interest_type,
+		            interest_tax: this.info.interest_tax,
+		            f_select_month: this.info.f_select_month,
+		            f_interest_rate: this.info.f_interest_rate,
+		            before_interest: this.info.before_interest,
+		            final_interest: this.info.final_interest,
 		            product_id: this.proInfo.product_id,
 		            customer_id: this.custInfo.customer_id,
 			}
@@ -468,11 +531,30 @@ var vueapp = new Vue({
 	            axios.post('/team4/saveCalulate', {params : params})
 	        	.then(response => {
 					alert("정상등록되었습니다")
+                    window.location.href = "/team4/designList";
 	        	})
 	        	.catch(error => {
 	        	    console.error("Error:", error);
 	        	});				
 		},
+		getDsgInfo: function() {
+            // 상품 정보를 가져오는 로직
+            console.log("1. 정상작동 하였습니다.")
+
+			var params = {
+			design_id : this.info.design_id
+			}
+            
+            axios.get('/team4/desSelectOne', {params : params})
+             	.then(response => {
+    				console.log("2. 정상작동 하였습니다.")
+    				this.info = response.data				            		
+            	})
+            	.catch(error => {
+            	    console.error("Error:", error);
+            	});
+        },
+
         getProdInfo: function() {
             // 상품 정보를 가져오는 로직
             console.log("1. 정상작동 하였습니다.")
@@ -482,7 +564,7 @@ var vueapp = new Vue({
 			}
             
             axios.get('/team4/proSelectOne', {params : params})
-            	.then(response => {
+             	.then(response => {
     				console.log("2. 정상작동 하였습니다.")
     				this.proInfo = response.data				            		
             	})
@@ -493,7 +575,7 @@ var vueapp = new Vue({
         getCustInfo: function() {
             // 고객 정보를 가져오는 로직
             console.log("1. 정상작동 하였습니다.")
-
+			this.info.simpl_ty_cd= "1";
 			var params = {
 			customer_id : this.custInfo.customer_id
 			}
@@ -541,12 +623,7 @@ var vueapp = new Vue({
 			$("#pop_cust").modal("show");
 		},
 		prcCalc : function(){
-			
-			var a = this.info.f_select_month
-			var b = this.info.v_select_month
-			console.log(a)
-			console.log(b)
-
+			this.info.flag = "Y"
 			if(cf_isEmpty(this.proInfo.product_id)){
 				alert("상품을 선택하세요.");
 				return;
@@ -567,18 +644,13 @@ var vueapp = new Vue({
 			       return false;
 			}
 		    
-		    if ((this.info.f_interest_rate === '' || this.info.f_interest_rate == 0) && 
-				(this.info.v_interest_rate === '' || this.info.v_interest_rate == 0)) {
-				alert('이자율을 선택하여주세요');
-				return false;
-			}
-				          
-
-
-		    if ((this.info.f_select_month === '' || this.info.f_select_month == 0) && 
-		       (this.info.v_select_month === '' || this.info.v_select_month == 0)) {
-		        alert('예치기간을 작성해주세요');
-		        return false;
+		    
+		    if(this.info.f_interest_rate === '' || this.info.f_interest_rate == 0){
+		    	alert('고정금리를 설정해주세요')
+		    }
+		    
+		    if(this.info.f_select_month === '' || this.info.f_select_month == 0){
+		    	alert('고정금리 기간을 설정해주세요')
 		    }
 		          
 		    if (this.info.tax_rate === '') {
@@ -592,76 +664,193 @@ var vueapp = new Vue({
 				var v_interest_rate = (this.info.v_interest_rate /100 /12);
 				var tax_rate ="";				
 				
-				if(this.info.tax_rate == "1") {
-					tax_rate =(15.4/100);
+				if(this.info.rate == "15.4") {
+					rate =(15.4/100);
 				}
-				if(this.info.tax_rate == "2") {
-					tax_rate =(9.5/100);
+				if(this.info.rate == "9.5") {
+					rate =(9.5/100);
 				}
-				if(this.info.tax_rate == "3") {
-					tax_rate = 0;
-				}
-				
-				if(this.info.interest_type == "단리"){
-					
-					var before_interest = (this.info.sub_money * f_interest_rate * this.info.f_select_month) + (this.info.sub_money*v_interest_rate*this.info.v_select_month); //세전이자
-					var rec_before_tax = this.info.sub_money + before_interest; //세전수령액
-					var interest_tax = before_interest * tax_rate; //이자에 대한 세금
-					var after_interest = before_interest - interest_tax; //세후 이자
-					var rec_after_tax = this.info.sub_money + after_interest //최종금액
-					var profit_rate =  ((before_interest / this.info.sub_money) * 100).toFixed(2) ;//수익률
-					var net_profit_rate = ((after_interest / this.info.sub_money) * 100).toFixed(2); //순수익률
-					
-					console.log("profit_rate: " + profit_rate)
-					console.log("net_profit_rate: " + net_profit_rate)
-					var formattedBeforeInterest = formatNumberWithCommas(before_interest);
-					var formattedRecBeforeTax = formatNumberWithCommas(rec_before_tax);
-					var formattedInterestTax = formatNumberWithCommas(interest_tax);
-					var formattedAfterInterest = formatNumberWithCommas(after_interest);
-					var formattedRecAfterTax = formatNumberWithCommas(rec_after_tax);
-					
-					this.info.sub_money = formatNumberWithCommas(this.info.sub_money);
-					this.info.before_interest = formattedBeforeInterest;
-					this.info.rec_before_tax = formattedRecBeforeTax;
-					this.info.interest_tax = formattedInterestTax;
-					this.info.after_interest = formattedAfterInterest;
-					this.info.rec_after_tax = formattedRecAfterTax;
-					this.info.profit_rate = profit_rate;
-					this.info.net_profit_rate = net_profit_rate;
-
+				if(this.info.rate == "0") {
+					rate = 0;
 				}
 				
-				if(this.info.interest_type == "복리"){
-					var f_rec_before_tax = this.info.sub_money * ((1 + f_interest_rate) ** this.info.f_select_month ); //고정금리 때 세전 수령액
-					var rec_before_tax = (f_rec_before_tax * (Math.pow((1+v_interest_rate), this.info.v_select_month ))); //변동금리까지 적용한 최종 세전 수령액
-					console.log("rec_before_tax: " + rec_before_tax)
-					var before_interest = (rec_before_tax - this.info.sub_money); //세전이자
-					var interest_tax = (before_interest *tax_rate) //이자에 대한 세금
-					var after_interest = before_interest - interest_tax; //세후 이자
-					var rec_after_tax = this.info.sub_money + after_interest; //최종금액
-					var profit_rate =  ((before_interest / this.info.sub_money) * 100).toFixed(2) ;//수익률
-					var net_profit_rate = ((after_interest / this.info.sub_money) * 100).toFixed(2); //순수익률
-					
-					var formattedBeforeInterest = formatNumberWithCommas(before_interest);
-					var formattedRecBeforeTax = formatNumberWithCommas(rec_before_tax);
-					var formattedInterestTax = formatNumberWithCommas(interest_tax);
-					var formattedAfterInterest = formatNumberWithCommas(after_interest);
-					var formattedRecAfterTax = formatNumberWithCommas(rec_after_tax);
-
-					this.info.sub_money = formatNumberWithCommas(this.info.sub_money);
-					this.info.before_interest = formattedBeforeInterest;
-					this.info.rec_before_tax = formattedRecBeforeTax;
-					this.info.interest_tax = formattedInterestTax;
-					this.info.after_interest = formattedAfterInterest;
-					this.info.rec_after_tax = formattedRecAfterTax;
-					this.info.profit_rate = profit_rate;
-					this.info.net_profit_rate = net_profit_rate;
-
+				var params = {
+						sub_money : this.info.sub_money,
+						interest_type : this.info.interest_type,
+						f_interest_rate : f_interest_rate,
+						f_select_month : this.info.f_select_month,
+						v_interest_rate : v_interest_rate,
+						v_select_month : this.info.v_select_month,
+						prod_ty_cd : "3",
 				}
+				
+	            axios.post('/team4/calculator', { params : params })
+	            .then(response => {
+	            	console.log("111222정상 작동 되었습니다.")
+	            	this.calculate_arr =response.data
+	            	console.log("=======================")
+	            	console.log(JSON.stringify(this.calculate_arr))
+	            	
+					var lastParams = this.calculate_arr[this.calculate_arr.length - 1];
+					var rec_before_tax = lastParams.round_total; //세전금액
+					var before_interest = lastParams.acc_interest //세전이자
+					var interest_tax = (before_interest * rate).toFixed(0); //이자에 대한 세금
+					var final_interest = before_interest - interest_tax; //세후 이자
+					var final_money = this.info.sub_money + final_interest; //세후 금액
+					var profit_rate =  ((before_interest / this.info.sub_money) * 100).toFixed(2) ;//수익률
+					var net_profit_rate = ((final_interest / this.info.sub_money) * 100).toFixed(2); //순수익률
+					
+					this.info.final_money = final_money; //세후 금액
+					this.info.final_interest = final_interest; //세후 이자
+					this.info.rec_before_tax = rec_before_tax; //세전 금액
+					this.info.interest_tax = interest_tax; //이자에 대한 세금
+					console.log("===============================")
+					console.log("interest_tax:" + interest_tax)
+					console.log("tax_rate:" + tax_rate)
+					console.log("before_interest:" + before_interest)
+
+					console.log("profit_rate:" + profit_rate)
+					console.log("net_profit_rate:" + net_profit_rate)
+
+					this.info.before_interest = before_interest; //세전 이자
+				    this.$set(this.info, 'profit_rate', profit_rate);  // 수익률 갱신
+				    this.$set(this.info, 'net_profit_rate', net_profit_rate);  // 순수익률 갱신
+
+	            	})
+	            .catch(error => {
+
+	                console.error('항목 삭제 중 에러 발생:', error);
+	            });
+				
+				
+// 				if(this.info.interest_type == "단리"){
+					
+// 					var before_interest = (this.info.sub_money * f_interest_rate * this.info.f_select_month) + (this.info.sub_money*v_interest_rate*this.info.v_select_month); //세전이자
+// 					var rec_before_tax = this.info.sub_money + before_interest; //세전수령액
+// 					var interest_tax = before_interest * tax_rate; //이자에 대한 세금
+// 					var after_interest = before_interest - interest_tax; //세후 이자
+// 					var rec_after_tax = this.info.sub_money + after_interest //최종금액
+// 					var profit_rate =  ((before_interest / this.info.sub_money) * 100).toFixed(2) ;//수익률
+// 					var net_profit_rate = ((after_interest / this.info.sub_money) * 100).toFixed(2); //순수익률
+					
+// 					console.log("profit_rate: " + profit_rate)
+// 					console.log("net_profit_rate: " + net_profit_rate)
+// 					var formattedBeforeInterest = formatNumberWithCommas(before_interest);
+// 					var formattedRecBeforeTax = formatNumberWithCommas(rec_before_tax);
+// 					var formattedInterestTax = formatNumberWithCommas(interest_tax);
+// 					var formattedAfterInterest = formatNumberWithCommas(after_interest);
+// 					var formattedRecAfterTax = formatNumberWithCommas(rec_after_tax);
+					
+// 					this.info.sub_money = formatNumberWithCommas(this.info.sub_money);
+// 					this.info.before_interest = formattedBeforeInterest;
+// 					this.info.rec_before_tax = formattedRecBeforeTax;
+// 					this.info.interest_tax = formattedInterestTax;
+// 					this.info.after_interest = formattedAfterInterest;
+// 					this.info.rec_after_tax = formattedRecAfterTax;
+// 					this.info.profit_rate = profit_rate;
+// 					this.info.net_profit_rate = net_profit_rate;
+					
+					
+// 					var length = this.info.f_select_month + this.info.v_select_month;
+// 					var accumulate_interest = 0;
+// 					var money = removeCommas(this.info.sub_money)
+// 					var r_interest = (money * f_interest_rate).toFixed(0);
+// 					for(var i = 1; i <= length; i++ ){
+						
+// 						if(i <= this.info.f_select_month){
+// 							accumulate_interest = accumulate_interest + money * f_interest_rate;
+// 							var params = {
+// 								round_num : i,
+// 								round_sub_money : money,
+// 					            round_interest: r_interest,
+// 								acc_interest : accumulate_interest.toFixed(0),
+// 								round_total : (money + accumulate_interest).toFixed(0)
+// 							}
+// 							this.calculate_arr.push(params);
+// 						} else{
+// 							accumulate_interest = accumulate_interest + money * v_interest_rate;
+// 							var params = {
+// 								round_num : i,
+// 								round_sub_money : money,
+// 								round_interest : (money * v_interest_rate).toFixed(0),
+// 								acc_interest : accumulate_interest.toFixed(0),
+// 								round_total : (money + accumulate_interest).toFixed(0)
+// 							}
+// 							this.calculate_arr.push(params);
+// 						}
+// 					}
+// 					console.log("========================================")
+// 					console.log(JSON.stringify(this.calculate_arr))
+
+					
+// 				}
+				
+// 				if(this.info.interest_type == "복리"){
+// 					var f_rec_before_tax = this.info.sub_money * ((1 + f_interest_rate) ** this.info.f_select_month ); //고정금리 때 세전 수령액
+// 					var rec_before_tax = (f_rec_before_tax * (Math.pow((1+v_interest_rate), this.info.v_select_month ))); //변동금리까지 적용한 최종 세전 수령액
+// 					console.log("rec_before_tax: " + rec_before_tax)
+// 					var before_interest = (rec_before_tax - this.info.sub_money); //세전이자
+// 					var interest_tax = (before_interest *tax_rate) //이자에 대한 세금
+// 					var after_interest = before_interest - interest_tax; //세후 이자
+// 					var rec_after_tax = this.info.sub_money + after_interest; //최종금액
+// 					var profit_rate =  ((before_interest / this.info.sub_money) * 100).toFixed(2) ;//수익률
+// 					var net_profit_rate = ((after_interest / this.info.sub_money) * 100).toFixed(2); //순수익률
+					
+// 					var formattedBeforeInterest = formatNumberWithCommas(before_interest);
+// 					var formattedRecBeforeTax = formatNumberWithCommas(rec_before_tax);
+// 					var formattedInterestTax = formatNumberWithCommas(interest_tax);
+// 					var formattedAfterInterest = formatNumberWithCommas(after_interest);
+// 					var formattedRecAfterTax = formatNumberWithCommas(rec_after_tax);
+
+// 					this.info.sub_money = formatNumberWithCommas(this.info.sub_money);
+// 					this.info.before_interest = formattedBeforeInterest;
+// 					this.info.rec_before_tax = formattedRecBeforeTax;
+// 					this.info.interest_tax = formattedInterestTax;
+// 					this.info.after_interest = formattedAfterInterest;
+// 					this.info.rec_after_tax = formattedRecAfterTax;
+// 					this.info.profit_rate = profit_rate;
+// 					this.info.net_profit_rate = net_profit_rate;
+					
+// 					var length = this.info.f_select_month + this.info.v_select_month;
+// 					var accumulate_interest = 0;
+// 					var money = removeCommas(this.info.sub_money)
+// 					for(var i = 1; i <= length; i++ ){
+						
+// 						if(i <= this.info.f_select_month){
+// 							money = money + money * f_interest_rate; //회차당 누적되는 돈
+// 							r_interest = (money * f_interest_rate).toFixed(0); //회차당 이자
+// 							accumulate_interest = (accumulate_interest + (money * f_interest_rate));
+// 							var params = {
+// 								round_num : i,
+// 								round_sub_money : removeCommas(this.info.sub_money),
+// 					            round_interest: r_interest,
+// 								acc_interest : accumulate_interest.toFixed(0),
+// 								round_total : money.toFixed(0)
+// 							}
+// 							this.calculate_arr.push(params);
+// 						} else{
+// 							money = money + money * v_interest_rate; //회차당 누적되는 돈
+// 							r_interest = (money * v_interest_rate).toFixed(0); //회차당 이자
+// 							accumulate_interest = (accumulate_interest + (money * v_interest_rate));
+// 							var params = {
+// 								round_num : i,
+// 								round_sub_money : removeCommas(this.info.sub_money),
+// 					            round_interest: r_interest,
+// 								acc_interest : accumulate_interest.toFixed(0),
+// 								round_total : money.toFixed(0)
+// 							}
+// 							this.calculate_arr.push(params);
+// 						}
+// 					}
+// 					console.log("========================================")
+// 					console.log(JSON.stringify(this.calculate_arr))
+
+
+// 				}
 
 		},
 		gotoList : function(){
-			cf_movePage('/promion_mng/list');
+			cf_movePage('/team4/designList');
 		},
 	}
 });

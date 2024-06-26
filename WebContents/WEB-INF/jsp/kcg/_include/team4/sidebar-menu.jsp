@@ -154,14 +154,18 @@
 			</a>
 				<ul data-lnb="5" data-snb="0">
 					<li data-lnb="5" data-snb="1"><a href="#gm"
-						onclick="cf_movePage('#')"> <span class="title">설계내역 목록</span>
+						onclick="cf_movePage('/team4/designList')"> <span class="title">설계내역 목록</span>
 					</a></li>
-
-
 				</ul>
 				<ul data-lnb="5" data-snb="0">
 					<li data-lnb="5" data-snb="1"><a href="#gm"
-						onclick="cf_movePage('#')"> <span class="title">금융계산기</span>
+						onclick="cf_movePage('/team4/subscriptionList')"> <span class="title">가입내역 목록</span>
+					</a></li>
+				</ul>
+				
+				<ul data-lnb="5" data-snb="0">
+					<li data-lnb="5" data-snb="1"><a href="#gm"
+						onclick="cf_movePage('/team4/calculate')"> <span class="title">금융계산기</span>
 					</a></li>
 				</ul></li>
 				</c:if>

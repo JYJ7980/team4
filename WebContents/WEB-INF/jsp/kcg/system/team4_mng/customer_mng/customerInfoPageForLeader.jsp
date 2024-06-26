@@ -118,7 +118,7 @@
 	border: 1px solid #ccc;
 	background-color: #fff;
 	z-index: 1000;
-	width: 400px;
+	width: 500px;
 	height: 450px;
 	overflow-y: auto;
 }
@@ -183,7 +183,17 @@
 	margin: 15% auto;
 	padding: 20px;
 	border: 1px solid #888;
-	width: 30%;
+	width: 450px;
+	height: 200px;
+}
+
+.modal-addconsult {
+	background-color: #fefefe;
+	margin: 15% auto;
+	padding: 20px;
+	border: 1px solid #888;
+	width: 400px;
+	height: 450px;
 }
 
 .close {
@@ -220,11 +230,11 @@
 				<br /> <span
 					style="font-size: 18px; font-weight: bold; color: black;">${userInfoVO.dept}</span>&nbsp;
 				고객관리 화면 <br> <a href="/system/team4/main">메인으로 돌아가기</a> <br>
-				<div>
+	
 					<br> <input id="keywordInput" type="text" name="keyword"
 						v-model="searchKeyword" class="inputtext"
 						placeholder="고객 이름을 입력하세요">
-					<button @click="searchCustomers">조건 검색</button>
+					<button @click="searchCustomers">이름 검색</button>
 					<button @click="getAllCustomers">전체 조회</button>
 					<label for="managerSelect">담당자별 조회:</label> <select
 						id="managerSelect" v-model="selectedManager"
@@ -233,14 +243,19 @@
 						<option v-for="manager in filteredManager" :key="manager.user_id"
 							:value="manager.name">{{ manager.name }}({{
 							manager.jikgub_nm }})</option>
+
 					</select>
 
-				</div>
+
 				<br>
 				<div id="customerTable" class="customer-container">
 					<div class="customer-one">
 						<div class="customer-list">
-							<h3 v-show="filteredCustomers.length > 0">전체 고객 정보</h3>
+
+							<h3 v-show="filteredCustomers.length >= 0">전체 고객 정보</h3>
+							<div v-show="filteredCustomers.length == 0">
+								<p>담당고객이 없습니다</p>
+							</div>
 							<div v-show="filteredCustomers.length > 0">
 								<div class="table-header">
 									<div class="table-cell">선택</div>
@@ -287,8 +302,30 @@
 								<div class="modal-content">
 									<span class="close" @click="closeModal">&times;</span>
 									<p>{{ selectedConsult.consult_context }}</p>
+
 								</div>
 							</div>
+							<!-- 							상담추가 모달 -->
+							<div class="modal" v-if="showAddConsultModal">
+								<div class="modal-addconsult">
+									<span class="close" @click="closeAddConsultModal">&times;</span>
+									<div class="input-form">
+										<label for="consultTitle">제목:</label> <input type="text"
+											id="consultTitle" v-model="consultTitle">
+
+									</div>
+									<div class="input-form">
+										<label for="consultContext">내용:</label>
+										<textArea rows="4" cols="35" id="consultContext"
+											v-model="consultContext"></textArea>
+									</div>
+
+									<br>
+									<button @click="addConsult">추가</button>
+									<button @click="resetConsultForm">취소</button>
+								</div>
+							</div>
+
 						</div>
 					</div>
 					<!-- 선택된 고객의 상세 정보 입력 폼 -->
@@ -304,8 +341,9 @@
 								<div class="input-form">
 									<label for="customerName">고객 이름</label> <input type="text"
 										id="customerName" v-model="selectedCustomer.customer_name">
-										<button type="button" class="btn" @click="openAddConsultModal()">상담추가</button>
-								</div> 
+									<button type="button" class="btn"
+										@click="openAddConsultModal()">상담추가</button>
+								</div>
 								<div class="input-form">
 									<label for="customerIdNumber">고객 주민번호</label> <input
 										type="text" id="customerIdNumber"
@@ -383,7 +421,7 @@
 										<!-- Iterate over consults array to display each consultation item -->
 										<div class="customer-item" v-for="subProduct in subProducts">
 											<div class="table-cell">{{ subProduct.sub_start_date }}</div>
-											<div class="table-cell">{{ subProduct.product_name }}</div>
+											<div class="table-cell" @click="moveProductInfoForm(subProduct.sub_id, subProduct.product_id, subProduct.customer_id)">{{ subProduct.product_name }}</div>
 										</div>
 									</div>
 									<div v-else>
@@ -404,8 +442,7 @@
 										<div class="customer-item"
 											v-for="designProduct in designProducts">
 											<div class="table-cell">{{ designProduct.design_date }}</div>
-											<div class="table-cell">{{ designProduct.product_name
-												}}</div>
+											<div class="table-cell" @click="moveDesignInfoForm(designProduct.design_id, designProduct.product_id, designProduct.customer_id)">{{ designProduct.product_name}}</div>
 										</div>
 									</div>
 									<div v-else>
@@ -480,8 +517,17 @@
 					<div class="popup-close" @click="closePopup">X</div>
 					<br> <br>
 					<div class="popup-search-container"></div>
+					<label for="searchInput">관리자 이름:</label> <input type="text"
+						id="searchInput" v-model="searchManagerName">
+					<button @click="searchManager">
+						<i class="fa fa-search"></i>
+					</button>
+					<button @click="searchManagerReset">다시</button>
 					<br>
+
 					<table>
+
+						<br>
 						<tr>
 							<th>이름</th>
 							<th>소속 부서</th>
@@ -522,13 +568,19 @@ new Vue({
         customerJob: '', 
         customerAddr: '',
         searchKeyword: '', // 검색 키워드 저장
+        searchManagerName:'', // 관리자 이름 키워드 저장
         errorMessage: '', // 오류 메시지 저장
         showFullIdNumber: false, // 주민등록번호 표시 여부를 저장하는 데이터 변수
         showPopup: false,
         selectedManager: '',
         filteredManager: [], 
         selectedConsult: null, // 선택된 상담 객체
-        showModal: false // 모달 표시 여부,
+        showModal: false, // 모달 표시 여부,
+        showAddConsultModal: false, //상담추가 모달 표시 여부
+        customerConId:'',
+		consultTitle: '',
+		consultContext: '',
+		
     },
     watch: {
         // selectedCustomer의 변경을 감지하는 watch
@@ -538,6 +590,7 @@ new Vue({
                 this.getCustConsults();
                 this.getSubProducts();
                 this.getDesignProducts();
+              
             } else {
                 // 선택된 고객이 없으면 상담 내역 배열을 초기화합니다.
                 this.consults = [];
@@ -547,6 +600,24 @@ new Vue({
         },
     },
     methods: {
+    	moveProductInfoForm(sub_id, product_id, customer_id){
+    		var params = {
+    			customer_id : customer_id,
+    			product_id : product_id,
+    			sub_id : sub_id,
+    			flag : "Y",
+    		}
+			cf_movePage("/team4/subscriptionList", params);
+    	},
+    	moveDesignInfoForm(design_id, product_id, customer_id){
+    		var params = {
+    			customer_id : customer_id,
+    			product_id : product_id,
+    			design_id : design_id,
+    			flag : "Y",
+    		}
+			cf_movePage("/team4/designList", params);
+    	},
         getAllCustomers: function() {
             // AJAX 요청을 보내고 응답 데이터를 customers에 할당
             axios.get('/system/team4/getCustAndUserInfo')
@@ -781,6 +852,35 @@ new Vue({
 		closePopup: function() {
 			this.showPopup = false;
 		},
+		searchManager: function() {
+	            if (this.searchManagerName.trim() === '') {
+	                alert('검색어를 입력하세요.');
+	                return;
+	            }
+	            axios.get('/system/team4/getUserInfo')
+	                .then(response => {
+	                   	this.Managers = response.data;
+	                    this.Managers = this.Managers.filter(manager =>
+	                    manager.name.includes(this.searchManagerName)
+	                );
+	                    
+	                })
+	                .catch(error => {
+	                    console.error('Error:', error);
+	                });
+	        },
+	        searchManagerReset:function(){
+	        	axios.get('/system/team4/getUserInfo')
+				.then(response => {
+					this.Managers = response.data;
+					 this.searchManagerName = '';
+				})
+				.catch(error => {
+					console.error('Error:', error);
+				});
+	        	
+	        },
+		
 	    showConsultDetails(consult) {
 	        this.selectedConsult = consult;
 	        this.showModal = true;
@@ -789,11 +889,60 @@ new Vue({
 	        this.selectedConsult = null;
 	        this.showModal = false;
 	    },
+	    
+	    openAddConsultModal() {
+            this.showAddConsultModal = true;
+        },
+        closeAddConsultModal() {
+            this.showAddConsultModal = false;
+        },
+		addConsult:function(){
+			
+		
+			   if (
+				        this.consultTitle.trim() === '' ||
+				        this.consultContext.trim() === ''
+				        
+				    ) {
+				        alert('모든 필수 입력 필드를 입력해주세요.');
+				        return; 
+				    }
+   
+			var params = {
+				user_id : this.userId,
+				consult_title : this.consultTitle,
+				consult_context : this.consultContext,
+				con_id : this.selectedCustomer.con_id,
+				
+			};
+			   //서버에 POST 요청으로 새로운 상담내용 등록
+         axios.post('/system/team4/addConsult', { params: params })
+             .then(response => {
+                 if (response.data.status === 'OK') {
+                     alert('새로운 상담내역이 등록되었습니다.');
+                     this.showAddConsultModal = false;
+                     this.getCustConsults();
+                 } else {
+                     alert('상담내역 등록에 실패했습니다.');
+                 }
+             })
+             .catch(error => {
+                 console.error('Error:', error);
+                 alert('상담내역 등록 중 오류가 발생했습니다.');
+             });
+			
+		},
+		resetConsultForm: function() {
+			this.consultTitle = '';
+			this.consultContext = '';
+		},
+        
 		selectManager: function(manager) {
 			this.selectedCustomer.name = manager.name;
 			this.selectedCustomer.dept = manager.dept;
 			this.selectedCustomer.jikgub_nm = manager.jikgub_nm;
 			this.selectedCustomer.user_id = manager.user_id;
+			
 			
 			this.showPopup = false;
 		},
@@ -823,6 +972,7 @@ new Vue({
                     .then(response => {
                         if (response.data.status === 'OK') {
                             alert('관리자 정보가 수정되었습니다.');
+                            this.getAllCustomers();
                         } else if (response.data.status === 'ERROR') {
                             alert(response.data.message); // 서버로부터 받은 에러 메시지를 표시
                         }
