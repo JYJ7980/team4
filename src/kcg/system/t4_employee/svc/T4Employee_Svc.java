@@ -18,7 +18,9 @@ import org.springframework.stereotype.Service;
 
 import common.dao.CmmnDao;
 import common.utils.common.CmmnMap;
+import common.utils.common.PagingConfig;
 import common.utils.crypt.CryptUtil;
+import common.utils.mybatis_paginator.domain.PageList;
 import kcg.common.svc.CommonSvc;
 
 @Service
@@ -145,5 +147,13 @@ public class T4Employee_Svc {
 		params.put("user_pw", hashedPw);
 		cmmnDao.update("system.t4_employee.updatePw", params);
 		return new CmmnMap().put("status", "OK");
+	}
+
+	
+	
+	//퇴직자 리스트 불러오기
+	public PageList<CmmnMap> getQuitUser(CmmnMap params, PagingConfig pagingConfig) {
+		PageList<CmmnMap> rslt = cmmnDao.selectListPage("system.t4_employee.getQuitUser", params, pagingConfig);
+		return rslt;
 	}
 }
