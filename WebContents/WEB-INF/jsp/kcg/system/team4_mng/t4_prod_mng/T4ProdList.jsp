@@ -80,14 +80,14 @@
 			<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/header.jsp"
 				flush="false" />
 			<ol class="breadcrumb bc-3">
-				<li><a href="#none" onclick="cf_movePage('/system')"><i
+				<li><a href="#none" onclick="cf_movePage('/system/team4/main')"><i
 						class="fa fa-home"></i>Home</a></li>
 				<li class="active"><strong>상품목록조회</strong></li>
 			</ol>
 			<h2>상품관리 > 상품목록조회</h2>
 			<br />
 
-			<div class="flex-column flex-gap-10" id="vueapp">
+			<div class="flex-column flex-gap-10 " id="vueapp">
 				<template>
 					<div class="search-box">
 						<div class="search-item">
@@ -121,10 +121,13 @@
 									조건검색 <i class="entypo-search"></i>
 								</button>
 							</div>
-							<button class="btn btn-blue btn-icon icon-left button"
-								@click="getListAll">
-								전체검색 <i class="entypo-search"></i>
-							</button>
+							<div class="flex flex-center flex-50">
+								<button type="button"
+									class="btn btn-blue btn-icon icon-left button"
+									@click="getListAll">
+									전체검색 <i class="entypo-search"></i>
+								</button>
+							</div>
 						</div>
 					</div>
 			</div>
@@ -183,8 +186,10 @@
 					</tr>
 				</tbody>
 			</table>
-			<div class="dataTables_paginate paging_simple_numbers"
-				id="div_paginate"></div>
+			<div class="dataTables_wrapper">
+				<div class="dataTables_paginate paging_simple_numbers"
+					id="div_paginate"></div>
+			</div>
 			</template>
 		</div>
 	</div>
