@@ -65,13 +65,10 @@ public class T4NoticeMng_Svc {
 	      return new CmmnMap().put("status", "OK");
 
 	}
-	
+
 	public PageList<CmmnMap> getAllNotice(CmmnMap params, PagingConfig pagingConfig) {
 		PageList<CmmnMap> pageList = cmmnDao.selectListPage("system.t4_notice_mng.getAllNotice", params, pagingConfig);
 		return pageList;
 	}
-	
-	
 
-	
 }

@@ -157,6 +157,7 @@
 </head>
 <body class="page-body">
 	<div class="page-container">
+
 		<jsp:include page="/WEB-INF/jsp/kcg/_include/system/sidebar-menu.jsp"
 			flush="false" />
 		<div class="main-content">
@@ -168,6 +169,9 @@
 				<li class="active"><strong>고객정보 관리</strong></li>
 			</ol>
 			<div id="app" style="margin-left: 70px;">
+
+
+	
 
 				<h2>고객관리 > 고객정보 관리</h2>
 				<br /> <span
@@ -786,5 +790,9 @@ new Vue({
 });
 </script>
 
+
+
+=======
+</body>
 
 </html>

@@ -20,12 +20,15 @@ import kcg.system.t4_notice_mng.svc.T4NoticeMng_Svc;
 @Controller
 @RequestMapping("system/team4/notice")
 public class T4NoticeMng_Ctl {
+	
 
 	@Autowired
 	CommonSvc commonSvc;
+	
 
 	@Autowired
 	T4NoticeMng_Svc t4NoticeMng_Svc;
+	
 
 	@Autowired
 	CmmnDao cmmnDao;
@@ -71,8 +74,6 @@ public class T4NoticeMng_Ctl {
 	public String NoticeTest() {
 		return "kcg/system/team4_mng/notice/noticeTest";
 	}
-	
-
 	//공지사항 페이징
 	@RequestMapping("/getAllNotice")
 	public PageList<CmmnMap> getAllNotice(CmmnMap params,PagingConfig pagingConfig) {
@@ -82,4 +83,3 @@ public class T4NoticeMng_Ctl {
 
 
 }
-

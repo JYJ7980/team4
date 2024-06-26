@@ -28,7 +28,7 @@
 
 	<div class="page-container">
 
-		<jsp:include page="/WEB-INF/jsp/kcg/_include/system/sidebar-menu.jsp"
+		<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/sidebar-menu.jsp"
 			flush="false" />
 
 		<div class="main-content">
@@ -80,11 +80,17 @@
 			    	<label>예치 금액:</label>
 			        <input type="text" id="start_money">
 			        <span>원</span>
+			        <br><br>
+			         <label>이자 과세:</label>
+			        <input type="text" id="pro.taxtion" v-model="pro.taxation">
 			    </div>
 			    <div v-else-if="pro.product_type === '적금'">
 			    	<label>납입 금액:</label>
 			        <input type="text" id="cycle_money">
 			        <span>원</span>
+			        <br><br>
+			        <label>이자 과세:</label>
+			        <input type="text" id="pro.taxtion" v-model="pro.taxation" readonly>
 			    </div>
 			    <div v-else-if="pro.product_type === '대출'">
 			    	<label>대출 금액:</label>
@@ -200,7 +206,14 @@ var vueapp = new Vue({
         pro: {
             product_id: "",
             product_name: "",
-            product_type: ""
+            product_type: "",
+            lowest_rate: "",
+            highest_rate: "",
+            highest_money:"",
+            lowest_money:"",
+            highest_date:"",
+            lowest_date:"",
+            taxation:"",
         },
         cus: {
             customer_id: "",
@@ -226,7 +239,10 @@ var vueapp = new Vue({
             axios.get('/team4/proSelectOne', {params : params})
             	.then(response => {
     				console.log("2. 정상작동 하였습니다.")
-    				this.pro = response.data				            		
+    				this.pro = response.data
+    				console.log("=======================")
+    				console.log(this.pro)
+    				console.log(this.pro.taxation)
             	})
             	.catch(error => {
             	    console.error("Error:", error);
@@ -254,7 +270,7 @@ var vueapp = new Vue({
         },
         handleSubmit: function(event) {
             console.log("submit함수가 실행되었습니다.");
-            
+            var currentDate = getCurrentDate();
             // 필수 입력 필드 값 확인
             var productID = $("#product_id").val() ? $("#product_id").val().trim() : '';
             var customerID = $("#customer_id").val() ? $("#customer_id").val().trim() : '';
@@ -263,7 +279,9 @@ var vueapp = new Vue({
             var startMoney = $("#start_money").val() ? $("#start_money").val().trim() : '0';
             var cycleMoney = $("#cycle_money").val() ? $("#cycle_money").val().trim() : '0';
             var loan = $("#loan").val() ? $("#loan").val().trim() : '0';
-
+            
+            var monthDiff = getMonthDifference(currentDate, subEndDate)
+            
             // 예금, 적금, 대출에 따른 추가 필드 값 확인
             var additionalField;
             if (this.pro.product_type === '예금') {
@@ -301,7 +319,56 @@ var vueapp = new Vue({
                 alert('예금, 적금, 대출 금액은 숫자만 입력 가능합니다.');
                 return;
             }
-
+            if(proInterestRate > this.pro.highest_rate){
+            	alert("상품 최대 금리보다 높습니다.")
+            	return;
+            }
+            if(proInterestRate < this.pro.lowest_rate){
+            	alert("상품 최소 금리보다 낮습니다.")
+            	return;
+            }
+            
+            if(monthDiff < this.pro.lowest_date){
+            	alert("상품 최소 가입 기간보다 짧게 설정하였습니다.")
+            	return;
+            }
+            
+            if(monthDiff > this.pro.highest_date){
+            	alert("상품 최대 가입 기간보다 길게 설정하였습니다..")
+            	return;
+            }
+			if(this.pro.product_type == "예금"){
+				if(startMoney > this.pro.highest_money){
+					alert("상품 최대 금액보다 높게 설정하였습니다.")
+					return;
+				}
+				if(startMoney < this.pro.lowest_money){
+					alert("상품 최대 금액보다 적게 설정하였습니다.")
+					return;
+				}
+			}
+			
+			if(this.pro.product_type == "적금"){
+				if(cycleMoney > this.pro.highest_money){
+					alert("상품 최대 금액보다 높게 설정하였습니다.")
+					return;
+				}
+				if(cycleMoney < this.pro.lowest_money){
+					alert("상품 최대 금액보다 적게 설정하였습니다.")
+					return;
+				}
+			}
+			
+			if(this.pro.product_type == "대출"){
+				if(loan > this.pro.highest_money){
+					alert("상품 최대 금액보다 높게 설정하였습니다.")
+					return;
+				}
+				if(loan < this.pro.lowest_money){
+					alert("상품 최대 금액보다 적게 설정하였습니다.")
+					return;
+				}
+			}
             // 모든 유효성 검사 통과 시 데이터 전송
             var params = {
                 product_id: productID,
@@ -312,7 +379,6 @@ var vueapp = new Vue({
                 loan: loan,
                 sub_end_date: subEndDate
             };
-
             axios.post('/team4/subscription', {params : params})
                 .then(response => {
                     alert("정상적으로 등록되었습니다.");
@@ -400,6 +466,52 @@ var pop_cust = new Vue({
     	
     	return year + "-" + month + "-" + day;
     }
+    
+    function getCurrentDate() {
+        var currentDate = new Date();
+        var year = currentDate.getFullYear();
+        var month = ('0' + (currentDate.getMonth() + 1)).slice(-2); // 월은 0부터 시작하므로 +1 해줌
+        var day = ('0' + currentDate.getDate()).slice(-2); // 일
+        var formattedDate = year + '-' + month + '-' + day;
+        return formattedDate;
+    }
+
+    // 두 날짜의 월 차이를 계산하는 함수
+	function getMonthDifference(startDateStr, endDateStr) {
+	    // 시작일과 종료일을 Date 객체로 변환
+	    var startDate = new Date(startDateStr);
+	    var endDate = new Date(endDateStr);
+	
+	    // 년, 월, 일을 각각 가져옴
+	    var startYear = startDate.getFullYear();
+	    var startMonth = startDate.getMonth();
+	    var startDay = startDate.getDate();
+	
+	    var endYear = endDate.getFullYear();
+	    var endMonth = endDate.getMonth();
+	    var endDay = endDate.getDate();
+	
+	    // 년도의 차이
+	    var yearDiff = endYear - startYear;
+	
+	    // 월의 차이
+	    var monthDiff = endMonth - startMonth;
+	
+	    // 일자로 보정
+	    if (endDay < startDay) {
+	        monthDiff--;
+	    }
+	
+	    // 음수로 나오는 경우 년도에서 하나 감소
+	    if (monthDiff < 0) {
+	        yearDiff--;
+	        monthDiff += 12;
+	    }
+	
+	    // 결과 반환
+	    return yearDiff * 12 + monthDiff;
+	}
+
     
 </script>
 </html>

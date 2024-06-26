@@ -214,10 +214,10 @@
 </head>
 <body class="page-body">
 	<div class="page-container">
-		<jsp:include page="/WEB-INF/jsp/kcg/_include/system/sidebar-menu.jsp"
+		<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/sidebar-menu.jsp"
 			flush="false" />
 		<div class="main-content">
-			<jsp:include page="/WEB-INF/jsp/kcg/_include/system/header.jsp"
+			<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/header.jsp"
 				flush="false" />
 			<ol class="breadcrumb bc-3">
 				<li><a href="#none" onclick="cf_movePage('/system/team4/main')"><i
@@ -442,8 +442,7 @@
 										<div class="customer-item"
 											v-for="designProduct in designProducts">
 											<div class="table-cell">{{ designProduct.design_date }}</div>
-											<div class="table-cell">{{ designProduct.product_name
-												}}</div>
+											<div class="table-cell">{{ designProduct.product_name}}</div>
 										</div>
 									</div>
 									<div v-else>
