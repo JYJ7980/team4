@@ -142,15 +142,15 @@
 <body class="page-body" data-url="http://neon.dev">
 
 	<div class="page-container" class="main-content"
-		style="background-image: url('/static_resources/system/images/money-background.png'); background-size: cover; background-position: center; repeat: no-repeat">
+		style="background-image: url('/static_resources/team4/images/money-background.png'); background-size: cover; background-position: center; repeat: no-repeat">
 
-		<jsp:include page="/WEB-INF/jsp/kcg/_include/system/sidebar-menu.jsp"
+		<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/sidebar-menu.jsp"
 			flush="false" />
 
 		<div style="opacity: 0.9">
 
 			<!-- 헤더 -->
-			<jsp:include page="/WEB-INF/jsp/kcg/_include/system/header.jsp"
+			<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/header.jsp"
 				flush="false" />
 
 			<ol class="breadcrumb bc-3">
@@ -160,7 +160,7 @@
 			</ol>
 			<div id="vue">
 				<div class="event">
-					<img src="/static_resources/system/images/person.png"
+					<img src="/static_resources/team4/images/person.png"
 						class="person_icon">
 					<div style="margin-left: 20px; font-size: 18px;">
 						<div style="font-weight: 700;">TODAY</div>
@@ -181,7 +181,7 @@
 					<div class="productdiv">
 						<div class="productType">예금</div>
 						<div class="">
-							<img src="/static_resources/system/images/pig.png"
+							<img src="/static_resources/team4/images/pig.png"
 								class="pig_icon"  @click="gotoDtl(deposit.product_id)">
 						</div>
 						<br>
@@ -195,7 +195,7 @@
 					</div>
 					<div class="productdiv">
 						<div class="productType">적금</div>
-						<img src="/static_resources/system/images/home.png"
+						<img src="/static_resources/team4/images/home.png"
 							class="home_icon" @click="gotoDtl(savings.product_id)"><br>
 						<div
 							style="align-items: center; justify-content: center; color: white;">
@@ -207,7 +207,7 @@
 					</div>
 					<div class="productdiv">
 						<div class="productType">대출</div>
-						<img src="/static_resources/system/images/loan.png"
+						<img src="/static_resources/team4/images/loan.png"
 							class="loan_icon" @click="gotoDtl(loan.product_id)"><br>
 						<div
 							style="align-items: center; justify-content: center; color: white;">
@@ -218,7 +218,7 @@
 					</div>
 					<div class="productdiv">
 						<div class="productType">특별</div>
-						<img src="/static_resources/system/images/프리미엄.png"
+						<img src="/static_resources/team4/images/프리미엄.png"
 							class="pri_icon" @click="gotoDtl(event.product_id)"><br>
 						<div
 							style="align-items: center; justify-content: center; color: white;">
@@ -229,7 +229,7 @@
 					</div>
 					<div class="productdiv">
 						<div class="productType">인기</div>
-						<img src="/static_resources/system/images/event.png"
+						<img src="/static_resources/team4/images/event.png"
 							class="event_icon"  @click="gotoDtl(popular.product_id)"><br>
 						<div
 							style="align-items: center; justify-content: center; color: white;">
@@ -240,7 +240,7 @@
 					</div>
 					<div class="productdiv">
 						
-						<img src="/static_resources/system/images/바로가기.png"
+						<img src="/static_resources/team4/images/바로가기.png"
 							class="pri_icon" @click="gotoList"><br>
 						<div
 							style="align-items: center; justify-content: center; color: white;">
@@ -252,7 +252,7 @@
 				</div>
 				<!-- 				공지사항 -->
 				<div class="noticediv">
-					<img src="/static_resources/system/images/megaphone.png"
+					<img src="/static_resources/team4/images/megaphone.png"
 						class="notice_icon">
 					<div style="margin-left: 30px; font-size: 15px;">
 						<div v-for="notice in notices">
