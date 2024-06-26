@@ -234,7 +234,7 @@
 					<br> <input id="keywordInput" type="text" name="keyword"
 						v-model="searchKeyword" class="inputtext"
 						placeholder="고객 이름을 입력하세요">
-					<button @click="searchCustomers">조건 검색</button>
+					<button @click="searchCustomers">이름 검색</button>
 					<button @click="getAllCustomers">전체 조회</button>
 					<label for="managerSelect">담당자별 조회:</label> <select
 						id="managerSelect" v-model="selectedManager"
