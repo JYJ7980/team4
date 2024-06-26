@@ -105,8 +105,8 @@
 						<th style="width: 10%;" class="center sorting" @click="sortList(event.target)" sort_target="product_type">상품유형</th>						
 						<th style="width: 25%;" class="center sorting" @click="sortList(event.target)" sort_target="product_name">상품명</th>			
 						<th style="width: 31%;" class="center sorting" >금액</th>	
-						<th style="width: 10%;" class="center">삭제</th>
-						<th style="width: 10%;" class="center">변경</th>														
+						<th style="width: 10%;" class="center">중단</th>
+						<th style="width: 10%;" class="center">상세정보</th>														
 					</tr>
 				</thead>
 				<tbody>
@@ -126,12 +126,18 @@
 					    <td class="right" v-else-if="item.product_type === '적금'">{{item.cycle_money}}</td>
 					    <td class="right" v-else-if="item.product_type === '대출'">{{item.loan}}</td>
 					    <td class="left"  v-else>-</td>
-					    <td class="left">				   
-					        <input type="button" value="삭제" @click="deleteItem(item.sub_id)">
+					    <td class="left">	
+				            <c:choose>
+				                <c:when test="${userInfoVO.jikgubCd == '2'}">
+				                    <input type="button" value="중단" @click="deleteItem(item.sub_id)">
+				                </c:when>
+				                <c:otherwise>
+				                    -
+				                </c:otherwise>
+				            </c:choose>
 					    </td>
-					 
 					    <td class="left">
-					        <input type="button" value="변경" @click="gotoDtl(item.sub_id, item.customer_id, item.product_id)">
+					        <input type="button" value="정보" @click="gotoDtl(item.sub_id, item.customer_id, item.product_id)">
 					    </td>
 					</tr>
 				</tbody>
@@ -226,6 +232,10 @@
 			<div class="modal-footer" >
                 <button type="button" id="update" class="btn btn-secondary" data-dismiss="modal" @click="updateProduct()">CHANGE</button>
          	</div>
+         	<div class="modal-footer" >
+                <button type="button" id="delete" class="btn btn-secondary" data-dismiss="modal" @click="deleteProduct(info.sub_id)">DELETE</button>
+         	</div>
+         	
 			<div class="modal-footer" >
                 <button type="button" id="cancle" class="btn btn-secondary" data-dismiss="modal" @click="close()">CLOSE</button>
          	</div>
@@ -281,10 +291,14 @@ var vueapp = new Vue({
 		user_id : "",
 		sub_start_date : "",
 		all_srch : "N",
-		selectedIds: []
+		selectedIds: [],
+		sub_id:"${sub_id}",
+		customer_id:"${customer_id}",
+		product_id:"${product_id}",
+		pro_flag:"${flag}",
+		jikgub_cd: "${jikgub_cd}",
 	},
 	mounted : function(){
-	
 		var fromDtl = cf_getUrlParam("fromDtl");
 		var pagingConfig = cv_sessionStorage.getItem("pagingConfig");		
 		
@@ -298,6 +312,9 @@ var vueapp = new Vue({
 				.removeItem("pagingConfig")
 				.removeItem("params");
 			this.getList(true);
+		}
+		if (this.pro_flag === "Y"){
+			this.gotoDtl(this.sub_id, this.customer_id, this.product_id);
 		}
 	},
 	methods : {
@@ -349,12 +366,12 @@ var vueapp = new Vue({
         	var params = {
         			sub_id : sub_id,
         			customer_id : customer_id,
-        			product_id : customer_id
+        			product_id : product_id
         			}
             console.log(JSON.stringify(params));
             axios.post('/team4/moveUpdateForm', { params : params })
             .then(response => {
-            	alert("변경폼으로 이동합니다.")
+            	alert("상세정보 페이지로 이동합니다.")
                 var resultMap = response.data;
                 console.log(JSON.stringify(resultMap));
                 // Pass the resultMap to pop_sub_info function
@@ -384,6 +401,7 @@ var vueapp = new Vue({
 	    deleteSelected: function () {
 	        console.log("=================================================="); // 선택된 ID 목록을 콘솔에 출력
 	        console.log(this.selectedIds); // 선택된 ID 목록을 콘솔에 출력
+	        alert("삭제하시겠습니까?")
 	        var params ={
 	        		selectedIds: this.selectedIds
 	        }
@@ -489,7 +507,7 @@ function pop_sub_info(mapData) {
 						sub_end_date: this.info.sub_end_date
 					};		
 					console.log("================================")
-                console.log(JSON.stringify(params));
+                	console.log(JSON.stringify(params));
 		            if (confirm('이 항목을 변경하시겠습니까?')) {
 		                axios.post('/team4/updateSubscription', { params : params })
 		                    .then(response => {
@@ -504,8 +522,22 @@ function pop_sub_info(mapData) {
 				},
 				close : function(){
 					$('#pop_sub_info').modal('hide');
+					vueapp.this.pro_flag = "N";
 					window.location.reload();
-				}
+				},
+				deleteProduct: function (sub_id) {
+		        	var params = {sub_id : sub_id}
+		            if (confirm('이 항목을 삭제하시겠습니까?')) {
+		                axios.post('/team4/deleteSingleItem', { params : params })
+		                    .then(response => {
+		                        alert("항목 삭제 완료");
+		                        window.location.href = "/team4/subscriptionList";                       
+		                        })
+		                    .catch(error => {
+		                        console.error('항목 삭제 중 에러 발생:', error);
+		                    });
+		            }
+		        }
 			},
 		});
 

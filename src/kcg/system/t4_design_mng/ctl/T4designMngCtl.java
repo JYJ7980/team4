@@ -19,6 +19,7 @@ import common.utils.common.CmmnMap;
 import common.utils.common.PagingConfig;
 import common.utils.mybatis_paginator.domain.PageList;
 import kcg.common.svc.CommonSvc;
+import kcg.login.vo.UserInfoVO;
 import kcg.system.t4_design_mng.svc.Calculator;
 import kcg.system.t4_design_mng.svc.T4designMngSVC;
 
@@ -94,8 +95,19 @@ public class T4designMngCtl {
 		return "kcg/system/team4_mng/t4_design_mng/SubscriptionList";
 	}
 	@GetMapping("subscriptionList")
-	public String subscriptionList() {
+	public String subscriptionList(CmmnMap params, Model model) {
+		System.out.println("이동했을 때 params 값 받기 =====================");
+		System.out.println("params: " + params.toString());
+
+		model.addAttribute("product_id", params.getString("product_id", ""));
+		model.addAttribute("customer_id", params.getString("customer_id", ""));
+		model.addAttribute("sub_id", params.getString("sub_id", ""));
+		model.addAttribute("flag", params.getString("flag", ""));
 		
+//		UserInfoVO uerInfoVo = commonSvc.getLoginInfo();
+//		params.put("jikgub_cd", uerInfoVo.getJikgubCd());
+//		model.addAttribute("jikgub_cd", params.getString("jikgub_cd", ""));
+
 		return "kcg/system/team4_mng/t4_design_mng/SubscriptionList";
 	}
 	
@@ -114,7 +126,7 @@ public class T4designMngCtl {
     public List<CmmnMap> deleteSingleItem(CmmnMap params) {
 
     	svc.deleteProduct(params);
-        return cmmnDao.selectOne("selectAllList", params);
+        return cmmnDao.selectList("selectAllList", params);
     }
     
     @PostMapping("/moveUpdateForm")
@@ -179,7 +191,14 @@ public class T4designMngCtl {
 	}
 	
 	@GetMapping("designList")
-	public String designList() {
+	public String designList(CmmnMap params, Model model) {
+		System.out.println("이동했을 때 params 값 받기 =====================");
+		System.out.println("params: " + params.toString());
+
+		model.addAttribute("product_id", params.getString("product_id", ""));
+		model.addAttribute("customer_id", params.getString("customer_id", ""));
+		model.addAttribute("design_id", params.getString("design_id", ""));
+		model.addAttribute("flag", params.getString("flag", ""));
 		return "kcg/system/team4_mng/t4_design_mng/DesignList";
 	}
 	
