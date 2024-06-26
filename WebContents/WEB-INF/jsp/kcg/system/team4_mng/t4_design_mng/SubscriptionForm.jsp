@@ -28,7 +28,7 @@
 
 	<div class="page-container">
 
-		<jsp:include page="/WEB-INF/jsp/kcg/_include/system/sidebar-menu.jsp"
+		<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/sidebar-menu.jsp"
 			flush="false" />
 
 		<div class="main-content">
@@ -82,7 +82,7 @@
 			        <span>원</span>
 			        <br><br>
 			         <label>이자 과세:</label>
-			        <input type="text" id="pro.taxtion">
+			        <input type="text" id="pro.taxtion" v-model="pro.taxation">
 			    </div>
 			    <div v-else-if="pro.product_type === '적금'">
 			    	<label>납입 금액:</label>
@@ -90,7 +90,7 @@
 			        <span>원</span>
 			        <br><br>
 			        <label>이자 과세:</label>
-			        <input type="text" id="pro.taxtion">
+			        <input type="text" id="pro.taxtion" v-model="pro.taxation" readonly>
 			    </div>
 			    <div v-else-if="pro.product_type === '대출'">
 			    	<label>대출 금액:</label>
@@ -213,6 +213,7 @@ var vueapp = new Vue({
             lowest_money:"",
             highest_date:"",
             lowest_date:"",
+            taxation:"",
         },
         cus: {
             customer_id: "",
@@ -238,7 +239,10 @@ var vueapp = new Vue({
             axios.get('/team4/proSelectOne', {params : params})
             	.then(response => {
     				console.log("2. 정상작동 하였습니다.")
-    				this.pro = response.data				            		
+    				this.pro = response.data
+    				console.log("=======================")
+    				console.log(this.pro)
+    				console.log(this.pro.taxation)
             	})
             	.catch(error => {
             	    console.error("Error:", error);

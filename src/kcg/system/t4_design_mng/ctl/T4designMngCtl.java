@@ -58,6 +58,9 @@ public class T4designMngCtl {
 	@RequestMapping("proSelectOne")
 	public CmmnMap proSelectOne(CmmnMap params) {
 		CmmnMap getOne = cmmnDao.selectOne("selectOneProduct", params);
+		System.out.println("=====상품정보 데이터 값들=====");
+		System.out.println(getOne.toString());
+
 		return getOne;
 	}
 	

@@ -15,7 +15,7 @@
 
 <div class="page-container">
 
-	<jsp:include page="/WEB-INF/jsp/kcg/_include/system/sidebar-menu.jsp" flush="false"/>
+	<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/sidebar-menu.jsp" flush="false"/>
 
 	<div class="main-content">
 
@@ -284,6 +284,7 @@ var vueapp = new Vue({
 		selectedIds: []
 	},
 	mounted : function(){
+	
 		var fromDtl = cf_getUrlParam("fromDtl");
 		var pagingConfig = cv_sessionStorage.getItem("pagingConfig");		
 		
