@@ -177,7 +177,7 @@
 										<button type="button" @click="input">비밀번호 수정</button>
 										<div v-if="key">
 											<label>비밀번호 : </label> <input type="text" v-model="userPw">
-											<button type="submit" @click="updatePw" @click>저장</button>
+											<button type="submit" @click="updatePw">저장</button>
 										</div>
 									</div>
 
@@ -208,7 +208,7 @@
 										</select>
 									</div>
 									<button @click="update">수정</button>
-									<button @click="deleteEmployee">삭제</button>
+									<!-- <button @click="deleteEmployee">삭제</button> -->
 								</div>
 
 							</div>
@@ -390,10 +390,10 @@
                 }
                 axios.post('/system/team4/employee/update', {params:params})
                     .then(response => {
-                        if (response.data.status === 'OK') {
+                        if (response.data.status === "OK") {
                             alert("수정되었습니다.");
                             this.loadEmployees();
-                            window.location.href = "/system/team4/employee/employeelist" ;
+                            /* window.location.href = "/system/team4/employee/employeeList" ; */
                         } else {
                             alert("수정 실패: " + response.data.message);
                         }
@@ -402,7 +402,7 @@
                         alert("오류 발생: " + error);
                     });
             },
-            deleteEmployee: function() {
+           /*  deleteEmployee: function() {
         	   var params = {
         		   user_id: this.emp_nfo.user_id
         	   }
@@ -418,7 +418,7 @@
                     .catch(error => {
                         alert("오류 발생: " + error);
                     });
-            },
+            }, */
             checkId: function(){
     			if(!this.newEmployee.new_user_id.trim()){
     				alert("ID를 입력해주세요.");
