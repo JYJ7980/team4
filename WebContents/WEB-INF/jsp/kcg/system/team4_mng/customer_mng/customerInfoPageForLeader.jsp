@@ -404,8 +404,7 @@
 										<div class="customer-item"
 											v-for="designProduct in designProducts">
 											<div class="table-cell">{{ designProduct.design_date }}</div>
-											<div class="table-cell">{{ designProduct.product_name
-												}}</div>
+											<div class="table-cell">{{ designProduct.product_name}}</div>
 										</div>
 									</div>
 									<div v-else>
