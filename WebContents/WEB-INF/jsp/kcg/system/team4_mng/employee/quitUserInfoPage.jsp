@@ -246,7 +246,7 @@
 						.then(response => {
 							if (response.data.status === 'OK') {
 								alert('관리자 정보가 수정되었습니다.');
-								this.showPopup(); // 팝업 닫기
+								this.closePopup(); // 팝업 닫기
 							} else {
 								alert('관리자 정보 수정 중 오류가 발생했습니다.');
 							}
