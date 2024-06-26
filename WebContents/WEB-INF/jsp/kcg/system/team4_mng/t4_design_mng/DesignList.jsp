@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="/static_resources/system/js/select2/select2-bootstrap.css">
 	<link rel="stylesheet" href="/static_resources/system/js/select2/select2.css">
 	
-	<title>가입상품조회</title>
+	<title>설계조회</title>
 </head>
 <body class="page-body">
 
@@ -23,10 +23,10 @@
 		
 		<ol class="breadcrumb bc-3">
 			<li><a href="#none" onclick="cf_movePage('/system')"><i class="fa fa-home"></i>Home</a></li>
-			<li class="active"><strong>가입상품조회</strong></li>
+			<li class="active"><strong>설계조회</strong></li>
 		</ol>
 	
-		<h2>가입상품조회</h2>
+		<h2>설계조회</h2>
 		<br/>
 		
 		<div class="dataTables_wrapper" id="vueapp">
@@ -41,7 +41,7 @@
 								<input class="form-control" v-model="customer_name" value="" />
 							</div>
 							
-							<label class="sys_label_01 control-label">관리담당자:</label>
+							<label class="sys_label_01 control-label">상품명:</label>
 							<div class="sys_col_02" style="width: 246px;">
 								<input class="form-control" v-model="user_id" value="" />
 							</div>
@@ -59,16 +59,17 @@
 							<label class="sys_label_01 control-label">가입날짜</label>
 							<div class="sys_col_02" style="width: 210px;">
 								<div class="input-group">
-									<input type="text" class="form-control datepicker2" v-model="sub_start_date" data-format="yyyy-mm-dd" style="width: 180px;">
+									<input type="text" class="form-control datepicker2" v-model="design_date" data-format="yyyy-mm-dd" style="width: 180px;">
 								</div>
 							</div>
 							<button type="button" class="btn btn-primary btn-sm datepicker2" id="wrdtbtn" style="float: left;">
 								<i class="fa fa-calendar"></i>
 							</button>
-							<label class="sys_label_01 control-label">상품명:</label>
+							<label class="sys_label_01 control-label">관리자명:</label>
 							<div class="sys_col_02" style="width: 246px;">
-								<input class="form-control" v-model="product_name" value="" />
+								<input class="form-control" v-model="name" value="" />
 							</div>
+
 						</td>
 						<td class="right" style="width: 200px;">
 							<button type="button" class="btn btn-blue btn-icon icon-left" @click="getListAll(true)">
@@ -83,7 +84,7 @@
 			<div class="dataTables_filter" style="float: none;">
 			<div class="sub flex flex-90">
                 <span class="sub-button flex-center flex-10 flex-wrap">
-					<button type="button" class="btn btn-orange btn-icon icon-left btn-small" @click="cf_movePage('/team4/subscriptionForm')">
+					<button type="button" class="btn btn-orange btn-icon icon-left btn-small" @click="cf_movePage('/team4/calculate')">
 						등록
 						<i class="entypo-plus"></i>
 					</button>
@@ -96,42 +97,37 @@
 				<thead>
 					<tr class="replace-inputs">
 						<th style="width: 5%;" class="center hidden-xs nosort"><input type="checkbox" id="allCheck" @click="all_check(event.target)"></th>
-						<th style="width: 10%;" class="center sorting" @click="sortList(event.target)" sort_target="sub_id">ID</th>
-						<th style="width: 10%;" class="center sorting" @click="sortList(event.target)" sort_target="customer_id">회원ID</th>
-						<th style="width: 10%;" class="center sorting" @click="sortList(event.target)" sort_target="customer_name">성명</th>						
-						<th style="width: 10%;" class="center sorting" @click="sortList(event.target)" sort_target="sub_start_date">가입일</th>
-						<th style="width: 10%;" class="center sorting" @click="sortList(event.target)" sort_target="sub_end_date">만기일</th>
-						<th style="width: 13%;" class="center sorting" @click="sortList(event.target)" sort_target="customer_phone">전화번호</th>
-						<th style="width: 10%;" class="center sorting" @click="sortList(event.target)" sort_target="product_type">상품유형</th>						
-						<th style="width: 25%;" class="center sorting" @click="sortList(event.target)" sort_target="product_name">상품명</th>			
-						<th style="width: 31%;" class="center sorting" >금액</th>	
+						<th style="width: 7%;" class="center sorting" @click="sortList(event.target)" sort_target="design_id">ID</th>
+						<th style="width: 10%;" class="center sorting" @click="sortList(event.target)" sort_target="user_id">관리자 ID</th>
+						<th style="width: 10%;" class="center sorting" @click="sortList(event.target)" sort_target="name">관리자 성명</th>
+						<th style="width: 8%;" class="center sorting" @click="sortList(event.target)" sort_target="customer_id">회원ID</th>
+						<th style="width: 9%;" class="center sorting" @click="sortList(event.target)" sort_target="customer_name">회원성명</th>						
+						<th style="width: 9%;" class="center sorting" @click="sortList(event.target)" sort_target="product_type">상품유형</th>						
+						<th style="width: 25%;" class="center sorting" @click="sortList(event.target)" sort_target="product_name">상품명</th>	
+						<th style="width: 10%;" class="center sorting" @click="sortList(event.target)" sort_target="design_date">설계일</th>
 						<th style="width: 10%;" class="center">삭제</th>
-						<th style="width: 10%;" class="center">변경</th>														
+						<th style="width: 16%;" class="center">상세정보</th>														
 					</tr>
 				</thead>
 				<tbody>
 					<tr v-for="item in dataList" style="cursor: pointer;">
 					    <td class="center">
-						  <input type="checkbox" v-model="selectedIds" :value="item.sub_id" @click="onCheck(item)" name="is_check">
+						  <input type="checkbox" v-model="selectedIds" :value="item.design_id" @click="onCheck(item)" name="is_check">
 					    </td>
-					    <td class="left">{{item.sub_id}}</td>
+					    <td class="left">{{item.design_id}}</td>
+					    <td class="left">{{item.user_id}}</td>
+					    <td class="left">{{item.name}}</td>
 					    <td class="left">{{item.customer_id}}</td>
 					    <td class="left">{{item.customer_name}}</td>
-					    <td class="center">{{item.sub_start_date}}</td>
-					    <td class="left">{{item.sub_end_date}}</td>
-					    <td class="center">{{item.customer_phone}}</td>
 					    <td class="left">{{item.product_name}}</td>
 					    <td class="left">{{item.product_type}}</td>
-					    <td class="right" v-if="item.product_type === '예금'">{{item.start_money}}</td>
-					    <td class="right" v-else-if="item.product_type === '적금'">{{item.cycle_money}}</td>
-					    <td class="right" v-else-if="item.product_type === '대출'">{{item.loan}}</td>
-					    <td class="left"  v-else>-</td>
+					    <td class="center">{{item.design_date}}</td>
 					    <td class="left">				   
-					        <input type="button" value="삭제" @click="deleteItem(item.sub_id)">
+					        <input type="button" value="삭제" @click="deleteItem(item.design_id)">
 					    </td>
 					 
 					    <td class="left">
-					        <input type="button" value="변경" @click="gotoDtl(item.sub_id, item.customer_id, item.product_id)">
+					        <input type="button" value="정보" @click="gotoDtl(item.design_id, item.customer_id, item.product_id)">
 					    </td>
 					</tr>
 				</tbody>
@@ -161,12 +157,7 @@
                     <div class="left-panel" style="width: 50%;">
                         <div class="form-group">
                             <label for="err_eng_nm" class="fix-width-33">ID:</label>
-                            <input type="text" class="form-control" id="pop_sub_id" v-model="info.sub_id" readonly>
-                        </div>
-                    
-                        <div class="form-group">
-                            <label for="err_eng_nm" class="fix-width-33">상품ID:</label>
-                            <input type="text" class="form-control" id="pop_product_id" v-model="info.product_id" readonly>
+                            <input type="text" class="form-control" id="pop_design_id" v-model="info.design_id" readonly>
                         </div>
       
                         <div class="form-group">
@@ -174,12 +165,10 @@
                             <input type="text" class="form-control" id="pop_product_name" v-model="info.product_name" readonly>
                         </div>
     
-    
                         <div class="form-group">
                             <label for="err_eng_nm" class="fix-width-33">고객ID:</label>
                             <input type="text" class="form-control" id="pop_customer_id" v-model="info.customer_id" readonly>
                         </div>
-      
     
                         <div class="form-group">
                             <label for="err_eng_nm" class="fix-width-33">고객명:</label>
@@ -187,39 +176,84 @@
                         </div>
                         
                         <div class="form-group">
-                            <label for="err_eng_nm" class="fix-width-33">가입금액</label>
 							    <div v-if="info.product_type === '예금'">
 							    	<label>예치 금액:</label>
-							        <input type="text" id="pop_start_money" v-model="info.start_money">
+							        <input type="text" id="pop_sub_money" v-model="info.sub_money" readonly>
 							        <span>원</span>
 							    </div>
 							    <div v-else-if="info.product_type === '적금'">
 							    	<label>납입 금액:</label>
-							        <input type="text" id="pop_cycle_money" v-model="info.cycle_money">
+							        <input type="text" id="pop_cycle_money" v-model="info.cycle_money" readonly>
 							        <span>원</span>
 							    </div>
 							    <div v-else-if="info.product_type === '대출'">
 							    	<label>대출 금액:</label>
-							        <input type="text" id="pop_loan" v-model="info.loan">
+							        <input type="text" id="pop_sub_money" v-model="info.sub_money" readonly>
 							    	<span>원</span>       
 							    </div>
-							    <div v-else>
-				    			</div>
-                        </div>                     
+							    <div v-else-if="info.product_type === '목돈마련적금'">
+							    	<label>목표 금액:</label>
+							        <input type="text" id="pop_sub_money" v-model="info.sub_money" readonly>
+							    	<span>원</span>       
+							    	<label>예상 납부 금액:</label>
+							        <input type="text" id="pop_cycle_money" v-model="info.cycle_money" readonly>
+							    	<span>원</span>       
+							    </div>
+                        </div>           
+                        <div class="form-group" v-if="info.product_type === '대출'">
+                            <label for="err_eng_nm" class="fix-width-33">대출 유형:</label>
+                            <input type="text" class="form-control" id="pop_info.loan_repayment_type" v-model="info.loan_repayment_type" readonly>
+                        </div>
+                        <div class="form-group" v-else>
+                            <label for="err_eng_nm" class="fix-width-33">이자 유형:</label>
+                            <input type="text" class="form-control" id="pop_info.interest_type" v-model="info.interest_type" readonly>
+                        </div>
+                                  
                         <div class="form-group">
-                            <label for="err_eng_nm" class="fix-width-33">이자율:</label>
-                            <input type="text" class="form-control" id="pop_pro_interest_rate" v-model="info.pro_interest_rate">
+                            <label for="err_eng_nm" class="fix-width-33">고정금리:</label>
+                            <input type="text" class="form-control" id="pop_f_interest_rate" v-model="info.f_interest_rate" readonly>
                             <span>%</span>                        
                         </div>
-                            <div class="form-group">
-                            <label for="err_eng_nm" class="fix-width-33">가입날짜:</label>
-                            <input type="text" class="form-control" id="pop_sub_start_date" v-model="info.sub_start_date">
-                        </div>      
-    
                         <div class="form-group">
-                            <label for="err_eng_nm" class="fix-width-33">만기날짜:</label>
-                            <input type="text" class="form-control" id="pop_sub_end_date" v-model="info.sub_end_date">
+                            <label for="err_eng_nm" class="fix-width-33">고정금리 기간:</label>
+                            <input type="text" class="form-control" id="pop_f_select_month" v-model="info.f_select_month" readonly>
+                            <span>(월)</span>                        
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="err_eng_nm" class="fix-width-33">변동금리:</label>
+                            <input type="text" class="form-control" id="pop_v_interest_rate" v-model="info.v_interest_rate" readonly>
+                            <span>%</span>                        
+                        </div>
+                        <div class="form-group">
+                            <label for="err_eng_nm" class="fix-width-33">변동금리 기간:</label>
+                            <input type="text" class="form-control" id="pop_v_select_month" v-model="info.v_select_month" readonly>
+                            <span>(월)</span>                        
+                        </div>
+                        <div class="form-group" v-if="info.product_type === '대출'">
+                            <label for="err_eng_nm" class="fix-width-33">중도상환수수료:</label>
+                            <input type="text" class="form-control" id="pop_rate" v-model="info.rate" readonly>
+                            <span>%</span>                        
+                        </div>
+                        <div class="form-group" v-else>
+                            <label for="err_eng_nm" class="fix-width-33">세율:</label>
+                            <input type="text" class="form-control" id="pop_rate" v-model="info.rate" readonly>
+                            <span>%</span>                        
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="err_eng_nm" class="fix-width-33">최종 금액:</label>
+                            <input type="text" class="form-control" id="pop_final_money" v-model="info.final_money" readonly>
                         </div>      
+                        <div class="form-group">
+                            <label for="err_eng_nm" class="fix-width-33">최종 이자:</label>
+                            <input type="text" class="form-control" id="pop_final_interest" v-model="info.final_interest" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="err_eng_nm" class="fix-width-33">설계 날짜:</label>
+                            <input type="text" class="form-control" id="pop_design_date" v-model="info.design_date" readonly>
+                        </div>      
+
                     </div>
                 </div>          
 			</div>
@@ -276,15 +310,18 @@ var vueapp = new Vue({
 	el : "#vueapp",
 	data : {
 		dataList : [],
-		product_name : "",
-		customer_name  : "",
+		design_id : "",
 		user_id : "",
-		sub_start_date : "",
+		name : "",
+		customer_id  : "",
+		customer_name : "",
+		product_type : "",
+		product_name : "",
+		design_date  : "",
 		all_srch : "N",
 		selectedIds: []
 	},
 	mounted : function(){
-	
 		var fromDtl = cf_getUrlParam("fromDtl");
 		var pagingConfig = cv_sessionStorage.getItem("pagingConfig");		
 		
@@ -316,16 +353,16 @@ var vueapp = new Vue({
 			
 			if(isInit === true){
 				cv_pagingConfig.pageNo = 1;
-				cv_pagingConfig.orders = [{target : "SUB_ID", isAsc : false}];
+				cv_pagingConfig.orders = [{target : "DESIGN_ID", isAsc : false}];
 			}
 			
 			var params = {};
 			if(this.all_srch != "Y") {
 				params = {
 					customer_name : this.customer_name,
-					user_id : this.user_id,
-					sub_start_date : this.sub_start_date,
+					design_date : this.design_date,
 					product_name : this.product_name,
+					name : this.name,
 				}
 			}
 			//첫 화면시 여기로 출력
@@ -333,7 +370,7 @@ var vueapp = new Vue({
 				.setItem('pagingConfig', cv_pagingConfig)
 				.setItem('params', params);
 
-			cf_ajax("/team4/getListPaging", params, this.getListCB);
+			cf_ajax("/team4/designListPaging", params, this.getListCB);
 		},
 		getListCB : function(data){
  			this.dataList = data.list;
@@ -345,16 +382,16 @@ var vueapp = new Vue({
 			
 			cv_pagingConfig.renderPagenation("system");
 		},
-		gotoDtl : function(sub_id, customer_id, product_id){
+		gotoDtl : function(design_id, customer_id, product_id){
         	var params = {
-        			sub_id : sub_id,
+        			design_id : design_id,
         			customer_id : customer_id,
         			product_id : customer_id
         			}
             console.log(JSON.stringify(params));
-            axios.post('/team4/moveUpdateForm', { params : params })
+            axios.post('/team4/moveDesignInfoForm', { params : params })
             .then(response => {
-            	alert("변경폼으로 이동합니다.")
+            	alert("상세 정보 팝업으로 이동합니다.")
                 var resultMap = response.data;
                 console.log(JSON.stringify(resultMap));
                 // Pass the resultMap to pop_sub_info function
@@ -374,25 +411,25 @@ var vueapp = new Vue({
 			$('[name=is_check]').prop('checked',obj.checked);
 		},
 	    onCheck: function (item) {
-	        if (this.selectedIds.includes(item.sub_id)) {
-	            this.selectedIds = this.selectedIds.filter(id => id !== item.sub_id);
+	        if (this.selectedIds.includes(item.design_id)) {
+	            this.selectedIds = this.selectedIds.filter(id => id !== item.design_id);
 	        } else {
-	            this.selectedIds.push(item.sub_id);
+	            this.selectedIds.push(item.design_id);
 	        }
 	        console.log(this.selectedIds); // 선택된 ID 목록을 콘솔에 출력
 	    },
 	    deleteSelected: function () {
-	        console.log("=================================================="); // 선택된 ID 목록을 콘솔에 출력
+	        console.log("======================22============================"); // 선택된 ID 목록을 콘솔에 출력
 	        console.log(this.selectedIds); // 선택된 ID 목록을 콘솔에 출력
 	        var params ={
 	        		selectedIds: this.selectedIds
 	        }
-	        console.log(this.params)
-	        console.log("=================================================="); // 선택된 ID 목록을 콘솔에 출력
+	        console.log(JSON.stringify(params))
+	        console.log("======================33============================"); // 선택된 ID 목록을 콘솔에 출력
 
 	        if (this.selectedIds.length > 0) {
 	            if (confirm('정말로 선택된 항목을 삭제하시겠습니까?')) {
-	                axios.post('/team4/deleteProduct', {params : params})
+	                axios.post('/team4/deleteDesign', {params : params})
 	                    .then(response => {
 	                        alert("정상적으로 삭제처리되었습니다.");
 	                        this.getListAll(false); // 목록을 다시 로드
@@ -408,10 +445,12 @@ var vueapp = new Vue({
 	        }
 	    },
         
-        deleteItem: function (sub_id) {
-        	var params = {sub_id : sub_id}
+        deleteItem: function (design_id) {
+	        console.log("=================================================="); // 선택된 ID 목록을 콘솔에 출력
+	        console.log(design_id)
+        	var params = {design_id : design_id}
             if (confirm('이 항목을 삭제하시겠습니까?')) {
-                axios.post('/team4/deleteSingleItem', { params : params })
+                axios.post('/team4/deleteSingleDesign', { params : params })
                     .then(response => {
                         alert("항목 삭제 완료");
                         // Spring 컨트롤러에서 받은 URL로 페이지를 새로고침하며 이동합니다
@@ -422,27 +461,6 @@ var vueapp = new Vue({
                     });
             }
         },
-
-		popupPrint : function(prod_cd){
-			var chkedList = $("[name=is_check]:checked");			 
-			if(chkedList.length == 0){
-				alert("출력할 대상을 선택하여 주십시오.");
-				return;
-			}
-			//check list 가져오기..
-			var dateCopyList = [];
-			var idx;
-			chkedList.each(function(i) {
-				idx = $(this).attr("data-idx");
-				dateCopyList.push(vueapp.dataList.getElementFirst("prod_cd", idx));
-			});			
-			
-			console.log(dateCopyList);		
-			
-			//출력팝업 띄우기
-			popup_print.init(dateCopyList);
-			$('#popup_print').modal('show');
-		},
 	},
 })
 
@@ -454,18 +472,25 @@ function pop_sub_info(mapData) {
 			el : "#pop_sub_info",
 			data: {
 			    info: {
-	                sub_id: mapData.sub_id,
-	                product_id: mapData.product_id,
-	                product_name: mapData.product_name,
-	                pro_interest_rate: mapData.pro_interest_rate,
-	                product_type: mapData.product_type,
 	                customer_id: mapData.customer_id,
 	                customer_name: mapData.customer_name,
-	                start_money: mapData.start_money,
+	                design_id: mapData.design_id,
+	                design_date: mapData.design_date,
+	                sub_money: mapData.sub_money,
 	                cycle_money: mapData.cycle_money,
-	                loan: mapData.loan,
-	                sub_start_date: mapData.sub_start_date,
-	                sub_end_date: mapData.sub_end_date,
+					interest_type: mapData.interest_type,
+					loan_repayment_type: mapData.loan_repayment_type,
+	                f_interest_rate: mapData.f_interest_rate,
+	                v_interest_rate: mapData.v_interest_rate,
+	                f_select_month: mapData.f_select_month,
+	                v_select_month: mapData.v_select_month,
+	                rate: mapData.rate,
+	                final_money: mapData.final_money,
+	                final_interest: mapData.final_interest,
+	                product_id: mapData.product_id,
+	                product_name: mapData.product_name,
+	                product_type: mapData.product_type,
+	                prod_ty_cd:""
 			    }
 			},
 			mounted : function(){
@@ -474,33 +499,31 @@ function pop_sub_info(mapData) {
 
 			methods : {
 				updateProduct : function(){
-					var params = {
-						sub_id: this.info.sub_id,
-						product_id: this.info.product_id,
-						product_name: this.info.product_name,
-						pro_interest_rate: this.info.pro_interest_rate,
-						product_type: this.info.product_type,
-						customer_id: this.info.customer_id,
-						customer_name: this.info.customer_name,
-						start_money: this.info.start_money,
-						cycle_money: this.info.cycle_money,
-						loan: this.info.loan,
-						sub_start_date: this.info.sub_start_date,
-						sub_end_date: this.info.sub_end_date
-					};		
-					console.log("================================")
-                console.log(JSON.stringify(params));
-		            if (confirm('이 항목을 변경하시겠습니까?')) {
-		                axios.post('/team4/updateSubscription', { params : params })
-		                    .then(response => {
-		                    		alert("변경 완료");
-			                        vueapp.getList(false); // 목록을 다시 로드
-		                        })
-		                    .catch(error => {
-		                        console.error('항목 삭제 중 에러 발생:', error);
-		                    });
-		            }
+					if(this.info.product_type == '예금'){
+						this.info.prod_ty_cd = "3";
+					} else if(this.info.product_type == '적금'){
+						this.info.prod_ty_cd = "1";
+					} else if(this.info.product_type == '대출'){
+						this.info.prod_ty_cd = "4";
+					}
+					if(this.info.product_name.includes("목돈")){
+						this.info.prod_ty_cd = "2";
+					}
+					console.log("prod_ty_cd : " + this.info.prod_ty_cd)
 
+					
+					var params = {
+						product_id: this.info.product_id,
+						customer_id: this.info.customer_id,
+						design_id: this.info.design_id,
+						prod_ty_cd: this.info.prod_ty_cd
+						
+					};		
+					console.log("========update params값=================")
+               		console.log(JSON.stringify(params));
+		            if (confirm('이 항목을 변경하시겠습니까?')) {
+		    			cf_movePage("/team4/calculate", params);
+		            }
 				},
 				close : function(){
 					$('#pop_sub_info').modal('hide');

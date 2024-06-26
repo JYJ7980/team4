@@ -170,4 +170,34 @@ public class T4Employee_Svc {
 		cmmnDao.update("system.t4_employee.updatePw", params);
 		return new CmmnMap().put("status", "OK");
 	}
+
+	/* 담당자 재직상태에 관한 수정 */
+	public CmmnMap status(CmmnMap params) {
+		String status_cd = params.getString("status_cd");
+		String iam_yn = params.getString("iam_yn");
+		String del_yn = params.getString("del_yn");
+		switch (status_cd) {
+		case "재직":
+			params.put("status_cd", "재직");
+			break;
+		case "휴가":
+			params.put("status_cd", "휴가");
+			break;
+		case "퇴사":
+			params.put("iam_yn", "Y");
+			params.put("del_yn", "Y");
+			params.put("status_cd", "퇴사");
+			break;
+		default:
+			return null;
+		}
+		cmmnDao.update("system.t4_employee.updateStatus", params);
+		return new CmmnMap().put("status", "OK");
+	}
+
+	public List<CmmnMap> statusSearch(CmmnMap params) {
+		List<CmmnMap> statusSearch = cmmnDao.selectList("system.t4_employee.statusSearch", params);
+		return statusSearch;
+	
+	}
 }

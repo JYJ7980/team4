@@ -102,4 +102,15 @@ public class T4MainEmployee_Ctl {
         CmmnMap data = t4Employee_Svc.updatePw(params);
          return data;
     }
+	
+	@RequestMapping("/status")
+	public CmmnMap status(CmmnMap params) {
+		CmmnMap data = t4Employee_Svc.status(params);
+		return data;
+	}
+	@RequestMapping("/st")
+	public List<CmmnMap> statusSearch(CmmnMap params) {
+		List<CmmnMap> dataList = t4Employee_Svc.statusSearch(params);
+		return dataList;
+	}
 }
