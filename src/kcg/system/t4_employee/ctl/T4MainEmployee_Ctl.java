@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import common.dao.CmmnDao;
 import common.utils.common.CmmnMap;
+import common.utils.common.PagingConfig;
+import common.utils.mybatis_paginator.domain.PageList;
 import kcg.common.svc.CommonSvc;
 import kcg.system.t4_employee.svc.T4Employee_Svc;
 
@@ -98,4 +100,23 @@ public class T4MainEmployee_Ctl {
         CmmnMap data = t4Employee_Svc.updatePw(params);
          return data;
     }
+	
+	
+	
+	// 퇴직자 리스트 페이지로 이동
+	@GetMapping("/quitUserInfoPage")
+	public String quitCustomerInfoPage() {
+		return "kcg/system/team4_mng/employee/quitUserInfoPage";
+	}
+	
+	
+	// 퇴직자 리스트 정보 전체 조회
+	@RequestMapping("/getQuitUser")
+		public PageList<CmmnMap> getQuitUser(CmmnMap params, PagingConfig pagingConfig) {
+			PageList<CmmnMap> pageList = t4Employee_Svc.getQuitUser(params, pagingConfig);
+			System.out.println("=========================");
+			return pageList;
+		}
+
+
 }

@@ -14,7 +14,7 @@
 <link rel="stylesheet"
 	href="/static_resources/system/js/select2/select2.css">
 
-<title>탈퇴고객 조회</title>
+<title>퇴직자 조회</title>
 </head>
 <body class="page-body">
 
@@ -33,7 +33,7 @@
 				<li class="active"><strong>탈퇴고객 조회</strong></li>
 			</ol>
 
-			<h2>고객관리 > 탈퇴고객 조회</h2>
+			<h2>직원관리 > 퇴직자 조회</h2>
 			<br />
 
 			<div class="dataTables_wrapper" id="vueapp">
@@ -43,20 +43,15 @@
 						<thead>
 							<tr class="replace-inputs">
 								<th style="width: 10%;" class="center sorting">성명</th>
-								<th style="width: 10%;" class="center sorting">주민번호</th>
-								<th style="width: 10%;" class="center sorting">담당부서</th>
-								<th style="width: 10%;" class="center sorting">담당직원</th>
-								<th style="width: 10%;" class="center sorting">휴면해제</th>
+								<th style="width: 10%;" class="center sorting">부서</th>
+								<th style="width: 10%;" class="center sorting">직급</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr v-for="item in dataList" style="cursor: pointer;">
-								<td class="center">{{item.customer_name}}</td>
-								<td class="center">{{ maskIdNumber(item.customer_id_number)
-									}}</td>
-								<td class="center">{{item.dept}}</td>
 								<td class="center">{{item.name}}</td>
-								<td class="center"><buttun @click="releaseQuitCust(item)" type="button" class="btn">계정 복구</buttun></td>
+								<td class="center">{{item.dept}}</td>
+								<td class="center">{{item.jikgub_nm}}</td>
 							</tr>
 						</tbody>
 					</table>
@@ -96,41 +91,7 @@
 					}
 				},
 				methods : {
-					maskIdNumber : function(idNumber) {
-						// 예시: 문자열로 변환 후 8자리까지만 표시하고 나머지는 '*'로 대체
-						if (idNumber && typeof idNumber === 'string') {
-							return idNumber.substring(0, 8)
-									+ '*'.repeat(idNumber.length - 8);
-						} else {
-							return '';
-						}
-					},
-					releaseQuitCust: function(item) {
-						if (item !== null) {
-			                // 확인 메시지 추가
-			                if (confirm('해당 고객을 휴면해제합니다')) {
-			                    var params = {
-			                        customer_id:item.customer_id
-			                    };
-			                    console.log(params);
-			                    axios.post('/system/team4/releaseQuitCust', { params: params })
-			                        .then(response => {
-			                            if (response.data.status === 'OK') {
-			                                alert('고객 계정이 복구처리 되었습니다.\n담당자 변경은 관리자에게 문의하세요');
-			                                this.getList(); // 고객 목록을 다시 불러옵니다.
-			              
-			                            } else {
-			                                alert('휴면해제를 실패했습니다.');
-			                            }
-			                        })
-			                        .catch(error => {
-			                            console.error('Error:', error);
-			                        });
-			                }
-			            }
-			        },
 					getList : function(isInit) {
-
 						cv_pagingConfig.func = this.getList;
 
 						if (isInit === true) {
@@ -138,14 +99,11 @@
 						}
 
 						var params = {};
-						if (this.all_srch != "Y") {
-
-						}
-
+					
 						cv_sessionStorage.setItem('pagingConfig',
 								cv_pagingConfig).setItem('params', params);
 
-						cf_ajax("/system/team4/getQuitCustInfo", params,
+						cf_ajax("/system/team4/employee/getQuitUser", params,
 								this.getListCB);
 					},
 					getListCB : function(data) {

@@ -23,8 +23,7 @@
 		<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/sidebar-menu.jsp"
 			flush="false" />
 
-		<div class="main-content">
-
+      <div class="main-content">
 			<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/header.jsp"
 				flush="false" />
 
@@ -34,8 +33,8 @@
 				<li class="active"><strong>상담내역 조회</strong></li>
 			</ol>
 
-			<h2>고객관리 > 상담내역 조회</h2> 
-		
+			<h2>고객관리 > 상담내역 조회</h2>
+
 			<br /> <span
 				style="font-size: 18px; font-weight: bold; color: black;">${userInfoVO.name}</span><span
 				style="font-size: 18px; color: black;">(${userInfoVO.dept})</span>&nbsp;
@@ -74,7 +73,9 @@
 				<br>
 				<button @click="filterList">담당 고객만 조회</button>
 				<button @click="getAllList">전체 상담내역 조회</button>
-				<button @click="window.location.href = '/system/team4/insertConsult'">상담 내역 추가</button>
+				<button
+					@click="window.location.href = '/system/team4/insertConsult'">상담
+					내역 추가</button>
 			</div>
 
 			<jsp:include page="/WEB-INF/jsp/kcg/_include/system/footer.jsp"

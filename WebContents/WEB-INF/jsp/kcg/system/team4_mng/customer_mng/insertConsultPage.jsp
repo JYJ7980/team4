@@ -96,6 +96,10 @@
 		<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/sidebar-menu.jsp"
 			flush="false" />
 
+      <div class="main-content">
+			<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/header.jsp"
+				flush="false" />
+
 		<div id="app" style="margin-left: 70px;">
 
 			<h4>상담 내역을 추가히세요!</h4>
@@ -147,6 +151,7 @@
 						<td>{{ customer.customer_brdt }}</td>
 					</tr>
 				</table>
+			</div>
 			</div>
 		</div>
 		<script>
