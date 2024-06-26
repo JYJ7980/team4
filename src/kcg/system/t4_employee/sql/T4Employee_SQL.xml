@@ -111,9 +111,31 @@
 	<select id="getQuitUser" parameterType="cmmnMap"
 		resultType="cmmnMap">
 		SELECT *
-		FROM kcgbd.t_user where iam_yn ='Y' and CONCAT(email, '') like '%@team4%'
+		FROM kcgbd.t_user where iam_yn ='Y' and
+		CONCAT(email, '') like '%@team4%'
 	</select>
 
+	<select id="getQuitUserCustomerInfo" parameterType="cmmnMap"
+		resultType="cmmnMap">
+		select * from kcgbd.db4_customer_info dci join kcgbd.t_user
+		tu on
+		dci.user_id = tu.user_id where tu.iam_yn = 'Y' and dci.use_yn
+		='Y'
+		and tu.user_id = #{user_id}
+	</select>
 
+	<select id="getCurrentUserInfo" parameterType="cmmnMap"
+		resultType="cmmnMap">
+		SELECT *
+		FROM kcgbd.t_user where iam_yn ='N' and
+		CONCAT(email, '') like '%@team4%'
+	</select>
 
+	<update id="changeQuitUser" parameterType="cmmnMap">
+		update
+		kcgbd.db4_customer_info
+		set user_id = #{user_id}
+		where customer_id =
+		CAST(#{customer_id} AS integer)
+	</update>
 </mapper>

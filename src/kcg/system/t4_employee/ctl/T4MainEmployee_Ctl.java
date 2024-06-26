@@ -114,9 +114,29 @@ public class T4MainEmployee_Ctl {
 	@RequestMapping("/getQuitUser")
 		public PageList<CmmnMap> getQuitUser(CmmnMap params, PagingConfig pagingConfig) {
 			PageList<CmmnMap> pageList = t4Employee_Svc.getQuitUser(params, pagingConfig);
-			System.out.println("=========================");
 			return pageList;
 		}
-
+	
+	//재직자 리스트 조회
+	@GetMapping("/getCurrentUserInfo")
+	public List<CmmnMap> getCurrentUserInfo(CmmnMap params) {
+		return t4Employee_Svc.getCurrentUserInfo(params);
+	}
+	
+	
+	//퇴직자 담당 고객 조회
+	@GetMapping("/getQuitUserCustomerInfo")
+	public List<CmmnMap> getQuitUserCustomerInfo(CmmnMap params) {
+		return t4Employee_Svc.getQuitUserCustomerInfo(params);
+	}
+	
+	//퇴직자 담당 고객 관리자 지정
+	@RequestMapping("/changeQuitUser")
+	public CmmnMap changeQuitUser(CmmnMap params) {
+		return t4Employee_Svc.changeQuitUser(params);
+	}
+	
+	
+	
 
 }

@@ -149,11 +149,33 @@ public class T4Employee_Svc {
 		return new CmmnMap().put("status", "OK");
 	}
 
-	
-	
-	//퇴직자 리스트 불러오기
+	// 퇴직자 리스트 불러오기
 	public PageList<CmmnMap> getQuitUser(CmmnMap params, PagingConfig pagingConfig) {
 		PageList<CmmnMap> rslt = cmmnDao.selectListPage("system.t4_employee.getQuitUser", params, pagingConfig);
 		return rslt;
+	}
+
+	public List<CmmnMap> getQuitUserCustomerInfo(CmmnMap params) {
+		List<CmmnMap> dataList = cmmnDao.selectList("system.t4_employee.getQuitUserCustomerInfo", params);
+//		System.out.println(dataList);
+		String user_id = params.getString("user_id");
+		params.put("user_id", user_id);
+		return dataList;
+	}
+
+	public List<CmmnMap> getCurrentUserInfo(CmmnMap params) {
+		List<CmmnMap> dataList = cmmnDao.selectList("system.t4_employee.getCurrentUserInfo", params);
+		return dataList;
+	}
+
+	public CmmnMap changeQuitUser(CmmnMap params) {
+		String customer_id = params.getString("customer_id");
+		String user_id = params.getString("user_id");
+
+		params.put("customer_id", customer_id);
+		params.put("user_id", user_id);
+
+		cmmnDao.update("system.t4_employee.changeQuitUser", params);
+		return new CmmnMap().put("status", "OK");
 	}
 }
