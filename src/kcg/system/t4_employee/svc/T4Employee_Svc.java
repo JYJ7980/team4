@@ -18,7 +18,9 @@ import org.springframework.stereotype.Service;
 
 import common.dao.CmmnDao;
 import common.utils.common.CmmnMap;
+import common.utils.common.PagingConfig;
 import common.utils.crypt.CryptUtil;
+import common.utils.mybatis_paginator.domain.PageList;
 import kcg.common.svc.CommonSvc;
 
 @Service
@@ -144,6 +146,36 @@ public class T4Employee_Svc {
 		String hashedPw = CryptUtil.hashSHA512HexString(user_pw);
 		params.put("user_pw", hashedPw);
 		cmmnDao.update("system.t4_employee.updatePw", params);
+		return new CmmnMap().put("status", "OK");
+	}
+
+	// 퇴직자 리스트 불러오기
+	public PageList<CmmnMap> getQuitUser(CmmnMap params, PagingConfig pagingConfig) {
+		PageList<CmmnMap> rslt = cmmnDao.selectListPage("system.t4_employee.getQuitUser", params, pagingConfig);
+		return rslt;
+	}
+
+	public List<CmmnMap> getQuitUserCustomerInfo(CmmnMap params) {
+		List<CmmnMap> dataList = cmmnDao.selectList("system.t4_employee.getQuitUserCustomerInfo", params);
+//		System.out.println(dataList);
+		String user_id = params.getString("user_id");
+		params.put("user_id", user_id);
+		return dataList;
+	}
+
+	public List<CmmnMap> getCurrentUserInfo(CmmnMap params) {
+		List<CmmnMap> dataList = cmmnDao.selectList("system.t4_employee.getCurrentUserInfo", params);
+		return dataList;
+	}
+
+	public CmmnMap changeQuitUser(CmmnMap params) {
+		String customer_id = params.getString("customer_id");
+		String user_id = params.getString("user_id");
+
+		params.put("customer_id", customer_id);
+		params.put("user_id", user_id);
+
+		cmmnDao.update("system.t4_employee.changeQuitUser", params);
 		return new CmmnMap().put("status", "OK");
 	}
 }
