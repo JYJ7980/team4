@@ -24,9 +24,9 @@
 	padding: 10px;
 }
 
-.fix-width-15 {
+.fix-width-20 {
 	display: flex;
-	width: 15%;
+	width: 20%;
 	align-items: center;
 	justify-content: flex-end;
 }
@@ -40,8 +40,8 @@ button[type="button"]:disabled {
 	position: relative;
 	width: 60%;
 	display: flex;
-	align-items: center;
 	justify-content: flex-start;
+	align-items: center;
 	padding-left: 10px;
 	padding-right: 10px;
 	padding-top: 20px;
@@ -54,6 +54,16 @@ button[type="button"]:disabled {
 	margin-left: 10px;
 	align-items: center;
 	justify-content: flex-start;
+	border-radius: 2px;
+}
+
+.form-group1 textarea {
+	resize: none;
+	width: 80%;
+	height: 80px;
+	margin-left: 10px;
+	justify-content: flex-start;
+	align-content: flex-start;
 	border-radius: 2px;
 }
 
@@ -106,6 +116,10 @@ button[type="button"]:disabled {
 	transform: translate(5%, 60%);
 	font-size: 18px;
 }
+
+.disabled[disabled] {
+	background: rgb(240, 240, 240);
+}
 </style>
 <title>상품정보관리</title>
 </head>
@@ -129,7 +143,7 @@ button[type="button"]:disabled {
 			<div class="flex flex-center" id="vueapp">
 				<div class="main-panel">
 					<div class="form-group1">
-						<label for="product_name" class="fix-width-15">상품명 :</label> <input
+						<label for="product_name" class="fix-width-20">상품명 :</label> <input
 							type="text" class="form-control" id="product_name"
 							v-model="info.product_name" ref="product_name"
 							:disabled="info.writer_name!=''&&info.writer_name!=null">
@@ -142,7 +156,7 @@ button[type="button"]:disabled {
 						</div>
 					</div>
 					<div class="form-group1">
-						<label for="product_id" class="fix-width-15">상품코드 :</label> <input
+						<label for="product_id" class="fix-width-20">상품코드 :</label> <input
 							type="text" class="form-control" id="product_id"
 							v-model="info.product_id" ref="product_id"
 							placeholder="상품코드는 5자리입니다."
@@ -156,7 +170,7 @@ button[type="button"]:disabled {
 						</div>
 					</div>
 					<div class="form-group1">
-						<label for="product_type" class="fix-width-15">상품유형 :</label> <select
+						<label for="product_type" class="fix-width-20">상품유형 :</label> <select
 							class="select-control" id="product_type"
 							v-model="info.product_type" ref="product_type"
 							:disabled="info.writer_name!=''&&info.writer_name!=null">
@@ -167,7 +181,7 @@ button[type="button"]:disabled {
 						</select>
 					</div>
 					<div class="form-group1">
-						<label for="possible_member" class="fix-width-15">가입대상 :</label> <select
+						<label for="possible_member" class="fix-width-20">가입대상 :</label> <select
 							class="select-control" id="possible_member" ref="possible_member"
 							v-model="info.possible_member"
 							:disabled="info.writer_name!=''&&info.writer_name!=null">
@@ -177,7 +191,7 @@ button[type="button"]:disabled {
 						</select>
 					</div>
 					<div class="form-group1">
-						<label for="lowest_money" class="fix-width-15">가입금액 :</label>
+						<label for="lowest_money" class="fix-width-20">가입금액 :</label>
 						<div class="form-group2">
 							<label class="label-position1">(최소)</label> <input type="text"
 								class="form-control" id="lowest_money" ref="lowest_money"
@@ -197,7 +211,7 @@ button[type="button"]:disabled {
 						</div>
 					</div>
 					<div class="form-group1">
-						<label for="lowest_rate" class="fix-width-15">적용이율 :</label>
+						<label for="lowest_rate" class="fix-width-20">적용이율 :</label>
 						<div class="form-group2">
 							<label class="label-position1">(최소)</label> <input type="number"
 								class="form-control" id="lowest_rate" ref="lowest_rate"
@@ -217,17 +231,14 @@ button[type="button"]:disabled {
 						</div>
 					</div>
 					<div class="form-group1">
-						<label for="rate_condition" class="fix-width-15">이율변동조건 :</label>
-						<div class="form-control">
-							<textarea id="rate_condition" ref="rate_condition"
-								v-model="info.rate_condition"
-								style="resize: none; width: 100%; height: 80px;"
-								:disabled="info.writer_name!=''&&info.writer_name!=null"></textarea>
-						</div>
+						<label for="rate_condition" class="fix-width-20">이율변동조건 :</label>
+						<textarea class="disabled" id="rate_condition"
+							ref="rate_condition" v-model="info.rate_condition"
+							:disabled="info.writer_name!=''&&info.writer_name!=null"></textarea>
 					</div>
 					<div class="form-group1">
-						<label for="pay_type" class="fix-width-15">납입주기 :</label> <select
-							class="form-control" id="pay_type" ref="pay_type"
+						<label for="pay_type" class="fix-width-20">납입주기 :</label> <select
+							class="select-control" id="pay_type" ref="pay_type"
 							v-model="info.pay_type"
 							:disabled="info.writer_name!=''&&info.writer_name!=null">
 							<option value="월납">월납</option>
@@ -236,20 +247,28 @@ button[type="button"]:disabled {
 						</select>
 					</div>
 					<div class="form-group1">
-						<label for="lowest_date" class="fix-width-15">적용기간 :</label>
-						<div class="form-control">
-							<input type="number" id="lowest_date" ref="lowest_date"
+						<label for="lowest_date" class="fix-width-20">적용기간 :</label>
+						<div class="form-group2">
+							<label class="label-position1">(최소)</label> <input type="number"
+								class="form-control" id="lowest_date" ref="lowest_date"
 								v-model="info.lowest_date"
 								:disabled="info.writer_name!=''&&info.writer_name!=null">
-							<label>개월 ~</label> <input type="number" id="highest_date"
-								ref="highest_date" v-model="info.highest_date"
+							<label class="label-position2">개월</label>
+						</div>
+						<div class="form-group3">
+							<label class="label-position3">～</label>
+						</div>
+						<div class="form-group2">
+							<label class="label-position1">(최대)</label> <input type="number"
+								class="form-control" id="highest_date" ref="highest_date"
+								v-model="info.highest_date"
 								:disabled="info.writer_name!=''&&info.writer_name!=null">
-							<label>개월</label>
+							<label class="label-position2">개월</label>
 						</div>
 					</div>
 					<div class="form-group1">
-						<label for="taxation" class="fix-width-15">과세구분 :</label> <select
-							class="form-control" id="taxation" ref="taxation"
+						<label for="taxation" class="fix-width-20">과세구분 :</label> <select
+							class="select-control" id="taxation" ref="taxation"
 							v-model="info.taxation"
 							:disabled="info.writer_name!=''&&info.writer_name!=null">
 							<option value="일반과세">일반과세</option>
@@ -258,31 +277,40 @@ button[type="button"]:disabled {
 						</select>
 					</div>
 					<div class="form-group1">
-						<label for="product_sale_start_date" class="fix-width-15">판매기간
+						<label for="product_sale_start_date" class="fix-width-20">판매기간
 							:</label>
-						<div class="form-control">
-							<input type="date" id="product_sale_start_date"
+						<div class="form-group2">
+							<label class="label-position1">(시작일)</label> <input type="date"
+								class="form-control" id="product_sale_start_date"
 								ref="product_sale_start_date"
 								v-model="info.product_sale_start_date"
 								:disabled="new Date(info.product_sale_start_date) < new Date(currentDate)">
-							<label> ~</label> <input type="date" id="product_sale_end_date"
+						</div>
+						<div class="form-group3">
+							<label class="label-position3"> ～ </label>
+						</div>
+						<div class="form-group2">
+							<label class="label-position1">(종료일)</label> <input type="date"
+								class="form-control" id="product_sale_end_date"
 								ref="product_sale_end_date" v-model="info.product_sale_end_date"
 								:disabled="info.product_status =='9'">
 						</div>
 					</div>
 					<div class="form-group1">
-						<label for="event_yn" class="fix-width-15">행사여부 :</label> <input
+						<label for="event_yn" class="fix-width-20">행사여부 :</label> <input
 							type="radio" name="event_yn" value="N" id="event_yn"
 							v-model="info.event_yn"
+							style="width: 15px; height: 15px; border: 1px;"
 							:disabled="info.writer_name!=''&&info.writer_name!=null">비행사상품
 						<input type="radio" name="event_yn" value="Y" id="event_yn"
 							v-model="info.event_yn"
+							style="width: 15px; height: 15px; border: 1px;"
 							:disabled="info.writer_name!=''&&info.writer_name!=null">행사상품
 
 					</div>
 					<div class="form-group1">
-						<label for="product_status" class="fix-width-15">판매상태 :</label> <select
-							class="form-control" id="product_status" ref="product_status"
+						<label for="product_status" class="fix-width-20">판매상태 :</label> <select
+							class="select-control" id="product_status" ref="product_status"
 							v-model="info.product_status"
 							:disabled="info.product_status =='9'">
 							<option value="0">정상(판매)</option>
@@ -296,13 +324,13 @@ button[type="button"]:disabled {
 							<div
 								v-if="info.product_status =='9' || new Date(info.product_sale_end_date) < new Date(currentDate)">
 								<button type="button" class="btn btn-blue btn-icon btn-small"
-									@click="gotoList">
+									@click="gotoList" style="justify-content: center;">
 									목록 <i class="entypo-list"></i>
 								</button>
 							</div>
 							<div v-else>
 								<button type="button" class="btn btn-green btn-icon btn-small"
-									@click="save" v-if="key">
+									@click="save" style="justify-content: center;" v-if="key">
 									저장 <i class="entypo-check"></i>
 								</button>
 
