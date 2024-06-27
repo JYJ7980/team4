@@ -27,7 +27,7 @@
 		AND email like '%@team4.com'
 		ORDER BY jikgub_cd asc
 	</select>
-	
+
 	<select id="statusSearch" parameterType="cmmnMap"
 		resultType="cmmnMap">
 		SELECT * FROM kcgbd.t_user WHERE status_cd = #{status_cd}
@@ -51,7 +51,6 @@
 	<!-- 비밀번호 수정 업데이트 -->
 	<update id="updatePw" parameterType="cmmnMap">
 		UPDATE kcgbd.t_user
-		SET user_pw = #{user_pw}
 		SET
 		user_pw = #{user_pw}
 		WHERE user_id = #{user_id}
@@ -64,20 +63,17 @@
 		name = #{name},
 		jikgub_nm = #{jikgub_nm},
 		dept = #{dept}
-		dept = #{dept},
-		del_yn = #{del_yn},
-		iam_yn = #{iam_yn}
-		WHERE user_id =
-		#{user_id}
+		WHERE user_id =	#{user_id}
 	</update>
 
 	<update id="updateStatus" parameterType="cmmnMap">
 		UPDATE kcgbd.t_user
-		SET 
+		SET
 		del_yn = #{del_yn},
 		iam_yn = #{iam_yn},
 		status_cd = #{status_cd}
-		WHERE user_id = #{user_id}
+		WHERE
+		user_id = #{user_id}
 	</update>
 
 	<!-- 신규 계정 생성 -->
@@ -99,7 +95,7 @@
 		del_yn)
 		VALUES
 		(#{reg_dt},
-		#{user_id},
+		CAST(#{user_id} AS VARCHAR),
 		#{user_pw},
 		#{iam_yn},
 		#{name},
@@ -114,7 +110,6 @@
 		#{del_yn})
 	</insert>
 	<insert id="insertCal" parameterType="CmmnMap">
-		INSERT INTO kcgbd.db4_bn_cal_mag (manager_id) values (#{user_id});
 		INSERT INTO
 		kcgbd.db4_bn_cal_mag (manager_id) values (#{user_id});
 	</insert>
@@ -151,4 +146,15 @@
 		where customer_id =
 		CAST(#{customer_id} AS integer)
 	</update>
+
+
+	<select id="newEmployeeID"	resultType="cmmnMap">
+		SELECT user_id
+		FROM kcgbd.t_user
+		WHERE
+		email LIKE '%@team4.com'
+		AND user_id LiKE '10000%'
+		ORDER BY user_id DESC
+		LIMIT 1
+	</select>
 </mapper>

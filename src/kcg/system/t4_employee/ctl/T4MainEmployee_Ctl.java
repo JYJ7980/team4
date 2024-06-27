@@ -149,4 +149,13 @@ public class T4MainEmployee_Ctl {
 	public CmmnMap changeQuitUser(CmmnMap params) {
 		return t4Employee_Svc.changeQuitUser(params);
 	}
+	
+	@RequestMapping("/newEmployeeID")
+	public CmmnMap newEmployeeID(CmmnMap params) {
+		CmmnMap data = t4Employee_Svc.newEmployeeID(params);
+		System.out.println("---------------------------------------------------------------------------------------------------------------");
+		System.out.println(data.toString());
+		return data;
+
+	}
 }

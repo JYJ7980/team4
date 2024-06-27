@@ -187,16 +187,25 @@
 										<label>비밀번호 수정</label>
 										<button type="button" @click="input">비밀번호 수정</button>
 										<div v-if="key">
-											<label>비밀번호 : </label> <input type="text" v-model="userPw">
+											<label>비밀번호 : </label> 
+											<input type="text" v-model="userPw">
 											<button type="submit" @click="updatePw">저장</button>
 										</div>
 									</div>
 
 									<div class="input-form">
-										<label v-model="status_cd">재직정보 : </label>
-										<button @click="status('재직')">재직</button>
-										<button @click="status('휴가')">휴가</button>
-										<button @click="status('퇴직')">퇴직</button>
+										<label>재직정보 : </label>
+										<div v-if="emp_nfo.status_cd == '재직'">
+											<button @click="status('휴가')">휴가</button>
+											<button @click="status('퇴직')">퇴직</button>
+										</div>
+										<div v-else-if="emp_nfo.status_cd == '휴가'">
+											<button @click="status('재직')">재직</button>
+											<button @click="status('퇴직')">퇴직</button>
+										</div>
+										<div v-else>
+										</div>
+
 									</div>
 									<div class="input-form">
 										<label>직급 : </label> <select v-model="emp_nfo.jikgub_nm">
@@ -218,20 +227,20 @@
 										</select>
 									</div>
 									<button @click="update">수정</button>
-									<!-- <button @click="deleteEmployee">삭제</button> -->
 								</div>
 							</div>
 						</div>
-
+      <!-- ---------------------------------------------------------------------------------------------------------------------- -->
 						<div v-if="formChange2">
 							<div class="details-container">
 								<div class="customer-info">
 									<h3>신규 직원</h3>
 									<div class="input-form">
-										<label>부여할 ID : </label> <input type="text" id="user_id"
-											v-model="newEmployee.new_user_id" :disabled="isIdChecked">
-										<input type="submit" id="new_user_id" value="ID중복확인"
-											@click="checkId">
+										<label>부여할 ID : </label> 
+										<input type="text" id="user_id"
+											v-model="newEmployee.new_user_id" disabled="disabled">
+<!-- 										<input type="submit" id="new_user_id" value="ID중복확인" -->
+<!-- 											@click="checkId"> -->
 									</div>
 
 									<div class="input-form">
@@ -248,7 +257,6 @@
 									<div class="input-form">
 										<label>직급 : </label> <select id="jikgub_nm"
 											v-model="newEmployee.new_jikgub_nm">
-											<option value="수습">수습</option>
 											<option value="부장">부장</option>
 											<option value="차장">차장</option>
 											<option value="과장">과장</option>
@@ -290,10 +298,12 @@
             statusSearch : "",
             status_cd : "",
             userPw:"",  //새 비밀번호 저장 변수
+            newEmployeeID:"",
             emp_nfo: { // 선택된 직원 정보를 저장하는 객체
                 user_id: "",
                 name: "",
                 user_pw:"",
+                status_cd:"",
                 jikgub_nm: "",
                 dept: "",
                 reg_dt :""
@@ -317,6 +327,17 @@
         	formChange : function(){
         		this.formChange1 = !this.formChange1;
         		this.formChange2 = !this.formChange2;
+        		
+        		 axios.get("/system/team4/employee/newEmployeeID")
+                 .then(response => {
+                	 console.log(response.data);
+                     var newEmployee = response.data.user_id;
+                     var b = (parseInt(newEmployee)+1);
+                     this.newEmployee.new_user_id = b
+                 })
+                 .catch(error => {
+                     console.error("데이터 로드 오류:", error);
+                 });
         	},
         	input :function(){
         		this.key = !this.key;
@@ -424,7 +445,7 @@
             },
             update: function() {
                 var params = {
-                		user_id : this.emp_nfo.user_id,
+                		user_id : Strign(this.emp_nfo.user_id),
                     	name : this.emp_nfo.name,
                     	jikgub_nm : this.emp_nfo.jikgub_nm,
                     	dept : this.emp_nfo.dept
@@ -443,35 +464,35 @@
                         alert("오류 발생: " + error);
                     });
             },
-            checkId: function(){
-    			if(!this.newEmployee.new_user_id.trim()){
-    				alert("ID를 입력해주세요.");
-    				return;
-    			}
-    			var params = {
-    				user_id: this.newEmployee.new_user_id
-    			};
-    			console.log(params);
-    			axios.post("/system/team4/employee/checkId/", {params:params})
-    				.then(response => {
-    					if (response.data.user_id === this.newEmployee.new_user_id) {
-    						alert("중복된 ID 입니다.");
-    					} else {
-    						alert("사용 가능한 ID 입니다.");
-    						this.isIdChecked = true; 
-    					}
-    				})
-    				.catch(error => {
-    					console.error("오류 발생: ", error);
-    					alert("오류 발생: " + error.message);
-    				});
-    		},
+//             checkId: function(){
+//     			if(!String(this.newEmployee.new_user_id.trim())){
+//     				alert("ID를 입력해주세요.");
+//     				return;
+//     			}
+//     			var params = {
+//     				user_id: this.newEmployee.new_user_id
+//     			};
+//     			console.log(params);
+//     			axios.post("/system/team4/employee/checkId/", {params:params})
+//     				.then(response => {
+//     					if (response.data.user_id === String(this.newEmployee.new_user_id)) {
+//     						alert("중복된 ID 입니다.");
+//     					} else {
+//     						alert("사용 가능한 ID 입니다.");
+//     						this.isIdChecked = true; 
+//     					}
+//     				})
+//     				.catch(error => {
+//     					console.error("오류 발생: ", error);
+//     					alert("오류 발생: " + error.message);
+//     				});
+//     		},
     		save: function () {
     			// 제목과 내용이 비어있는지 검사
-    			if (!this.newEmployee.new_user_id.trim()) {
-    				alert("부여 할 아이디를 입력하세요.");
-    				return;
-    			}
+//     			if (!this.newEmployee.new_user_id.trim()) {
+//     				alert("부여 할 아이디를 입력하세요.");
+//     				return;
+//     			}
     			if (!this.newEmployee.new_user_pw.trim()) {
     				alert("비밀번호를 입력하세요.");
     				return;
@@ -488,10 +509,10 @@
     				alert("부서를 선택하세요.");
     				return;
     			}
-    			if (!this.isIdChecked) {
-    				alert("ID중복확인을 클릭해주세요.");
-    				return;
-    			}
+//     			if (!this.isIdChecked) {
+//     				alert("ID중복확인을 클릭해주세요.");
+//     				return;
+//     			}
 
     			// 저장 요청 보내기
     			if (!confirm("저장하시겠습니까?")) return;
@@ -520,6 +541,7 @@
     					alert("오류 발생: " + error);
     				});
     		}
+    		
         }
     });
 

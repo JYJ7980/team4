@@ -207,4 +207,9 @@ public class T4Employee_Svc {
 		cmmnDao.update("system.t4_employee.changeQuitUser", params);
 		return new CmmnMap().put("status", "OK");
 	}
+	
+	public CmmnMap newEmployeeID(CmmnMap params) {
+		CmmnMap data = cmmnDao.selectOne("system.t4_employee.newEmployeeID", params);
+		return data;
+	}
 }
