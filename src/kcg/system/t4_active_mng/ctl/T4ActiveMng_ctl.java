@@ -42,4 +42,14 @@ public class T4ActiveMng_ctl {
 	public CmmnMap saveCalender(CmmnMap params) {
 		return t4ActiveMng_svc.saveCalender(params);
 	}
+	
+	@PostMapping("/teamSave")
+	public CmmnMap teamSave(CmmnMap params) {
+		return t4ActiveMng_svc.teamSaveCalender(params);
+	}
+	
+	@PostMapping("/calenderDept")
+	public List<CmmnMap> calenderDept(CmmnMap params) {
+		return t4ActiveMng_svc.findDept(params);
+	}
 }

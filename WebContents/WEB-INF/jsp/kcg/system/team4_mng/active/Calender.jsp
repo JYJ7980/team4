@@ -144,11 +144,26 @@
 					<button @click="calendarData(-1)"><</button>
 					{{ year }}년 {{ month }}월
 					<button @click="calendarData(1)">></button>
-					
+
 				</div>
-				<div style="display: flex; justify-content: flex-end; margin-right: 200px;">
-						<button type="button" @click="openInsertForm">등록</button>
+				<c:if test="${userInfoVO.jikgubCd == '2'}">
+				<div style="display: flex; justify-content: flex-end;">
+					<div
+						style="display: flex; justify-content: flex-end; margin-right: 10px;">
+						<button type="button" @click="openTeamForm">팀 일정 등록</button>
 					</div>
+					<div
+					style="display: flex; justify-content: flex-end; margin-right: 200px;">
+					<button type="button" @click="openInsertForm">등록</button>
+				</div>
+				</div>
+				</c:if>
+				<c:if test="${userInfoVO.jikgubCd != '2'}">
+				<div
+					style="display: flex; justify-content: flex-end; margin-right: 200px;">
+					<button type="button" @click="openInsertForm">등록</button>
+				</div>
+				</c:if>
 				<table border="1" style="width: 80%;" align="center">
 					<thead>
 						<!-- 요일 -->
@@ -168,6 +183,12 @@
 											v-if="parseInt(toDo.cal_date.substring(8, 10))==day"
 											@click="openEditModal(toDo)" class="ptag">
 											{{toDo.cal_title}}</li>
+										<li v-for="toDo in deptList"
+											v-if="parseInt(toDo.cal_date.substring(8, 10))==day"
+											@click="openTeamModal(toDo)" class="ptag" style="color: red;">
+											{{toDo.cal_title}}</li>
+
+
 									</ul>
 									<div v-else></div>
 							</td>
@@ -176,6 +197,85 @@
 						</tr>
 					</tbody>
 				</table>
+
+
+
+
+				<div v-if="teamModal" class="modal">
+					<div class="modal-content">
+						<span class="close" @click="closeTeamModal">&times;</span>
+
+						<div class="form-group">
+
+							<div>
+							<c:if test="${userInfoVO.jikgubCd == '2'}">
+								<div>
+									<label for="date">날짜</label> <input type="date" id="date"
+										v-model="selected.cal_date">
+								</div>
+								</c:if>
+								<c:if test="${userInfoVO.jikgubCd != '2'}">
+								<div>
+									<label for="date">날짜</label> <input type="date" id="date"
+										v-model="selected.cal_date" disabled="disabled">
+								</div>
+								</c:if>
+								<br>
+								<c:if test="${userInfoVO.jikgubCd == '2'}">
+								<div>
+									<label for="title">제목</label> <input type="text" id="title"
+										v-model="selected.cal_title">
+								</div>
+								</c:if>
+								<c:if test="${userInfoVO.jikgubCd != '2'}">
+								<div>
+									<label for="title">제목</label> <input type="text" id="title"
+										v-model="selected.cal_title" disabled="disabled">
+								</div>
+								</c:if>
+								<c:if test="${userInfoVO.jikgubCd == '2'}">
+								<div>
+									<div>
+										<label for="content">내용 : </label>
+									</div>
+									<div>
+										<textarea rows="5" id="content" v-model="selected.cal_content"
+											placeholder="내용을 입력하세요." class="contentArea"></textarea>
+									</div>
+
+								</div>
+								</c:if>
+								<c:if test="${userInfoVO.jikgubCd != '2'}">
+								<div>
+									<div>
+										<label for="content">내용 : </label>
+									</div>
+									<div>
+										<textarea rows="5" id="content" v-model="selected.cal_content"
+											placeholder="내용을 입력하세요." class="contentArea" disabled="disabled"></textarea>
+									</div>
+
+								</div>
+								</c:if>
+								<c:if test="${userInfoVO.jikgubCd == '2'}">
+									<div style="display: flex; justify-content: flex-end;">
+										<button type="button" @click="updateTeamCal">
+											수정<i class="entypo-check"></i>
+										</button>
+										<button type="button"
+											@click="deleteTeamCal(selected.bn_cal_id)"
+											style="margin-left: 20px;">
+											삭제 <i class="entypo-check"></i>
+										</button>
+									</div>
+								</c:if>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+
 
 				<div v-if="showModal" class="modal">
 					<div class="modal-content">
@@ -254,6 +354,44 @@
 				</div>
 
 
+				<div v-if="teamForm" class="modal">
+					<div class="modal-content">
+						<span class="close" @click="closeTeamForm">&times;</span>
+						<div class="form-group">
+
+							<div>
+								<div>
+									<label for="insert.date">날짜</label> : <input type="date"
+										id="insert.date" v-model="insert.date">
+								</div>
+								<br>
+								<div>
+									<label for="insert.title">제목</label> : <input type="text"
+										id="insert.title" v-model="insert.title">
+								</div>
+								<div>
+									<div>
+										<label for="insert.content">내용 : </label>
+									</div>
+									<div>
+										<textarea rows="5" id="insert.content"
+											v-model="insert.content" placeholder="내용을 입력하세요."
+											class="contentArea"></textarea>
+									</div>
+
+								</div>
+								<div style="display: flex; justify-content: flex-end;">
+									<button type="button" @click="teamSave">
+										등록<i class="entypo-check"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+
 			</div>
 		</div>
 	</div>
@@ -274,10 +412,13 @@ var vueapp = new Vue({
 		year: 0,
 		month: 0,
 		dates: [],
+		deptList: [],
 		toDoList: [],
 		selected: null,
 		showModal: false,
 		insertForm: false,
+		teamForm: false,
+		teamModal: false,
 		insert: {
 			date:"",
 			title:"",
@@ -296,9 +437,6 @@ var vueapp = new Vue({
 				year: this.year,
 				month: this.month,
 			}
-			
-
-
 			axios.post('/system/team4/active/calenderDateCal', {params:params})
 				.then(response => {
 					this.getDataListCB(response.data);
@@ -306,6 +444,15 @@ var vueapp = new Vue({
 				.catch(error => {
 					console.error("Error fetching calendar data:", error);
 				});
+			
+			axios.post('/system/team4/active/calenderDept', {params:params})
+			.then(response => {
+				this.getDeptListCB(response.data);
+			})
+			.catch(error => {
+				console.error("Error fetching calendar data:", error);
+			});
+			
 
 		},
 		calendarData(move) {
@@ -387,9 +534,21 @@ var vueapp = new Vue({
 		      return dates;
 		      
 		},
-		    getDataListCB : function(data){
-		    	this.toDoList = data;
-		    },
+		getDataListCB : function(data){
+	    	this.toDoList = data;
+	    },
+	    getDeptListCB : function(data){
+	    	this.deptList = data;
+	    },
+	    openTeamModal(toDo) {
+    		this.selected = Object.assign({}, toDo);
+    		this.teamModal = true;
+    	},
+    	closeTeamModal() {
+    		this.teamModal = false;
+    		this.selected = null;
+    	},
+
 		    openEditModal(toDo) {
         		this.selected = Object.assign({}, toDo);
         		this.showModal = true;
@@ -408,6 +567,17 @@ var vueapp = new Vue({
         	closeEditModal() {
         		this.showModal = false;
         		this.selected = null;
+        	},
+        	openTeamForm() {
+        		this.teamForm = true;
+        	},
+        	closeTeamForm(){
+        		this.teamForm = false;
+        		this.insert = [
+        				cal_date="",
+        				cal_title="",
+        				cal_content=""
+        		]
         	},
         	
 			updateCal: function () {
@@ -435,6 +605,56 @@ var vueapp = new Vue({
 					})
 					.catch(error => {
 						alert("오류 발생: " + error);
+					});
+			},
+			
+			updateTeamCal: function () {
+				if (!this.selected.cal_title.trim()) {
+					alert("제목을 입력하세요.");
+					return;
+				}
+
+				var params = {
+					update_id: this.selected.bn_cal_id,
+					update_title: this.selected.cal_title,
+					update_content: this.selected.cal_content,
+					update_date: this.selected.cal_date
+				};
+
+				axios.post('/system/team4/active/calUpdate', { params: params })
+					.then(response => {
+						if (response.data.status === "OK") {
+							alert("저장되었습니다.");
+							this.getCalendar(true);
+							this.closeTeamModal();
+						} else {
+							alert("저장 실패: " + response.data.message);
+						}
+					})
+					.catch(error => {
+						alert("오류 발생: " + error);
+					});
+			},
+			
+			deleteTeamCal(bn_cal_id) {
+				if (!confirm('정말로 삭제하시겠습니까?')) return;
+				var params = {
+					delete_id: bn_cal_id,
+				};
+
+				console.log(params);
+				axios.post('/system/team4/active/calDelete', { params: params })
+					.then(response => {
+						if (response.data.status === 'OK') {
+							alert('삭제되었습니다.');
+							this.getCalendar(true);
+							this.closeTeamModal();
+						} else {
+							alert('삭제 실패: ' + response.data.message);
+						}
+					})
+					.catch(error => {
+						alert('오류 발생: ' + error);
 					});
 			},
 			deleteCal(bn_cal_id) {
@@ -481,7 +701,32 @@ var vueapp = new Vue({
 					.catch(error => {
 						alert("오류 발생: " + error);
 					});
+			},
+			teamSave : function (){
+				if (!this.insert.title.trim()) {
+					alert("제목을 입력하세요.");
+					return;
+				}
+				var params = {
+						date : this.insert.date,
+						title : this.insert.title,
+						content : this.insert.content
+				};
+				console.log(params);
+				axios.post("/system/team4/active/teamSave", {params:params})
+					.then(response => {
+						if (response.data.status === "OK") {
+							alert("저장되었습니다.");
+							window.location.href = '/system/team4/active/calender'; // 저장 후 목록으로 이동
+						} else {
+							alert("저장 실패: " + response.data.message);
+						}
+					})
+					.catch(error => {
+						alert("오류 발생: " + error);
+					});
 			}
+
 
 	}
 });
