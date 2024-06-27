@@ -18,7 +18,14 @@ public class T4ActiveMng_svc {
 	CommonSvc commonSvc;
 	@Autowired
 	CmmnDao cmmnDao;
-	
+	public String findDeptId() {
+		UserInfoVO userInfoVO = commonSvc.getLoginInfo();
+		CmmnMap params = new CmmnMap();
+		String dept_nm = userInfoVO.getDept();
+		params.put("dept_nm", dept_nm);
+		
+		return cmmnDao.selectOne("system.t4_active_mng.findDeptId", params);
+	}
 	public List<CmmnMap> findToDoList(CmmnMap params) {
 		String year = params.getString("year");
 		String month = params.getString("month");
@@ -26,7 +33,7 @@ public class T4ActiveMng_svc {
 	    if (month.length() == 1) {
 	        month = "0" + month; // 1자리 수일 경우 앞에 0을 붙임
 	    }
-	    
+
 		UserInfoVO uerInfoVo = commonSvc.getLoginInfo();
 		params.put("user_id", uerInfoVo.getUserId());
 		params.put("year", year);
@@ -79,6 +86,40 @@ public class T4ActiveMng_svc {
 		params.put("cal_id", cal_id);
 		
 		cmmnDao.insert("system.t4_active_mng.saveCalender",params);
+		
+		
+		return new CmmnMap().put("status", "OK");
+	}
+	public List<CmmnMap> findDept(CmmnMap params) {
+		String year = params.getString("year");
+		String month = params.getString("month");
+		
+	    if (month.length() == 1) {
+	        month = "0" + month; // 1자리 수일 경우 앞에 0을 붙임
+	    }
+	    String dept_cal_id = findDeptId();
+		params.put("dept_cal_id", dept_cal_id);
+		params.put("year", year);
+		params.put("month", month);
+		List<CmmnMap> dataList = cmmnDao.selectList("system.t4_active_mng.findDept",params);
+		return dataList;
+		
+	}
+	
+	public CmmnMap teamSaveCalender(CmmnMap params) {
+		String cal_date = params.getString("date");
+		String cal_title = params.getString("title");
+		String cal_content = params.getString("content");
+		String dept_cal_id = findDeptId();
+		
+		params.put("dept_cal_id", dept_cal_id);
+		
+		params.put("cal_date", cal_date);
+		params.put("cal_title", cal_title);
+		params.put("cal_content", cal_content);
+		
+		
+		cmmnDao.insert("system.t4_active_mng.saveTeamCalender",params);
 		
 		
 		return new CmmnMap().put("status", "OK");
