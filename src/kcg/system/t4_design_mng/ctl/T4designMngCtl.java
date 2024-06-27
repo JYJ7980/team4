@@ -75,8 +75,7 @@ public class T4designMngCtl {
 	@RequestMapping("customerList")
 	public List<CmmnMap> customerList(CmmnMap params){
 
-		List<CmmnMap> customerList = cmmnDao.selectList("getCustomerList", params);
-		System.out.println(customerList.toString());
+		List<CmmnMap> customerList = svc.customerList(params);
 		return customerList;
 	}
 	
