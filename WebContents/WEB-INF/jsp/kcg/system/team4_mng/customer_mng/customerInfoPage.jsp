@@ -112,22 +112,33 @@
 .modal {
 	display: block;
 	position: fixed;
-	z-index: 1000;
+	z-index: 1;
 	left: 0;
 	top: 0;
+	margin-left: 100px;
 	width: 100%;
 	height: 100%;
-	background-color: rgba(0, 0, 0, 0.5);
 	overflow: auto;
+	background-color: rgb(0, 0, 0);
+	background-color: rgba(0, 0, 0, 0.4);
+	padding-top: 60px;
 }
 
 .modal-content {
 	background-color: #fefefe;
-	margin: 15% auto;
+	margin: 10% auto;
 	padding: 20px;
 	border: 1px solid #888;
-	width: 450px;
-	height: 200px;
+	width: 400px;
+	height: 350px;
+}
+
+.modal-body {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	font-size: 17px;
 }
 
 .modal-addconsult {
@@ -151,6 +162,11 @@
 	text-decoration: none;
 	cursor: pointer;
 }
+
+textarea {
+	resize: none;
+	padding: 10px;
+}
 </style>
 
 
@@ -160,7 +176,7 @@
 		<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/sidebar-menu.jsp"
 			flush="false" />
 
-      <div class="main-content">
+		<div class="main-content">
 			<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/header.jsp"
 				flush="false" />
 			<ol class="breadcrumb bc-3">
@@ -171,7 +187,7 @@
 			<div id="app" style="margin-left: 70px;">
 
 
-	
+
 
 				<h2>고객관리 > 고객정보 관리</h2>
 				<br /> <span
@@ -235,8 +251,19 @@
 							<div class="modal" v-if="selectedConsult !== null">
 								<div class="modal-content">
 									<span class="close" @click="closeModal">&times;</span>
-									<p>{{ selectedConsult.consult_context }}</p>
-
+									<div class="modal-body">
+										<div>
+											<label>상담시간 </label><input type="text"
+												v-model="selectedConsult.con_date" disabled="disabled">
+										</div>
+										<br>
+										<div>
+											<label>상담내용</label><br>
+											<textarea cols="25" rows="5"
+												v-model="selectedConsult.consult_context"
+												disabled="disabled"></textarea>
+										</div>
+									</div>
 								</div>
 							</div>
 							<!-- 							상담추가 모달 -->
@@ -244,7 +271,8 @@
 								<div class="modal-addconsult">
 									<span class="close" @click="closeAddConsultModal">&times;</span>
 									<div class="input-form">
-										<label for="consultTitle">제목:</label> <input type="text"
+										<span>**상담내역을 추가해주세요**</span><br> <label
+											for="consultTitle">제목:</label> <input type="text"
 											id="consultTitle" v-model="consultTitle">
 
 									</div>
