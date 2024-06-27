@@ -56,7 +56,7 @@
 								<c:if test="${userInfoVO.jikgubCd != '1'}">
 					<ul data-lnb="5" data-snb="0">
 						<li data-lnb="5" data-snb="1"><a href="#gm"
-							onclick="cf_movePage('/system/team4//consultListPage')">
+							onclick="cf_movePage('/system/team4/consultListPage')">
 								<span class="title">상담내역</span>
 						</a></li>
 
@@ -132,12 +132,7 @@
 
 
 				</ul>
-				<ul data-lnb="5" data-snb="0">
-					<li data-lnb="5" data-snb="1"><a href="#gm"
-						onclick="cf_movePage('/system/team4/employee/employeeInsert')">
-							<span class="title">신규 직원 회원가입</span>
-					</a></li>
-				</ul>
+				
 					<ul data-lnb="5" data-snb="0">
 					<li data-lnb="5" data-snb="1"><a href="#gm"
 						onclick="cf_movePage('/system/team4/employee/quitUserInfoPage')">

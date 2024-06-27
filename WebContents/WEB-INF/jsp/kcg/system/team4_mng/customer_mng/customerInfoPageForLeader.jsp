@@ -169,22 +169,33 @@
 .modal {
 	display: block;
 	position: fixed;
-	z-index: 1000;
+	z-index: 1;
 	left: 0;
 	top: 0;
+	margin-left: 100px;
 	width: 100%;
 	height: 100%;
-	background-color: rgba(0, 0, 0, 0.5);
 	overflow: auto;
+	background-color: rgb(0, 0, 0);
+	background-color: rgba(0, 0, 0, 0.4);
+	padding-top: 60px;
 }
 
 .modal-content {
 	background-color: #fefefe;
-	margin: 15% auto;
+	margin: 10% auto;
 	padding: 20px;
 	border: 1px solid #888;
-	width: 450px;
-	height: 200px;
+	width: 400px;
+	height: 350px;
+}
+
+.modal-body {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	font-size: 17px;
 }
 
 .modal-addconsult {
@@ -208,6 +219,11 @@
 	text-decoration: none;
 	cursor: pointer;
 }
+
+textarea {
+	resize: none;
+	padding: 10px;
+}
 </style>
 
 
@@ -217,7 +233,7 @@
 		<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/sidebar-menu.jsp"
 			flush="false" />
 
-      <div class="main-content">
+		<div class="main-content">
 			<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/header.jsp"
 				flush="false" />
 			<ol class="breadcrumb bc-3">
@@ -231,24 +247,21 @@
 				<br /> <span
 					style="font-size: 18px; font-weight: bold; color: black;">${userInfoVO.dept}</span>&nbsp;
 				고객관리 화면 <br> <a href="/system/team4/main">메인으로 돌아가기</a> <br>
-	
-					<br> <input id="keywordInput" type="text" name="keyword"
-						v-model="searchKeyword" class="inputtext"
-						placeholder="고객 이름을 입력하세요">
-					<button @click="searchCustomers">이름 검색</button>
-					<button @click="getAllCustomers">전체 조회</button>
-					<label for="managerSelect">담당자별 조회:</label> <select
-						id="managerSelect" v-model="selectedManager"
-						@change="filterByManager">
-						<option value="">전체</option>
-						<option v-for="manager in filteredManager" :key="manager.user_id"
-							:value="manager.name">{{ manager.name }}({{
-							manager.jikgub_nm }})</option>
 
-					</select>
+				<br> <input id="keywordInput" type="text" name="keyword"
+					v-model="searchKeyword" class="inputtext"
+					placeholder="고객 이름을 입력하세요">
+				<button @click="searchCustomers">이름 검색</button>
+				<button @click="getAllCustomers">전체 조회</button>
+				<label for="managerSelect">담당자별 조회:</label> <select
+					id="managerSelect" v-model="selectedManager"
+					@change="filterByManager">
+					<option value="">전체</option>
+					<option v-for="manager in filteredManager" :key="manager.user_id"
+						:value="manager.name">{{ manager.name }}({{
+						manager.jikgub_nm }})</option>
 
-
-				<br>
+				</select> <br>
 				<div id="customerTable" class="customer-container">
 					<div class="customer-one">
 						<div class="customer-list">
@@ -299,11 +312,23 @@
 								<p>상담 내역이 없습니다.</p>
 							</div>
 							<!-- 							상세내역 모달 -->
+							<!-- 							상세내역 모달 -->
 							<div class="modal" v-if="selectedConsult !== null">
 								<div class="modal-content">
 									<span class="close" @click="closeModal">&times;</span>
-									<p>{{ selectedConsult.consult_context }}</p>
-
+									<div class="modal-body">
+										<div>
+											<label>상담시간 </label><input type="text"
+												v-model="selectedConsult.con_date" disabled="disabled">
+										</div>
+										<br>
+										<div>
+											<label>상담내용</label><br>
+											<textarea cols="25" rows="5"
+												v-model="selectedConsult.consult_context"
+												disabled="disabled"></textarea>
+										</div>
+									</div>
 								</div>
 							</div>
 							<!-- 							상담추가 모달 -->
@@ -311,6 +336,7 @@
 								<div class="modal-addconsult">
 									<span class="close" @click="closeAddConsultModal">&times;</span>
 									<div class="input-form">
+									<span>**상담내역을 추가해주세요**</span><br>
 										<label for="consultTitle">제목:</label> <input type="text"
 											id="consultTitle" v-model="consultTitle">
 
@@ -422,7 +448,9 @@
 										<!-- Iterate over consults array to display each consultation item -->
 										<div class="customer-item" v-for="subProduct in subProducts">
 											<div class="table-cell">{{ subProduct.sub_start_date }}</div>
-											<div class="table-cell" @click="moveProductInfoForm(subProduct.sub_id, subProduct.product_id, subProduct.customer_id)">{{ subProduct.product_name }}</div>
+											<div class="table-cell"
+												@click="moveProductInfoForm(subProduct.sub_id, subProduct.product_id, subProduct.customer_id)">{{
+												subProduct.product_name }}</div>
 										</div>
 									</div>
 									<div v-else>
@@ -443,7 +471,9 @@
 										<div class="customer-item"
 											v-for="designProduct in designProducts">
 											<div class="table-cell">{{ designProduct.design_date }}</div>
-											<div class="table-cell" @click="moveDesignInfoForm(designProduct.design_id, designProduct.product_id, designProduct.customer_id)">{{ designProduct.product_name}}</div>
+											<div class="table-cell"
+												@click="moveDesignInfoForm(designProduct.design_id, designProduct.product_id, designProduct.customer_id)">{{
+												designProduct.product_name}}</div>
 										</div>
 									</div>
 									<div v-else>

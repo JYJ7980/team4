@@ -537,8 +537,7 @@ function pop_sub_info(mapData) {
 		            }
 				},
 				close : function(){
-					vueapp.this.des_flag = "N";
-					window.location.reload();
+                    window.location.href = "/team4/designList";                       
 				},
 		        deleteDesign: function (design_id) {
 			        console.log("=================================================="); // 선택된 ID 목록을 콘솔에 출력
@@ -553,6 +552,8 @@ function pop_sub_info(mapData) {
 		                    .catch(error => {
 		                        console.error('항목 삭제 중 에러 발생:', error);
 		                    });
+		            }else{
+	                    window.location.href = "/team4/designList";                       
 		            }
 		        },
 
