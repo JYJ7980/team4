@@ -4,8 +4,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
 <jsp:include page="/WEB-INF/jsp/kcg/_include/system/header_meta.jsp"
 	flush="false" />
 <!-- Imported styles on this page -->
@@ -16,60 +14,61 @@
 	href="/static_resources/team4/css/select2-bootstrap.css">
 <link rel="stylesheet" href="/static_resources/team4/css/select2.css">
 <style type="text/css">
-/* .search-box { */
-/* 	width: 1000px; */
-/* 	height: 150px; */
-/* 	display: flex; */
-/* 	justify-content: flex-end; */
-/* 	align-content: stretch; */
-/* 	align-items: center; */
-/* 	flex-flow: row wrap; */
-/* 	margin: 0 auto; */
-/* } */
-
 .search-box {
-	display : flex;
-	width : 1000px;
-	height : 150px;
+	display: flex;
+	width: 1000px;
+	height: 120px;
 	flex-flow: row wrap;
 	margin: 0 auto;
 	border: 1px solid #999999;
+	justify-content: space-between;
 }
 
 .search-item {
 	display: flex;
-	flex : 1 1 40%;
+	flex: 1 1 40%;
 	flex-flow: row wrap;
-	
+	align-items: center;
 }
 
 .label-box {
 	display: flex;
-	flex-basis : 30%;
+	flex-basis: 20%;
 	height: 30px;
 	justify-content: flex-end;
 	align-items: center;
 	font-weight: bold;
+	margin: 10px;
 }
 
 .select-box {
 	display: flex;
-	flex-basis : 70%;
+	flex-basis: 65%;
 	height: 30px;
-	display: flex;
-	justify-content: left;
+	justify-content: flex-start;
 	align-items: center;
+	margin: 10px;
 }
 
 .input-box {
 	display: flex;
-	flex-basis : 70%;
+	flex-basis: 65%;
 	height: 30px;
-	display: flex;
-	justify-content: left;
+	justify-content: flex-start;
 	align-items: center;
+	margin: 10px;
+}
+
+.button {
+	display: flex;
+	justify-content: center;
+	justify-items: center;
+	flex: 1 1 calc(40% - 6px);
+	height: 30px;
+	margin: 10px;
 }
 </style>
+<title>상품목록조회</title>
 </head>
 <body class="page-body">
 
@@ -81,17 +80,15 @@
 			<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/header.jsp"
 				flush="false" />
 			<ol class="breadcrumb bc-3">
-				<li><a href="#none" onclick="cf_movePage('/system')"><i
+				<li><a href="#none" onclick="cf_movePage('/system/team4/main')"><i
 						class="fa fa-home"></i>Home</a></li>
 				<li class="active"><strong>상품목록조회</strong></li>
 			</ol>
-
 			<h2>상품관리 > 상품목록조회</h2>
 			<br />
 
-			<div class="flex-column flex-gap-10" id="vueapp">
+			<div class="flex-column flex-gap-10 " id="vueapp">
 				<template>
-					<!-- 					<div class="flex flex-width-1000 flex-center"> -->
 					<div class="search-box">
 						<div class="search-item">
 							<label class="label-box">가입대상:</label> <select class="select-box"
@@ -118,13 +115,15 @@
 						</div>
 						<div class="search-item">
 							<div class="flex flex-center flex-50">
-								<button type="button" class="btn btn-blue btn-icon icon-left"
+								<button type="button"
+									class="btn btn-blue btn-icon icon-left button"
 									@click="getListCond(true)">
 									조건검색 <i class="entypo-search"></i>
 								</button>
 							</div>
 							<div class="flex flex-center flex-50">
-								<button class="btn btn-blue btn-icon icon-left"
+								<button type="button"
+									class="btn btn-blue btn-icon icon-left button"
 									@click="getListAll">
 									전체검색 <i class="entypo-search"></i>
 								</button>
@@ -167,20 +166,30 @@
 				</thead>
 				<tbody>
 					<tr v-for="product in products" style="cursor: pointer;">
-						<td @click="gotoDtl(product.product_id)">{{product.product_name}}</td>
-						<td @click="gotoDtl(product.product_id)">{{product.product_type}}</td>
-						<td @click="gotoDtl(product.product_id)">{{product.possible_member}}</td>
-						<td @click="gotoDtl(product.product_id)">{{product.lowest_money}}</td>
-						<td @click="gotoDtl(product.product_id)">{{product.highest_money}}</td>
-						<td @click="gotoDtl(product.product_id)">{{product.lowest_rate}}</td>
-						<td @click="gotoDtl(product.product_id)">{{product.highest_rate}}</td>
-						<td @click="gotoDtl(product.product_id)">{{product.pay_type}}</td>
-						<td @click="gotoDtl(product.product_id)">{{product.taxation}}</td>
+						<td class="left" @click="gotoDtl(product.product_id)">{{product.product_name}}</td>
+						<td cless="center" @click="gotoDtl(product.product_id)"
+							style="text-align: center;">{{product.product_type}}</td>
+						<td cless="center" @click="gotoDtl(product.product_id)"
+							style="text-align: center;">{{product.possible_member}}</td>
+						<td cless="right" @click="gotoDtl(product.product_id)"
+							style="text-align: right;">{{product.lowest_money}}원</td>
+						<td cless="right" @click="gotoDtl(product.product_id)"
+							style="text-align: right;">{{product.highest_money}}원</td>
+						<td cless="right" @click="gotoDtl(product.product_id)"
+							style="text-align: right;">{{product.lowest_rate}}%</td>
+						<td cless="right" @click="gotoDtl(product.product_id)"
+							style="text-align: right;">{{product.highest_rate}}%</td>
+						<td cless="center" @click="gotoDtl(product.product_id)"
+							style="text-align: center;">{{product.pay_type}}</td>
+						<td cless="center" @click="gotoDtl(product.product_id)"
+							style="text-align: center;">{{product.taxation}}</td>
 					</tr>
 				</tbody>
 			</table>
-			<div class="dataTables_paginate paging_simple_numbers"
-				id="div_paginate"></div>
+			<div class="dataTables_wrapper">
+				<div class="dataTables_paginate paging_simple_numbers"
+					id="div_paginate"></div>
+			</div>
 			</template>
 		</div>
 	</div>

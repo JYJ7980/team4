@@ -15,7 +15,7 @@
 		SELECT *
 		FROM kcgbd.t_user
 		WHERE CONCAT(email, '') LIKE
-		'%@team4%';
+		'%@team4%' and iam_yn='N';
 	</select>
 	<select id="getCustAndUserInfo" parameterType="cmmnMap"
 		resultType="cmmnMap">
