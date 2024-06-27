@@ -120,29 +120,6 @@ public class T4Employee_Svc {
 
 	/* 담당자 계정에 대한 수정 */
 	public CmmnMap updateEmployee(CmmnMap params) {
-		String del_yn = params.getString("del_yn");
-		String iam_yn = params.getString("iam_yn");
-		String status_cd = params.getString("status_cd");
-
-		switch (status_cd) {
-		case "재직":
-			params.put("iam_yn", "N");
-			params.put("del_yn", "N");
-			params.put("status_cd", "재직");
-			break;
-		case "휴가":
-			params.put("iam_yn", "N");
-			params.put("del_yn", "N");
-			params.put("status_cd", "휴가");
-			break;
-		case "퇴사":
-			params.put("iam_yn", "Y");
-			params.put("del_yn", "Y");
-			params.put("status_cd", "퇴사");
-			break;
-		default:
-			return null;
-		}
 		cmmnDao.update("system.t4_employee.updateEmployee", params);
 		return new CmmnMap().put("status", "OK");
 	}
@@ -178,15 +155,19 @@ public class T4Employee_Svc {
 		String del_yn = params.getString("del_yn");
 		switch (status_cd) {
 		case "재직":
+			params.put("iam_yn", "N");
+			params.put("del_yn", "N");
 			params.put("status_cd", "재직");
 			break;
 		case "휴가":
+			params.put("iam_yn", "N");
+			params.put("del_yn", "N");
 			params.put("status_cd", "휴가");
 			break;
-		case "퇴사":
+		case "퇴직":
 			params.put("iam_yn", "Y");
 			params.put("del_yn", "Y");
-			params.put("status_cd", "퇴사");
+			params.put("status_cd", "퇴직");
 			break;
 		default:
 			return null;

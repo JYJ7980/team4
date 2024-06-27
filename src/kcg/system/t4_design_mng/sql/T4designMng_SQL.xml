@@ -38,7 +38,7 @@
 	    LEFT JOIN kcgbd.t_user t ON c.user_id = t.user_id
 	    LEFT JOIN kcgbd.db4_product_sub s ON s.customer_id = c.customer_id
 	    LEFT JOIN kcgbd.db4_product_info p ON s.product_id = p.product_id
-	    WHERE s.sub_id = #{sub_id}
+	    WHERE s.sub_id = CAST(#{sub_id} as BIGINT)
 	</select> 
 	
 	<select id="getCustomerList" parameterType="cmmnMap" resultType="cmmnMap">

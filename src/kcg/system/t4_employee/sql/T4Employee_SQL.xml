@@ -14,7 +14,7 @@
 		<if test='name != null and name != ""'>
 			and name = #{name}
 		</if>
-		ORDER BY jikgub_cd desc
+		ORDER BY jikgub_cd asc
 	</select>
 
 	<!-- 이름으로 조건 검색 -->
@@ -25,12 +25,14 @@
 		name LIKE CONCAT('%',
 		#{name}, '%')
 		AND email like '%@team4.com'
+		ORDER BY jikgub_cd asc
 	</select>
 	
 	<select id="statusSearch" parameterType="cmmnMap"
 		resultType="cmmnMap">
 		SELECT * FROM kcgbd.t_user WHERE status_cd = #{status_cd}
 		AND email like '%@team4.com'
+		ORDER BY jikgub_cd asc
 	</select>
 
 
@@ -58,18 +60,17 @@
 		UPDATE kcgbd.t_user
 		SET
 		name = #{name},
-		status_cd = #{status_cd},
 		jikgub_nm = #{jikgub_nm},
-		dept = #{dept},
-		del_yn = #{del_yn},
-		iam_yn = #{iam_yn}
+		dept = #{dept}
 		WHERE user_id =
 		#{user_id}
 	</update>
 
 	<update id="updateStatus" parameterType="cmmnMap">
 		UPDATE kcgbd.t_user
-		SET
+		SET 
+		del_yn = #{del_yn},
+		iam_yn = #{iam_yn},
 		status_cd = #{status_cd}
 		WHERE user_id = #{user_id}
 	</update>

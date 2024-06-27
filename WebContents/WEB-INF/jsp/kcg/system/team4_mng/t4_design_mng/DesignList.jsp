@@ -119,8 +119,8 @@
 					    <td class="left">{{item.name}}</td>
 					    <td class="left">{{item.customer_id}}</td>
 					    <td class="left">{{item.customer_name}}</td>
-					    <td class="left">{{item.product_name}}</td>
 					    <td class="left">{{item.product_type}}</td>
+					    <td class="left">{{item.product_name}}</td>
 					    <td class="center">{{item.design_date}}</td>
 					    <td class="left">				   
 					        <input type="button" value="삭제" @click="deleteItem(item.design_id)">
@@ -260,6 +260,9 @@
 			<div class="modal-footer" >
                 <button type="button" id="update" class="btn btn-secondary" data-dismiss="modal" @click="updateProduct()">CHANGE</button>
          	</div>
+         	<div class="modal-footer" >
+                <button type="button" id="update" class="btn btn-secondary" data-dismiss="modal" @click="deleteDesign(info.design_id)">DELETE</button>
+         	</div>
 			<div class="modal-footer" >
                 <button type="button" id="cancle" class="btn btn-secondary" data-dismiss="modal" @click="close()">CLOSE</button>
          	</div>
@@ -319,7 +322,11 @@ var vueapp = new Vue({
 		product_name : "",
 		design_date  : "",
 		all_srch : "N",
-		selectedIds: []
+		selectedIds: [],
+		des_id : "${design_id}",
+		cus_id : "${customer_id}",
+		pro_id : "${product_id}",
+		des_flag: "${flag}",
 	},
 	mounted : function(){
 		var fromDtl = cf_getUrlParam("fromDtl");
@@ -336,6 +343,10 @@ var vueapp = new Vue({
 				.removeItem("params");
 			this.getList(true);
 		}
+		if (this.des_flag === "Y"){
+			this.gotoDtl(this.des_id, this.cus_id, this.pro_id);
+		}
+
 	},
 	methods : {
 		getListAll : function(isInit){
@@ -391,7 +402,7 @@ var vueapp = new Vue({
             console.log(JSON.stringify(params));
             axios.post('/team4/moveDesignInfoForm', { params : params })
             .then(response => {
-            	alert("상세 정보 팝업으로 이동합니다.")
+            	alert("상세 정보 페이지로 이동합니다.")
                 var resultMap = response.data;
                 console.log(JSON.stringify(resultMap));
                 // Pass the resultMap to pop_sub_info function
@@ -526,9 +537,25 @@ function pop_sub_info(mapData) {
 		            }
 				},
 				close : function(){
-					$('#pop_sub_info').modal('hide');
+					vueapp.this.des_flag = "N";
 					window.location.reload();
-				}
+				},
+		        deleteDesign: function (design_id) {
+			        console.log("=================================================="); // 선택된 ID 목록을 콘솔에 출력
+			        console.log(design_id)
+		        	var params = {design_id : design_id}
+		            if (confirm('이 항목을 삭제하시겠습니까?')) {
+		                axios.post('/team4/deleteSingleDesign', { params : params })
+		                    .then(response => {
+		                        alert("항목 삭제 완료");
+		                        window.location.href = "/team4/designList";                       
+		                        })
+		                    .catch(error => {
+		                        console.error('항목 삭제 중 에러 발생:', error);
+		                    });
+		            }
+		        },
+
 			},
 		});
 

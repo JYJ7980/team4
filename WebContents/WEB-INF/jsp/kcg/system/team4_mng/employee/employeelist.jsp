@@ -119,161 +119,155 @@
 				flush="false" />
 			<!-- 이름으로 리스트 만들기 -->
 			<div id="vueapp" style="margin-left: 70px;">
-				<div id="listPage">
-					<h3>직원 리스트</h3>
-					<div>
-						<input type="text" v-model="name" class="inputtext"
-							placeholder="이름을 입력하세요.">
+				<h3>직원 리스트</h3>
+				<div>
+					<input type="text" v-model="name" class="inputtext"
+						placeholder="이름을 입력하세요.">
 
-						<button @click="employeeSearch()">이름검색</button>
-						<button @click="employeeSearchAll">전체검색</button>
-
+					<button @click="employeeSearch()">이름검색</button>
+					<button @click="employeeSearchAll">전체검색</button>
 
 
-						<select v-model="statusSearch" @change="st">
-							<option value="재직">재직</option>
-							<option value="휴가">휴가</option>
-							<option value="퇴직">퇴직</option>
-						</select>
 
-						<button @click="formChange">신규 직원</button>
+					<select v-model="statusSearch" @change="st">
+						<option value="재직">재직</option>
+						<option value="휴가">휴가</option>
+						<option value="퇴직">퇴직</option>
+					</select>
 
+					<button @click="formChange">신규 직원</button>
+
+				</div>
+				<div class="customer-container">
+					<div class="customer-one">
+						<div class="customer-list">
+							<div class="table-header">
+								<div class="table-cell">이름</div>
+								<div class="table-cell">직급</div>
+								<div class="table-cell">휴가</div>
+							</div>
+
+
+							<div class="customer-item" v-for="employee in employees"
+								:key="employee.user_id">
+
+								<div class="table-cell" id="name" name="name"
+									@click="employeeInfo(employee.user_id)">{{employee.name}}</div>
+								<div class="table-cell" id="jikgub_nm" name="jikgub_nm"
+									@click="employeeInfo(employee.jikgub_nm)">{{employee.jikgub_nm}}</div>
+								<div class="table-cell" id="status_cd" name="status_cd"
+									@click="employeeInfo(employee.jikgub_nm)">{{employee.status_cd}}</div>
+							</div>
+						</div>
 					</div>
-					<div class="customer-container">
-						<div class="customer-one">
-							<div class="customer-list">
-								<div class="table-header">
-									<div class="table-cell">이름</div>
-									<div class="table-cell">직급</div>
-									<div class="table-cell">휴가</div>
-								</div>
+
+					<div class="customer-details">
+						<div v-if="formChange1">
+							<div class="details-container">
+								<div class="customer-info">
+									<h3>직원 정보</h3>
+									<div class="input-form">
+										<label>입사 날짜 : </label> <input type="text"
+											v-model="emp_nfo.reg_dt" disabled>
+
+									</div>
 
 
-								<div class="customer-item" v-for="employee in employees"
-									:key="employee.user_id">
+									<div class="input-form">
+										<label>직원ID : </label> <input type="text"
+											v-model="emp_nfo.user_id" readonly>
 
-									<div class="table-cell" id="name" name="name"
-										@click="employeeInfo(employee.user_id)">{{employee.name}}</div>
-									<div class="table-cell" id="jikgub_nm" name="jikgub_nm"
-										@click="employeeInfo(employee.jikgub_nm)">{{employee.jikgub_nm}}</div>
-									<div class="table-cell" id="status_cd" name="status_cd"
-										@click="employeeInfo(employee.jikgub_nm)">{{employee.status_cd}}</div>
+									</div>
+
+									<div class="input-form">
+										<label>이름 : </label> <input type="text" v-model="emp_nfo.name">
+									</div>
+
+									<div class="input-form">
+										<label>비밀번호 수정</label>
+										<button type="button" @click="input">비밀번호 수정</button>
+										<div v-if="key">
+											<label>비밀번호 : </label> <input type="text" v-model="userPw">
+											<button type="submit" @click="updatePw">저장</button>
+										</div>
+									</div>
+
+									<div class="input-form">
+										<label v-model="status_cd">재직정보 : </label>
+										<button @click="status('재직')">재직</button>
+										<button @click="status('휴가')">휴가</button>
+										<button @click="status('퇴직')">퇴직</button>
+									</div>
+									<div class="input-form">
+										<label>직급 : </label> <select v-model="emp_nfo.jikgub_nm">
+											<option value="수습" name="수습">수습</option>
+											<option value="부장" name="부장">부장</option>
+											<option value="차장" name="차장">차장</option>
+											<option value="과장" name="과장">과장</option>
+											<option value="대리" name="대리">대리</option>
+											<option value="사원" name="사원">사원</option>
+										</select>
+									</div>
+
+									<div class="input-form">
+										<label>부서명 : </label> <select v-model="emp_nfo.dept">
+											<option id="영업1팀">영업1팀</option>
+											<option id="영업2팀">영업2팀</option>
+											<option id="총무팀">총무팀</option>
+											<option id="개발팀">개발팀</option>
+										</select>
+									</div>
+									<button @click="update">수정</button>
+									<!-- <button @click="deleteEmployee">삭제</button> -->
 								</div>
 							</div>
 						</div>
 
-						<div class="customer-details">
-							<div v-if="formChange1">
-								<div class="details-container">
-									<div class="customer-info">
-										<h3>직원 정보</h3>
-										<div class="input-form">
-											<label>입사 날짜 : </label> <input type="text"
-												v-model="emp_nfo.reg_dt" disabled>
-
-										</div>
-
-
-										<div class="input-form">
-											<label>직원ID : </label> <input type="text"
-												v-model="emp_nfo.user_id" readonly>
-
-										</div>
-
-										<div class="input-form">
-											<label>이름 : </label> <input type="text"
-												v-model="emp_nfo.name">
-										</div>
-
-										<div class="input-form">
-											<label>비밀번호 수정</label>
-											<button type="button" @click="input">비밀번호 수정</button>
-											<div v-if="key">
-												<label>비밀번호 : </label> <input type="text" v-model="userPw">
-												<button type="submit" @click="updatePw">저장</button>
-											</div>
-										</div>
-
-										<div class="input-form">
-											<label v-model="status_cd">재직정보 : </label>
-											<button @click="status('재직')">재직</button>
-											<button @click="status('휴가')">휴가</button>
-											<button @click="status('퇴사')">퇴사</button>
-										</div>
-										<div class="input-form">
-											<label>직급 : </label> <select v-model="emp_nfo.jikgub_nm">
-												<option value="수습" name="수습">수습</option>
-												<option value="부장" name="부장">부장</option>
-												<option value="차장" name="차장">차장</option>
-												<option value="과장" name="과장">과장</option>
-												<option value="대리" name="대리">대리</option>
-												<option value="사원" name="사원">사원</option>
-											</select>
-										</div>
-
-										<div class="input-form">
-											<label>부서명 : </label> <select v-model="emp_nfo.dept">
-												<option id="영업1팀">영업1팀</option>
-												<option id="영업2팀">영업2팀</option>
-												<option id="총무팀">총무팀</option>
-												<option id="개발팀">개발팀</option>
-											</select>
-										</div>
-										<button @click="update">수정</button>
-										<!-- <button @click="deleteEmployee">삭제</button> -->
+						<div v-if="formChange2">
+							<div class="details-container">
+								<div class="customer-info">
+									<h3>신규 직원</h3>
+									<div class="input-form">
+										<label>부여할 ID : </label> <input type="text" id="user_id"
+											v-model="newEmployee.new_user_id" :disabled="isIdChecked">
+										<input type="submit" id="new_user_id" value="ID중복확인"
+											@click="checkId">
 									</div>
-								</div>
-							</div>
 
-
-
-
-							<div v-if="formChange2">
-								<div class="details-container">
-									<div class="customer-info">
-										<h3>신규 직원</h3>
-										<div class="input-form">
-											<label>부여할 ID : </label> <input type="text" id="user_id"
-												v-model="newEmployee.new_user_id" :disabled="isIdChecked">
-											<input type="submit" id="new_user_id" value="ID중복확인"
-												@click="checkId">
-										</div>
-
-										<div class="input-form">
-											<label>이름 : </label> <input type="text" id="new_name"
-												v-model="newEmployee.new_name">
-										</div>
-
-										<div class="input-form">
-											<label>초기 비밀번호 : </label> <input type="text" id="new_user_pw"
-												v-model="newEmployee.new_user_pw">
-										</div>
-
-
-										<div class="input-form">
-											<label>직급 : </label> <select id="jikgub_nm"
-												v-model="newEmployee.new_jikgub_nm">
-												<option value="수습">수습</option>
-												<option value="부장">부장</option>
-												<option value="차장">차장</option>
-												<option value="과장">과장</option>
-												<option value="대리">대리</option>
-												<option value="사원">사원</option>
-											</select>
-										</div>
-
-										<div class="input-form">
-											<label>부서명 : </label> <select id="dept"
-												v-model="newEmployee.new_dept">
-												<option value="">부서를 선택해주세요</option>
-												<option value="영업1팀">영업1팀</option>
-												<option value="영업2팀">영업2팀</option>
-												<option value="총무팀">총무팀</option>
-												<option value="개발팀">개발팀</option>
-											</select>
-										</div>
-										<button type="button" @click="save">등록</button>
+									<div class="input-form">
+										<label>이름 : </label> <input type="text" id="new_name"
+											v-model="newEmployee.new_name">
 									</div>
+
+									<div class="input-form">
+										<label>초기 비밀번호 : </label> <input type="text" id="new_user_pw"
+											v-model="newEmployee.new_user_pw">
+									</div>
+
+
+									<div class="input-form">
+										<label>직급 : </label> <select id="jikgub_nm"
+											v-model="newEmployee.new_jikgub_nm">
+											<option value="수습">수습</option>
+											<option value="부장">부장</option>
+											<option value="차장">차장</option>
+											<option value="과장">과장</option>
+											<option value="대리">대리</option>
+											<option value="사원">사원</option>
+										</select>
+									</div>
+
+									<div class="input-form">
+										<label>부서명 : </label> <select id="dept"
+											v-model="newEmployee.new_dept">
+											<option value="">부서를 선택해주세요</option>
+											<option value="영업1팀">영업1팀</option>
+											<option value="영업2팀">영업2팀</option>
+											<option value="총무팀">총무팀</option>
+											<option value="개발팀">개발팀</option>
+										</select>
+									</div>
+									<button type="button" @click="save">등록</button>
 								</div>
 							</div>
 						</div>
@@ -373,6 +367,7 @@
                         if (response.data.status === "OK") {
                             alert("저장 되었습니다.");
                             this.status_cd = response.data;
+                            window.location.href = '/system/team4/employee/employeeList';
                         } else {
                             alert("저장 실패: " + response.data.message);
                         }
@@ -394,6 +389,7 @@
                         if (response.data.status === "OK") {
                             alert("저장 되었습니다.");
                             this.key = false;
+                            window.location.href = '/system/team4/employee/employeeList';
                         } else {
                             alert("저장 실패: " + response.data.message);
                         }
@@ -421,7 +417,6 @@
             	axios.get("/system/team4/employee/searchAll")
                 .then(response => {
 					this.employees = response.data;
-					
                 })
                 .catch(error => {
                     console.error("데이터 로드 오류:", error);
@@ -439,7 +434,7 @@
                         if (response.data.status === "OK") {
                             alert("수정되었습니다.");
                             this.loadEmployees();
-                            /* window.location.href = "/system/team4/employee/employeeList" ; */
+                            window.location.href = '/system/team4/employee/employeeList';
                         } else {
                             alert("수정 실패: " + response.data.message);
                         }
