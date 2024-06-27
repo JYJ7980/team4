@@ -75,8 +75,11 @@
 						<i class="fa fa-search"></i>
 					</button>				
 				</div>
+				
 				<!-- 		예금, 적금, 대출 일 때 나눠서 저장하기 위함 -->
 			    <div v-if="pro.product_type === '예금'">
+			    	<p>상품 최대 금액: {{pro.highest_money}}원</p>
+			    	<p>상품 최소 금액: {{pro.lowest_money}}원</p>
 			    	<label>예치 금액:</label>
 			        <input type="text" id="start_money">
 			        <span>원</span>
@@ -85,6 +88,8 @@
 			        <input type="text" id="pro.taxtion" v-model="pro.taxation">
 			    </div>
 			    <div v-else-if="pro.product_type === '적금'">
+			    	<p>상품 최대 금액: {{pro.highest_money}}원</p>
+			    	<p>상품 최소 금액: {{pro.lowest_money}}원</p>
 			    	<label>납입 금액:</label>
 			        <input type="text" id="cycle_money">
 			        <span>원</span>
@@ -93,6 +98,8 @@
 			        <input type="text" id="pro.taxtion" v-model="pro.taxation" readonly>
 			    </div>
 			    <div v-else-if="pro.product_type === '대출'">
+			    	<p>상품 최대 금액: {{pro.highest_money}}원</p>
+			    	<p>상품 최소 금액: {{pro.lowest_money}}원</p>
 			    	<label>대출 금액:</label>
 			        <input type="text" id="loan">
 			    	<span>원</span>       
@@ -100,10 +107,14 @@
 			    <div v-else>
     			</div>
     			<br>
+			    <p>상품 최대 금리: {{pro.highest_rate}}%</p>
+			    <p>상품 최소 금리: {{pro.lowest_rate}}%</p>
 			    <label>이자율 :</label> 	    
 				<input type="text" id="pro_interest_rate">
 				<span>(%)</span>
-				 <br><br>
+				<br>
+			    <p>상품 최대 기간: {{pro.highest_date}}개월</p>
+			    <p>상품 최소 기간: {{pro.lowest_date}}개월</p>
 			    <label>만기 날짜:</label> 
 				<input type="date" id="sub_end_date"> 
 				<br><br>
