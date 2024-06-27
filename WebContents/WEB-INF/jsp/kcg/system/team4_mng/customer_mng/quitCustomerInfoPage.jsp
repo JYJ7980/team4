@@ -23,7 +23,7 @@
 		<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/sidebar-menu.jsp"
 			flush="false" />
 
-      <div class="main-content">
+        <div class="main-content" style="background-image: url('/static_resources/team4/images/background-test.png'); background-size: cover; background-position: center; repeat: no-repeat">
 			<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/header.jsp"
 				flush="false" />
 
@@ -36,17 +36,17 @@
 			<h2>고객관리 > 탈퇴고객 조회</h2>
 			<br />
 
-			<div class="dataTables_wrapper" id="vueapp">
+			<div class="dataTables_wrapper" id="vueapp" style="border-style: none;">
 				<template>
 					<table class="table table-bordered datatable dataTable"
-						id="grid_app">
+						id="grid_app" style="border-top-left-radius: 20px; border-top-right-radius: 20px;">
 						<thead>
 							<tr class="replace-inputs">
-								<th style="width: 10%;" class="center sorting">성명</th>
-								<th style="width: 10%;" class="center sorting">주민번호</th>
-								<th style="width: 10%;" class="center sorting">담당부서</th>
-								<th style="width: 10%;" class="center sorting">담당직원</th>
-								<th style="width: 10%;" class="center sorting">휴면해제</th>
+								<th style="width: 10%;background-color: #FDEE87; color: black; border-top-left-radius: 20px;" class="center sorting">성명</th>
+								<th style="width: 10%;background-color: #FDEE87; color: black;" class="center sorting">주민번호</th>
+								<th style="width: 10%;background-color: #FDEE87; color: black;" class="center sorting">담당부서</th>
+								<th style="width: 10%;background-color: #FDEE87; color: black;" class="center sorting">담당직원</th>
+								<th style="width: 10%;background-color: #FDEE87; color: black; border-top-right-radius: 20px;" class="center sorting">휴면해제</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -61,12 +61,9 @@
 						</tbody>
 					</table>
 					<div class="dataTables_paginate paging_simple_numbers"
-						id="div_paginate"></div>
+						id="div_paginate" style="background-color: white;"></div>
 				</template>
 			</div>
-
-			<jsp:include page="/WEB-INF/jsp/kcg/_include/system/footer.jsp"
-				flush="false" />
 
 		</div>
 	</div>

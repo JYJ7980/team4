@@ -23,7 +23,7 @@
 		<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/sidebar-menu.jsp"
 			flush="false" />
 
-      <div class="main-content">
+      <div class="main-content" style="background-image: url('/static_resources/team4/images/background-test.png'); background-size: cover; background-position: center; repeat: no-repeat">
 			<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/header.jsp"
 				flush="false" />
 
@@ -39,19 +39,19 @@
 				style="font-size: 18px; font-weight: bold; color: black;">${userInfoVO.name}</span><span
 				style="font-size: 18px; color: black;">(${userInfoVO.dept})</span>&nbsp;
 			님 상담내역
-
-			<div class="dataTables_wrapper" id="vueapp">
+			
+			<div class="dataTables_wrapper" id="vueapp" style="border-style: none; margin-top: 10px;">
 				<template>
 					<table class="table table-bordered datatable dataTable"
-						id="grid_app">
+						style="border: 1px solid #ccc; border-top-left-radius: 30px; border-top-right-radius: 30px;">
 						<thead>
 							<tr class="replace-inputs">
-								<th style="width: 10%;" class="center sorting">등록일</th>
-								<th style="width: 10%;" class="center sorting">제목</th>
-								<th style="width: 10%;" class="center sorting">내용</th>
-								<th style="width: 10%;" class="center sorting">고객명</th>
-								<th style="width: 10%;" class="center sorting">고객 담당자명</th>
-								<th style="width: 10%;" class="center sorting">고객 담당부서</th>
+								<th style="width: 10%; background-color: #FDEE87; color: black; border-top-left-radius: 30px;" class="center sorting">등록일</th>
+								<th style="width: 10%; background-color: #FDEE87;  color: black;" class="center sorting">제목</th>
+								<th style="width: 10%; background-color: #FDEE87;  color: black;" class="center sorting">내용</th>
+								<th style="width: 10%; background-color: #FDEE87;  color: black;" class="center sorting">고객명</th>
+								<th style="width: 10%; background-color: #FDEE87;  color: black;" class="center sorting">고객 담당자명</th>
+								<th style="width: 10%; background-color: #FDEE87;  color: black;  border-top-right-radius: 30px;" class="center sorting">고객 담당부서</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -68,7 +68,7 @@
 						</tbody>
 					</table>
 					<div class="dataTables_paginate paging_simple_numbers"
-						id="div_paginate"></div>
+						id="div_paginate" style="background-color: white;"></div>
 				</template>
 				<br>
 				<button @click="filterList">담당 고객만 조회</button>

@@ -16,6 +16,12 @@
 <link rel="stylesheet"
 	href="/static_resources/team4/css/prodlist.css?after">
 <style type="text/css">
+	.jh-div {
+	display: flex;
+	align-items: center;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	}
 .box {
 	display: flex;
 	width: 1000px;
@@ -104,7 +110,7 @@
 		<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/sidebar-menu.jsp"
 			flush="false" />
 
-		<div class="main-content">
+		<div class="main-content" style="background-image: url('/static_resources/team4/images/background-test.png'); background-size: cover; background-position: center; repeat: no-repeat">
 
 			<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/header.jsp"
 				flush="false" />
@@ -168,40 +174,45 @@
 					<div class="flex flex-100 flex-padding-10 flex-gap-10"
 						style="justify-content: flex-end">
 						<button type="button"
-							class="btn btn-orange btn-icon icon-left btn-small"
+							class="btn btn-green btn-icon icon-left btn-small"
 							@click="cf_movePage('/team4/calculate')">
 							등록 <i class="entypo-plus"></i>
 						</button>
+						<button type="button" value="+삭제" @click="deleteSelected"
+						 class="btn btn-red btn-icon icon-left btn-small">선택 삭제
+						 <i class="entypo-trash"></i>
+						 
+						 </button>
 					</div>
 					<table class="table table-bordered datatable dataTable"
-						id="grid_app">
+						id="grid_app" style="border-top-right-radius: 20px; border-top-left-radius: 20px;">
 						<thead>
-							<tr class="replace-inputs">
-								<th style="width: 5%;" class="center hidden-xs nosort"><input
+							<tr class="replace-inputs" style="text-align: center;">
+								<th style="width: 40px; background-color: #3EAB6F; color: white; border-top-left-radius: 20px;" class="center hidden-xs nosort"><input
 									type="checkbox" id="allCheck" @click="all_check(event.target)"></th>
-								<th style="width: 7%;" class="center sorting"
+								<th style="width: 60px; background-color: #3EAB6F; color: white;" class="center sorting"
 									@click="sortList(event.target)" sort_target="design_id">ID</th>
-								<th style="width: 10%;" class="center sorting"
+								<th style="width: 100px; background-color: #3EAB6F; color: white;" class="center sorting"
 									@click="sortList(event.target)" sort_target="user_id">관리자
 									ID</th>
-								<th style="width: 10%;" class="center sorting"
+								<th style="width: 100px; background-color: #3EAB6F; color: white;" class="center sorting"
 									@click="sortList(event.target)" sort_target="name">관리자 성명</th>
-								<th style="width: 8%;" class="center sorting"
+								<th style="width: 100px; background-color: #3EAB6F; color: white;" class="center sorting"
 									@click="sortList(event.target)" sort_target="customer_id">회원ID</th>
-								<th style="width: 9%;" class="center sorting"
+								<th style="width: 100px; background-color: #3EAB6F; color: white;" class="center sorting"
 									@click="sortList(event.target)" sort_target="customer_name">회원성명</th>
-								<th style="width: 9%;" class="center sorting"
+								<th style="width: 70px; background-color: #3EAB6F; color: white;" class="center sorting"
 									@click="sortList(event.target)" sort_target="product_type">상품유형</th>
-								<th style="width: 25%;" class="center sorting"
+								<th style="width: 190px; background-color: #3EAB6F; color: white;" class="center sorting"
 									@click="sortList(event.target)" sort_target="product_name">상품명</th>
-								<th style="width: 10%;" class="center sorting"
+								<th style="width: 100px; background-color: #3EAB6F; color: white;" class="center sorting"
 									@click="sortList(event.target)" sort_target="design_date">설계일</th>
-								<th style="width: 10%;" class="center">삭제</th>
-								<th style="width: 16%;" class="center">상세정보</th>
+								<th style="width: 70px; background-color: #3EAB6F; color: white;" class="center">삭제</th>
+								<th style="width: 70px; background-color: #3EAB6F; color: white; border-top-right-radius: 20px;" class="center">상세정보</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr v-for="item in dataList" style="cursor: pointer;">
+							<tr v-for="item in dataList" style="cursor: pointer;text-align: center;">
 								<td class="center"><input type="checkbox"
 									v-model="selectedIds" :value="item.design_id"
 									@click="onCheck(item)" name="is_check"></td>
@@ -213,36 +224,37 @@
 								<td class="left">{{item.product_type}}</td>
 								<td class="left">{{item.product_name}}</td>
 								<td class="center">{{item.design_date}}</td>
-								<td class="left"><input type="button" value="삭제"
-									@click="deleteItem(item.design_id)"></td>
+								<td class="left">
+								<button type="button" value="삭제"
+									@click="deleteItem(item.design_id)"  class="btn btn-red" style="border-style: none;">
+									<i class="entypo-trash"></i>
+									</button>
+									</td>
 
 								<td class="left"><input type="button" value="정보"
-									@click="gotoDtl(item.design_id, item.customer_id, item.product_id)">
+									@click="gotoDtl(item.design_id, item.customer_id, item.product_id)"  class="btn btn-orange" style="border-style: none;">
 								</td>
 							</tr>
 						</tbody>
 					</table>
-					<input type="button" value="+삭제" @click="deleteSelected">
-					<div class="dataTables_paginate paging_simple_numbers"
-						id="div_paginate"></div>
+				
+	<div class="dataTables_paginate paging_simple_numbers" id="div_paginate" style="background-color: white;">
+			</div>
 				</template>
 			</div>
-
-			<jsp:include page="/WEB-INF/jsp/kcg/_include/system/footer.jsp"
-				flush="false" />
 
 		</div>
 	</div>
 
-	<!-- 가입 정보 조회 팝업 -->
-	<div class="modal fade" id="pop_sub_info">
+	<!-- 설계 정보 조회 팝업 -->
+	<div class="modal fade" id="pop_sub_info" style="margin-top: 100px; margin-left: 50px;">
 		<template>
 			<div class="modal-dialog" style="width: 80%;">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal"
 							aria-hidden="true" id="btn_popClose">&times;</button>
-						<h4 class="modal-title" id="modify_nm">가입 정보 조회</h4>
+						<h4 class="modal-title" id="modify_nm">설계 정보 조회</h4>
 					</div>
 					<div class="modal-body">
 						<div class="panel-body"
@@ -358,12 +370,8 @@
 					<div class="modal-footer">
 						<button type="button" id="update" class="btn btn-secondary"
 							data-dismiss="modal" @click="updateProduct()">CHANGE</button>
-					</div>
-					<div class="modal-footer">
 						<button type="button" id="update" class="btn btn-secondary"
 							data-dismiss="modal" @click="deleteDesign(info.design_id)">DELETE</button>
-					</div>
-					<div class="modal-footer">
 						<button type="button" id="cancle" class="btn btn-secondary"
 							data-dismiss="modal" @click="close()">CLOSE</button>
 					</div>
