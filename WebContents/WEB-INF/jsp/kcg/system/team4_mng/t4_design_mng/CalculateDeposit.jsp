@@ -674,6 +674,22 @@ var vueapp = new Vue({
 					rate = 0;
 				}
 				
+			       if(this.info.v_select_month == ""){
+			        	this.info.v_select_month = 0;
+			        }
+			        if(this.info.v_interest_rate == ""){
+			        	this.info.v_interest_rate = 0;
+			        	v_interest_rate = 0;
+			        }
+			        if(this.info.f_select_month == ""){
+			        	this.info.f_select_month = 0;
+			        }
+			        if(this.info.f_interest_rate == ""){
+			        	this.info.f_interest_rate = 0;
+			        	f_interest_rate = 0;
+			        }
+
+				
 				var params = {
 						sub_money : this.info.sub_money,
 						interest_type : this.info.interest_type,
