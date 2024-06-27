@@ -4,35 +4,60 @@
 <mapper namespace='system.t4_active_mng'>
 	<select id="findToDoList" parameterType="cmmnMap"
 		resultType="cmmnMap">
-SELECT cc.bn_cal_id, cc.cal_title, cc.cal_content,
-to_char(to_date(cc.cal_date,'yyyy-mm-dd'),'yyyy-mm-dd') as cal_date
- , bn.manager_id, cc.cal_id
-        FROM kcgbd.db4_bn_cal cc
-        JOIN kcgbd.db4_bn_cal_mag bn ON cc.cal_id = bn.cal_id
-        WHERE bn.manager_id = CAST(#{user_id} AS VARCHAR)
-        AND SUBSTRING(cc.cal_date, 1, 4) = #{year}
-		AND SUBSTRING(cc.cal_date, 6, 2) = #{month}
+		SELECT cc.bn_cal_id, cc.cal_title, cc.cal_content,
+		to_char(to_date(cc.cal_date,'yyyy-mm-dd'),'yyyy-mm-dd') as cal_date
+		, bn.manager_id, cc.cal_id
+		FROM kcgbd.db4_bn_cal cc
+		JOIN kcgbd.db4_bn_cal_mag bn ON cc.cal_id = bn.cal_id
+		WHERE bn.manager_id = CAST(#{user_id} AS VARCHAR)
+		AND SUBSTRING(cc.cal_date, 1, 4) = #{year}
+		AND SUBSTRING(cc.cal_date, 6,
+		2) = #{month}
 	</select>
-	
+
 	<update id="updateCalender" parameterType="cmmnMap">
-	UPDATE kcgbd.db4_bn_cal
-	SET cal_title = #{cal_title}, cal_content = #{cal_content}, cal_date = #{cal_date}
-	WHERE bn_cal_id = #{bn_cal_id}
+		UPDATE kcgbd.db4_bn_cal
+		SET cal_title = #{cal_title}, cal_content = #{cal_content}, cal_date =
+		#{cal_date}
+		WHERE bn_cal_id = #{bn_cal_id}
 	</update>
-	
+
 	<delete id="deleteCalender" parameterType="cmmnMap">
-	DELETE FROM kcgbd.db4_bn_cal
-	WHERE bn_cal_id = #{bn_cal_id}
+		DELETE FROM kcgbd.db4_bn_cal
+		WHERE bn_cal_id = #{bn_cal_id}
 	</delete>
-	
+
 	<select id="findCalId" parameterType="cmmnMap" resultType="int">
-	SELECT cal_id FROM kcgbd.db4_bn_cal_mag
-	WHERE manager_id LIKE #{manager_id}
+		SELECT cal_id FROM kcgbd.db4_bn_cal_mag
+		WHERE manager_id LIKE #{manager_id}
 	</select>
-	
+
 	<insert id="saveCalender" parameterType="cmmnMap">
-	INSERT INTO kcgbd.db4_bn_cal
-	(cal_id,cal_title,cal_content,cal_date)
-	VALUES(#{cal_id},#{cal_title},#{cal_content},#{cal_date})
+		INSERT INTO kcgbd.db4_bn_cal
+		(cal_id,cal_title,cal_content,cal_date)
+		VALUES(#{cal_id},#{cal_title},#{cal_content},#{cal_date})
 	</insert>
+	
+	<insert id="saveTeamCalender" parameterType="cmmnMap">
+		INSERT INTO kcgbd.db4_bn_cal
+		(cal_title,cal_content,cal_date,dept_cal_id)
+		VALUES(#{cal_title},#{cal_content},#{cal_date},#{dept_cal_id})
+	</insert>
+
+	<select id="findDeptId" parameterType="cmmnMap"
+		resultType="String">
+		SELECT dept_cal_id FROM kcgbd.db4_bn_cal_dept
+		WHERE dept_nm = #{dept_nm}
+	</select>
+
+	<select id="findDept" parameterType="cmmnMap"
+		resultType="cmmnMap">
+		SELECT cc.bn_cal_id, cc.cal_title, cc.cal_content,
+		to_char(to_date(cc.cal_date,'yyyy-mm-dd'),'yyyy-mm-dd') as cal_date,
+		cc.cal_id, cc.dept_cal_id
+		FROM kcgbd.db4_bn_cal cc
+		WHERE SUBSTRING(cc.cal_date, 1, 4) = #{year}
+		AND SUBSTRING(cc.cal_date, 6, 2) = #{month}
+		AND cc.dept_cal_id = #{dept_cal_id}
+	</select>
 </mapper>
