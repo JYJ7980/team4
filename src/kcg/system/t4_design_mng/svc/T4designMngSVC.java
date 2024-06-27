@@ -152,6 +152,13 @@ public class T4designMngSVC {
 	    });
 	    return params;
 	}
+
+	public List<CmmnMap> customerList(CmmnMap params) {
+		UserInfoVO uerInfoVo = commonSvc.getLoginInfo();
+		params.put("user_id", uerInfoVo.getUserId());
+
+		return cmmnDao.selectList("getCustomerList", params);
+	}
 	
 
 }

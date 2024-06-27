@@ -142,7 +142,7 @@
 					</tr>
 				</tbody>
 			</table>
-			<input type="button" value="+삭제" @click="deleteSelected">
+			<input type="button" value="중단" @click="deleteSelected">
 			<div class="dataTables_paginate paging_simple_numbers" id="div_paginate">
 			</div>
 		</template>
@@ -401,7 +401,7 @@ var vueapp = new Vue({
 	    deleteSelected: function () {
 	        console.log("=================================================="); // 선택된 ID 목록을 콘솔에 출력
 	        console.log(this.selectedIds); // 선택된 ID 목록을 콘솔에 출력
-	        alert("삭제하시겠습니까?")
+	        alert("중단하시겠습니까?")
 	        var params ={
 	        		selectedIds: this.selectedIds
 	        }
@@ -409,17 +409,17 @@ var vueapp = new Vue({
 	        console.log("=================================================="); // 선택된 ID 목록을 콘솔에 출력
 
 	        if (this.selectedIds.length > 0) {
-	            if (confirm('정말로 선택된 항목을 삭제하시겠습니까?')) {
+	            if (confirm('정말로 선택된 항목들을 중단하시겠습니까?')) {
 	                axios.post('/team4/deleteProduct', {params : params})
 	                    .then(response => {
-	                        alert("정상적으로 삭제처리되었습니다.");
+	                        alert("정상적으로 처리 되었습니다.");
 	                        this.getListAll(false); // 목록을 다시 로드
 	                    })
 	                    .catch(error => {
 	                        console.error('아이템 삭제 중 에러 발생:', error);
 	                    });
 	            } else {
-	                console.log('삭제가 취소되었습니다.');
+	                console.log('취소되었습니다.');
 	            }
 	        } else {
 	            console.warn('삭제할 아이템이 선택되지 않았습니다.');
@@ -428,15 +428,15 @@ var vueapp = new Vue({
         
         deleteItem: function (sub_id) {
         	var params = {sub_id : sub_id}
-            if (confirm('이 항목을 삭제하시겠습니까?')) {
+            if (confirm('이 항목을 중단하시겠습니까?')) {
                 axios.post('/team4/deleteSingleItem', { params : params })
                     .then(response => {
-                        alert("항목 삭제 완료");
+                        alert("정상적으로 처리되었습니다.");
                         // Spring 컨트롤러에서 받은 URL로 페이지를 새로고침하며 이동합니다
                         this.getList(false); // 목록을 다시 로드
                         })
                     .catch(error => {
-                        console.error('항목 삭제 중 에러 발생:', error);
+                        console.error('에러 발생:', error);
                     });
             }
         },
@@ -527,10 +527,10 @@ function pop_sub_info(mapData) {
 				},
 				deleteProduct: function (sub_id) {
 		        	var params = {sub_id : sub_id}
-		            if (confirm('이 항목을 삭제하시겠습니까?')) {
+		            if (confirm('이 항목을 중단하시겠습니까?')) {
 		                axios.post('/team4/deleteSingleItem', { params : params })
 		                    .then(response => {
-		                        alert("항목 삭제 완료");
+		                        alert("중단 완료");
 		                        window.location.href = "/team4/subscriptionList";                       
 		                        })
 		                    .catch(error => {

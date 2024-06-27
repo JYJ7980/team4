@@ -52,6 +52,8 @@
 	<update id="updatePw" parameterType="cmmnMap">
 		UPDATE kcgbd.t_user
 		SET user_pw = #{user_pw}
+		SET
+		user_pw = #{user_pw}
 		WHERE user_id = #{user_id}
 	</update>
 
@@ -62,6 +64,9 @@
 		name = #{name},
 		jikgub_nm = #{jikgub_nm},
 		dept = #{dept}
+		dept = #{dept},
+		del_yn = #{del_yn},
+		iam_yn = #{iam_yn}
 		WHERE user_id =
 		#{user_id}
 	</update>
@@ -110,5 +115,40 @@
 	</insert>
 	<insert id="insertCal" parameterType="CmmnMap">
 		INSERT INTO kcgbd.db4_bn_cal_mag (manager_id) values (#{user_id});
+		INSERT INTO
+		kcgbd.db4_bn_cal_mag (manager_id) values (#{user_id});
 	</insert>
+
+
+	<!-- 퇴직자 리스트 불러오기 -->
+	<select id="getQuitUser" parameterType="cmmnMap"
+		resultType="cmmnMap">
+		SELECT *
+		FROM kcgbd.t_user where iam_yn ='Y' and
+		CONCAT(email, '') like '%@team4%'
+	</select>
+
+	<select id="getQuitUserCustomerInfo" parameterType="cmmnMap"
+		resultType="cmmnMap">
+		select * from kcgbd.db4_customer_info dci join kcgbd.t_user
+		tu on
+		dci.user_id = tu.user_id where tu.iam_yn = 'Y' and dci.use_yn
+		='Y'
+		and tu.user_id = #{user_id}
+	</select>
+
+	<select id="getCurrentUserInfo" parameterType="cmmnMap"
+		resultType="cmmnMap">
+		SELECT *
+		FROM kcgbd.t_user where iam_yn ='N' and
+		CONCAT(email, '') like '%@team4%'
+	</select>
+
+	<update id="changeQuitUser" parameterType="cmmnMap">
+		update
+		kcgbd.db4_customer_info
+		set user_id = #{user_id}
+		where customer_id =
+		CAST(#{customer_id} AS integer)
+	</update>
 </mapper>

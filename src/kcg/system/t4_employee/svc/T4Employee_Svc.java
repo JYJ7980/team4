@@ -1,24 +1,21 @@
 package kcg.system.t4_employee.svc;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.hadoop.hdfs.server.datanode.dataNodeHome_jsp;
-import org.checkerframework.checker.units.qual.C;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import common.dao.CmmnDao;
 import common.utils.common.CmmnMap;
+import common.utils.common.PagingConfig;
 import common.utils.crypt.CryptUtil;
+import common.utils.mybatis_paginator.domain.PageList;
 import kcg.common.svc.CommonSvc;
 
 @Service
@@ -180,5 +177,34 @@ public class T4Employee_Svc {
 		List<CmmnMap> statusSearch = cmmnDao.selectList("system.t4_employee.statusSearch", params);
 		return statusSearch;
 	
+	}
+	// 퇴직자 리스트 불러오기
+	public PageList<CmmnMap> getQuitUser(CmmnMap params, PagingConfig pagingConfig) {
+		PageList<CmmnMap> rslt = cmmnDao.selectListPage("system.t4_employee.getQuitUser", params, pagingConfig);
+		return rslt;
+	}
+
+	public List<CmmnMap> getQuitUserCustomerInfo(CmmnMap params) {
+		List<CmmnMap> dataList = cmmnDao.selectList("system.t4_employee.getQuitUserCustomerInfo", params);
+//		System.out.println(dataList);
+		String user_id = params.getString("user_id");
+		params.put("user_id", user_id);
+		return dataList;
+	}
+
+	public List<CmmnMap> getCurrentUserInfo(CmmnMap params) {
+		List<CmmnMap> dataList = cmmnDao.selectList("system.t4_employee.getCurrentUserInfo", params);
+		return dataList;
+	}
+
+	public CmmnMap changeQuitUser(CmmnMap params) {
+		String customer_id = params.getString("customer_id");
+		String user_id = params.getString("user_id");
+
+		params.put("customer_id", customer_id);
+		params.put("user_id", user_id);
+
+		cmmnDao.update("system.t4_employee.changeQuitUser", params);
+		return new CmmnMap().put("status", "OK");
 	}
 }

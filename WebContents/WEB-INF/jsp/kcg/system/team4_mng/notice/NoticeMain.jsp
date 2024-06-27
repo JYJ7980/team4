@@ -30,10 +30,29 @@
 
 .modal-content {
 	background-color: #fefefe;
-	margin: 5% auto;
+	margin: 10% auto;
 	padding: 20px;
 	border: 1px solid #888;
-	width: 50%;
+	width: 500px;
+	height: 370px;
+}
+
+.modal-content-read {
+	background-color: #fefefe;
+	margin: 10% auto;
+	padding: 20px;
+	border: 1px solid #888;
+	width: 500px;
+	height: 350px;
+}
+
+.modal-content-change {
+	background-color: #fefefe;
+	margin: 10% auto;
+	padding: 20px;
+	border: 1px solid #888;
+	width: 500px;
+	height: 450px;
 }
 
 .close {
@@ -47,6 +66,20 @@
 	color: black;
 	text-decoration: none;
 	cursor: pointer;
+}
+
+.readDiv {
+	width: 100%;
+	height: 200px;
+	border: 1px solid black;
+	font-size: 18px;
+}
+
+.contentArea {
+	width: 100%;
+	height: 200px;
+	font-size: 18px;
+	resize: none;
 }
 </style>
 <title>공지사항 조회</title>
@@ -75,31 +108,42 @@
 
 			<div class="dataTables_wrapper" id="vueapp">
 				<template>
-				<c:if test="${userInfoVO.jikgubCd == '1'}">
-					<button @click="showInsertForm">공지사항 추가</button>
+
+					<c:if test="${userInfoVO.jikgubCd == '1'}">
+						<div
+							style="align-items: flex-end; display: flex; justify-content: flex-end;">
+							<button @click="showInsertForm">공지사항 추가</button>
+						</div>
 					</c:if>
+
+
 					<br>
 					<table class="table table-bordered datatable dataTable"
 						id="grid_app">
 						<thead>
 							<tr class="replace-inputs">
-								<th style="width: 10%;" class="center sorting">등록일자</th>
-								<th style="width: 10%;" class="center sorting">등록번호</th>
-								<th style="width: 10%;" class="center sorting">제목</th>
-								<th style="width: 10%;" class="center sorting">비고</th>
+								<th style="width: 20px;" class="center sorting">최초 등록 일자</th>
+								<th style="width: 20px;" class="center sorting">최종 수정 일자</th>
+								<th style="width: 10px;" class="center sorting">등록번호</th>
+								<th style="width: 200px;" class="center sorting">제목</th>
+								<c:if test="${userInfoVO.jikgubCd == '1'}">
+									<th style="width: 10%;" class="center sorting">비고</th>
+								</c:if>
 							</tr>
 						</thead>
 						<tbody>
 							<tr v-for="notice in dataList" :key="notice.notice_id">
-								<td>{{ notice.regis_date }}</td>
-								<td>{{ notice.notice_id }}</td>
-								<td>{{ notice.notice_title }}</td>
-								<td>
+								<td align="center">{{ notice.regis_date }}</td>
+								<td align="center">{{ notice.cor_date }}</td>
+								<td align="center">{{ notice.notice_id }}</td>
+								<td @click="readNoticeOpen(notice)">{{ notice.notice_title
+									}}</td>
 								<c:if test="${userInfoVO.jikgubCd == '1'}">
-									<button @click="openEditModal(notice)">수정</button>
-									<button @click="deleteNotice(notice.notice_id)">삭제</button>
-									</c:if>
-								</td>
+									<td>
+										<button @click="openEditModal(notice)">수정</button>
+										<button @click="deleteNotice(notice.notice_id)">삭제</button>
+									</td>
+								</c:if>
 							</tr>
 						</tbody>
 					</table>
@@ -107,14 +151,14 @@
 						id="div_paginate"></div>
 
 					<div v-if="showModal" class="modal">
-						<div class="modal-content">
+						<div class="modal-content-change">
 							<span class="close" @click="closeEditModal">&times;</span>
 							<h2>공지사항 수정</h2>
 							<div class="form-group">
 								<label for="title">제목</label>
 								<div>
 									<input type="text" id="title"
-										v-model="selectedNotice.notice_title">
+										v-model="selectedNotice.notice_title" style="width: 100%;">
 								</div>
 							</div>
 							<div class="form-group">
@@ -122,15 +166,18 @@
 								<div>
 									<textarea rows="5" id="content"
 										v-model="selectedNotice.notice_content"
-										placeholder="내용을 입력하세요."></textarea>
+										placeholder="내용을 입력하세요." class="contentArea"></textarea>
 								</div>
 							</div>
-							<div class="form-group">
-								<button type="button" @click="updateNotice">
+							<div class="form-group"
+								style="justify-content: center; display: flex;">
+								<button type="button" @click="updateNotice"
+									style="margin: 10px;">
 									저장 <i class="entypo-check"></i>
 								</button>
 								<button type="button"
-									@click="deleteNotice(selectedNotice.notice_id)">
+									@click="deleteNotice(selectedNotice.notice_id)"
+									style="margin: 10px;">
 									삭제 <i class="entypo-check"></i>
 								</button>
 							</div>
@@ -145,7 +192,7 @@
 								<label for="insertTitle">제목 : </label>
 								<div>
 									<input type="text" id="insertNotice.insertTitle"
-										v-model="insertNotice.insertTitle">
+										v-model="insertNotice.insertTitle" style="width: 100%;">
 								</div>
 							</div>
 							<div>
@@ -153,11 +200,33 @@
 							</div>
 							<div>
 								<textarea rows="5" id="insertNotice.insertContent"
-									v-model="insertNotice.insertContent" placeholder="내용을 입력하세요."></textarea>
+									v-model="insertNotice.insertContent" placeholder="내용을 입력하세요."
+									class="contentArea"></textarea>
 							</div>
-							<div>
+							<div
+								style="align-items: center; justify-content: center; display: flex;">
 								<button type="button" @click="save">저장</button>
 							</div>
+						</div>
+					</div>
+
+					<div v-if="readNotice" class="modal">
+						<div class="modal-content-read">
+							<span class="close" @click="closeReadNotice">&times;</span>
+
+							<div class="form-group">
+
+								<div>
+									<h2>{{selectedNotice.notice_title}}</h2>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="content">내용</label>
+								<div>
+									<textarea class="contentArea" disabled="disabled">{{selectedNotice.notice_content}}</textarea>
+								</div>
+							</div>
+
 						</div>
 					</div>
 				</template>
@@ -183,6 +252,7 @@
         	update_content:"",
         	delete_id:"",
         	insertForm: false,
+        	readNotice: false,
 			insertNotice: {
 				insertTitle:"",
 				insertContent:""
@@ -221,10 +291,19 @@
         		this.selectedNotice = Object.assign({}, notice);
         		this.showModal = true;
         	},
+        	readNoticeOpen(notice) {
+        		this.selectedNotice = Object.assign({}, notice);
+        		this.readNotice = true;
+        	},
+        	closeReadNotice() {
+        		this.readNotice = false;
+        		this.selectedNotice = null;
+        	},
         	closeEditModal() {
         		this.showModal = false;
         		this.selectedNotice = null;
         	},
+        	
         	showInsertForm() {
         		this.insertForm = true;
         	},
