@@ -44,6 +44,7 @@
 	<select id="getCustomerList" parameterType="cmmnMap" resultType="cmmnMap">
     SELECT customer_name, customer_id, customer_brdt FROM kcgbd.db4_customer_info 
     WHERE customer_name LIKE CONCAT('%', #{customer_name}, '%')
+    AND user_id = #{user_id}
 	</select>
 
 	<select id="selectOneCustomer" parameterType="cmmnMap" resultType="cmmnMap">
