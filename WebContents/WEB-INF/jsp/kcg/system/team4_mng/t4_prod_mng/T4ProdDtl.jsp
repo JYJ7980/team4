@@ -319,8 +319,8 @@ button[type="button"]:disabled {
 							<option value="9">판매중지</option>
 						</select>
 					</div>
-					<div class="form-group1">
-						<div>
+					<div class="form-group1" style="align-items: flex-end; display: flex; justify-content: flex-end;">
+						<div >
 							<div
 								v-if="info.product_status =='9' || new Date(info.product_sale_end_date) < new Date(currentDate)">
 								<button type="button" class="btn btn-blue btn-icon btn-small"
