@@ -1,276 +1,377 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
-	<jsp:include page="/WEB-INF/jsp/kcg/_include/system/header_meta.jsp" flush="false"/>
-	<!-- Imported styles on this page -->
-	<link rel="stylesheet" href="/static_resources/system/js/datatables/datatables.css">
-	<link rel="stylesheet" href="/static_resources/system/js/select2/select2-bootstrap.css">
-	<link rel="stylesheet" href="/static_resources/system/js/select2/select2.css">
-	
-	<title>설계조회</title>
+<jsp:include page="/WEB-INF/jsp/kcg/_include/system/header_meta.jsp"
+	flush="false" />
+<!-- Imported styles on this page -->
+<link rel="stylesheet"
+	href="/static_resources/team4/js/datatables/datatables.css">
+<link rel="stylesheet"
+	href="/static_resources/team4/js/select2/select2-bootstrap.css">
+<link rel="stylesheet"
+	href="/static_resources/team4/js/select2/select2.css">
+<link rel="stylesheet"
+	href="/static_resources/team4/css/prodlist.css?after">
+<style type="text/css">
+.box {
+	display: flex;
+	width: 1000px;
+	flex-flow: row wrap;
+	margin: 0 auto;
+}
+
+.search-box {
+	display: flex;
+	width: 80%;
+	height: 120px;
+	flex-flow: row wrap;
+	border: 1px solid #999999;
+	justify-content: space-between;
+}
+
+.button-box {
+	display: flex;
+	width: 20%;
+	height: 120px;
+	flex-flow: row wrap;
+	border: 1px solid #999999;
+	justify-content: space-between;
+}
+
+.search-item {
+	position: relative;
+	display: flex;
+	flex: 1 1 40%;
+	flex-flow: row wrap;
+	align-items: center;
+}
+
+.label-box {
+	display: flex;
+	flex-basis: 20%;
+	height: 30px;
+	justify-content: flex-end;
+	align-items: center;
+	font-weight: bold;
+	margin: 10px;
+}
+
+.select-box {
+	display: flex;
+	flex-basis: 65%;
+	height: 30px;
+	justify-content: flex-start;
+	align-items: center;
+	margin: 10px;
+}
+
+.input-box {
+	display: flex;
+	flex-basis: 65%;
+	height: 30px;
+	justify-content: flex-start;
+	align-items: center;
+	margin: 10px;
+}
+
+.button {
+	display: flex;
+	justify-content: center;
+	justify-items: center;
+	align-content: center;
+	align-items: center;
+	flex: 1 1 calc(40% - 6px);
+	height: 30px;
+	margin: 10px;
+	flex: 1 1 calc(40% - 6px);
+}
+
+.date-button {
+	display: flex;
+	position: absolute;
+	right: 8%;
+}
+</style>
+<title>설계조회</title>
 </head>
 <body class="page-body">
 
-<div class="page-container">
+	<div class="page-container">
 
-	<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/sidebar-menu.jsp" flush="false"/>
+		<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/sidebar-menu.jsp"
+			flush="false" />
 
-	<div class="main-content">
+		<div class="main-content">
 
-		<jsp:include page="/WEB-INF/jsp/kcg/_include/system/header.jsp" flush="false"/>
-		
-		<ol class="breadcrumb bc-3">
-			<li><a href="#none" onclick="cf_movePage('/system')"><i class="fa fa-home"></i>Home</a></li>
-			<li class="active"><strong>설계조회</strong></li>
-		</ol>
-	
-		<h2>설계조회</h2>
-		<br/>
-		
-		<div class="dataTables_wrapper" id="vueapp">
-		<template>
-			<div class="dataTables_filter" style="float: none;">
-				
-				<table style="width: 100%;">
-					<tr>
-						<td class="left">
-							<label class="sys_label_01 control-label">고객명:</label>
-							<div class="sys_col_02" style="width: 246px;">
-								<input class="form-control" v-model="customer_name" value="" />
+			<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/header.jsp"
+				flush="false" />
+
+			<ol class="breadcrumb bc-3">
+				<li><a href="#none" onclick="cf_movePage('/system')"><i
+						class="fa fa-home"></i>Home</a></li>
+				<li class="active"><strong>설계조회</strong></li>
+			</ol>
+
+			<h2>설계조회</h2>
+			<br />
+
+			<div class="flex-column flex-gap-10 " id="vueapp">
+				<template>
+					<div class="box">
+						<div class="search-box">
+							<div class="search-item">
+								<label class="label-box">고객명:</label> <input class="input-box"
+									v-model="customer_name" value="" />
 							</div>
-							
-							<label class="sys_label_01 control-label">상품명:</label>
-							<div class="sys_col_02" style="width: 246px;">
-								<input class="form-control" v-model="user_id" value="" />
+							<div class="search-item">
+								<label class="label-box">상품명:</label> <input class="input-box"
+									v-model="user_id" value="" />
 							</div>
-						</td>
-						<td class="right" style="width: 200px;">
-							<button type="button" class="btn btn-blue btn-icon icon-left" @click="getListCond(true)">
-								조건검색
-								<i class="entypo-search"></i>
-							</button>
-						</td>
-					</tr>
-					<tr>
-						<td class="left">
-							
-							<label class="sys_label_01 control-label">가입날짜</label>
-							<div class="sys_col_02" style="width: 210px;">
-								<div class="input-group">
-									<input type="text" class="form-control datepicker2" v-model="design_date" data-format="yyyy-mm-dd" style="width: 180px;">
+							<div class="search-item">
+								<label class="label-box">가입날짜:</label> <input type="text"
+									class="input-box datepicker2" v-model="design_date"
+									data-format="yyyy-mm-dd">
+								<div class="date-button">
+									<button type="button"
+										class="btn btn-primary btn-sm datepicker2" id="wrdtbtn"
+										style="float: left;">
+										<i class="fa fa-calendar"></i>
+									</button>
 								</div>
 							</div>
-							<button type="button" class="btn btn-primary btn-sm datepicker2" id="wrdtbtn" style="float: left;">
-								<i class="fa fa-calendar"></i>
-							</button>
-							<label class="sys_label_01 control-label">관리자명:</label>
-							<div class="sys_col_02" style="width: 246px;">
-								<input class="form-control" v-model="name" value="" />
+							<div class="search-item">
+								<label class="label-box">관리자명:</label> <input class="input-box"
+									v-model="name" value="" />
+							</div>
+						</div>
+						<div class="button-box">
+							<div class="flex flex-center flex-80">
+								<button type="button"
+									class="btn btn-blue btn-icon icon-left button"
+									@click="getListCond(true)">
+									조건검색 <i class="entypo-search"></i>
+								</button>
+							</div>
+							<div class="flex flex-center flex-80">
+								<button type="button"
+									class="btn btn-blue btn-icon icon-left button"
+									@click="getListAll(true)">
+									전체검색 <i class="entypo-search"></i>
+								</button>
 							</div>
 
-						</td>
-						<td class="right" style="width: 200px;">
-							<button type="button" class="btn btn-blue btn-icon icon-left" @click="getListAll(true)">
-								전체검색
-								<i class="entypo-search"></i>
-							</button>
-						</td>
-					</tr>
-				</table>
+						</div>
+					</div>
+					<div class="flex flex-100 flex-padding-10 flex-gap-10"
+						style="justify-content: flex-end">
+						<button type="button"
+							class="btn btn-orange btn-icon icon-left btn-small"
+							@click="cf_movePage('/team4/calculate')">
+							등록 <i class="entypo-plus"></i>
+						</button>
+					</div>
+					<table class="table table-bordered datatable dataTable"
+						id="grid_app">
+						<thead>
+							<tr class="replace-inputs">
+								<th style="width: 5%;" class="center hidden-xs nosort"><input
+									type="checkbox" id="allCheck" @click="all_check(event.target)"></th>
+								<th style="width: 7%;" class="center sorting"
+									@click="sortList(event.target)" sort_target="design_id">ID</th>
+								<th style="width: 10%;" class="center sorting"
+									@click="sortList(event.target)" sort_target="user_id">관리자
+									ID</th>
+								<th style="width: 10%;" class="center sorting"
+									@click="sortList(event.target)" sort_target="name">관리자 성명</th>
+								<th style="width: 8%;" class="center sorting"
+									@click="sortList(event.target)" sort_target="customer_id">회원ID</th>
+								<th style="width: 9%;" class="center sorting"
+									@click="sortList(event.target)" sort_target="customer_name">회원성명</th>
+								<th style="width: 9%;" class="center sorting"
+									@click="sortList(event.target)" sort_target="product_type">상품유형</th>
+								<th style="width: 25%;" class="center sorting"
+									@click="sortList(event.target)" sort_target="product_name">상품명</th>
+								<th style="width: 10%;" class="center sorting"
+									@click="sortList(event.target)" sort_target="design_date">설계일</th>
+								<th style="width: 10%;" class="center">삭제</th>
+								<th style="width: 16%;" class="center">상세정보</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr v-for="item in dataList" style="cursor: pointer;">
+								<td class="center"><input type="checkbox"
+									v-model="selectedIds" :value="item.design_id"
+									@click="onCheck(item)" name="is_check"></td>
+								<td class="left">{{item.design_id}}</td>
+								<td class="left">{{item.user_id}}</td>
+								<td class="left">{{item.name}}</td>
+								<td class="left">{{item.customer_id}}</td>
+								<td class="left">{{item.customer_name}}</td>
+								<td class="left">{{item.product_type}}</td>
+								<td class="left">{{item.product_name}}</td>
+								<td class="center">{{item.design_date}}</td>
+								<td class="left"><input type="button" value="삭제"
+									@click="deleteItem(item.design_id)"></td>
+
+								<td class="left"><input type="button" value="정보"
+									@click="gotoDtl(item.design_id, item.customer_id, item.product_id)">
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<input type="button" value="+삭제" @click="deleteSelected">
+					<div class="dataTables_paginate paging_simple_numbers"
+						id="div_paginate"></div>
+				</template>
 			</div>
-			
-			<div class="dataTables_filter" style="float: none;">
-			<div class="sub flex flex-90">
-                <span class="sub-button flex-center flex-10 flex-wrap">
-					<button type="button" class="btn btn-orange btn-icon icon-left btn-small" @click="cf_movePage('/team4/calculate')">
-						등록
-						<i class="entypo-plus"></i>
-					</button>
-                </span>
-            </div>
-            </div>
-            
-            
-			<table class="table table-bordered datatable dataTable" id="grid_app">                                    
-				<thead>
-					<tr class="replace-inputs">
-						<th style="width: 5%;" class="center hidden-xs nosort"><input type="checkbox" id="allCheck" @click="all_check(event.target)"></th>
-						<th style="width: 7%;" class="center sorting" @click="sortList(event.target)" sort_target="design_id">ID</th>
-						<th style="width: 10%;" class="center sorting" @click="sortList(event.target)" sort_target="user_id">관리자 ID</th>
-						<th style="width: 10%;" class="center sorting" @click="sortList(event.target)" sort_target="name">관리자 성명</th>
-						<th style="width: 8%;" class="center sorting" @click="sortList(event.target)" sort_target="customer_id">회원ID</th>
-						<th style="width: 9%;" class="center sorting" @click="sortList(event.target)" sort_target="customer_name">회원성명</th>						
-						<th style="width: 9%;" class="center sorting" @click="sortList(event.target)" sort_target="product_type">상품유형</th>						
-						<th style="width: 25%;" class="center sorting" @click="sortList(event.target)" sort_target="product_name">상품명</th>	
-						<th style="width: 10%;" class="center sorting" @click="sortList(event.target)" sort_target="design_date">설계일</th>
-						<th style="width: 10%;" class="center">삭제</th>
-						<th style="width: 16%;" class="center">상세정보</th>														
-					</tr>
-				</thead>
-				<tbody>
-					<tr v-for="item in dataList" style="cursor: pointer;">
-					    <td class="center">
-						  <input type="checkbox" v-model="selectedIds" :value="item.design_id" @click="onCheck(item)" name="is_check">
-					    </td>
-					    <td class="left">{{item.design_id}}</td>
-					    <td class="left">{{item.user_id}}</td>
-					    <td class="left">{{item.name}}</td>
-					    <td class="left">{{item.customer_id}}</td>
-					    <td class="left">{{item.customer_name}}</td>
-					    <td class="left">{{item.product_type}}</td>
-					    <td class="left">{{item.product_name}}</td>
-					    <td class="center">{{item.design_date}}</td>
-					    <td class="left">				   
-					        <input type="button" value="삭제" @click="deleteItem(item.design_id)">
-					    </td>
-					 
-					    <td class="left">
-					        <input type="button" value="정보" @click="gotoDtl(item.design_id, item.customer_id, item.product_id)">
-					    </td>
-					</tr>
-				</tbody>
-			</table>
-			<input type="button" value="+삭제" @click="deleteSelected">
-			<div class="dataTables_paginate paging_simple_numbers" id="div_paginate">
+
+			<jsp:include page="/WEB-INF/jsp/kcg/_include/system/footer.jsp"
+				flush="false" />
+
+		</div>
+	</div>
+
+	<!-- 가입 정보 조회 팝업 -->
+	<div class="modal fade" id="pop_sub_info">
+		<template>
+			<div class="modal-dialog" style="width: 80%;">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true" id="btn_popClose">&times;</button>
+						<h4 class="modal-title" id="modify_nm">가입 정보 조회</h4>
+					</div>
+					<div class="modal-body">
+						<div class="panel-body"
+							style="display: flex; border: 1px solid #FF0000; width: 100%;">
+							<div class="left-panel" style="width: 50%;">
+								<div class="form-group">
+									<label for="err_eng_nm" class="fix-width-33">ID:</label> <input
+										type="text" class="form-control" id="pop_design_id"
+										v-model="info.design_id" readonly>
+								</div>
+
+								<div class="form-group">
+									<label for="err_eng_nm" class="fix-width-33">상품명:</label> <input
+										type="text" class="form-control" id="pop_product_name"
+										v-model="info.product_name" readonly>
+								</div>
+
+								<div class="form-group">
+									<label for="err_eng_nm" class="fix-width-33">고객ID:</label> <input
+										type="text" class="form-control" id="pop_customer_id"
+										v-model="info.customer_id" readonly>
+								</div>
+
+								<div class="form-group">
+									<label for="err_eng_nm" class="fix-width-33">고객명:</label> <input
+										type="text" class="form-control" id="pop_customer_name"
+										v-model="info.customer_name" readonly>
+								</div>
+
+								<div class="form-group">
+									<div v-if="info.product_type === '예금'">
+										<label>예치 금액:</label> <input type="text" id="pop_sub_money"
+											v-model="info.sub_money" readonly> <span>원</span>
+									</div>
+									<div v-else-if="info.product_type === '적금'">
+										<label>납입 금액:</label> <input type="text" id="pop_cycle_money"
+											v-model="info.cycle_money" readonly> <span>원</span>
+									</div>
+									<div v-else-if="info.product_type === '대출'">
+										<label>대출 금액:</label> <input type="text" id="pop_sub_money"
+											v-model="info.sub_money" readonly> <span>원</span>
+									</div>
+									<div v-else-if="info.product_type === '목돈마련적금'">
+										<label>목표 금액:</label> <input type="text" id="pop_sub_money"
+											v-model="info.sub_money" readonly> <span>원</span> <label>예상
+											납부 금액:</label> <input type="text" id="pop_cycle_money"
+											v-model="info.cycle_money" readonly> <span>원</span>
+									</div>
+								</div>
+								<div class="form-group" v-if="info.product_type === '대출'">
+									<label for="err_eng_nm" class="fix-width-33">대출 유형:</label> <input
+										type="text" class="form-control"
+										id="pop_info.loan_repayment_type"
+										v-model="info.loan_repayment_type" readonly>
+								</div>
+								<div class="form-group" v-else>
+									<label for="err_eng_nm" class="fix-width-33">이자 유형:</label> <input
+										type="text" class="form-control" id="pop_info.interest_type"
+										v-model="info.interest_type" readonly>
+								</div>
+
+								<div class="form-group">
+									<label for="err_eng_nm" class="fix-width-33">고정금리:</label> <input
+										type="text" class="form-control" id="pop_f_interest_rate"
+										v-model="info.f_interest_rate" readonly> <span>%</span>
+								</div>
+								<div class="form-group">
+									<label for="err_eng_nm" class="fix-width-33">고정금리 기간:</label> <input
+										type="text" class="form-control" id="pop_f_select_month"
+										v-model="info.f_select_month" readonly> <span>(월)</span>
+								</div>
+
+								<div class="form-group">
+									<label for="err_eng_nm" class="fix-width-33">변동금리:</label> <input
+										type="text" class="form-control" id="pop_v_interest_rate"
+										v-model="info.v_interest_rate" readonly> <span>%</span>
+								</div>
+								<div class="form-group">
+									<label for="err_eng_nm" class="fix-width-33">변동금리 기간:</label> <input
+										type="text" class="form-control" id="pop_v_select_month"
+										v-model="info.v_select_month" readonly> <span>(월)</span>
+								</div>
+								<div class="form-group" v-if="info.product_type === '대출'">
+									<label for="err_eng_nm" class="fix-width-33">중도상환수수료:</label> <input
+										type="text" class="form-control" id="pop_rate"
+										v-model="info.rate" readonly> <span>%</span>
+								</div>
+								<div class="form-group" v-else>
+									<label for="err_eng_nm" class="fix-width-33">세율:</label> <input
+										type="text" class="form-control" id="pop_rate"
+										v-model="info.rate" readonly> <span>%</span>
+								</div>
+
+								<div class="form-group">
+									<label for="err_eng_nm" class="fix-width-33">최종 금액:</label> <input
+										type="text" class="form-control" id="pop_final_money"
+										v-model="info.final_money" readonly>
+								</div>
+								<div class="form-group">
+									<label for="err_eng_nm" class="fix-width-33">최종 이자:</label> <input
+										type="text" class="form-control" id="pop_final_interest"
+										v-model="info.final_interest" readonly>
+								</div>
+								<div class="form-group">
+									<label for="err_eng_nm" class="fix-width-33">설계 날짜:</label> <input
+										type="text" class="form-control" id="pop_design_date"
+										v-model="info.design_date" readonly>
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" id="update" class="btn btn-secondary"
+							data-dismiss="modal" @click="updateProduct()">CHANGE</button>
+					</div>
+					<div class="modal-footer">
+						<button type="button" id="update" class="btn btn-secondary"
+							data-dismiss="modal" @click="deleteDesign(info.design_id)">DELETE</button>
+					</div>
+					<div class="modal-footer">
+						<button type="button" id="cancle" class="btn btn-secondary"
+							data-dismiss="modal" @click="close()">CLOSE</button>
+					</div>
+
+				</div>
 			</div>
 		</template>
-		</div>
-		
-		<jsp:include page="/WEB-INF/jsp/kcg/_include/system/footer.jsp" flush="false"/>
-		
 	</div>
-</div>
-
-<!-- 가입 정보 조회 팝업 -->
-<div class="modal fade" id="pop_sub_info">
-<template>
-	<div class="modal-dialog" style="width: 80%;">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="btn_popClose">&times;</button>
-				<h4 class="modal-title" id="modify_nm">가입 정보 조회</h4>
-			</div>
-			<div class="modal-body">
-                <div class="panel-body" style="display: flex;border: 1px solid #FF0000;width: 100%;">			
-                    <div class="left-panel" style="width: 50%;">
-                        <div class="form-group">
-                            <label for="err_eng_nm" class="fix-width-33">ID:</label>
-                            <input type="text" class="form-control" id="pop_design_id" v-model="info.design_id" readonly>
-                        </div>
-      
-                        <div class="form-group">
-                            <label for="err_eng_nm" class="fix-width-33">상품명:</label>
-                            <input type="text" class="form-control" id="pop_product_name" v-model="info.product_name" readonly>
-                        </div>
-    
-                        <div class="form-group">
-                            <label for="err_eng_nm" class="fix-width-33">고객ID:</label>
-                            <input type="text" class="form-control" id="pop_customer_id" v-model="info.customer_id" readonly>
-                        </div>
-    
-                        <div class="form-group">
-                            <label for="err_eng_nm" class="fix-width-33">고객명:</label>
-                            <input type="text" class="form-control" id="pop_customer_name" v-model="info.customer_name" readonly>
-                        </div>
-                        
-                        <div class="form-group">
-							    <div v-if="info.product_type === '예금'">
-							    	<label>예치 금액:</label>
-							        <input type="text" id="pop_sub_money" v-model="info.sub_money" readonly>
-							        <span>원</span>
-							    </div>
-							    <div v-else-if="info.product_type === '적금'">
-							    	<label>납입 금액:</label>
-							        <input type="text" id="pop_cycle_money" v-model="info.cycle_money" readonly>
-							        <span>원</span>
-							    </div>
-							    <div v-else-if="info.product_type === '대출'">
-							    	<label>대출 금액:</label>
-							        <input type="text" id="pop_sub_money" v-model="info.sub_money" readonly>
-							    	<span>원</span>       
-							    </div>
-							    <div v-else-if="info.product_type === '목돈마련적금'">
-							    	<label>목표 금액:</label>
-							        <input type="text" id="pop_sub_money" v-model="info.sub_money" readonly>
-							    	<span>원</span>       
-							    	<label>예상 납부 금액:</label>
-							        <input type="text" id="pop_cycle_money" v-model="info.cycle_money" readonly>
-							    	<span>원</span>       
-							    </div>
-                        </div>           
-                        <div class="form-group" v-if="info.product_type === '대출'">
-                            <label for="err_eng_nm" class="fix-width-33">대출 유형:</label>
-                            <input type="text" class="form-control" id="pop_info.loan_repayment_type" v-model="info.loan_repayment_type" readonly>
-                        </div>
-                        <div class="form-group" v-else>
-                            <label for="err_eng_nm" class="fix-width-33">이자 유형:</label>
-                            <input type="text" class="form-control" id="pop_info.interest_type" v-model="info.interest_type" readonly>
-                        </div>
-                                  
-                        <div class="form-group">
-                            <label for="err_eng_nm" class="fix-width-33">고정금리:</label>
-                            <input type="text" class="form-control" id="pop_f_interest_rate" v-model="info.f_interest_rate" readonly>
-                            <span>%</span>                        
-                        </div>
-                        <div class="form-group">
-                            <label for="err_eng_nm" class="fix-width-33">고정금리 기간:</label>
-                            <input type="text" class="form-control" id="pop_f_select_month" v-model="info.f_select_month" readonly>
-                            <span>(월)</span>                        
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="err_eng_nm" class="fix-width-33">변동금리:</label>
-                            <input type="text" class="form-control" id="pop_v_interest_rate" v-model="info.v_interest_rate" readonly>
-                            <span>%</span>                        
-                        </div>
-                        <div class="form-group">
-                            <label for="err_eng_nm" class="fix-width-33">변동금리 기간:</label>
-                            <input type="text" class="form-control" id="pop_v_select_month" v-model="info.v_select_month" readonly>
-                            <span>(월)</span>                        
-                        </div>
-                        <div class="form-group" v-if="info.product_type === '대출'">
-                            <label for="err_eng_nm" class="fix-width-33">중도상환수수료:</label>
-                            <input type="text" class="form-control" id="pop_rate" v-model="info.rate" readonly>
-                            <span>%</span>                        
-                        </div>
-                        <div class="form-group" v-else>
-                            <label for="err_eng_nm" class="fix-width-33">세율:</label>
-                            <input type="text" class="form-control" id="pop_rate" v-model="info.rate" readonly>
-                            <span>%</span>                        
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="err_eng_nm" class="fix-width-33">최종 금액:</label>
-                            <input type="text" class="form-control" id="pop_final_money" v-model="info.final_money" readonly>
-                        </div>      
-                        <div class="form-group">
-                            <label for="err_eng_nm" class="fix-width-33">최종 이자:</label>
-                            <input type="text" class="form-control" id="pop_final_interest" v-model="info.final_interest" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="err_eng_nm" class="fix-width-33">설계 날짜:</label>
-                            <input type="text" class="form-control" id="pop_design_date" v-model="info.design_date" readonly>
-                        </div>      
-
-                    </div>
-                </div>          
-			</div>
-			<div class="modal-footer" >
-                <button type="button" id="update" class="btn btn-secondary" data-dismiss="modal" @click="updateProduct()">CHANGE</button>
-         	</div>
-         	<div class="modal-footer" >
-                <button type="button" id="update" class="btn btn-secondary" data-dismiss="modal" @click="deleteDesign(info.design_id)">DELETE</button>
-         	</div>
-			<div class="modal-footer" >
-                <button type="button" id="cancle" class="btn btn-secondary" data-dismiss="modal" @click="close()">CLOSE</button>
-         	</div>
-
-		</div>
-	</div>
-</template>
-</div>
 
 
 </body>

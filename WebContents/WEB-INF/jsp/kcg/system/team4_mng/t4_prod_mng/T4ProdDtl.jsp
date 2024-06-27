@@ -319,23 +319,22 @@ button[type="button"]:disabled {
 							<option value="9">판매중지</option>
 						</select>
 					</div>
-					<div class="form-group1" style="align-items: flex-end; display: flex; justify-content: flex-end;">
-						<div >
-							<div
-								v-if="info.product_status =='9' || new Date(info.product_sale_end_date) < new Date(currentDate)">
+					<div class="form-group1"
+						style="align-items: flex-end; display: flex; justify-content: flex-end;">
+						<div>
+							<div v-if="key1">
+								<button type="button" class="btn btn-green btn-icon btn-small"
+									@click="save" style="justify-content: center;" v-if="key2">
+									저장 <i class="entypo-check"></i>
+								</button>
 								<button type="button" class="btn btn-blue btn-icon btn-small"
-									@click="gotoList" style="justify-content: center;">
+									@click="gotoList">
 									목록 <i class="entypo-list"></i>
 								</button>
 							</div>
 							<div v-else>
-								<button type="button" class="btn btn-green btn-icon btn-small"
-									@click="save" style="justify-content: center;" v-if="key">
-									저장 <i class="entypo-check"></i>
-								</button>
-
 								<button type="button" class="btn btn-blue btn-icon btn-small"
-									@click="gotoList">
+									@click="gotoList" style="justify-content: center;">
 									목록 <i class="entypo-list"></i>
 								</button>
 							</div>
@@ -352,7 +351,8 @@ button[type="button"]:disabled {
 						el : "#vueapp",
 						data : {
 							jikgub_nm : '${userInfoVO.jikgubNm}',
-							key : "",
+							key1 : "",
+							key2 : "",
 							info1 : "",
 							currentDate : "",
 							info : {
@@ -366,9 +366,9 @@ button[type="button"]:disabled {
 
 						mounted : function() {
 							if (this.jikgub_nm === "이사") {
-								this.key = true;
+								this.key1 = true;
 							} else {
-								this.key = false;
+								this.key1 = false;
 							}
 							if (!cf_isEmpty(this.info.product_id)) {
 								this.getInfo();
@@ -403,9 +403,13 @@ button[type="button"]:disabled {
 								this.currentDate = formattedDate;
 								console.log(formattedDate); // 예: "2024-06-21"
 								this.info = data;
-								console.log(this.info.product_status);
-								console.log(this.info.product_sale_end_date);
 								this.info.save_mode = "update";
+								var status = this.info.product_status;
+								if(status == '9'){
+									this.key2 = false;
+								} else{
+									this.key2 = true;
+								}
 
 							},
 							save : function() {
