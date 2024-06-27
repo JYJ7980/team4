@@ -2,140 +2,162 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace='system.t4_employee'>
 
-	<!-- 전체 담당자 리스트 이름으로 가져오기 -->
-	<select id="employeelist" parameterType="cmmnMap"
-		resultType="cmmnMap">
-		SELECT * FROM kcgbd.t_user
-		WHERE 1=1
-		and email like '%@team4.com'
-		<if test='user_id != null and user_id != ""'>
-			and user_id = #{user_id}
-		</if>
-		<if test='name != null and name != ""'>
-			and name = #{name}
-		</if>
-	</select>
+   <!-- 전체 담당자 리스트 이름으로 가져오기 -->
+   <select id="employeelist" parameterType="cmmnMap"
+      resultType="cmmnMap">
+      SELECT * FROM kcgbd.t_user
+      WHERE 1=1
+      and email like '%@team4.com'
+      <if test='user_id != null and user_id != ""'>
+         and user_id = #{user_id}
+      </if>
+      <if test='name != null and name != ""'>
+         and name = #{name}
+      </if>
+      ORDER BY jikgub_cd asc
+   </select>
 
-	<!-- 이름으로 조건 검색 -->
-	<select id="searchEmployee" parameterType="cmmnMap"
-		resultType="cmmnMap">
-		SELECT * FROM kcgbd.t_user
-		WHERE
-		name LIKE CONCAT('%',
-		#{name}, '%')
-		AND email like '%@team4.com'
-	</select>
+   <!-- 이름으로 조건 검색 -->
+   <select id="searchEmployee" parameterType="cmmnMap"
+      resultType="cmmnMap">
+      SELECT * FROM kcgbd.t_user
+      WHERE 1=1
+      <if test='status_cd != null and status_cd != ""'>
+       and status_cd = #{status_cd}
+      </if>
+      and name LIKE CONCAT('%',
+      #{name}, '%')
+      AND email like '%@team4.com'
+      ORDER BY jikgub_cd asc
+   </select>
 
-
-	<!-- user_id에 해당하는 정보를 가져오기 -->
-	<select id="selectOne" parameterType="cmmnMap"
-		resultType="cmmnMap">
-		SELECT user_id , name, status_cd, jikgub_nm, dept, user_pw
-		, to_char(reg_dt, 'YYYY-MM-DD') AS reg_dt
-		FROM
-		kcgbd.t_user
-		WHERE user_id
-		= #{user_id}
-		AND email like '%@team4.com'
-	</select>
-
-	<!-- 비밀번호 수정 업데이트 -->
-	<update id="updatePw" parameterType="cmmnMap">
-		UPDATE kcgbd.t_user
-		SET
-		user_pw = #{user_pw}
-		WHERE user_id = #{user_id}
-	</update>
-
-	<!-- 계정 정보 수정 -->
-	<update id="updateEmployee" parameterType="cmmnMap">
-		UPDATE kcgbd.t_user
-		SET
-		name = #{name},
-		status_cd = #{status_cd},
-		jikgub_nm = #{jikgub_nm},
-		dept = #{dept},
-		del_yn = #{del_yn},
-		iam_yn = #{iam_yn}
-		WHERE user_id =
-		#{user_id}
-	</update>
-
-	<!-- 계정 정보 삭제 -->
-	<delete id="deleteEmployee" parameterType="cmmnMap">
-		DELETE FROM
-		kcgbd.t_user
-		WHERE user_id = #{user_id}
-	</delete>
-
-	<!-- 신규 계정 생성 -->
-	<insert id="insertEmp" parameterType="cmmnMap">
-		INSERT INTO kcgbd.t_user
-		(reg_dt ,
-		user_id,
-		user_pw,
-		iam_yn,
-		name,
-		auth_cd,
-		status_cd,
-		jikgub_cd,
-		tdept_nm,
-		gis_auth,
-		jikgub_nm,
-		dept,
-		email,
-		del_yn)
-		VALUES
-		(#{reg_dt},
-		#{user_id},
-		#{user_pw},
-		#{iam_yn},
-		#{name},
-		#{auth_cd},
-		'재직',
-		#{jikgub_cd},
-		#{tdept_nm},
-		#{gis_auth},
-		#{jikgub_nm},
-		#{dept},
-		#{email} ,
-		#{del_yn})
-	</insert>
-	<insert id="insertCal" parameterType="CmmnMap">
-		INSERT INTO
-		kcgbd.db4_bn_cal_mag (manager_id) values (#{user_id});
-	</insert>
+   <select id="statusSearch" parameterType="cmmnMap"
+      resultType="cmmnMap">
+      SELECT * FROM kcgbd.t_user WHERE status_cd = #{status_cd}
+      AND email like '%@team4.com'
+      ORDER BY jikgub_cd asc
+   </select>
 
 
-	<!-- 퇴직자 리스트 불러오기 -->
-	<select id="getQuitUser" parameterType="cmmnMap"
-		resultType="cmmnMap">
-		SELECT *
-		FROM kcgbd.t_user where iam_yn ='Y' and
-		CONCAT(email, '') like '%@team4%'
-	</select>
+   <!-- user_id에 해당하는 정보를 가져오기 -->
+   <select id="selectOne" parameterType="cmmnMap"
+      resultType="cmmnMap">
+      SELECT user_id , name, status_cd, jikgub_nm, dept, user_pw
+      , to_char(reg_dt, 'YYYY-MM-DD') AS reg_dt
+      FROM
+      kcgbd.t_user
+      WHERE user_id
+      = #{user_id}
+      AND email like '%@team4.com'
+   </select>
 
-	<select id="getQuitUserCustomerInfo" parameterType="cmmnMap"
-		resultType="cmmnMap">
-		select * from kcgbd.db4_customer_info dci join kcgbd.t_user
-		tu on
-		dci.user_id = tu.user_id where tu.iam_yn = 'Y' and dci.use_yn
-		='Y'
-		and tu.user_id = #{user_id}
-	</select>
+   <!-- 비밀번호 수정 업데이트 -->
+   <update id="updatePw" parameterType="cmmnMap">
+      UPDATE kcgbd.t_user
+      SET
+      user_pw = #{user_pw}
+      WHERE user_id = #{user_id}
+   </update>
 
-	<select id="getCurrentUserInfo" parameterType="cmmnMap"
-		resultType="cmmnMap">
-		SELECT *
-		FROM kcgbd.t_user where iam_yn ='N' and
-		CONCAT(email, '') like '%@team4%'
-	</select>
+   <!-- 계정 정보 수정 -->
+   <update id="updateEmployee" parameterType="cmmnMap">
+      UPDATE kcgbd.t_user
+      SET
+      name = #{name},
+      jikgub_nm = #{jikgub_nm},
+      dept = #{dept}
+      WHERE user_id =   #{user_id}
+   </update>
 
-	<update id="changeQuitUser" parameterType="cmmnMap">
-		update
-		kcgbd.db4_customer_info
-		set user_id = #{user_id}
-		where customer_id =
-		CAST(#{customer_id} AS integer)
-	</update>
+   <update id="updateStatus" parameterType="cmmnMap">
+      UPDATE kcgbd.t_user
+      SET
+      del_yn = #{del_yn},
+      iam_yn = #{iam_yn},
+      status_cd = #{status_cd}
+      WHERE
+      user_id = #{user_id}
+   </update>
+
+   <!-- 신규 계정 생성 -->
+   <insert id="insertEmp" parameterType="cmmnMap">
+      INSERT INTO kcgbd.t_user
+      (reg_dt ,
+      user_id,
+      user_pw,
+      iam_yn,
+      name,
+      auth_cd,
+      status_cd,
+      jikgub_cd,
+      tdept_nm,
+      gis_auth,
+      jikgub_nm,
+      dept,
+      email,
+      del_yn)
+      VALUES
+      (#{reg_dt},
+      CAST(#{user_id} AS VARCHAR),
+      #{user_pw},
+      #{iam_yn},
+      #{name},
+      #{auth_cd},
+      '재직',
+      #{jikgub_cd},
+      #{tdept_nm},
+      #{gis_auth},
+      #{jikgub_nm},
+      #{dept},
+      #{email} ,
+      #{del_yn})
+   </insert>
+   <insert id="insertCal" parameterType="CmmnMap">
+      INSERT INTO
+      kcgbd.db4_bn_cal_mag (manager_id) values (#{user_id});
+   </insert>
+
+
+   <!-- 퇴직자 리스트 불러오기 -->
+   <select id="getQuitUser" parameterType="cmmnMap"
+      resultType="cmmnMap">
+      SELECT *
+      FROM kcgbd.t_user where iam_yn ='Y' and
+      CONCAT(email, '') like '%@team4%'
+   </select>
+
+   <select id="getQuitUserCustomerInfo" parameterType="cmmnMap"
+      resultType="cmmnMap">
+      select * from kcgbd.db4_customer_info dci join kcgbd.t_user
+      tu on
+      dci.user_id = tu.user_id where tu.iam_yn = 'Y' and dci.use_yn
+      ='Y'
+      and tu.user_id = #{user_id}
+   </select>
+
+   <select id="getCurrentUserInfo" parameterType="cmmnMap"
+      resultType="cmmnMap">
+      SELECT *
+      FROM kcgbd.t_user where iam_yn ='N' and
+      CONCAT(email, '') like '%@team4%'
+   </select>
+
+   <update id="changeQuitUser" parameterType="cmmnMap">
+      update
+      kcgbd.db4_customer_info
+      set user_id = #{user_id}
+      where customer_id =
+      CAST(#{customer_id} AS integer)
+   </update>
+
+
+   <select id="newEmployeeID"   resultType="cmmnMap">
+      SELECT user_id
+      FROM kcgbd.t_user
+      WHERE
+      email LIKE '%@team4.com'
+      AND user_id LiKE '10000%'
+      ORDER BY user_id DESC
+      LIMIT 1
+   </select>
 </mapper>
