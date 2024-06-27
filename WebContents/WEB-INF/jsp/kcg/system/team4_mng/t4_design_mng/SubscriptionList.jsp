@@ -521,9 +521,7 @@ function pop_sub_info(mapData) {
 
 				},
 				close : function(){
-					$('#pop_sub_info').modal('hide');
-					vueapp.this.pro_flag = "N";
-					window.location.reload();
+                    window.location.href = "/team4/subscriptionList";                       
 				},
 				deleteProduct: function (sub_id) {
 		        	var params = {sub_id : sub_id}
@@ -536,6 +534,8 @@ function pop_sub_info(mapData) {
 		                    .catch(error => {
 		                        console.error('항목 삭제 중 에러 발생:', error);
 		                    });
+		            }else{
+	                 window.location.href = "/team4/subscriptionList";                       
 		            }
 		        }
 			},
