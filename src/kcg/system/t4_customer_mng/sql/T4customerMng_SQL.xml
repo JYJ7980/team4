@@ -8,14 +8,14 @@
 		FROM kcgbd.db4_customer_info cust join
 		kcgbd.db4_cust_con dcc on
 		cust.customer_id = dcc.customer_id where
-		cust.use_yn = 'Y';
+		cust.use_yn = 'Y' order by customer_name ;
 	</select>
 	<select id="getUserInfo" parameterType="cmmnMap"
 		resultType="cmmnMap">
 		SELECT *
 		FROM kcgbd.t_user
 		WHERE CONCAT(email, '') LIKE
-		'%@team4%' and iam_yn='N';
+		'%@team4%' and iam_yn='N' and jikgub_cd !='1' order by name;
 	</select>
 	<select id="getCustAndUserInfo" parameterType="cmmnMap"
 		resultType="cmmnMap">
@@ -24,9 +24,11 @@
 		kcgbd.t_user
 		tu on
 		cust.user_id = tu.user_id
-		join kcgbd.db4_cust_con dcc on cust.customer_id = dcc.customer_id
+		join kcgbd.db4_cust_con dcc on
+		cust.customer_id = dcc.customer_id
 		where
-		cust.use_yn = 'Y'
+		cust.use_yn = 'Y' order by
+		cust.customer_name
 	</select>
 	<select id="getCustIdNumber" parameterType="cmmnMap"
 		resultType="cmmnMap">
@@ -34,7 +36,8 @@
 		FROM kcgbd.db4_customer_info
 		where
 		customer_id_number = #{customer_id_number}
-		and use_yn = 'Y'
+		and use_yn = 'Y' order by
+		customer_name
 	</select>
 	<select id="getQuitCustIdNumber" parameterType="cmmnMap"
 		resultType="cmmnMap">
@@ -42,7 +45,8 @@
 		FROM kcgbd.db4_customer_info
 		where
 		customer_id_number = #{customer_id_number}
-		and use_yn = 'N'
+		and use_yn = 'N' order by
+		customer_name
 	</select>
 	<select id="getCustPhone" parameterType="cmmnMap"
 		resultType="cmmnMap">
@@ -161,7 +165,7 @@
 		kcgbd.t_user rep ON ci.user_id = rep.user_id
 		WHERE
 		con.user_id =
-		#{user_id};
+		#{user_id} order by con.con_date DESC
 	</select>
 
 	<select id="getAllMyconsult" parameterType="cmmnMap"
@@ -185,7 +189,7 @@
 		kcgbd.t_user rep ON ci.user_id = rep.user_id
 		WHERE
 		con.user_id =
-		#{user_id_number} and rep.name=#{user_name};
+		#{user_id_number} and rep.name=#{user_name} order by con.con_date DESC
 	</select>
 
 	<select id="getCustConsult" parameterType="cmmnMap"
@@ -195,7 +199,7 @@
 		tu.user_id
 		where dcc.customer_id =
 		CAST(#{customer_id} AS
-		integer)
+		integer) order by dc.con_date DESC
 
 	</select>
 
