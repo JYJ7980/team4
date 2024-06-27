@@ -137,7 +137,15 @@
 						onclick="cf_movePage('/system/team4/employee/employeeInsert')">
 							<span class="title">신규 직원 회원가입</span>
 					</a></li>
-				</ul></li>
+				</ul>
+					<ul data-lnb="5" data-snb="0">
+					<li data-lnb="5" data-snb="1"><a href="#gm"
+						onclick="cf_movePage('/system/team4/employee/quitUserInfoPage')">
+							<span class="title">퇴사 직원 관리</span>
+					</a></li>
+				</ul>
+				
+				</li>
 				</c:if>
 			<li data-lnb="5" data-snb="0"><a href="#gm"> <i
 					class="entypo-newspaper"></i> <span class="title">team
