@@ -119,6 +119,7 @@ public class T4designMngCtl {
 	
     @PostMapping("/deleteProduct")
     public List<CmmnMap> deleteProduct(CmmnMap params) {
+    	svc.deleteProducts(params);
         return cmmnDao.selectList("system.t4_design_mng.selectAllList", params);
     }
 	
