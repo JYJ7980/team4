@@ -312,8 +312,9 @@
 												<option value="수습" name="수습" style="text-align: center;">수습</option>
 												<option value="사원" name="사원"style="text-align: center;">사원</option>
 												<option value="대리" name="대리"style="text-align: center;">대리</option>
-												<option value="과장" name="과장"style="text-align: center;">과장</option>
 												<option value="차장" name="차장"style="text-align: center;">차장</option>
+												<option value="과장" name="과장"style="text-align: center;">과장</option>
+												
 												<option value="부장" name="부장"style="text-align: center;">부장</option>
 												
 											</select>
@@ -555,7 +556,7 @@
             },
             update: function() {
                 var params = {
-                      user_id : Strign(this.emp_nfo.user_id),
+                      user_id : this.emp_nfo.user_id,
                        name : this.emp_nfo.name,
                        jikgub_nm : this.emp_nfo.jikgub_nm,
                        dept : this.emp_nfo.dept
