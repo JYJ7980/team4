@@ -233,10 +233,6 @@
 			                               
 			                           </div>	
 			                           
-		                            <div class="panel-heading">
-										<div class="panel-title">계산결과 CHART</div>
-									</div>										
-									<div id="chart" class="bottom-right-bottom flex-100"></div>
 	                        		</td>
 	                        		<td class="center" style="width: 3%;">
 	                        		</td>

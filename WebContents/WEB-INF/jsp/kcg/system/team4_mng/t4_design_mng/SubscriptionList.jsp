@@ -97,10 +97,17 @@
 					<button type="button" class="btn btn-green btn-icon icon-left btn-small" @click="cf_movePage('/team4/subscriptionForm')">
 						등록
 						<i class="entypo-plus"></i>
-					</button>
-					<button type="button" value="중단" @click="deleteSelected" class="btn btn-red btn-icon icon-left btn-small">
-					선택 중단<i class=" entypo-block"></i>
-					</button>
+					</button> 
+					<c:choose>
+						<c:when test="${userInfoVO.jikgubCd == '2'}">
+							<button type="button" value="중단" @click="deleteSelected" class="btn btn-red btn-icon icon-left btn-small">
+							선택 중단<i class=" entypo-block"></i>
+							</button>
+						</c:when>
+						<c:otherwise>
+					    </c:otherwise>
+					</c:choose>
+
                 </span>
             </div>
             </div>
@@ -233,12 +240,12 @@
                         </div>
                             <div class="jh-div">
                             <label for="err_eng_nm" class="fix-width-33">가입날짜:</label>
-                            <input type="text" class="form-control" id="pop_sub_start_date" v-model="info.sub_start_date" style="width: 250px; margin-left: 10px;">
+                            <input type="text" class="form-control" id="pop_sub_start_date" v-model="info.sub_start_date" style="width: 250px; margin-left: 10px;" readonly>
                         </div>      
     
                         <div class="jh-div">
                             <label for="err_eng_nm" class="fix-width-33">만기날짜:</label>
-                            <input type="text" class="form-control" id="pop_sub_end_date" v-model="info.sub_end_date" style="width: 250px; margin-left: 10px;">
+                            <input type="text" class="form-control" id="pop_sub_end_date" v-model="info.sub_end_date" style="width: 250px; margin-left: 10px;" readonly>
                         </div>      
                     </div>
                 </div>          
