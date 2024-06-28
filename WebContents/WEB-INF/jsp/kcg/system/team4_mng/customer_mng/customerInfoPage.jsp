@@ -134,7 +134,7 @@
 	margin: 10% auto;
 	padding: 20px;
 	border: 1px solid #888;
-	width: 400px;
+	width: 550px;
 	height: 350px;
 }
 
@@ -274,13 +274,13 @@ textarea {
 									<span class="close" @click="closeModal">&times;</span>
 									<div class="modal-body">
 										<div>
-											<label>상담시간 </label><input type="text"
+											<label style="margin-left: -120px;">상담일시: </label><input type="text"
 												v-model="selectedConsult.con_date" disabled="disabled">
 										</div>
 										<br>
 										<div>
 											<label>상담내용</label><br>
-											<textarea cols="25" rows="5"
+											<textarea cols="40" rows="5"
 												v-model="selectedConsult.consult_context"
 												disabled="disabled"></textarea>
 										</div>
@@ -901,8 +901,6 @@ new Vue({
 </script>
 
 
-
-=======
 </body>
 
 </html>

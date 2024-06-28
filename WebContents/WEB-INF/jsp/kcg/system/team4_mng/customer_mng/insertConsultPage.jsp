@@ -23,11 +23,12 @@
 #app {
 	margin-left: auto;
 	margin-right: auto;
-	width: 50%; /* Adjust width as per your design */
-	/* Optionally, you can add padding, background color, etc. */
+	width: 700px; 
+	height: 750px;
 	padding: 20px;
 	background-color: #f0f0f0;
 	border: 1px solid #ccc;
+	align-items: center;
 }
 
 .input-form {
@@ -43,7 +44,7 @@
 	display: none;
 	position: fixed;
 	text-align: center;
-	padding:15px;
+	padding: 15px;
 	left: 50%;
 	top: 50%;
 	transform: translate(-50%, -50%);
@@ -97,6 +98,11 @@
 	align-items: center; /* 요소들을 세로 중앙 정렬 */
 	gap: 10px; /* 요소들 사이 간격 조정 */
 }
+
+textarea {
+	resize: none;
+	padding: 10px;
+}
 </style>
 <title>상담내역 추가 페이지</title>
 
@@ -108,7 +114,8 @@
 		<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/sidebar-menu.jsp"
 			flush="false" />
 
-		  <div class="main-content" style="background-image: url('/static_resources/team4/images/background-test.png'); background-size: cover; background-position: center; repeat: no-repeat">
+		<div class="main-content"
+			style="background-image: url('/static_resources/team4/images/background-test.png'); background-size: cover; background-position: center; repeat: no-repeat">
 			<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/header.jsp"
 				flush="false" />
 			<ol class="breadcrumb bc-3">
@@ -118,16 +125,17 @@
 			</ol>
 
 			<h2>고객관리 > 상담내역 추가</h2>
-			<br><br>
+			<br>
+			<br>
 
 			<div id="app">
 
-			
+
 				<div class="input-form">
-				<span>**상담내역을 추가하세요**</span>
-				<br><br>
-					<label for="customerName">고객 이름:</label> <input type="search"
-						id="customerName" v-model="customerName" placeholder="고객을 선택하세요">
+					<span>**상담내역을 추가하세요**</span> <br>
+					<br> <label for="customerName">고객 이름:</label> <input
+						type="search" id="customerName" v-model="customerName"
+						placeholder="고객을 선택하세요">
 					<button type="button" class="btn" @click="popupCust()">
 						<i class="fa fa-search"></i> 검색
 					</button>
@@ -145,7 +153,8 @@
 				<br>
 				<button @click="addConsult">추가</button>
 				<button @click="resetForm">취소</button>
-				<button onclick="cf_movePage('/system/team4/consultListPage')">상담내역 목록으로</button>
+				<button onclick="cf_movePage('/system/team4/consultListPage')">상담내역
+					목록으로</button>
 
 				<div class="popup-overlay" :class="{active: showPopup}"
 					@click="closePopup"></div>
@@ -159,7 +168,7 @@
 							<i class="fa fa-search"></i>
 						</button>
 						<button @click="searchCustomersReset">다시</button>
-						
+
 					</div>
 
 
@@ -175,7 +184,8 @@
 							@click="selectCustomer(customer)">
 							<td>{{ customer.customer_name }}</td>
 							<td>{{ customer.customer_brdt }}</td>
-							<td>{{ customer.name }}({{ customer.dept }}-{{ customer.jikgub_nm }})</td>
+							<td>{{ customer.name }}({{ customer.dept }}-{{
+								customer.jikgub_nm }})</td>
 						</tr>
 					</table>
 				</div>
