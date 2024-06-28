@@ -263,7 +263,7 @@ textarea {
 											<i class="fa fa-search"></i>
 										</button>
 										<button type="button" class="btn"
-											@click="searchCustomersReset">다시</button>
+											@click="searchCustomersReset">초기화</button>
 									</div>
 								</div>
 								<br>
