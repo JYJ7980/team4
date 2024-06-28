@@ -425,7 +425,9 @@ textarea {
 										<!-- Iterate over consults array to display each consultation item -->
 										<div class="customer-item" v-for="subProduct in subProducts">
 											<div class="table-cell">{{ subProduct.sub_start_date }}</div>
-											<div class="table-cell">{{ subProduct.product_name }}</div>
+											<div class="table-cell"
+												@click="moveProductInfoForm(subProduct.sub_id, subProduct.product_id, subProduct.customer_id)">{{
+												subProduct.product_name }}</div>
 										</div>
 									</div>
 									<div v-else>
@@ -447,8 +449,9 @@ textarea {
 										<div class="customer-item"
 											v-for="designProduct in designProducts">
 											<div class="table-cell">{{ designProduct.design_date }}</div>
-											<div class="table-cell">{{ designProduct.product_name
-												}}</div>
+											<div class="table-cell"
+												@click="moveDesignInfoForm(designProduct.design_id, designProduct.product_id, designProduct.customer_id)">{{
+												designProduct.product_name}}</div>
 										</div>
 									</div>
 									<div v-else>
@@ -592,6 +595,24 @@ new Vue({
         },
     },
     methods: {
+    	moveProductInfoForm(sub_id, product_id, customer_id){
+    		var params = {
+    			customer_id : customer_id,
+    			product_id : product_id,
+    			sub_id : sub_id,
+    			flag : "Y",
+    		}
+			cf_movePage("/team4/subscriptionList", params);
+    	},
+    	moveDesignInfoForm(design_id, product_id, customer_id){
+    		var params = {
+    			customer_id : customer_id,
+    			product_id : product_id,
+    			design_id : design_id,
+    			flag : "Y",
+    		}
+			cf_movePage("/team4/designList", params);
+    	},
         getAllCustomers: function() {
         	 axios.get('/system/team4/getCustInfo')
              .then(response => {
