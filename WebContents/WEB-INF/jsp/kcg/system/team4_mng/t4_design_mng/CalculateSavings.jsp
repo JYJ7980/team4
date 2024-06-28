@@ -25,7 +25,7 @@
 
 	<div class="main-content">
 
-		<jsp:include page="/WEB-INF/jsp/kcg/_include/system/header.jsp" flush="false"/>
+		<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/header.jsp" flush="false"/>
 		
 		<ol class="breadcrumb bc-3">
 			<li><a href="#none" onclick="cf_movePage('/system')"><i class="fa fa-home"></i>Home</a></li>
@@ -39,7 +39,7 @@
 			<div class="dataTables_wrapper flex" id="vueapp">
 			<template>
 			
-				<div class="left flex-column flex-gap-10 flex-40" v-if="info.simpl_ty_cd == '1'">
+				<div class="left flex-column flex-gap-10 flex-40" v-if="info.simpl_ty_cd == '1'" style="width: 300px; margin-right: 50px;">
                     <label>고객정보:</label>
                     <div class="form-group">
                         <label>성명:</label>
