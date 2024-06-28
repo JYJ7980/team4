@@ -13,95 +13,9 @@
    href="/static_resources/system/js/select2/select2-bootstrap.css">
 <link rel="stylesheet"
    href="/static_resources/system/js/select2/select2.css">
-<style type="text/css">
-.has-text-centered {
-   text-align: center
-}
+   	<link rel="stylesheet"
+	href="/static_resources/team4/css/Calender.css">
 
-.has-text-prev {
-   background-color: #ECEFF1
-}
-
-.has-text-next {
-   background-color: #ECEFF1
-}
-
-.has-text-primary {
-   background-color: #598987
-}
-
-.fixed-text {
-   width: 100px;
-   height: 150px;
-   position: relative; /* 부모 요소 기준으로 위치를 설정하기 위해 relative 설정 */
-}
-
-.fixed-text .inner-text {
-   position: absolute;
-   top: 0;
-   left: 0;
-   width: 20px;
-   height: 20px;
-   background-color: lightgray; /* 배경색 설정 (선택사항) */
-   text-align: center;
-}
-
-.fixed-text .ptag {
-   margin-left: 0;
-}
-
-.has-text-centered {
-   text-align: center
-}
-
-.has-text-prev {
-   background-color: #ECEFF1
-}
-
-.has-text-next {
-   background-color: #ECEFF1
-}
-
-.has-text-primary {
-   background-color: #598987
-}
-
-.modal {
-   display: block;
-   position: fixed;
-   z-index: 1;
-   left: 0;
-   top: 0;
-   margin-left: 100px;
-   width: 100%;
-   height: 100%;
-   overflow: auto;
-   background-color: rgb(0, 0, 0);
-   background-color: rgba(0, 0, 0, 0.4);
-   padding-top: 60px;
-}
-
-.modal-content {
-   background-color: #fefefe;
-   margin: 5% auto;
-   padding: 20px;
-   border: 1px solid #888;
-   width: 80%;
-}
-
-.close {
-   color: #aaa;
-   float: right;
-   font-size: 28px;
-   font-weight: bold;
-}
-
-.close:hover, .close:focus {
-   color: black;
-   text-decoration: none;
-   cursor: pointer;
-}
-</style>
 <title>관리자시스템</title>
 </head>
 <body class="page-body">
@@ -110,7 +24,7 @@
 		<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/sidebar-menu.jsp"
 			flush="false" />
 
-      <div class="main-content">
+      <div class="main-content" style="background-image: url('/static_resources/team4/images/background-test.png'); background-size: cover; background-position: center; repeat: no-repeat">
 			<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/header.jsp"
 				flush="false" />
 
@@ -121,22 +35,24 @@
             <li class="active"><strong>스케쥴 관리</strong></li>
          </ol>
 
-         <h2>${userInfoVO.userId}님의캘린더</h2>
+         <h2>${userInfoVO.name}님의 고객 캘린더</h2>
          <br />
          <div class="dataTables_wrapper" id="vueapp">
 
-            <div align="center">
-               <button @click="calendarData(-1)"><</button>
-               {{ year }}년 {{ month }}월
-               <button @click="calendarData(1)">></button>
-            </div>
-            <table border="1" style="width: 80%;" align="center">
-               <thead>
+            <div align="center" style="font-size: 25px; color: black;">
+					<button @click="calendarData(-1)" class="btn-pink"><</button>
+					{{ year }}년 {{ month }}월
+					<button @click="calendarData(1)" class="btn-pink">></button>
+
+				</div>
+            <table border="1" style=" width: 80%; background-color: white; border-color: #80D9E1; border-top-left-radius: 50px; border-top-right-radius: 50px;" align="center">
+				   <thead>
                   <!-- 요일 -->
                   <tr>
-                     <th v-for="days in weeks" :key="days" style="text-align: center;">{{
-                        days }}</th>
-                  </tr>
+                     <tr>
+							<th v-for="days in weeks" :key="days" style="text-align: center; height: 25px; font-size: 18px; color: white; background-color:#80D9E1; font-weight: 700; ">{{
+								days }}</th>
+						</tr>
                </thead>
                <!-- 날짜 -->
                <tbody>
@@ -173,7 +89,7 @@
 var vueapp = new Vue({
    el: "#vueapp",
    data: {
-      weeks: ["일", "월", "화", "수", "목", "금", "토"],
+      weeks: ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"],
       currentYear: 0,
       currentMonth: 0,
       year: 0,

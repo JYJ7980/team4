@@ -81,6 +81,61 @@
 	font-size: 18px;
 	resize: none;
 }
+
+.orange_btn{
+    border-radius:30px;
+    line-height:0;
+    width:120px;
+    height:30px;
+    border:2px solid #70C653;
+    color:#FFFFFF;
+    background:#0EA06F;
+    margin-bottom: -10px;
+}
+
+.btn {
+	margin-right: 10px;
+	width: 50px;
+	height: 30px;
+	border-radius: 5px;
+	box-shadow: $shadow;
+	cursor: pointer;
+	transition: .3s ease; & __primary { grid-column : 1/ 2;
+	grid-row: 4/5; background : #FDEE87; box-shadow : inset .2rem .2rem
+	1rem #E4EBF5, inset -.2rem -.2rem 1rem #9baacf, $ shadow; width : 10rem;
+	height : 3rem; border-radius : 1rem; box-shadow : $ shadow; cursor :
+	pointer; transition : .3s ease; & __primary { grid-column : 1/ 2;
+	grid-row: 4/5;
+	background: #6d5dfc;
+	box-shadow: inset .2rem .2rem 1rem #8abdff, inset -.2rem -.2rem 1rem
+		#5b0eeb,$shadow;
+	color: #E4EBF5;
+	background: #FDEE87;
+	box-shadow: inset .2rem .2rem 1rem #E4EBF5, inset -.2rem -.2rem 1rem
+		#9baacf,$shadow;
+	width: 10rem;
+	height: 3rem;
+	border-radius: 1rem;
+	box-shadow: $ shadow;
+	cursor: pointer;
+	transition: .3s ease;
+	&:
+	hover
+	{
+	color
+	:
+	#FFFFFF;
+}
+
+&
+:active {
+	box-shadow: inset .2rem .2rem 1rem #5b0eeb, inset -.2rem -.2rem 1rem
+		#8abdff;
+}
+
+}
+}
+}
 </style>
 <title>공지사항 조회</title>
 
@@ -92,7 +147,8 @@
 		<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/sidebar-menu.jsp"
 			flush="false" />
 
-		<div class="main-content">
+		<div class="main-content"
+			style="background-image: url('/static_resources/team4/images/background-test.png'); background-size: cover; background-position: center; repeat: no-repeat">
 
 			<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/header.jsp"
 				flush="false" />
@@ -106,28 +162,40 @@
 			<h2>활동관리 > 공지사항 조회</h2>
 			<br />
 
-			<div class="dataTables_wrapper" id="vueapp">
+			<div class="dataTables_wrapper" id="vueapp"
+				style="border-style: none;">
 				<template>
+
+
 
 					<c:if test="${userInfoVO.jikgubCd == '1'}">
 						<div
-							style="align-items: flex-end; display: flex; justify-content: flex-end;">
-							<button @click="showInsertForm">공지사항 추가</button>
+							style="align-items: flex-start; display: flex; justify-content: flex-start;">
+							<button @click="showInsertForm" class="orange_btn">공지사항 추가</button>
 						</div>
 					</c:if>
-
-
 					<br>
 					<table class="table table-bordered datatable dataTable"
-						id="grid_app">
+						id="grid_app"
+						style="border-top-left-radius: 20px; border-top-right-radius: 20px;">
 						<thead>
 							<tr class="replace-inputs">
-								<th style="width: 20px;" class="center sorting">최초 등록 일자</th>
-								<th style="width: 20px;" class="center sorting">최종 수정 일자</th>
-								<th style="width: 10px;" class="center sorting">등록번호</th>
-								<th style="width: 200px;" class="center sorting">제목</th>
+								<th
+									style="width: 20px; background-color: #3EAB6F; color: white; border-top-left-radius: 20px;"
+									class="center sorting">최초 등록 일자</th>
+								<th
+									style="width: 20px; background-color: #3EAB6F; color: white;"
+									class="center sorting">최종 수정 일자</th>
+								<th
+									style="width: 10px; background-color: #3EAB6F; color: white;"
+									class="center sorting">등록번호</th>
+								<th
+									style="width: 200px; background-color: #3EAB6F; color: white;"
+									class="center sorting">제목</th>
 								<c:if test="${userInfoVO.jikgubCd == '1'}">
-									<th style="width: 10%;" class="center sorting">비고</th>
+									<th
+										style="width: 10%; background-color: #3EAB6F; color: white; border-top-right-radius: 20px;"
+										class="center sorting">비고</th>
 								</c:if>
 							</tr>
 						</thead>
@@ -140,15 +208,16 @@
 									}}</td>
 								<c:if test="${userInfoVO.jikgubCd == '1'}">
 									<td>
-										<button @click="openEditModal(notice)">수정</button>
-										<button @click="deleteNotice(notice.notice_id)">삭제</button>
+										<button @click="openEditModal(notice)" class="btn">수정</button>
+										<button @click="deleteNotice(notice.notice_id)" class="btn">삭제</button>
 									</td>
 								</c:if>
 							</tr>
 						</tbody>
 					</table>
+
 					<div class="dataTables_paginate paging_simple_numbers"
-						id="div_paginate"></div>
+						id="div_paginate" style="background-color: white;"></div>
 
 					<div v-if="showModal" class="modal">
 						<div class="modal-content-change">
@@ -178,7 +247,7 @@
 								<button type="button"
 									@click="deleteNotice(selectedNotice.notice_id)"
 									style="margin: 10px;">
-									삭제 <i class="entypo-check"></i>
+									삭제 <i class="entypo-trash"></i>
 								</button>
 							</div>
 						</div>
@@ -233,8 +302,6 @@
 
 			</div>
 
-			<jsp:include page="/WEB-INF/jsp/kcg/_include/system/footer.jsp"
-				flush="false" />
 
 		</div>
 	</div>
