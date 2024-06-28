@@ -65,6 +65,7 @@
       SET
       name = #{name},
       jikgub_nm = #{jikgub_nm},
+      jikgub_cd = #{jikgub_cd},
       dept = #{dept}
       WHERE user_id =   #{user_id}
    </update>
