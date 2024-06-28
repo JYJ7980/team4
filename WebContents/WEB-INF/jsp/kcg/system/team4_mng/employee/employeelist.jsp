@@ -239,7 +239,7 @@
 							<div class="table-header">
 								<div class="table-cell">이름</div>
 								<div class="table-cell">직급</div>
-								<div class="table-cell">휴가</div>
+								<div class="table-cell">재직상태</div>
 							</div>
 							<div class="customer-list">
 
