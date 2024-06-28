@@ -51,7 +51,7 @@
 							
 							<label class="sys_label_01 control-label">관리담당자:</label>
 							<div class="sys_col_02" style="width: 246px;">
-								<input class="form-control" v-model="user_id" value="" />
+								<input class="form-control" v-model="name"/>
 							</div>
 							<div style="margin-right: 30px;">
 
@@ -306,6 +306,7 @@ var vueapp = new Vue({
 		product_id:"${product_id}",
 		pro_flag:"${flag}",
 		jikgub_cd: "${jikgub_cd}",
+		name: "",
 	},
 	mounted : function(){
 		var fromDtl = cf_getUrlParam("fromDtl");
@@ -349,7 +350,7 @@ var vueapp = new Vue({
 			if(this.all_srch != "Y") {
 				params = {
 					customer_name : this.customer_name,
-					user_id : this.user_id,
+					name : this.name,
 					sub_start_date : this.sub_start_date,
 					product_name : this.product_name,
 				}
@@ -493,6 +494,7 @@ function pop_sub_info(mapData) {
 	                loan: mapData.loan,
 	                sub_start_date: mapData.sub_start_date,
 	                sub_end_date: mapData.sub_end_date,
+	                
 			    }
 			},
 			mounted : function(){

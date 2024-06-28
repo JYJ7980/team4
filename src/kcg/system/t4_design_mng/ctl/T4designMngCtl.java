@@ -52,7 +52,7 @@ public class T4designMngCtl {
 	@RequestMapping("productList")
 	public List<CmmnMap> productList(CmmnMap params){
 		
-		List<CmmnMap> productList = cmmnDao.selectList("getProductList", params);
+		 List<CmmnMap> productList = svc.productList(params);
 		return productList;
 	}
 	
@@ -97,22 +97,20 @@ public class T4designMngCtl {
 	public String subscriptionList(CmmnMap params, Model model) {
 		System.out.println("이동했을 때 params 값 받기 =====================");
 		System.out.println("params: " + params.toString());
-
+		
 		model.addAttribute("product_id", params.getString("product_id", ""));
 		model.addAttribute("customer_id", params.getString("customer_id", ""));
 		model.addAttribute("sub_id", params.getString("sub_id", ""));
 		model.addAttribute("flag", params.getString("flag", ""));
 		
-//		UserInfoVO uerInfoVo = commonSvc.getLoginInfo();
-//		params.put("jikgub_cd", uerInfoVo.getJikgubCd());
-//		model.addAttribute("jikgub_cd", params.getString("jikgub_cd", ""));
 
 		return "kcg/system/team4_mng/t4_design_mng/SubscriptionList";
 	}
 	
 	@RequestMapping("/getListPaging")
 	public PageList<CmmnMap> getListPaging(CmmnMap params, PagingConfig pagingConfig) {
-		PageList<CmmnMap> rslt = cmmnDao.selectListPage("getSubscriptionList", params, pagingConfig);
+		PageList<CmmnMap> rslt = svc.getListPaging(params, pagingConfig);
+		
 		return rslt;
 	}
 	
@@ -194,7 +192,11 @@ public class T4designMngCtl {
 	public String designList(CmmnMap params, Model model) {
 		System.out.println("이동했을 때 params 값 받기 =====================");
 		System.out.println("params: " + params.toString());
-
+		
+		UserInfoVO uerInfoVo = commonSvc.getLoginInfo();
+		params.put("name", uerInfoVo.getName());
+		model.addAttribute("name", params.getString("name", ""));
+		
 		model.addAttribute("product_id", params.getString("product_id", ""));
 		model.addAttribute("customer_id", params.getString("customer_id", ""));
 		model.addAttribute("design_id", params.getString("design_id", ""));

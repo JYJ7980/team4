@@ -150,7 +150,7 @@
 							</div>
 							<div class="search-item">
 								<label class="label-box">관리자명:</label> <input class="input-box"
-									v-model="name" value="" />
+									v-model="my_name" readonly/>
 							</div>
 						</div>
 						<div class="button-box">
@@ -212,7 +212,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr v-for="item in dataList" style="cursor: pointer;text-align: center;">
+							<tr v-for="item in dataList" style="cursor: pointer;text-align: center; background-color: white;">
 								<td class="center"><input type="checkbox"
 									v-model="selectedIds" :value="item.design_id"
 									@click="onCheck(item)" name="is_check"></td>
@@ -436,6 +436,7 @@ var vueapp = new Vue({
 		cus_id : "${customer_id}",
 		pro_id : "${product_id}",
 		des_flag: "${flag}",
+		my_name: "${name}"
 	},
 	mounted : function(){
 		var fromDtl = cf_getUrlParam("fromDtl");

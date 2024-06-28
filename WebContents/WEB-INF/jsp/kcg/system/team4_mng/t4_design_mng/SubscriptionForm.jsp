@@ -418,7 +418,8 @@ var pop_prod = new Vue({
 		getList : function(){
 			this.dataList = [];
 			var params = {
-				product_name : this.pop_product_name
+				product_name : this.pop_product_name,
+				flag : true
 			}
 			console.log(params);
 			cf_ajax("/team4/productList", params, function(proList){
