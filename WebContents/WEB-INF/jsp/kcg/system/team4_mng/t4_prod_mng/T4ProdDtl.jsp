@@ -352,7 +352,7 @@ button[type="button"]:disabled {
 						data : {
 							jikgub_nm : '${userInfoVO.jikgubNm}',
 							key1 : "",
-							key2 : "",
+							key2 : "true",
 							info1 : "",
 							currentDate : "",
 							info : {

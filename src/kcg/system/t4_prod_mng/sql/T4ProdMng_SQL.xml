@@ -39,7 +39,7 @@
 	    <if test='product_type != null and product_type != ""'>
 	        AND product_type = #{product_type}
 	    </if>
-
+		ORDER BY product_name ASC
 	</select>
 
 	<insert id="insertInfo" parameterType="cmmnMap">
@@ -183,6 +183,7 @@
 		FROM kcgbd.db4_product_info
 		WHERE 1=1
 		AND product_id = #{product_id}
+		
 	</select>
 	<select id="getEndList" parameterType="cmmnMap"
 		resultType="cmmnMap">
@@ -227,6 +228,7 @@
 		<if test='product_type != null and product_type != ""'>
 	        AND product_type = #{product_type}
 	    </if>
+	    ORDER BY product_name ASC
 	</select>
 	<update id="updateStatus">
 		<!-- system.t4_prod_mng.updateStatus -->
@@ -273,5 +275,6 @@
 	    <if test='product_type != null and product_type != ""'>
 	        AND product_type = #{product_type}
 	    </if>
+	    ORDER BY product_name ASC
 	</select>
 </mapper>
