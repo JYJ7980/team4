@@ -5,8 +5,11 @@
 <!-- 	//design 설계 sql 나중에 옮겨 갈 것-->
 	
 	<select id="getProductList" parameterType="cmmnMap" resultType="cmmnMap">
-		SELECT product_name, product_id, product_type FROM kcgbd.db4_product_info 
-	    WHERE product_name LIKE CONCAT('%', #{product_name}, '%')	
+			SELECT product_name, product_id, product_type FROM kcgbd.db4_product_info 
+		    WHERE product_name LIKE CONCAT('%', #{product_name}, '%')
+	    <if test='flag == true'>
+		    AND product_status = 0
+		</if>
 	</select>
 	
 	<select id="selectTypeProductList" parameterType="cmmnMap" resultType="cmmnMap">
@@ -73,6 +76,7 @@
 	           , s.cycle_money
 	           , s.loan
 	           , t.user_id 
+	           , t.name
 	           , s.sub_quit
 	    FROM kcgbd.db4_customer_info c 
 	    LEFT JOIN kcgbd.t_user t ON c.user_id = t.user_id
@@ -87,8 +91,8 @@
 	        <if test='product_name != null and product_name != ""'>
 	           AND p.product_name LIKE CONCAT('%',#{product_name},'%')
 	        </if>
-	        <if test='user_id != null and user_id != ""'>
-	           AND t.user_id LIKE CONCAT('%',#{user_id},'%')
+	        <if test='name != null and name != ""'>
+	           AND t.name LIKE CONCAT('%',#{name},'%')
 	        </if>
 	        <if test='sub_start_date != null and sub_start_date != ""'>
 	           AND s.sub_start_date LIKE CONCAT('%',#{sub_start_date},'%')

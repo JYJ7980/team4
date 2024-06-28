@@ -17,25 +17,30 @@
 		ORDER BY jikgub_cd asc
 	</select>
 
-	<!-- 이름으로 조건 검색 -->
-	<select id="searchEmployee" parameterType="cmmnMap"
-		resultType="cmmnMap">
-		SELECT * FROM kcgbd.t_user
-		WHERE 1=1
-		<if test='status_cd != null and status_cd != ""'>
-		 and status_cd = #{status_cd}
-		</if>
-		and name LIKE CONCAT('%',
-		#{name}, '%')
-		AND email like '%@team4.com'
-		ORDER BY jikgub_cd asc
-	</select>
+   <!-- 이름으로 조건 검색 -->
+   <select id="searchEmployee" parameterType="cmmnMap"
+      resultType="cmmnMap">
+      SELECT * FROM kcgbd.t_user
+      WHERE 1=1
+      <if test='status_cd != null and status_cd != ""'>
+       and status_cd = #{status_cd}
+      </if>
+      and name LIKE CONCAT('%',
+      #{name}, '%')
+      AND email like '%@team4.com'
+      ORDER BY jikgub_cd asc
+   </select>
 
-	<select id="statusSearch" parameterType="cmmnMap"
-		resultType="cmmnMap">
-		SELECT * FROM kcgbd.t_user WHERE status_cd = #{status_cd}
-		AND email like '%@team4.com'
-		ORDER BY jikgub_cd asc
+	<select id="statusSearch" parameterType="cmmnMap" resultType="cmmnMap">
+	    SELECT * FROM kcgbd.t_user
+	    <where>
+	        <if test="status_cd != '전체'">
+	            status_cd = #{status_cd}
+	            AND
+	        </if>
+	        email like '%@team4.com'
+	    </where>
+	    ORDER BY jikgub_cd asc
 	</select>
 
    <!-- user_id에 해당하는 정보를 가져오기 -->
@@ -64,6 +69,7 @@
 		SET
 		name = #{name},
 		jikgub_nm = #{jikgub_nm},
+		jikgub_cd = #{jikgub_cd},
 		dept = #{dept}
 		WHERE user_id =	#{user_id}
 	</update>

@@ -132,16 +132,32 @@
 						<option value="퇴직">퇴직</option>
 					</select>
 
-					<button @click="formChange">신규 직원</button>
-<!-- ---------------------------------------------------------------------------------------------------------------------- -->
-				</div>
-				<div class="customer-container">
-					<div class="customer-one">
-						<div class="customer-list">
+					</div>
+					<!-- ---------------------------------------------------------------------------------------------------------------------- -->
+
+					<div class="customer-container">
+
+						<div class="customer-one">
+
+							<div style="justify-content: flex-end; display: flex;">
+								<button @click="employeeSearch()" class="btn btn__primary">이름검색</button>
+								<button @click="employeeSearchAll" class="btn btn__primary">전체검색</button>
+								<button @click="formChange" class="btn btn__primary"
+									style="margin-right: 50px;">신규 직원</button>
+
+								<select v-model="statusSearch" @change="st"
+									style="width: 50px; height: 30px;">
+									<option value="전체">전체</option>
+									<option value="재직">재직</option>
+									<option value="휴가">휴가</option>
+									<option value="퇴직">퇴직</option>
+								</select>
+							</div>
+
 							<div class="table-header">
 								<div class="table-cell">이름</div>
 								<div class="table-cell">직급</div>
-								<div class="table-cell">휴가</div>
+								<div class="table-cell">재직상태</div>
 							</div>
 
 							<div class="customer-item" v-for="employee in employees"
