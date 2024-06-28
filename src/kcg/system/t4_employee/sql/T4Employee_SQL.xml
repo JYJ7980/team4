@@ -31,12 +31,17 @@
       ORDER BY jikgub_cd asc
    </select>
 
-   <select id="statusSearch" parameterType="cmmnMap"
-      resultType="cmmnMap">
-      SELECT * FROM kcgbd.t_user WHERE status_cd = #{status_cd}
-      AND email like '%@team4.com'
-      ORDER BY jikgub_cd asc
-   </select>
+	<select id="statusSearch" parameterType="cmmnMap" resultType="cmmnMap">
+	    SELECT * FROM kcgbd.t_user
+	    <where>
+	        <if test="status_cd != '전체'">
+	            status_cd = #{status_cd}
+	            AND
+	        </if>
+	        email like '%@team4.com'
+	    </where>
+	    ORDER BY jikgub_cd asc
+	</select>
 
 
    <!-- user_id에 해당하는 정보를 가져오기 -->

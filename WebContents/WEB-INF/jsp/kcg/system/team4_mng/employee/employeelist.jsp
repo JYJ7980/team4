@@ -230,7 +230,7 @@
 
 								<select v-model="statusSearch" @change="st"
 									style="width: 50px; height: 30px;">
-									<option value="">전체</option>
+									<option value="전체">전체</option>
 									<option value="재직">재직</option>
 									<option value="휴가">휴가</option>
 									<option value="퇴직">퇴직</option>
@@ -239,7 +239,7 @@
 							<div class="table-header">
 								<div class="table-cell">이름</div>
 								<div class="table-cell">직급</div>
-								<div class="table-cell">휴가</div>
+								<div class="table-cell">재직상태</div>
 							</div>
 							<div class="customer-list">
 
