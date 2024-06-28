@@ -96,7 +96,9 @@
 								<option value="">전체</option>
 								<option value="일반개인">일반개인</option>
 								<option value="청년">청년</option>
+								<option value="군인">군인</option>
 								<option value="장애인">장애인</option>
+								<option value="자영업자">자영업자</option>
 							</select>
 						</div>
 						<div class="search-item">
@@ -106,7 +108,6 @@
 								<option value="예금">예금</option>
 								<option value="적금">적금</option>
 								<option value="대출">대출</option>
-								<option value="목돈마련">목돈마련</option>
 							</select>
 						</div>
 						<div class="search-item">
