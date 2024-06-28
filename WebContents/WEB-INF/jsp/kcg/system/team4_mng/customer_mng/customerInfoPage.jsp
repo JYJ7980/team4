@@ -613,7 +613,6 @@ new Vue({
     		}
 			cf_movePage("/team4/designList", params);
     	},
-
         getAllCustomers: function() {
         	 axios.get('/system/team4/getCustInfo')
              .then(response => {
