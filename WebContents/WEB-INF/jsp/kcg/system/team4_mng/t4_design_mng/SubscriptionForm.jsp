@@ -33,7 +33,7 @@
 
 		<div class="main-content">
 
-			<jsp:include page="/WEB-INF/jsp/kcg/_include/system/header.jsp"
+			<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/header.jsp"
 				flush="false" />
 
 			<ol class="breadcrumb bc-3">

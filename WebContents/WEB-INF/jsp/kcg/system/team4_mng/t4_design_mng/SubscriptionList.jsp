@@ -27,7 +27,7 @@
 
 	<div class="main-content" style="background-image: url('/static_resources/team4/images/background-test.png'); background-size: cover; background-position: center; repeat: no-repeat">
 
-		<jsp:include page="/WEB-INF/jsp/kcg/_include/system/header.jsp" flush="false"/>
+		<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/header.jsp" flush="false"/>
 		
 		<ol class="breadcrumb bc-3">
 			<li><a href="#none" onclick="cf_movePage('/system')"><i class="fa fa-home"></i>Home</a></li>
