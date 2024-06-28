@@ -214,8 +214,8 @@ textarea {
 						class="search-icon"> <input id="keywordInput" type="text"
 						name="keyword" v-model="searchKeyword" class="inputtext"
 						placeholder="이름을 입력하세요">
-					<button @click="searchCustomers" class="btn">이름 검색</button>
-					<button @click="getAllCustomers" class="btn">전체 조회</button>
+					<button type="button" class="btn"  @click="searchCustomers" class="btn">이름 검색</button>
+					<button type="button" class="btn"  @click="getAllCustomers" class="btn">전체 조회</button>
 				</div>
 
 				<br>
@@ -336,7 +336,7 @@ textarea {
 										type="text" id="customerIdNumber"
 										:value="maskIdNumber(selectedCustomer.customer_id_number)"
 										readonly style="margin-left: 10px;">
-									<button @click="toggleMasking" style="margin-left: 10px;">확인</button>
+									<button type="button" class="btn" @click="toggleMasking" style="margin-left: 10px;">확인</button>
 								</div>
 								<div class="input-form">
 									<label for="customerLevel" style="margin-left: 28px;">고객
@@ -509,9 +509,9 @@ textarea {
 										주소 : </label> <input type="text" id="customerAddr"
 										v-model="customerAddr" style="margin-left: 10px;">
 								</div>
-								<div style="margin-left: 250px;">
-									<button @click="addCustomer" class="btn">등록</button>
-									<button @click="resetForm" class="btn">초기화</button>
+								<div style="margin-left: 200px;">
+									<button type="button" class="btn"  @click="addCustomer" class="btn">등록</button>
+									<button type="button" class="btn"  @click="resetForm" class="btn">초기화</button>
 								</div>
 							</div>
 							<div class="manager-info">

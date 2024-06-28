@@ -274,8 +274,8 @@ textarea {
 						class="search-icon"> <input id="keywordInput" type="text"
 						name="keyword" v-model="searchKeyword" class="inputtext"
 						placeholder="고객 이름을 입력하세요">
-					<button @click="searchCustomers">이름 검색</button>
-					<button @click="getAllCustomers">전체 조회</button>
+					<button type="button" class="btn" @click="searchCustomers">이름 검색</button>
+					<button type="button" class="btn" @click="getAllCustomers">전체 조회</button>
 					<label for="managerSelect">담당자별 조회:</label> <select
 						id="managerSelect" v-model="selectedManager"
 						@change="filterByManager">
@@ -368,7 +368,7 @@ textarea {
 
 										</div>
 										<div>
-											<label for="consultContext" style="margin-left: 10px;">내용:</label>
+											<label for="consultContext" style="margin-left: 15px;">내용:</label>
 											<textArea rows="5" cols="25" id="consultContext"
 												v-model="consultContext"></textArea>
 										</div>
@@ -405,7 +405,7 @@ textarea {
 										type="text" id="customerIdNumber"
 										:value="maskIdNumber(selectedCustomer.customer_id_number)"
 										readonly style="margin-left: 10px;">
-									<button @click="toggleMasking" style="margin-left: 10px;">확인</button>
+									<button type="button" class="btn" @click="toggleMasking" style="margin-left: 10px;">확인</button>
 								</div>
 								<div class="input-form">
 									<label for="customerLevel" style="margin-left: 28px;">고객
@@ -450,10 +450,10 @@ textarea {
 										v-model="selectedCustomer.customer_addr">
 								</div>
 								<br>
-								<div style="margin-left: 150px;">
-									<button @click="deleteCustomer">삭제</button>
-									<button @click="updateCustomer">수정</button>
-									<button @click="resetForm">신규</button>
+								<div style="margin-left: 140px;">
+									<button type="button" class="btn" @click="deleteCustomer">삭제</button>
+									<button type="button" class="btn" @click="updateCustomer">수정</button>
+									<button type="button" class="btn" @click="resetForm">신규</button>
 								</div>
 
 								<hr>
@@ -464,7 +464,7 @@ textarea {
 											이름</label> <input type="text" id="userName"
 											v-model="selectedCustomer.name" disabled
 											style="margin-left: 10px;">
-										<button type="button" class="btn" @click="popupUser()">
+										<button type="button" class="btn" @click="popupUser()" style="margin-left: 10px;">
 											<i class="fa fa-search"></i> 검색
 										</button>
 									</div>
@@ -479,7 +479,7 @@ textarea {
 											직급</label> <input type="text" id="userJikgub"
 											v-model="selectedCustomer.jikgub_nm" disabled
 											style="margin-left: 10px;">
-										<button @click="updateUser">수정</button>
+										<button type="button" class="btn" @click="updateUser" style="margin-left: 10px;">수정</button>
 									</div>
 								</div>
 							</div>
@@ -580,10 +580,12 @@ textarea {
 										주소</label> <input type="text" id="customerAddr" v-model="customerAddr"
 										style="margin-left: 10px;">
 								</div>
-								<div style="margin-left: 250px;">
-									<button @click="addCustomer">등록</button>
-									<button @click="resetForm">초기화</button>
+								<br>
+								<div style="margin-left: 200px;">
+									<button type="button" class="btn" @click="addCustomer">등록</button>
+									<button type="button" class="btn" @click="resetForm">초기화</button>
 								</div>
+								<br>
 							</div>
 							<div class="manager-info">
 								<h3>관리자 정보</h3>
@@ -615,10 +617,10 @@ textarea {
 					<div class="popup-search-container"></div>
 					<label for="searchInput">관리자 이름:</label> <input type="text"
 						id="searchInput" v-model="searchManagerName">
-					<button @click="searchManager">
+					<button type="button" class="btn" @click="searchManager">
 						<i class="fa fa-search"></i>
 					</button>
-					<button @click="searchManagerReset">다시</button>
+					<button  type="button" class="btn" @click="searchManagerReset">다시</button>
 					<br>
 
 					<table>
