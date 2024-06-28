@@ -42,6 +42,8 @@
 .popup {
 	display: none;
 	position: fixed;
+	text-align: center;
+	padding:15px;
 	left: 50%;
 	top: 50%;
 	transform: translate(-50%, -50%);
@@ -167,11 +169,13 @@
 						<tr>
 							<th>이름</th>
 							<th>생년월일</th>
+							<th>고객 담당자</th>
 						</tr>
 						<tr v-for="customer in customers"
 							@click="selectCustomer(customer)">
 							<td>{{ customer.customer_name }}</td>
 							<td>{{ customer.customer_brdt }}</td>
+							<td>{{ customer.name }}({{ customer.dept }}-{{ customer.jikgub_nm }})</td>
 						</tr>
 					</table>
 				</div>
@@ -197,7 +201,7 @@
 			methods: {
 				getAllCustomers: function() {
 					// AJAX 요청을 보내고 응답 데이터를 customers에 할당
-					axios.get('/system/team4/getCustInfo')
+					axios.get('/system/team4/getCustAndUserInfo')
 						.then(response => {
 							this.customers = response.data;
 						})
@@ -210,7 +214,7 @@
 			                alert('검색어를 입력하세요.');
 			                return;
 			            }
-			            axios.get('/system/team4/getCustInfo')
+			            axios.get('/system/team4/getCustAndUserInfo')
 			                .then(response => {
 			                	this.customers = response.data;
 			                    this.customers = this.customers.filter(customer => 
@@ -225,7 +229,7 @@
 			                });
 			        },
 			        searchCustomersReset:function(){
-			        	axios.get('/system/team4/getCustInfo')
+			        	axios.get('/system/team4/getCustAndUserInfo')
 						.then(response => {
 							this.customers = response.data;
 							 this.searchKeyword = '';
@@ -236,7 +240,7 @@
 			        	
 			        },
 				popupCust: function() {
-					axios.get('/system/team4/getCustInfo')
+					axios.get('/system/team4/getCustAndUserInfo')
 					.then(response => {
 						this.customers = response.data;
 					})
