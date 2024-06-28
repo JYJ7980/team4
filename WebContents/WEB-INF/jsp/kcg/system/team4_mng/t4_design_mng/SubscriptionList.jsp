@@ -10,6 +10,14 @@
 	<link rel="stylesheet" href="/static_resources/system/js/select2/select2.css">
 	
 	<title>가입상품조회</title>
+	<style type="text/css">
+	.jh-div {
+	display: flex;
+	align-items: center;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	}
+	</style>
 </head>
 <body class="page-body">
 
@@ -17,7 +25,7 @@
 
 	<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/sidebar-menu.jsp" flush="false"/>
 
-	<div class="main-content">
+	<div class="main-content" style="background-image: url('/static_resources/team4/images/background-test.png'); background-size: cover; background-position: center; repeat: no-repeat">
 
 		<jsp:include page="/WEB-INF/jsp/kcg/_include/system/header.jsp" flush="false"/>
 		
@@ -29,13 +37,13 @@
 		<h2>가입상품조회</h2>
 		<br/>
 		
-		<div class="dataTables_wrapper" id="vueapp">
+		<div class="dataTables_wrapper" id="vueapp" style="border-style: none;">
 		<template>
-			<div class="dataTables_filter" style="float: none;">
+			<div class="dataTables_filter" style="float: none; border-style: none;">
 				
-				<table style="width: 100%;">
-					<tr>
-						<td class="left">
+				
+					<div style="width: 1000px; height: 130px; border: 1px solid #ccc; margin-left: 300px;">
+						<div style="margin-top: 20px; margin-left: -40px;">
 							<label class="sys_label_01 control-label">고객명:</label>
 							<div class="sys_col_02" style="width: 246px;">
 								<input class="form-control" v-model="customer_name" value="" />
@@ -45,16 +53,19 @@
 							<div class="sys_col_02" style="width: 246px;">
 								<input class="form-control" v-model="user_id" value="" />
 							</div>
-						</td>
-						<td class="right" style="width: 200px;">
-							<button type="button" class="btn btn-blue btn-icon icon-left" @click="getListCond(true)">
+							<div style="margin-right: 30px;">
+
+							<button type="button" class="btn btn-blue btn-icon icon-left" @click="getListCond(true)" >
 								조건검색
 								<i class="entypo-search"></i>
 							</button>
-						</td>
-					</tr>
-					<tr>
-						<td class="left">
+					</div>
+						</div>
+						
+					
+					
+					
+						<div style="margin-left: -40px; margin-top: 20px;">
 							
 							<label class="sys_label_01 control-label">가입날짜</label>
 							<div class="sys_col_02" style="width: 210px;">
@@ -69,48 +80,51 @@
 							<div class="sys_col_02" style="width: 246px;">
 								<input class="form-control" v-model="product_name" value="" />
 							</div>
-						</td>
-						<td class="right" style="width: 200px;">
+						</div>
+						<div style="margin-right: 30px;">
 							<button type="button" class="btn btn-blue btn-icon icon-left" @click="getListAll(true)">
 								전체검색
 								<i class="entypo-search"></i>
 							</button>
-						</td>
-					</tr>
-				</table>
+						
+					</div>
+			</div>
 			</div>
 			
 			<div class="dataTables_filter" style="float: none;">
 			<div class="sub flex flex-90">
                 <span class="sub-button flex-center flex-10 flex-wrap">
-					<button type="button" class="btn btn-orange btn-icon icon-left btn-small" @click="cf_movePage('/team4/subscriptionForm')">
+					<button type="button" class="btn btn-green btn-icon icon-left btn-small" @click="cf_movePage('/team4/subscriptionForm')">
 						등록
 						<i class="entypo-plus"></i>
+					</button>
+					<button type="button" value="중단" @click="deleteSelected" class="btn btn-red btn-icon icon-left btn-small">
+					선택 중단<i class=" entypo-block"></i>
 					</button>
                 </span>
             </div>
             </div>
             
             
-			<table class="table table-bordered datatable dataTable" id="grid_app">                                    
+			<table class="table table-bordered datatable dataTable" id="grid_app" style="border-top-right-radius: 20px; border-top-left-radius: 20px;">                                    
 				<thead>
 					<tr class="replace-inputs">
-						<th style="width: 5%;" class="center hidden-xs nosort"><input type="checkbox" id="allCheck" @click="all_check(event.target)"></th>
-						<th style="width: 10%;" class="center sorting" @click="sortList(event.target)" sort_target="sub_id">ID</th>
-						<th style="width: 10%;" class="center sorting" @click="sortList(event.target)" sort_target="customer_id">회원ID</th>
-						<th style="width: 10%;" class="center sorting" @click="sortList(event.target)" sort_target="customer_name">성명</th>						
-						<th style="width: 10%;" class="center sorting" @click="sortList(event.target)" sort_target="sub_start_date">가입일</th>
-						<th style="width: 10%;" class="center sorting" @click="sortList(event.target)" sort_target="sub_end_date">만기일</th>
-						<th style="width: 13%;" class="center sorting" @click="sortList(event.target)" sort_target="customer_phone">전화번호</th>
-						<th style="width: 10%;" class="center sorting" @click="sortList(event.target)" sort_target="product_type">상품유형</th>						
-						<th style="width: 25%;" class="center sorting" @click="sortList(event.target)" sort_target="product_name">상품명</th>			
-						<th style="width: 31%;" class="center sorting" >금액</th>	
-						<th style="width: 10%;" class="center">중단</th>
-						<th style="width: 10%;" class="center">상세정보</th>														
+						<th style="width: 40px; background-color: #3EAB6F; color: white; border-top-left-radius: 20px; " class="center hidden-xs nosort"><input type="checkbox" id="allCheck" @click="all_check(event.target)"></th>
+						<th style="width: 60px; background-color: #3EAB6F; color: white;" class="center sorting" @click="sortList(event.target)" sort_target="sub_id">ID</th>
+						<th style="width: 100px;background-color: #3EAB6F; color: white;" class="center sorting" @click="sortList(event.target)" sort_target="customer_id">회원ID</th>
+						<th style="width: 100px;background-color: #3EAB6F; color: white;" class="center sorting" @click="sortList(event.target)" sort_target="customer_name">성명</th>						
+						<th style="width: 100px;background-color: #3EAB6F; color: white;" class="center sorting" @click="sortList(event.target)" sort_target="sub_start_date">가입일</th>
+						<th style="width: 100px;background-color: #3EAB6F; color: white;" class="center sorting" @click="sortList(event.target)" sort_target="sub_end_date">만기일</th>
+						<th style="width: 100px;background-color: #3EAB6F; color: white;" class="center sorting" @click="sortList(event.target)" sort_target="customer_phone">전화번호</th>
+						<th style="width: 190px;background-color: #3EAB6F; color: white;" class="center sorting" @click="sortList(event.target)" sort_target="product_type">상품명</th>						
+						<th style="width: 90px;background-color: #3EAB6F; color: white;" class="center sorting" @click="sortList(event.target)" sort_target="product_name">상품유형</th>			
+						<th style="width: 150px;background-color: #3EAB6F; color: white;" class="center sorting" >금액</th>	
+						<th style="width: 70px;background-color: #3EAB6F; color: white;" class="center">중단</th>
+						<th style="width: 100px;background-color: #3EAB6F; color: white; border-top-right-radius: 20px; " class="center">상세정보</th>														
 					</tr>
 				</thead>
 				<tbody>
-					<tr v-for="item in dataList" style="cursor: pointer;">
+					<tr v-for="item in dataList" style="cursor: pointer; text-align: center;">
 					    <td class="center">
 						  <input type="checkbox" v-model="selectedIds" :value="item.sub_id" @click="onCheck(item)" name="is_check">
 					    </td>
@@ -137,13 +151,13 @@
 				            </c:choose>
 					    </td>
 					    <td class="left">
-					        <input type="button" value="정보" @click="gotoDtl(item.sub_id, item.customer_id, item.product_id)">
+					        <input type="button" value="정보" @click="gotoDtl(item.sub_id, item.customer_id, item.product_id)" class="btn btn-orange" style="border-style: none;">
 					    </td>
 					</tr>
 				</tbody>
 			</table>
-			<input type="button" value="중단" @click="deleteSelected">
-			<div class="dataTables_paginate paging_simple_numbers" id="div_paginate">
+			
+			<div class="dataTables_paginate paging_simple_numbers" id="div_paginate" style="background-color: white;">
 			</div>
 		</template>
 		</div>
@@ -154,89 +168,84 @@
 </div>
 
 <!-- 가입 정보 조회 팝업 -->
-<div class="modal fade" id="pop_sub_info">
+<div class="modal fade" id="pop_sub_info" style="margin-top: 100px; margin-left: 50px;">
 <template>
-	<div class="modal-dialog" style="width: 80%;">
+	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="btn_popClose">&times;</button>
 				<h4 class="modal-title" id="modify_nm">가입 정보 조회</h4>
 			</div>
-			<div class="modal-body">
-                <div class="panel-body" style="display: flex;border: 1px solid #FF0000;width: 100%;">			
-                    <div class="left-panel" style="width: 50%;">
-                        <div class="form-group">
-                            <label for="err_eng_nm" class="fix-width-33">ID:</label>
-                            <input type="text" class="form-control" id="pop_sub_id" v-model="info.sub_id" readonly>
+			<div class="modal-body" style="display: flex; width: 100%; margin-left: 120px;">
+                <div class="panel-body" >			
+                    <div class="left-panel">
+                        <div class="jh-div">
+                            <label for="err_eng_nm" class="fix-width-33" style="margin-left: 25px;">ID : </label>
+                            <input type="text" class="form-control" id="pop_sub_id" v-model="info.sub_id" readonly style="width: 250px; margin-left: 10px;">
                         </div>
                     
-                        <div class="form-group">
+                        <div class="jh-div">
                             <label for="err_eng_nm" class="fix-width-33">상품ID:</label>
-                            <input type="text" class="form-control" id="pop_product_id" v-model="info.product_id" readonly>
+                            <input type="text" class="form-control" id="pop_product_id" v-model="info.product_id" readonly style="width: 250px; margin-left: 10px;">
                         </div>
       
-                        <div class="form-group">
+                        <div class="jh-div">
                             <label for="err_eng_nm" class="fix-width-33">상품명:</label>
-                            <input type="text" class="form-control" id="pop_product_name" v-model="info.product_name" readonly>
+                            <input type="text" class="form-control" id="pop_product_name" v-model="info.product_name" readonly style="width: 250px; margin-left: 10px;">
                         </div>
     
     
-                        <div class="form-group">
+                        <div class="jh-div">
                             <label for="err_eng_nm" class="fix-width-33">고객ID:</label>
-                            <input type="text" class="form-control" id="pop_customer_id" v-model="info.customer_id" readonly>
+                            <input type="text" class="form-control" id="pop_customer_id" v-model="info.customer_id" readonly style="width: 250px; margin-left: 10px;">
                         </div>
       
     
-                        <div class="form-group">
+                        <div class="jh-div">
                             <label for="err_eng_nm" class="fix-width-33">고객명:</label>
-                            <input type="text" class="form-control" id="pop_customer_name" v-model="info.customer_name" readonly>
+                            <input type="text" class="form-control" id="pop_customer_name" v-model="info.customer_name" readonly style="width: 250px; margin-left: 10px;">
                         </div>
                         
-                        <div class="form-group">
+                        <div class="jh-div">
                             <label for="err_eng_nm" class="fix-width-33">가입금액</label>
 							    <div v-if="info.product_type === '예금'">
-							    	<label>예치 금액:</label>
-							        <input type="text" id="pop_start_money" v-model="info.start_money">
+							    	<label style="margin-left: 20px;">예치 : </label>
+							        <input type="text" id="pop_start_money" v-model="info.start_money" style="width: 150px; margin-left: 10px;">
 							        <span>원</span>
 							    </div>
 							    <div v-else-if="info.product_type === '적금'">
-							    	<label>납입 금액:</label>
-							        <input type="text" id="pop_cycle_money" v-model="info.cycle_money">
+							    	<label style="margin-left: 20px;">납입 : </label>
+							        <input type="text" id="pop_cycle_money" v-model="info.cycle_money" style="width: 150px; margin-left: 10px;">
 							        <span>원</span>
 							    </div>
 							    <div v-else-if="info.product_type === '대출'">
-							    	<label>대출 금액:</label>
-							        <input type="text" id="pop_loan" v-model="info.loan">
+							    	<label style="margin-left: 20px;"> 대출 : </label>
+							        <input type="text" id="pop_loan" v-model="info.loan" style="width: 150px; margin-left: 10px;">
 							    	<span>원</span>       
 							    </div>
 							    <div v-else>
 				    			</div>
                         </div>                     
-                        <div class="form-group">
+                        <div class="jh-div">
                             <label for="err_eng_nm" class="fix-width-33">이자율:</label>
-                            <input type="text" class="form-control" id="pop_pro_interest_rate" v-model="info.pro_interest_rate">
+                            <input type="text" class="form-control" id="pop_pro_interest_rate" v-model="info.pro_interest_rate" style="width: 250px; margin-left: 10px;">
                             <span>%</span>                        
                         </div>
-                            <div class="form-group">
+                            <div class="jh-div">
                             <label for="err_eng_nm" class="fix-width-33">가입날짜:</label>
-                            <input type="text" class="form-control" id="pop_sub_start_date" v-model="info.sub_start_date">
+                            <input type="text" class="form-control" id="pop_sub_start_date" v-model="info.sub_start_date" style="width: 250px; margin-left: 10px;">
                         </div>      
     
-                        <div class="form-group">
+                        <div class="jh-div">
                             <label for="err_eng_nm" class="fix-width-33">만기날짜:</label>
-                            <input type="text" class="form-control" id="pop_sub_end_date" v-model="info.sub_end_date">
+                            <input type="text" class="form-control" id="pop_sub_end_date" v-model="info.sub_end_date" style="width: 250px; margin-left: 10px;">
                         </div>      
                     </div>
                 </div>          
 			</div>
 			<div class="modal-footer" >
                 <button type="button" id="update" class="btn btn-secondary" data-dismiss="modal" @click="updateProduct()">CHANGE</button>
-         	</div>
-         	<div class="modal-footer" >
                 <button type="button" id="delete" class="btn btn-secondary" data-dismiss="modal" @click="deleteProduct(info.sub_id)">DELETE</button>
-         	</div>
-         	
-			<div class="modal-footer" >
                 <button type="button" id="cancle" class="btn btn-secondary" data-dismiss="modal" @click="close()">CLOSE</button>
          	</div>
 
