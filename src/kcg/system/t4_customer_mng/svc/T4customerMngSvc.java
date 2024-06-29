@@ -40,6 +40,19 @@ public class T4customerMngSvc {
 	}
 	
 
+	public List<CmmnMap> getCustConsult(CmmnMap params) {
+		List<CmmnMap> dataList = cmmnDao.selectList("getCustConsult", params);
+		String customer_id = params.getString("customer_id");
+		params.put("customer_id", customer_id);
+//		System.out.println(dataList);
+		return dataList;
+	}
+
+
+
+	
+
+
 	public CmmnMap deleteCust(CmmnMap params) {
 		String customer_id = params.getString("customer_id");
 		params.put("customer_id", customer_id);
@@ -52,13 +65,13 @@ public class T4customerMngSvc {
 
 	public CmmnMap updateUser(CmmnMap params) {
 		String customer_id = params.getString("customer_id");
-		String user_id = params.getString("user_id");
+		String manager_id = params.getString("manager_id");
 // 		String user_name = params.getString("user_name");
 //		String user_dept = params.getString("user_dept");
 //		String user_jikgub_nm = params.getString("user_jikgub_nm");
 		
 		params.put("customer_id", customer_id);
-		params.put("user_id", user_id);
+		params.put("manager_id", manager_id);
 //		params.put("user_name",user_name);
 //		params.put("user_dept", user_dept);
 //		params.put("user_jikgub_nm",user_jikgub_nm);
@@ -221,6 +234,23 @@ public class T4customerMngSvc {
 		return new CmmnMap().put("status", "OK");
 	}
 
+
+	public List<CmmnMap> getSubProductInfo(CmmnMap params) {
+		List<CmmnMap> dataList = cmmnDao.selectList("getSubProductInfo", params);
+		String customer_id = params.getString("customer_id");
+		params.put("customer_id", customer_id);
+//		System.out.println(dataList);
+		return dataList;
+	}
+
+
+	public List<CmmnMap> getDesignProductInfo(CmmnMap params) {
+		List<CmmnMap> dataList = cmmnDao.selectList("getDesignProductInfo", params);
+		String customer_id = params.getString("customer_id");
+		params.put("customer_id", customer_id);
+//		System.out.println(dataList);
+		return dataList;
+	}
 
 
 

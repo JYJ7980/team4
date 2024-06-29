@@ -5,23 +5,22 @@
 <!DOCTYPE html>
 <html>
 <head>
+<jsp:include page="/WEB-INF/jsp/kcg/_include/system/header_meta.jsp"
+	flush="false" />
 <meta charset="UTF-8">
 <title>Customer InfoPage</title>
 <!-- Vue.js CDN 추가 -->
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
 <!-- axios CDN 추가 -->
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<jsp:include page="/WEB-INF/jsp/kcg/_include/system/header_meta.jsp"
-	flush="false" />
-<!-- Imported styles on this page -->
-<link rel="stylesheet"
-	href="/static_resources/system/js/datatables/datatables.css">
-<link rel="stylesheet"
-	href="/static_resources/system/js/select2/select2-bootstrap.css">
-<link rel="stylesheet"
-	href="/static_resources/system/js/select2/select2.css">
-
 <style>
+.customer-one {
+	display: flex;
+	flex-direction: column; /* 세로로 정렬 */
+	gap: 10px; /* 요소들 사이의 간격 설정 */
+	padding: 10px;
+}
+
 .input-form {
 	margin-bottom: 10px;
 }
@@ -35,198 +34,462 @@
 .customer-container {
 	display: flex;
 	justify-content: space-between;
+	gap: 20px;
 }
 
 .customer-details {
 	flex: 1;
 	padding: 10px;
 	border: 1px solid #ccc;
+	padding: 10px;
 }
 
-.customer-table {
+.details-container {
+	display: flex;
+	gap: 10px;
+}
+
+.customer-info, .other-info {
+	flex: 1; /* 각 섹션이 동일한 너비를 갖도록 설정 */
+	padding: 5px;
+	border: 1px solid #ccc;
+}
+
+.manager-info {
+	flex: 1; /* 각 섹션이 동일한 너비를 갖도록 설정 */
+	padding: 5px;
+	border: 1px solid #ccc;
+}
+
+.sub-product, .design-product {
+	flex: 1; /* 각 섹션이 동일한 너비를 갖도록 설정 */
+	padding: 5px;
+	width: 500px;
+	height: 250px;
+	overflow-y: auto;
+	border: 1px solid #ccc;
+}
+
+.customer-list {
+	width: 500px;
+	height: 400px;
+	overflow-y: auto;
+	border: 1px solid #ccc;
+	padding: 10px;
+	height: 400px;
+}
+
+.customer-item {
+	display: flex;
+	align-items: center;
+	padding: 5px 0;
+	border-bottom: 1px solid #eee;
+}
+
+.customer-details>div {
+	margin-right: 10px;
+}
+
+.table-header {
+	display: flex;
+	font-weight: bold;
+	border-bottom: 2px solid #ccc;
+	padding-bottom: 5px;
+}
+
+.table-row {
+	display: flex;
+	align-items: center;
+	padding: 5px 0;
+	border-bottom: 1px solid #eee;
+}
+
+.table-cell {
 	flex: 1;
+	padding: 5px;
+}
+
+.modal {
+	display: block;
+	position: fixed;
+	z-index: 1;
+	left: 0;
+	top: 0;
+	margin-left: 100px;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgb(0, 0, 0);
+	background-color: rgba(0, 0, 0, 0.4);
+	padding-top: 60px;
+}
+
+.modal-content {
+	background-color: #fefefe;
+	margin: 10% auto;
+	padding: 20px;
+	border: 1px solid #888;
+	width: 400px;
+	height: 350px;
+}
+
+.modal-body {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	font-size: 17px;
+}
+
+.modal-addconsult {
+	background-color: #fefefe;
+	margin: 15% auto;
+	padding: 20px;
+	border: 1px solid #888;
+	width: 400px;
+	height: 450px;
+}
+
+.close {
+	color: #aaa;
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
+}
+
+.close:hover, .close:focus {
+	color: black;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+textarea {
+	resize: none;
+	padding: 10px;
 }
 </style>
+
+
 </head>
 <body class="page-body">
-
 	<div class="page-container">
-
-		<jsp:include page="/WEB-INF/jsp/kcg/_include/system/sidebar-menu.jsp"
+		<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/sidebar-menu.jsp"
 			flush="false" />
 
-		<div id="app" style="margin-left: 70px;">
-			<span style="font-size: 18px; font-weight: bold; color: black;">${userInfoVO.userId}</span>&nbsp;님
-			화면 <br> <a href="/system/team4/main">메인으로 돌아가기</a><br>
-			<div id="customerTable" class="customer-container">
-				<div class="customer-table">
-					<h4>고객 정보 관리</h4>
-					<div>
-						<br> <input id="keywordInput" type="text" name="keyword"
-							v-model="searchKeyword" class="inputtext" placeholder="이름을 입력하세요">
-						<button @click="searchCustomers">조건 검색</button>
+		<div class="main-content">
+			<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/header.jsp"
+				flush="false" />
+			<ol class="breadcrumb bc-3">
+				<li><a href="#none" onclick="cf_movePage('/system/team4/main')"><i
+						class="fa fa-home"></i>Home</a></li>
+				<li class="active"><strong>고객정보 관리</strong></li>
+			</ol>
+			<div id="app" style="margin-left: 70px;">
+
+
+
+
+				<h2>고객관리 > 고객정보 관리</h2>
+				<br /> <span
+					style="font-size: 18px; font-weight: bold; color: black;">${userInfoVO.name}(${userInfoVO.dept})</span>&nbsp;
+				님 고객관리 화면 <br> <a href="/system/team4/main">메인으로 돌아가기</a> <br>
+
+				<br> <input id="keywordInput" type="text" name="keyword"
+					v-model="searchKeyword" class="inputtext" placeholder="이름을 입력하세요">
+				<button @click="searchCustomers">이름 검색</button>
+				<button @click="getAllCustomers">전체 조회</button>
+				<br>
+				<div id="customerTable" class="customer-container">
+					<div class="customer-one">
+						<div class="customer-list">
+
+							<h3 v-show="filteredCustomers.length >= 0">전체 고객 정보</h3>
+							<div v-show="filteredCustomers.length == 0">
+								<p>담당고객이 없습니다</p>
+							</div>
+							<div v-show="filteredCustomers.length > 0">
+								<div class="table-header">
+									<div class="table-cell">선택</div>
+									<div class="table-cell">이름</div>
+									<div class="table-cell">생년월일</div>
+
+								</div>
+								<div class="customer-item" v-for="customer in filteredCustomers"
+									:key="customer.customer_id">
+									<div class="table-cell">
+										<input type="radio" name="selectedCustomer"
+											v-model="selectedCustomer" :value="customer">
+									</div>
+									<div class="table-cell">{{ customer.customer_name }}</div>
+									<div class="table-cell">{{ customer.customer_brdt }}</div>
+
+								</div>
+							</div>
+						</div>
+						<div class="customer-list" v-if="selectedCustomer !== null">
+							<h3>상담내역</h3>
+							<div v-if="consults.length > 0">
+								<div class="table-header">
+									<div class="table-cell">상담일</div>
+									<div class="table-cell">상담제목</div>
+									<div class="table-cell">상담 담당자</div>
+								</div>
+
+								<!-- Iterate over consults array to display each consultation item -->
+								<div class="customer-item" v-for="consult in consults"
+									@click="showConsultDetails(consult)">
+									<div class="table-cell">{{ consult.con_date }}</div>
+									<div class="table-cell">{{ consult.consult_title }}</div>
+									<div class="table-cell">{{ consult.name }} ({{
+										consult.dept }} {{ consult.jikgub_nm }})</div>
+								</div>
+							</div>
+							<div v-else>
+								<p>상담 내역이 없습니다.</p>
+							</div>
+							<!-- 							상세내역 모달 -->
+							<div class="modal" v-if="selectedConsult !== null">
+								<div class="modal-content">
+									<span class="close" @click="closeModal">&times;</span>
+									<div class="modal-body">
+										<div>
+											<label>상담시간 </label><input type="text"
+												v-model="selectedConsult.con_date" disabled="disabled">
+										</div>
+										<br>
+										<div>
+											<label>상담내용</label><br>
+											<textarea cols="25" rows="5"
+												v-model="selectedConsult.consult_context"
+												disabled="disabled"></textarea>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- 							상담추가 모달 -->
+							<div class="modal" v-if="showAddConsultModal">
+								<div class="modal-addconsult">
+									<span class="close" @click="closeAddConsultModal">&times;</span>
+									<div class="input-form">
+										<span>**상담내역을 추가해주세요**</span><br> <label
+											for="consultTitle">제목:</label> <input type="text"
+											id="consultTitle" v-model="consultTitle">
+
+									</div>
+									<div class="input-form">
+										<label for="consultContext">내용:</label>
+										<textArea rows="4" cols="35" id="consultContext"
+											v-model="consultContext"></textArea>
+									</div>
+
+									<br>
+									<button @click="addConsult">추가</button>
+									<button @click="resetConsultForm">취소</button>
+								</div>
+							</div>
+
+						</div>
 					</div>
-					<br>
-					<div>
-						<!-- 전체 조회 버튼 -->
-						<br>
-						<button @click="getAllCustomers">전체 조회</button>
-						<br>
+					<!-- 선택된 고객의 상세 정보 입력 폼 -->
+					<div class="customer-details" v-if="selectedCustomer !== null">
+						<div class="details-container">
+							<div class="customer-info">
+								<h3>고객 정보</h3>
+								<div class="input-form">
+									<label for="customerSubDate">등록일</label> <input type="text"
+										id="customerSubDate"
+										v-model="selectedCustomer.customer_sub_date" readonly>
+								</div>
+								<div class="input-form">
+									<label for="customerName">고객 이름</label> <input type="text"
+										id="customerName" v-model="selectedCustomer.customer_name">
+									<button type="button" class="btn"
+										@click="openAddConsultModal()">상담추가</button>
+								</div>
+								<div class="input-form">
+									<label for="customerIdNumber">고객 주민번호</label> <input
+										type="text" id="customerIdNumber"
+										:value="maskIdNumber(selectedCustomer.customer_id_number)"
+										readonly>
+									<button @click="toggleMasking">확인</button>
+								</div>
+								<div class="input-form">
+									<label for="customerLevel">고객 등급</label> <select
+										id="customerLevel" v-model="selectedCustomer.customer_level">
+										<option value="1">일반</option>
+										<option value="2">우수</option>
+										<option value="3">VIP</option>
+										<option value="4">VVIP</option>
+										<option value="5">플래티넘</option>
+									</select>
+
+								</div>
+								<div class="input-form">
+									<label for="customerPhone">고객 전화번호</label> <input type="text"
+										id="customerPhone" v-model="selectedCustomer.customer_phone">
+								</div>
+								<div class="input-form">
+									<label for="customerSubTel">고객 비상연락망</label> <input type="text"
+										id="customerSubTel"
+										v-model="selectedCustomer.customer_sub_tel">
+								</div>
+								<div class="input-form">
+									<label for="customerEmail">고객 이메일</label> <input type="text"
+										id="customerEmail" v-model="selectedCustomer.customer_email">
+								</div>
+								<div class="input-form">
+									<label for="customerJob">고객 직업</label> <input type="text"
+										id="customerJob" v-model="selectedCustomer.customer_job">
+								</div>
+								<div class="input-form">
+									<label for="customerAddr">고객 주소</label> <input type="text"
+										id="customerAddr" v-model="selectedCustomer.customer_addr">
+								</div>
+								<br>
+								<button @click="deleteCustomer">삭제</button>
+								<button @click="updateCustomer">수정</button>
+								<button @click="resetForm">신규</button>
+							</div>
+							<div class="other-info">
+								<div class="manager-info">
+									<h3>관리자 정보</h3>
+									<div class="input-form">
+										<label for="userName">관리자 이름</label> <input type="text"
+											id="userName" value="${userInfoVO.name}" disabled>
+									</div>
+									<div class="input-form">
+										<label for="userDept">관리자 부서</label> <input type="text"
+											id="userDept" value="${userInfoVO.dept}" disabled>
+									</div>
+									<div class="input-form">
+										<label for="userjikgub">관리자 직급</label> <input type="text"
+											id="userJikgub" value="${userInfoVO.jikgubNm}" disabled>
+									</div>
+								</div>
+								<br>
+								<div class="sub-product">
+
+									<h3>가입상품 정보</h3>
+									<div v-if="subProducts.length > 0">
+										<div class="table-header">
+											<div class="table-cell">가입일</div>
+											<div class="table-cell">가입 상품</div>
+										</div>
+
+										<!-- Iterate over consults array to display each consultation item -->
+										<div class="customer-item" v-for="subProduct in subProducts">
+											<div class="table-cell">{{ subProduct.sub_start_date }}</div>
+											<div class="table-cell">{{ subProduct.product_name }}</div>
+										</div>
+									</div>
+									<div v-else>
+										<p>가입상품 내역이 없습니다.</p>
+									</div>
+
+								</div>
+								<br>
+								<div class="design-product">
+									<h3>설계상품 정보</h3>
+									<div v-if="designProducts.length > 0">
+										<div class="table-header">
+											<div class="table-cell">설계일</div>
+											<div class="table-cell">설계 상품</div>
+										</div>
+
+										<!-- Iterate over consults array to display each consultation item -->
+										<div class="customer-item"
+											v-for="designProduct in designProducts">
+											<div class="table-cell">{{ designProduct.design_date }}</div>
+											<div class="table-cell">{{ designProduct.product_name
+												}}</div>
+										</div>
+									</div>
+									<div v-else>
+										<p>설계상품 내역이 없습니다.</p>
+									</div>
+
+								</div>
+							</div>
+						</div>
 					</div>
-					<!--       <div id="customerTable" class="customer-container"> -->
-					<!--          <div class="customer-table"> -->
-					<!-- 고객 정보 테이블 -->
-					<h2 v-show="filteredCustomers.length > 0">전체 고객 정보</h2>
-					<table border='1' v-show="filteredCustomers.length > 0">
-						<tr>
-							<th>Select</th>
-							<th>이름</th>
-							<th>생년월일</th>
-						</tr>
-						<tr v-for="customer in filteredCustomers"
-							:key="customer.customer_id">
-							<td><input type="radio" name="selectedCustomer"
-								v-model="selectedCustomer" :value="customer"></td>
-							<td>{{ customer.customer_name }}</td>
-							<td>{{ customer.customer_brdt }}</td>
-						</tr>
-					</table>
+					<div class="customer-details" v-else>
+						<div class="details-container">
+							<div class="customer-info">
+								<!-- 선택된 고객이 없는 경우의 메시지 -->
+								<p>고객을 신규 등록해 주세요.</p>
+								<p>**표시는 필수 입력값 입니다. [최조 등록 시 고객 등급은 일반 등급으로 등록]</p>
+								<h3>고객 정보</h3>
+								<div class="input-form">
+									<label for="customerName">**고객 이름</label> <input type="text"
+										id="customerName" v-model="customerName" required>
+								</div>
+								<div class="input-form">
+									<label for="customerIdNumber">**고객 주민번호</label> <input
+										type="text" id="customerIdNumber" v-model="customerIdNumber"
+										required maxlength="14"> <small>예시:
+										YYMMDD-1234567</small>
+								</div>
+								<div class="input-form">
+									<label for="customerPhone">**고객 전화번호</label> <input type="text"
+										id="customerPhone" v-model="customerPhone" required>
+								</div>
+								<div class="input-form">
+									<label for="customerSubTel">**고객 비상연락망</label> <input
+										type="text" id="customerSubTel" v-model="customerSubTel">
+								</div>
+								<div class="input-form">
+									<label for="customerEmail">**고객 이메일</label> <input type="email"
+										id="customerEmail" v-model="customerEmail" required>
+								</div>
+								<div class="input-form">
+									<label for="customerJob">고객 직업</label> <input type="text"
+										id="customerJob" v-model="customerJob">
+								</div>
+								<div class="input-form">
+									<label for="customerAddr">고객 주소</label> <input type="text"
+										id="customerAddr" v-model="customerAddr">
+								</div>
+								<button @click="addCustomer">등록</button>
+								<button @click="resetForm">초기화</button>
+							</div>
+							<div class="manager-info">
+								<h3>관리자 정보</h3>
+								<div class="input-form">
+									<label for="userName">관리자 이름</label> <input type="text"
+										id="userName" value="${userInfoVO.name}" disabled>
+								</div>
+								<div class="input-form">
+									<label for="userDept">관리자 부서</label> <input type="text"
+										id="userDept" value="${userInfoVO.dept}" disabled>
+								</div>
+								<div class="input-form">
+									<label for="userjikgub">관리자 직급</label> <input type="text"
+										id="userJikgub" value="${userInfoVO.jikgubNm}" disabled>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
-				<!-- 선택된 고객의 상세 정보 입력 폼 -->
-				<div class="customer-details" v-if="selectedCustomer !== null">
-					<h2>고객 정보</h2>
-					<div class="input-form">
-						<label for="customerSubDate">등록일</label> <input type="text"
-							id="customerSubDate" v-model="selectedCustomer.customer_sub_date"
-							readonly>
-					</div>
-					<div class="input-form">
-						<label for="customerName">고객 이름</label> <input type="text"
-							id="customerName" v-model="selectedCustomer.customer_name">
-					</div>
-					<div class="input-form">
-						<label for="customerIdNumber">고객 주민번호</label> <input type="text"
-							id="customerIdNumber"
-							:value="maskIdNumber(selectedCustomer.customer_id_number)"
-							readonly>
-						<button @click="toggleMasking">확인</button>
-					</div>
-					<div class="input-form">
-						<label for="customerLevel">고객 등급</label> <select
-							id="customerLevel" v-model="selectedCustomer.customer_level">
-							<option value="1">일반</option>
-							<option value="2">우수</option>
-							<option value="3">VIP</option>
-							<option value="4">VVIP</option>
-							<option value="5">플래티넘</option>
-						</select>
 
-					</div>
-					<div class="input-form">
-						<label for="customerPhone">고객 전화번호</label> <input type="text"
-							id="customerPhone" v-model="selectedCustomer.customer_phone">
-					</div>
-					<div class="input-form">
-						<label for="customerSubTel">고객 비상연락망</label> <input type="text"
-							id="customerSubTel" v-model="selectedCustomer.customer_sub_tel">
-					</div>
-					<div class="input-form">
-						<label for="customerEmail">고객 이메일</label> <input type="text"
-							id="customerEmail" v-model="selectedCustomer.customer_email">
-					</div>
-					<div class="input-form">
-						<label for="customerJob">고객 직업</label> <input type="text"
-							id="customerJob" v-model="selectedCustomer.customer_job">
-					</div>
-					<div class="input-form">
-						<label for="customerAddr">고객 주소</label> <input type="text"
-							id="customerAddr" v-model="selectedCustomer.customer_addr">
-					</div>
-					<br>
-					<button @click="deleteCustomer">삭제</button>
-					<button @click="updateCustomer">수정</button>
-					<button @click="resetForm">신규</button>
-
-					<br> <br>
-					<h2>관리자 정보</h2>
-					<div class="input-form">
-						<label for="userName">관리자 이름</label> <input type="text"
-							id="userName" value="${userInfoVO.name}" disabled>
-					</div>
-					<div class="input-form">
-						<label for="userDept">관리자 부서</label> <input type="text"
-							id="userDept" value="${userInfoVO.dept}" disabled>
-					</div>
-					<div class="input-form">
-						<label for="userjikgub">관리자 직급</label> <input type="text"
-							id="userjikgub" value="${userInfoVO.jikgubNm}" disabled>
-					</div>
-					<!-- 필요한 입력 폼 추가 -->
-				</div>
-				<div class="customer-details" v-else>
-					<!-- 선택된 고객이 없는 경우의 메시지 -->
-					<p>고객을 신규 등록해 주세요.</p>
-					<p>**표시는 필수 입력값 입니다. [최조 등록 시 고객 등급은 일반 등급으로 등록]</p>
-					<h2>고객 정보</h2>
-					<div class="input-form">
-						<label for="customerName">**고객 이름</label> <input type="text"
-							id="customerName" v-model="customerName" required>
-					</div>
-					<div class="input-form">
-						<label for="customerIdNumber">**고객 주민번호</label> <input type="text"
-							id="customerIdNumber" v-model="customerIdNumber" required
-							maxlength="14"> <small>예시: YYMMDD-1234567</small>
-					</div>
-					<div class="input-form">
-						<label for="customerPhone">**고객 전화번호</label> <input type="text"
-							id="customerPhone" v-model="customerPhone" required>
-					</div>
-					<div class="input-form">
-						<label for="customerSubTel">**고객 비상연락망</label> <input type="text"
-							id="customerSubTel" v-model="customerSubTel">
-					</div>
-					<div class="input-form">
-						<label for="customerEmail">**고객 이메일</label> <input type="email"
-							id="customerEmail" v-model="customerEmail" required>
-					</div>
-					<div class="input-form">
-						<label for="customerJob">고객 직업</label> <input type="text"
-							id="customerJob" v-model="customerJob">
-					</div>
-					<div class="input-form">
-						<label for="customerAddr">고객 주소</label> <input type="text"
-							id="customerAddr" v-model="customerAddr">
-					</div>
-					<br>
-
-
-					<button @click="addCustomer">등록</button>
-					<button @click="resetForm">초기화</button>
-					<h2>관리자 정보</h2>
-					<div class="input-form">
-						<label for="userName">관리자 이름</label> <input type="text"
-							id="userName" value="${userInfoVO.name}" disabled>
-					</div>
-					<div class="input-form">
-						<label for="userDept">관리자 부서</label> <input type="text"
-							id="userDept" value="${userInfoVO.dept}" disabled>
-					</div>
-					<div class="input-form">
-						<label for="userjikgub">관리자 직급</label> <input type="text"
-							id="userjikgub" value="${userInfoVO.jikgubNm}" disabled>
-					</div>
-				</div>
 			</div>
+			<jsp:include page="/WEB-INF/jsp/kcg/_include/system/footer.jsp"
+				flush="false" />
 		</div>
 	</div>
-	<script>
+</body>
+
+<script>
 new Vue({
     el: '#app',
     data: {
         customers: [], // 고객 정보를 저장할 배열
         filteredCustomers: [], // 필터된 고객 정보를 저장할 배열
+        consults:[], // 고객 별 상담내역
+        subProducts:[], //고객 별 가입상품 내역
+        designProducts:[], //고객 별 설계상품 내역
         selectedCustomer: null, // 선택된 고객 정보
         userId: '${userInfoVO.userId}', // 현재 사용자의 userId를 저장
+        userDept:'${userInfoVO.dept}',
         customerSubDate:'',
         customerName: '', // 고객 이름을 저장할 변수
         customerIdNumber:'',
@@ -239,24 +502,95 @@ new Vue({
         searchKeyword: '', // 검색 키워드 저장
         errorMessage: '', // 오류 메시지 저장
         showFullIdNumber: false, // 주민등록번호 표시 여부를 저장하는 데이터 변수
+        showPopup: false,
+        selectedManager: '',
+        filteredManager: [], 
+        selectedConsult: null, // 선택된 상담 객체
+        showModal: false, // 모달 표시 여부,
+        showAddConsultModal: false, //상담추가 모달 표시 여부
+        customerConId:'',
+		consultTitle: '',
+		consultContext: '',
+		
+    },
+    watch: {
+        // selectedCustomer의 변경을 감지하는 watch
+        selectedCustomer(newCustomer, oldCustomer) {
+            if (newCustomer !== null) {
+                // 선택된 고객이 변경되면 상담 내역을 가져오는 메서드를 호출합니다.
+                this.getCustConsults();
+                this.getSubProducts();
+                this.getDesignProducts();
+              
+            } else {
+                // 선택된 고객이 없으면 상담 내역 배열을 초기화합니다.
+                this.consults = [];
+                this.subProducts = [];
+                this.designProducts=[];
+            }
+        },
     },
     methods: {
         getAllCustomers: function() {
-            // AJAX 요청을 보내고 응답 데이터를 customers에 할당
-            axios.get('/system/team4/getCustInfo')
+        	 axios.get('/system/team4/getCustInfo')
+             .then(response => {
+                 this.customers = response.data;
+                 this.filterCustomers(); // 고객 필터링 함수 호출
+                 this.selectedCustomer = null; // 선택 고객 초기화
+                 
+             })
+             .catch(error => {
+                 console.error('Error:', error);
+             });
+        },
+        filterCustomers: function() {
+            // userInfoVO.userId와 customer.user_id가 같은 고객만 필터링
+            this.filteredCustomers = this.customers.filter(customer => customer.user_id === this.userId);
+        },
+        getCustConsults: function() {
+        	var params = {
+                    customer_id: this.selectedCustomer.customer_id,
+                    
+                };
+      
+            axios.get('/system/team4/getCustConsult',{ params: params })
                 .then(response => {
-                    this.customers = response.data;
-                    this.filterCustomers(); // 고객 필터링 함수 호출
-                    this.selectedCustomer = null; // 선택 고객 초기화
+                    this.consults = response.data;
                     
                 })
                 .catch(error => {
                     console.error('Error:', error);
                 });
         },
-        filterCustomers: function() {
-            // userInfoVO.userId와 customer.user_id가 같은 고객만 필터링
-            this.filteredCustomers = this.customers.filter(customer => customer.user_id === this.userId);
+        getSubProducts: function() {
+        	var params = {
+                    customer_id: this.selectedCustomer.customer_id,
+                    
+                };
+         
+            axios.get('/system/team4/getSubProductInfo',{ params: params })
+                .then(response => {
+                    this.subProducts = response.data;
+                    
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        },
+        getDesignProducts: function() {
+        	var params = {
+                    customer_id: this.selectedCustomer.customer_id,
+                    
+                };
+         
+            axios.get('/system/team4/getDesignProductInfo',{ params: params })
+                .then(response => {
+                    this.designProducts = response.data;
+                    
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         },
         toggleMasking: function() {
             // 현재 마스킹 상태를 확인하여 토글
@@ -335,15 +669,12 @@ new Vue({
                     customer_job: this.selectedCustomer.customer_job,
                     customer_addr: this.selectedCustomer.customer_addr
                 };
-             
- 
-                // 서버에 PUT 또는 POST 요청 보내기 (수정에 따라 다름)
+
+           
                 axios.put('/system/team4/updateCust', { params: params })
                     .then(response => {
                         if (response.data.status === 'OK') {
                             alert('고객 정보가 수정되었습니다.');
-                            // 수정된 고객 정보를 다시 불러오기
-                            this.getAllCustomers();
                         } else if (response.data.status === 'ERROR') {
                             alert(response.data.message); // 서버로부터 받은 에러 메시지를 표시
                         }
@@ -405,6 +736,63 @@ new Vue({
                     alert('고객 등록 중 오류가 발생했습니다.');
                 });
         },
+    showConsultDetails(consult) {
+	        this.selectedConsult = consult;
+	        this.showModal = true;
+	    },
+	    closeModal() {
+	        this.selectedConsult = null;
+	        this.showModal = false;
+	    },
+	    
+	    openAddConsultModal() {
+            this.showAddConsultModal = true;
+        },
+        closeAddConsultModal() {
+            this.showAddConsultModal = false;
+        },
+		addConsult:function(){
+			
+		
+			   if (
+				        this.consultTitle.trim() === '' ||
+				        this.consultContext.trim() === ''
+				        
+				    ) {
+				        alert('모든 필수 입력 필드를 입력해주세요.');
+				        return; 
+				    }
+   
+			var params = {
+				user_id : this.userId,
+				consult_title : this.consultTitle,
+				consult_context : this.consultContext,
+				con_id : this.selectedCustomer.con_id,
+				
+			};
+			   //서버에 POST 요청으로 새로운 상담내용 등록
+         axios.post('/system/team4/addConsult', { params: params })
+             .then(response => {
+                 if (response.data.status === 'OK') {
+                     alert('새로운 상담내역이 등록되었습니다.');
+                     this.showAddConsultModal = false;
+                     this.getCustConsults();
+                 } else {
+                     alert('상담내역 등록에 실패했습니다.');
+                 }
+             })
+             .catch(error => {
+                 console.error('Error:', error);
+                 alert('상담내역 등록 중 오류가 발생했습니다.');
+             });
+			
+		},
+		resetConsultForm: function() {
+			this.consultTitle = '';
+			this.consultContext = '';
+		},
+        
+
         resetForm: function() {
             // 입력 폼 데이터 초기화
             this.selectedCustomer = null; // 선택된 고객 초기화
@@ -416,17 +804,23 @@ new Vue({
             this.customerEmail = ''; // 고객 이메일 초기화
             this.customerJob = ''; // 고객 직업 초기화
             this.customerAddr = ''; // 고객 주소 초기화
-        }
+        },
+
+
     },
     
 
-
     mounted: function() {
-        // 페이지 로딩 시 초기화
+        // 페이지 로딩 시 
+        this.getAllCustomers(); //전체 고객 조회화면
         this.selectedCustomer = null;
     }
 });
 </script>
-	</div>
+
+
+
+
 </body>
+
 </html>

@@ -20,12 +20,15 @@ import kcg.system.t4_notice_mng.svc.T4NoticeMng_Svc;
 @Controller
 @RequestMapping("system/team4/notice")
 public class T4NoticeMng_Ctl {
+	
 
 	@Autowired
 	CommonSvc commonSvc;
+	
 
 	@Autowired
 	T4NoticeMng_Svc t4NoticeMng_Svc;
+	
 
 	@Autowired
 	CmmnDao cmmnDao;
@@ -65,18 +68,18 @@ public class T4NoticeMng_Ctl {
 		return t4NoticeMng_Svc.updateNotice(params);
 	}
 
+
 	// 페이징 테스트용 페이지
 	@GetMapping("/noticeTest")
 	public String NoticeTest() {
 		return "kcg/system/team4_mng/notice/noticeTest";
 	}
-	
-
 	//공지사항 페이징
 	@RequestMapping("/getAllNotice")
 	public PageList<CmmnMap> getAllNotice(CmmnMap params,PagingConfig pagingConfig) {
 		PageList<CmmnMap> pageList = t4NoticeMng_Svc.getAllNotice(params,pagingConfig);
 		return pageList;
 	}
+
 
 }

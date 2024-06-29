@@ -7,13 +7,16 @@
 		SELECT
 		*
 		FROM kcgbd.db4_notice
+		ORDER BY cor_date desc
 	</select>
 	<select id="getAllNotice" parameterType="cmmnMap"
 		resultType="cmmnMap">
 		SELECT
 		*
 		FROM kcgbd.db4_notice
+		ORDER BY cor_date desc
 	</select>
+
 
 	<insert id="insertNotice" parameterType="cmmnMap">
 		INSERT INTO

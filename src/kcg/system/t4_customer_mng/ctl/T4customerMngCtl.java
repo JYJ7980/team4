@@ -6,9 +6,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+
 import org.springframework.web.bind.annotation.PostMapping;
+
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -47,6 +50,7 @@ public class T4customerMngCtl {
 	public List<CmmnMap> getCustInfo(CmmnMap params) {
 		return svc.getAllCustomers(params);
 	}
+
 	
 	//관리자 정보 전체 조회
 	@GetMapping("/getUserInfo")
@@ -60,8 +64,18 @@ public class T4customerMngCtl {
 		return svc.getCustAndUserInfo(params);
 	}
 	
-
 	
+	//고객 가입 상품 조회
+	@GetMapping("/getSubProductInfo")
+	public List<CmmnMap> getSubProductInfo(CmmnMap params) {
+		return svc.getSubProductInfo(params);
+	}
+	
+	//고객 설계 상품 조회
+	@GetMapping("/getDesignProductInfo")
+	public List<CmmnMap> getDesignProductInfo(CmmnMap params) {
+		return svc.getDesignProductInfo(params);
+	}
 
 	// 고객 주민번호 중복 확인용 조회
 	@GetMapping("/getCustIdNumber")
@@ -92,7 +106,7 @@ public class T4customerMngCtl {
 
 	}
 
-	// 담당 고객 삭제
+	//고객 삭제
 	@RequestMapping("/deleteCust")
 	public CmmnMap deleteCust(CmmnMap params) {
 		return svc.deleteCust(params);
@@ -105,6 +119,7 @@ public class T4customerMngCtl {
 		return svc.updateCust(params);
 	}
 	
+
 	//관리자 수정
 	@RequestMapping("/updateUser")
 	public CmmnMap updateUser(CmmnMap params) {
@@ -125,12 +140,21 @@ public class T4customerMngCtl {
 		return pageList;
 	}
 	
+	
 	//상담 내역 조회 필터링(내 담당 고객만)
 	@RequestMapping("/getAllMyconsult")
 	public PageList<CmmnMap> getAllMyconsult(CmmnMap params,PagingConfig pagingConfig) {
 		PageList<CmmnMap> pageList = svc.getAllMyconsult(params,pagingConfig);
 		return pageList;
 	}
+	
+	
+	//고객 별 상담내역 
+	@GetMapping("/getCustConsult")
+	public List<CmmnMap> getCustConsult(CmmnMap params) {
+		return svc.getCustConsult(params);
+	}
+	
 	
 	
 	
@@ -172,6 +196,9 @@ public class T4customerMngCtl {
 	public String customerInfoPageForLeader() {
 		return "kcg/system/team4_mng/customer_mng/customerInfoPageForLeader";
 	}
+	
+	
+
 	
 
 }
