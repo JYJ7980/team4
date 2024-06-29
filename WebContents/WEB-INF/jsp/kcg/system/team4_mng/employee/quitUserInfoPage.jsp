@@ -81,7 +81,8 @@
 		<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/sidebar-menu.jsp"
 			flush="false" />
 
-		<div class="main-content">
+		<div class="main-content"
+			style="background-image: url('/static_resources/team4/images/background-test.png'); background-size: cover; background-position: center; repeat: no-repeat">
 			<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/header.jsp"
 				flush="false" />
 
@@ -94,20 +95,31 @@
 			<h2>직원관리 > 퇴직자 조회</h2>
 			<br />
 
-			<div class="dataTables_wrapper" id="vueapp">
+			<div class="dataTables_wrapper" id="vueapp"
+				style="border-style: none;">
 				<template>
 					<table class="table table-bordered datatable dataTable"
-						id="grid_app">
+						id="grid_app"
+						style="width: 80%; border-style: solid; border-color: #ccc; border-top-left-radius: 20px; border-top-right-radius: 20px;">
 						<thead>
 							<tr class="replace-inputs">
-								<th style="width: 10%;" class="center sorting">성명</th>
-								<th style="width: 10%;" class="center sorting">부서</th>
-								<th style="width: 10%;" class="center sorting">직급</th>
-								<th style="width: 10%;" class="center sorting">담당 고객</th>
+								<th
+									style="width: 150px; background-color: #FDEE87; color: black; border-top-left-radius: 20px;"
+									class="center sorting">성명</th>
+								<th
+									style="width: 150px; background-color: #FDEE87; color: black;"
+									class="center sorting">부서</th>
+								<th
+									style="width: 150px; background-color: #FDEE87; color: black;"
+									class="center sorting">직급</th>
+								<th
+									style="width: 150px; background-color: #FDEE87; color: black; border-top-right-radius: 20px;"
+									class="center sorting">담당 고객</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr v-for="(item, index) in dataList" :key="index" style="cursor: pointer;">
+							<tr v-for="(item, index) in dataList" :key="index"
+								style="cursor: pointer;">
 								<td class="center">{{item.name}}</td>
 								<td class="center">{{item.dept}}</td>
 								<td class="center">{{item.jikgub_nm}}</td>
@@ -117,12 +129,10 @@
 						</tbody>
 					</table>
 					<div class="dataTables_paginate paging_simple_numbers"
-						id="div_paginate"></div>
+						id="div_paginate"
+						style="background-color: white; margin-top: 30px; margin-right: 170px;"></div>
 				</template>
 
-
-				<jsp:include page="/WEB-INF/jsp/kcg/_include/system/footer.jsp"
-					flush="false" />
 				<div class="popup-overlay" :class="{active: showPopup}"
 					@click="closePopup"></div>
 				<div class="popup" :class="{active: showPopup}">
@@ -135,21 +145,20 @@
 							<th>생년월일</th>
 							<th>관리자 수정</th>
 						</tr>
-						<tr v-for="(customer, customerIndex) in customers" :key="customerIndex">
-						
+						<tr v-for="(customer, customerIndex) in customers"
+							:key="customerIndex">
+
 							<td>{{ customer.customer_name }}</td>
 							<td>{{ customer.customer_brdt }}</td>
-							<td>
-								<select v-model="customer.selectedAdmin">
-									<option v-for="admin in adminList" :key="admin.user_id" :value="admin">
-										{{ admin.name }}({{ admin.dept }}-{{ admin.jikgub_nm }})
-									</option>
-								</select>
-								<button @click="updateAdmin(customer)">수정</button>
-							</td>
+							<td><select v-model="customer.selectedAdmin">
+									<option v-for="admin in adminList" :key="admin.user_id"
+										:value="admin">{{ admin.name }}({{ admin.dept }}-{{
+										admin.jikgub_nm }})</option>
+							</select>
+								<button @click="updateAdmin(customer)">수정</button></td>
 						</tr>
 					</table>
-						<h3 style="text-align: center;" v-else>해당 고객이 존재하지 않습니다</h3>
+					<h3 style="text-align: center;" v-else>해당 고객이 존재하지 않습니다</h3>
 				</div>
 			</div>
 		</div>

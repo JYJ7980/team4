@@ -117,6 +117,32 @@ public class T4Employee_Svc {
 
    /* 담당자 계정에 대한 수정 */
    public CmmnMap updateEmployee(CmmnMap params) {
+	   String jikgub_cd = "";
+	   
+	   switch (params.getString("jikgub_nm")) {
+	      case "이사":
+	         jikgub_cd = "1";
+	         break;
+	      case "부장":
+	         jikgub_cd = "2";
+	         break;
+	      case "과장":
+	         jikgub_cd = "3";
+	         break;
+	      case "차장":
+	         jikgub_cd = "4";
+	         break;
+	      case "대리":
+	         jikgub_cd = "5";
+	         break;
+	      case "사원":
+	         jikgub_cd = "6";
+	         break;
+	      case "수습":
+	         jikgub_cd = "7";
+	         break;
+	      };
+	      params.put("jikgub_cd", jikgub_cd);
       cmmnDao.update("system.t4_employee.updateEmployee", params);
       return new CmmnMap().put("status", "OK");
    }

@@ -76,7 +76,7 @@
 
 		<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/sidebar-menu.jsp"
 			flush="false" />
-		<div class="main-content">
+		<div class="main-content" style="background-image: url('/static_resources/team4/images/background-test.png'); background-size: cover; background-position: center; repeat: no-repeat">
 			<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/header.jsp"
 				flush="false" />
 			<ol class="breadcrumb bc-3">
@@ -96,7 +96,9 @@
 								<option value="">전체</option>
 								<option value="일반개인">일반개인</option>
 								<option value="청년">청년</option>
+								<option value="군인">군인</option>
 								<option value="장애인">장애인</option>
+								<option value="자영업자">자영업자</option>
 							</select>
 						</div>
 						<div class="search-item">
@@ -106,7 +108,6 @@
 								<option value="예금">예금</option>
 								<option value="적금">적금</option>
 								<option value="대출">대출</option>
-								<option value="목돈마련">목돈마련</option>
 							</select>
 						</div>
 						<div class="search-item">
@@ -132,27 +133,27 @@
 					</div>
 			</div>
 			<table class="table table-bordered datatable dataTable" id="grid_app"
-				style="border: 1px solid #999999;">
+				style="border: 1px solid #999999;border-top-left-radius: 20px; border-top-right-radius: 20px;">
 				<thead>
 					<tr class="replace_inputs">
 						<th class="center sorting" @click="sortList(event.target)"
-							sort_target="product_name">상품명</th>
+							sort_target="product_name"style="background-color: #3EAB6F; color: white; border-top-left-radius: 20px; " >상품명</th>
 						<th class="center sorting" @click="sortList(event.target)"
-							sort_target="product_type">상품유형</th>
+							sort_target="product_type"style="background-color: #3EAB6F; color: white;">상품유형</th>
 						<th class="center sorting" @click="sortList(event.target)"
-							sort_target="possible_member">가입대상</th>
+							sort_target="possible_member"style="background-color: #3EAB6F; color: white;">가입대상</th>
 						<th class="center sorting" @click="sortList(event.target)"
-							sort_target="lowest_money">최소가입금액</th>
+							sort_target="lowest_money"style="background-color: #3EAB6F; color: white;">최소가입금액</th>
 						<th class="center sorting" @click="sortList(event.target)"
-							sort_target="highest_money">최대가입금액</th>
+							sort_target="highest_money"style="background-color: #3EAB6F; color: white;">최대가입금액</th>
 						<th class="center sorting" @click="sortList(event.target)"
-							sort_target="lowest_date">최소적용이율</th>
+							sort_target="lowest_date"style="background-color: #3EAB6F; color: white;">최소적용이율</th>
 						<th class="center sorting" @click="sortList(event.target)"
-							sort_target="highest_date">최대적용이율</th>
+							sort_target="highest_date"style="background-color: #3EAB6F; color: white;">최대적용이율</th>
 						<th class="center sorting" @click="sortList(event.target)"
-							sort_target="pay_type">납입주기</th>
+							sort_target="pay_type"style="background-color: #3EAB6F; color: white;">납입주기</th>
 						<th class="center sorting" @click="sortList(event.target)"
-							sort_target="taxation">이자과세</th>
+							sort_target="taxation"style="background-color: #3EAB6F; color: white; border-top-right-radius: 20px;">이자과세</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -177,9 +178,9 @@
 					</tr>
 				</tbody>
 			</table>
-			<div class="dataTables_wrapper">
+			<div class="dataTables_wrapper"  style="border-style: none;">
 				<div class="dataTables_paginate paging_simple_numbers"
-					id="div_paginate"></div>
+					id="div_paginate" style="background-color: white; "></div>
 			</div>
 			</template>
 		</div>

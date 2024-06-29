@@ -177,7 +177,6 @@ button[type="button"]:disabled {
 							<option value="예금">예금</option>
 							<option value="적금">적금</option>
 							<option value="대출">대출</option>
-							<option value="목돈">목돈마련</option>
 						</select>
 					</div>
 					<div class="form-group1">
@@ -186,8 +185,10 @@ button[type="button"]:disabled {
 							v-model="info.possible_member"
 							:disabled="info.writer_name!=''&&info.writer_name!=null">
 							<option value="일반개인">일반개인</option>
-							<option value="청년">청년우대</option>
-							<option value="장애인">장애인우대</option>
+							<option value="청년">청년</option>
+							<option value="군인">군인</option>
+							<option value="장애인">장애인</option>
+							<option value="자영업자">자영업자</option>
 						</select>
 					</div>
 					<div class="form-group1">
@@ -352,7 +353,7 @@ button[type="button"]:disabled {
 						data : {
 							jikgub_nm : '${userInfoVO.jikgubNm}',
 							key1 : "",
-							key2 : "",
+							key2 : "true",
 							info1 : "",
 							currentDate : "",
 							info : {

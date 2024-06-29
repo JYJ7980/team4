@@ -66,7 +66,7 @@ public class T4designMngSVC {
 		params = handleEmptyStringAsNull(params);
 		
 		if(params.getString("customer_id")==null) {
-			int customer_id = 0;
+			int customer_id = 76;
 			params.put("customer_id", customer_id);
 		}
 		
@@ -159,6 +159,18 @@ public class T4designMngSVC {
 
 		return cmmnDao.selectList("getCustomerList", params);
 	}
+
+	public List<CmmnMap> productList(CmmnMap params) {
+		
+		List<CmmnMap> productList = cmmnDao.selectList("getProductList", params);
+		return 	productList;
+	}
+
+	public PageList<CmmnMap> getListPaging(CmmnMap params, PagingConfig pagingConfig) {
+		PageList<CmmnMap> rslt = cmmnDao.selectListPage("getSubscriptionList", params, pagingConfig);
+		return rslt;
+	}
+
 	
 
 }
