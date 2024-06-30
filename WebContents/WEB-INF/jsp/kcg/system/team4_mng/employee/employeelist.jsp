@@ -152,10 +152,16 @@
 	box-shadow: $shadow;
 	cursor: pointer;
 	transition: .3s ease; & __primary { grid-column : 1/ 2;
-	grid-row: 4/5; background : #FDEE87; box-shadow : inset .2rem .2rem
-	1rem #E4EBF5, inset -.2rem -.2rem 1rem #9baacf, $ shadow; width : 10rem;
-	height : 3rem; border-radius : 1rem; box-shadow : $ shadow; cursor :
-	pointer; transition : .3s ease; & __primary { grid-column : 1/ 2;
+	grid-row: 4/5;
+	background: #FDEE87;
+	box-shadow: inset .2rem .2rem 1rem #E4EBF5, inset -.2rem -.2rem 1rem
+		#9baacf,$ shadow;
+	width: 10rem;
+	height: 3rem;
+	border-radius: 1rem;
+	box-shadow: $ shadow;
+	cursor: pointer;
+	transition: .3s ease; & __primary { grid-column : 1/ 2;
 	grid-row: 4/5;
 	background: #6d5dfc;
 	box-shadow: inset .2rem .2rem 1rem #8abdff, inset -.2rem -.2rem 1rem
@@ -192,8 +198,6 @@
 	height: 30px;
 	margin-left: 70px;
 }
-
-
 </style>
 
 </head>
@@ -201,7 +205,8 @@
 	<div class="page-container">
 		<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/sidebar-menu.jsp"
 			flush="false" />
-				<div class="main-content" style="background-image: url('/static_resources/team4/images/background-test.png'); background-size: cover; background-position: center; repeat: no-repeat">
+		<div class="main-content"
+			style="background-image: url('/static_resources/team4/images/background-test.png'); background-size: cover; background-position: center; repeat: no-repeat">
 			<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/header.jsp"
 				flush="false" />
 			<!-- 이름으로 리스트 만들기 -->
@@ -222,14 +227,14 @@
 
 						<div class="customer-one">
 
-							<div style="justify-content: flex-end; display: flex;">
+							<div style="justify-content: flex-end; display: flex; ">
 								<button @click="employeeSearch()" class="btn btn__primary">이름검색</button>
 								<button @click="employeeSearchAll" class="btn btn__primary">전체검색</button>
 								<button @click="formChange" class="btn btn__primary"
 									style="margin-right: 50px;">신규 직원</button>
 
 								<select v-model="statusSearch" @change="st"
-									style="width: 50px; height: 30px;">
+									style="width: 53px; height: 30px;">
 									<option value="전체">전체</option>
 									<option value="재직">재직</option>
 									<option value="휴가">휴가</option>
@@ -281,104 +286,134 @@
 										</div>
 
 										<div class="input-form">
-											<label style="margin-left: 60px; margin-top: 5px; margin-right: 20px;">비밀번호 수정</label>
-											<button type="button" @click="input" class="btn btn__primary" style="width: 50px; height: 30px; font-weight: 700;">수정</button>
+											<label
+												style="margin-left: 60px; margin-top: 5px; margin-right: 20px;">비밀번호
+												수정</label>
+											<button type="button" @click="input" class="btn btn__primary"
+												style="width: 50px; height: 30px; font-weight: 700;">수정</button>
 										</div>
-										
+
 										<div v-if="key">
-										<div class="input-form">
-											<label style="margin-left: 5px;">비밀번호 : </label> <input type="text" v-model="userPw" style="margin-left: 10px; ">
-											<button type="submit" @click="updatePw"  class="btn btn__primary" style="width: 30px; height: 30px; margin-left: 10px;"><i class="entypo entypo-check" style="margin-left: -6px;"></i></button>
-										</div>
+											<div class="input-form">
+												<label style="margin-left: 5px;">비밀번호 : </label> <input
+													type="text" v-model="userPw" style="margin-left: 10px;">
+												<button type="submit" @click="updatePw"
+													class="btn btn__primary"
+													style="width: 30px; height: 30px; margin-left: 10px;">
+													<i class="entypo entypo-check" style="margin-left: -6px;"></i>
+												</button>
+											</div>
 										</div>
 										<div class="input-form">
 											<label style="margin-left: 5px;">재직변경 : </label>
 											<div v-model="emp_nfo.status_cd"
 												v-if="emp_nfo.status_cd == '재직'">
-												<button @click="status('휴가')" class="btn btn__primary" style=" margin-left: 20px; width:50px; height: 30px; font-weight: 700;">휴가</button>
-												<button @click="status('퇴직')" class="btn btn__primary" style="width: 50px; height: 30px; font-weight: 700;">퇴직</button>
+												<button @click="status('휴가')" class="btn btn__primary"
+													style="margin-left: 20px; width: 50px; height: 30px; font-weight: 700;">휴가</button>
+												<button @click="status('퇴직')" class="btn btn__primary"
+													style="width: 50px; height: 30px; font-weight: 700;">퇴직</button>
 											</div>
 											<div v-else-if="emp_nfo.status_cd == '휴가'">
-												<button @click="status('재직')" class="btn btn__primary" style=" margin-left: 20px; width:50px; height: 30px; font-weight: 700;">재직</button>
-												<button @click="status('퇴직')" class="btn btn__primary" style="width: 50px; height: 30px; font-weight: 700;">퇴직</button>
+												<button @click="status('재직')" class="btn btn__primary"
+													style="margin-left: 20px; width: 50px; height: 30px; font-weight: 700;">재직</button>
+												<button @click="status('퇴직')" class="btn btn__primary"
+													style="width: 50px; height: 30px; font-weight: 700;">퇴직</button>
 											</div>
 											<div v-else></div>
 
 										</div>
 										<div class="input-form">
-											<label style="margin-left: 32px;">직급 : </label>
-											
-											 <select v-model="emp_nfo.jikgub_nm" style="margin-left: 10px; width: 70px; height: 25px;">
+											<label style="margin-left: 32px;">직급 : </label> <select
+												v-model="emp_nfo.jikgub_nm"
+												style="margin-left: 10px; width: 70px; height: 25px;">
 												<option value="수습" name="수습" style="text-align: center;">수습</option>
-												<option value="사원" name="사원"style="text-align: center;">사원</option>
-												<option value="대리" name="대리"style="text-align: center;">대리</option>
-												<option value="차장" name="차장"style="text-align: center;">차장</option>
-												<option value="과장" name="과장"style="text-align: center;">과장</option>
-												
-												<option value="부장" name="부장"style="text-align: center;">부장</option>
-												
+												<option value="사원" name="사원" style="text-align: center;">사원</option>
+												<option value="대리" name="대리" style="text-align: center;">대리</option>
+												<option value="차장" name="차장" style="text-align: center;">차장</option>
+												<option value="과장" name="과장" style="text-align: center;">과장</option>
+
+												<option value="부장" name="부장" style="text-align: center;">부장</option>
+
 											</select>
 										</div>
 
 										<div class="input-form">
-											<label style="margin-left: 18px;">부서명 : </label> <select v-model="emp_nfo.dept" style="margin-left: 10px; width: 70px; height: 25px;">
-												<option id="영업1팀"style="text-align: center;">영업1팀</option>
-												<option id="영업2팀"style="text-align: center;">영업2팀</option>
-												<option id="총무팀"style="text-align: center;">총무팀</option>
-												<option id="개발팀"style="text-align: center;">개발팀</option>
+											<label style="margin-left: 18px;">부서명 : </label> <select
+												v-model="emp_nfo.dept"
+												style="margin-left: 10px; width: 70px; height: 25px;">
+												<option id="영업1팀" style="text-align: center;">영업1팀</option>
+												<option id="영업2팀" style="text-align: center;">영업2팀</option>
+												<option id="총무팀" style="text-align: center;">총무팀</option>
+												<option id="개발팀" style="text-align: center;">개발팀</option>
 											</select>
 										</div>
-										<button @click="update" style="margin-left: 230px; margin-top: 30px;">저장<i class="entypo entypo-check"></i></button>
+
+										<div v-if="emp_nfo.status_cd !== '퇴직'">
+											<button @click="update"
+												style="margin-left: 230px; margin-top: 30px;">
+												저장<i class="entypo entypo-check"></i>
+											</button>
+										</div>
+
+										<!-- 		<button @click="update" style="margin-left: 230px; margin-top: 30px;">저장<i class="entypo entypo-check"></i></button> -->
 									</div>
 								</div>
 							</div>
 							<!-- ---------------------------------------------------------------------------------------------------------------------- -->
 							<div v-if="formChange2">
-							<h3 style="margin-left: 150px; margin-top: 50px;">신규 직원</h3>
+								<h3 style="margin-left: 150px; margin-top: 50px;">신규 직원</h3>
 								<div class="mag-info">
 									<div class="customer-info">
-									
-										
+
+
 										<div class="input-form">
 											<label>부여할 ID : </label> <input type="text" id="user_id"
-												v-model="newEmployee.new_user_id" disabled="disabled" style="margin-left: 10px;">
+												v-model="newEmployee.new_user_id" disabled="disabled"
+												style="margin-left: 10px;">
 											<!--                               <input type="submit" id="new_user_id" value="ID중복확인" -->
 											<!--                                  @click="checkId"> -->
 										</div>
 
 										<div class="input-form">
-											<label style="margin-left: 32px;">이름 : </label> <input type="text" id="new_name"
-												v-model="newEmployee.new_name" style="margin-left: 10px;">
+											<label style="margin-left: 32px;">이름 : </label> <input
+												type="text" id="new_name" v-model="newEmployee.new_name"
+												style="margin-left: 10px;">
 										</div>
 
 										<div class="input-form">
-											<label style="margin-left: -28px;">초기 비밀번호 : </label> <input type="text" id="new_user_pw"
+											<label style="margin-left: -28px;">초기 비밀번호 : </label> <input
+												type="text" id="new_user_pw"
 												v-model="newEmployee.new_user_pw" style="margin-left: 10px;">
 										</div>
 
 										<div class="input-form">
-											<label style="margin-left: 19px;">부서명 : </label> <select id="dept"
-												v-model="newEmployee.new_dept" style="margin-left: 10px; width: 178px; height: 25px;">
+											<label style="margin-left: 19px;">부서명 : </label> <select
+												id="dept" v-model="newEmployee.new_dept"
+												style="margin-left: 10px; width: 178px; height: 25px;">
 												<option value="">부서를 선택해주세요</option>
-												<option value="영업1팀"style="text-align: center;">영업1팀</option>
-												<option value="영업2팀"style="text-align: center;">영업2팀</option>
-												<option value="총무팀"style="text-align: center;">총무팀</option>
-												<option value="개발팀"style="text-align: center;">개발팀</option>
+												<option value="영업1팀" style="text-align: center;">영업1팀</option>
+												<option value="영업2팀" style="text-align: center;">영업2팀</option>
+												<option value="총무팀" style="text-align: center;">총무팀</option>
+												<option value="개발팀" style="text-align: center;">개발팀</option>
 											</select>
 										</div>
 										<div class="input-form">
-											<label style="margin-left: 33px;">직급 : </label> <select id="jikgub_nm"
-												v-model="newEmployee.new_jikgub_nm" style="margin-left: 10px; width: 70px; height: 25px;">
-												<option value="부장"style="text-align: center;">부장</option>
-												<option value="차장"style="text-align: center;">차장</option>
-												<option value="과장"style="text-align: center;">과장</option>
-												<option value="대리"style="text-align: center;">대리</option>
-												<option value="사원"style="text-align: center;">사원</option>
+											<label style="margin-left: 33px;">직급 : </label> <select
+												id="jikgub_nm" v-model="newEmployee.new_jikgub_nm"
+												style="margin-left: 10px; width: 70px; height: 25px;">
+												<option value="부장" style="text-align: center;">부장</option>
+												<option value="차장" style="text-align: center;">차장</option>
+												<option value="과장" style="text-align: center;">과장</option>
+												<option value="대리" style="text-align: center;">대리</option>
+												<option value="사원" style="text-align: center;">사원</option>
 											</select>
 										</div>
 
 
-										<button type="button" @click="save" style="margin-left: 230px; margin-top: 30px;">등록<i class="entypo entypo-check"></i></button>
+										<button type="button" @click="save"
+											style="margin-left: 230px; margin-top: 30px;">
+											등록<i class="entypo entypo-check"></i>
+										</button>
 									</div>
 								</div>
 							</div>
