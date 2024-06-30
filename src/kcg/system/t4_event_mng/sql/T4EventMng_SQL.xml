@@ -12,13 +12,14 @@
 	<select id="eventFindPlus" parameterType="cmmnMap" resultType="cmmnMap">
 	SELECT ci.*,sub.*,u.user_id
 	FROM kcgbd.db4_customer_info ci
-	join kcgbd.db4_product_sub sub
-	on ci.customer_id = sub.customer_id 
-	join kcgbd.t_user u
-	on ci.user_id = u.user_id 
+	JOIN kcgbd.db4_product_sub sub
+	ON ci.customer_id = sub.customer_id 
+	JOIN kcgbd.t_user u
+	ON ci.user_id = u.user_id 
 	WHERE ci.user_id like #{user_id}
- 	and SUBSTRING(sub.sub_end_date , 1, 4) = #{year}
-  	and SUBSTRING(sub.sub_end_date , 6, 2) = #{month}
-   	and sub.sub_quit ='Y';
+ 	AND SUBSTRING(sub.sub_end_date , 1, 4) = #{year}
+  	AND SUBSTRING(sub.sub_end_date , 6, 2) = #{month}
+   	AND sub.sub_quit ='Y'
+   	AND ci.use_yn ='Y'
 	</select>
 </mapper>

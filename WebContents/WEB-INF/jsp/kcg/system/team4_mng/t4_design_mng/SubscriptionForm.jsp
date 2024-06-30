@@ -354,7 +354,7 @@ var vueapp = new Vue({
 					return;
 				}
 				if(startMoney < this.pro.lowest_money){
-					alert("상품 최대 금액보다 적게 설정하였습니다.")
+					alert("상품 최소 금액보다 적게 설정하였습니다.")
 					return;
 				}
 			}

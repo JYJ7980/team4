@@ -109,7 +109,7 @@ var vueapp = new Vue({
    created() {
       const date = new Date();
       this.year = date.getFullYear();
-      this.month = date.getMonth(); // JavaScript의 월은 0부터 시작하므로 +1 해줍니다.
+      this.month = date.getMonth() + 1;
       this.calendarData(0);
    },
    methods: {

@@ -14,18 +14,6 @@
 		AND use_yn = 'Y';
 	</select>
 
-	<insert id="newCreateManagement" parameterType="cmmnMap">
-		INSERT INTO
-		employees (
-		user_id, user_pw, email, name, status_cd, jikgub_nm, dept,
-		reg_dt
-		) VALUES (
-		#{user_id}, #{user_pw}, #{email}, #{name},
-		#{status_cd}, #{jikgub_nm}, #{dept},
-		NOW()
-		)
-	</insert>
-
 	<select id="ending" parameterType="cmmnMap" resultType="cmmnMap">
 		SELECT
 		COUNT(*)
@@ -39,8 +27,10 @@
 		SUBSTRING(sub.sub_end_date , 6, 2) = #{month}
 		AND
 		SUBSTRING(sub.sub_end_date , 9, 2) = #{day}
-		AND use_yn = 'Y';
+		AND ci.use_yn = 'Y'
+		AND sub.sub_quit = 'Y';
 	</select>
+	
 	<select id="noticeTop2" resultType="cmmnMap">
 		SELECT *
 		FROM kcgbd.db4_notice
@@ -93,7 +83,6 @@
 		SELECT * FROM
 		kcgbd.db4_product_info
 		WHERE product_id = #{product_id}
-		LIMIT 1
 	</select>
 
 </mapper>
