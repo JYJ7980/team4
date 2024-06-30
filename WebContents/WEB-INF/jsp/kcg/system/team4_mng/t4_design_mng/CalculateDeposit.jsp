@@ -269,7 +269,7 @@
 									</div>
 									<div class="form-group1">
 										<div class="label-box2">
-											<label>예치금액 (원) :</label>
+											<label>예치금액(원) :</label>
 										</div>
 										<div class="input-box">
 											<input type="text" id="dpst_amt" v-model="info.sub_money"
@@ -302,7 +302,7 @@
 									</div>
 									<div class="form-group1">
 										<div class="label-box2">
-											<label>고정금리 (%) :</label>
+											<label>고정금리(%) :</label>
 										</div>
 										<div class="input-box">
 											<input class="form-control" type="text" id="aply_rate"
@@ -311,7 +311,7 @@
 									</div>
 									<div class="form-group1">
 										<div class="label-box2">
-											<label> 고정금리 예치기간 (개월) :</label>
+											<label> 고정금리 예치기간(개월) :</label>
 										</div>
 										<div class="input-box">
 											<input type="text" id="dpst_prd"
@@ -329,7 +329,7 @@
 									</div>
 									<div class="form-group1">
 										<div class="label-box2">
-											<label>변동금리 (%) :</label>
+											<label>변동금리(%) :</label>
 										</div>
 										<div class="input-box">
 											<input class="form-control" type="text" id="aply_rate"
@@ -338,7 +338,7 @@
 									</div>
 									<div class="form-group1">
 										<div class="label-box2">
-											<label> 변동금리 예치기간 (개월) :</label>
+											<label> 변동금리 예치기간(개월) :</label>
 										</div>
 										<div class="input-box">
 											<input type="text" id="dpst_prd"

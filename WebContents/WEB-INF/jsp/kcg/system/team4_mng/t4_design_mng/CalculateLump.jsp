@@ -134,7 +134,7 @@
 							<label>고객정보:</label>
 							<div class="form-group1">
 								<div class="label-box1">
-									<label>성명:</label>
+									<label>성명 :</label>
 								</div>
 								<div class="input-box">
 									<input class="form-control" v-model="custInfo.customer_name"
@@ -147,7 +147,7 @@
 							</div>
 							<div class="form-group1">
 								<div class="label-box1">
-									<label>주민번호:</label>
+									<label>주민번호 :</label>
 								</div>
 								<div class="input-box">
 									<input class="form-control"
@@ -156,7 +156,7 @@
 							</div>
 							<div class="form-group1">
 								<div class="label-box1">
-									<label>E-mail:</label>
+									<label>E-mail :</label>
 								</div>
 								<div class="input-box">
 									<input class="form-control" v-model="custInfo.customer_email"
@@ -165,7 +165,7 @@
 							</div>
 							<div class="form-group1">
 								<div class="label-box1">
-									<label>전화번호:</label>
+									<label>전화번호 :</label>
 								</div>
 								<div class="input-box">
 									<input class="form-control" v-model="custInfo.customer_phone"
@@ -174,7 +174,7 @@
 							</div>
 							<div class="form-group1">
 								<div class="label-box1">
-									<label>비상연락처:</label>
+									<label>비상연락처 :</label>
 								</div>
 								<div class="input-box">
 									<input class="form-control" v-model="custInfo.customer_sub_tel"
@@ -183,7 +183,7 @@
 							</div>
 							<div class="form-group1">
 								<div class="label-box1">
-									<label>직업:</label>
+									<label>직업 :</label>
 								</div>
 								<div class="input-box">
 									<input class="form-control" v-model="custInfo.customer_job"
@@ -192,7 +192,7 @@
 							</div>
 							<div class="form-group1">
 								<div class="label-box1">
-									<label>주소:</label>
+									<label>주소 :</label>
 								</div>
 								<div class="input-box">
 									<input class="form-control" v-model="custInfo.customer_addr"
@@ -201,7 +201,7 @@
 							</div>
 							<div class="form-group1">
 								<div class="label-box1">
-									<label>관리담당자ID:</label>
+									<label>관리담당자ID :</label>
 								</div>
 								<div class="input-box">
 									<input class="form-control" v-model="custInfo.user_id" disabled />
@@ -209,7 +209,7 @@
 							</div>
 							<div class="form-group1">
 								<div class="label-box1">
-									<label>관리담당자:</label>
+									<label>관리담당자 :</label>
 								</div>
 								<div class="input-box">
 									<input class="form-control" v-model="custInfo.name" disabled />
@@ -217,7 +217,7 @@
 							</div>
 							<div class="form-group1">
 								<div class="label-box1">
-									<label>부서:</label>
+									<label>부서 :</label>
 								</div>
 								<div class="input-box">
 									<input class="form-control" v-model="custInfo.dept" disabled />
@@ -225,7 +225,7 @@
 							</div>
 							<div class="form-group1">
 								<div class="label-box1">
-									<label>직위:</label>
+									<label>직위 :</label>
 								</div>
 								<div class="input-box">
 									<input class="form-control" v-model="custInfo.jikgub_nm"
@@ -245,7 +245,7 @@
 								<div class="nav-content flex-column flex-gap-10">
 									<div class="form-group1">
 										<div class="label-box2">
-											<label>설계번호:</label>
+											<label>설계번호 :</label>
 										</div>
 										<div class="input-box">
 											<input class="form-control" id="design_id"
@@ -254,7 +254,7 @@
 									</div>
 									<div class="form-group1">
 										<div class="label-box2">
-											<label>상품선택:</label>
+											<label>상품선택 :</label>
 										</div>
 										<div class="input-box">
 											<input class="form-control" id="prod_cd"
@@ -268,7 +268,7 @@
 									</div>
 									<div class="form-group1">
 										<div class="label-box2">
-											<label>목표금액 (원):</label>
+											<label>목표금액(원) :</label>
 										</div>
 										<div class="input-box">
 											<input type="text" id="dpst_amt" v-model="info.sub_money"
@@ -289,7 +289,7 @@
 									</div>
 									<div class="form-group1">
 										<div class="label-box2">
-											<label>이자유형:</label>
+											<label>이자유형 :</label>
 										</div>
 										<div class="select-box">
 											<select id="int_tax_ty_cd" v-model="info.interest_type"
@@ -302,7 +302,7 @@
 
 									<div class="form-group1">
 										<div class="label-box2">
-											<label>고정금리 (%):</label>
+											<label>고정금리(%) :</label>
 										</div>
 										<div class="input-box">
 											<input class="form-control" type="text" id="aply_rate"
@@ -311,7 +311,7 @@
 									</div>
 									<div class="form-group1">
 										<div class="label-box2">
-											<label> 고정금리 예치기간 (개월):</label>
+											<label> 고정금리 예치기간(개월) :</label>
 										</div>
 										<div class="input-box">
 											<input type="text" id="dpst_prd"
@@ -330,7 +330,7 @@
 
 									<div class="form-group1">
 										<div class="label-box2">
-											<label>변동금리 (%):</label>
+											<label>변동금리(%) :</label>
 										</div>
 										<div class="input-box">
 											<input class="form-control" type="text" id="aply_rate"
@@ -339,7 +339,7 @@
 									</div>
 									<div class="form-group1">
 										<div class="label-box2">
-											<label> 변동금리 예치기간 (개월):</label>
+											<label> 변동금리 예치기간(개월) :</label>
 										</div>
 										<div class="input-box">
 											<input type="text" id="dpst_prd"
@@ -357,7 +357,7 @@
 									</div>
 									<div class="form-group1">
 										<div class="label-box2">
-											<label>이자과세:</label>
+											<label>이자과세 :</label>
 										</div>
 										<div class="select-box">
 											<select id="int_tax_ty_cd" v-model="info.rate"
@@ -401,7 +401,7 @@
 											<div class="form-wrapper flex flex-wrap flex-gap-10">
 												<div class="form-group1">
 													<div class="label-box1">
-														<label>월 납부 금액:</label>
+														<label>월 납부 금액 :</label>
 													</div>
 													<div class="input-box">
 														<input class="form-control" id="tot_dpst_amt"
@@ -410,7 +410,7 @@
 												</div>
 												<div class="form-group1">
 													<div class="label-box1">
-														<label>불입 금액 합계:</label>
+														<label>불입 금액 합계 :</label>
 													</div>
 													<div class="input-box">
 														<input class="form-control" id="tot_dpst_amt"
@@ -419,7 +419,7 @@
 												</div>
 												<div class="form-group1">
 													<div class="label-box1">
-														<label>세전이자:</label>
+														<label>세전이자 :</label>
 													</div>
 													<div class="input-box">
 														<input class="form-control" id="tot_dpst_int"
@@ -428,14 +428,14 @@
 												</div>
 												<div class="form-group1">
 													<div class="label-box1">
-														<label>수익률:</label>
+														<label>수익률 :</label>
 													</div>
 													<span id="tot_dpst_int" disabled>{{ info.profit_rate
 														}}%</span>
 												</div>
 												<div class="form-group1">
 													<div class="label-box1">
-														<label>세전수령액:</label>
+														<label>세전수령액 :</label>
 													</div>
 													<div class="input-box">
 														<input class="form-control" id="bfo_rcve_amt"
@@ -444,7 +444,7 @@
 												</div>
 												<div class="form-group1">
 													<div class="label-box1">
-														<label>이자과세금:</label>
+														<label>이자과세금 :</label>
 													</div>
 													<div class="input-box">
 														<input class="form-control" id="int_tax_amt"
@@ -453,7 +453,7 @@
 												</div>
 												<div class="form-group1">
 													<div class="label-box1">
-														<label>세후수령액:</label>
+														<label>세후수령액 :</label>
 													</div>
 													<div class="input-box">
 														<input class="form-control" id="atx_rcve_amt"
@@ -462,7 +462,7 @@
 												</div>
 												<div class="form-group1">
 													<div class="label-box1">
-														<label>순수익률:</label>
+														<label>순수익률 :</label>
 													</div>
 													<span id="tot_dpst_int" disabled>{{
 														info.net_profit_rate }}%</span>

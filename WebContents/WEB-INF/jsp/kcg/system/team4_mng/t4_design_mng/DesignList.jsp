@@ -8,20 +8,21 @@
 	flush="false" />
 <!-- Imported styles on this page -->
 <link rel="stylesheet"
-	href="/static_resources/team4/js/datatables/datatables.css">
+	href="/static_resources/team4/css/datatables/datatables.css">
 <link rel="stylesheet"
-	href="/static_resources/team4/js/select2/select2-bootstrap.css">
+	href="/static_resources/team4/css/select2/select2-bootstrap.css">
 <link rel="stylesheet"
-	href="/static_resources/team4/js/select2/select2.css">
+	href="/static_resources/team4/css/select2/select2.css">
 <link rel="stylesheet"
 	href="/static_resources/team4/css/prodlist.css?after">
 <style type="text/css">
-	.jh-div {
+.jh-div {
 	display: flex;
 	align-items: center;
 	margin-top: 10px;
 	margin-bottom: 10px;
-	}
+}
+
 .box {
 	display: flex;
 	width: 1000px;
@@ -100,6 +101,74 @@
 	position: absolute;
 	right: 8%;
 }
+
+.modal-content1 {
+	position: relative;
+	dispaly: flex;
+	width: 1000px;
+	margin: 0 auto;
+	background-color: #fff;
+	border: 1px solid #999;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	border-radius: 3px;
+	-webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+	box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+	background-clip: padding-box;
+	outline: 0;
+	background-color: #fff;
+	margin: 0 auto;
+	background-color: #fff;
+}
+
+.form-group1 {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	width: 100%;
+	padding-top: 8px;
+}
+
+.form-group1 label {
+	font-weight: bold;
+	text-align: right;
+}
+
+.label-box1 {
+	display: flex;
+	width: 30%;
+	justify-content: flex-end;
+	align-items: center;
+}
+
+.label-box2 {
+	display: flex;
+	width: 20%;
+	justify-content: flex-end;
+	align-items: center;
+}
+
+.input-box {
+	position: relative;
+	display: flex;
+	width: 60%;
+}
+
+.input-box input {
+	width: 100%;
+	height: 30px;
+	justify-content: flex-start;
+	margin-left: 10px;
+	align-items: center;
+	border: 1px solid rgb(212, 212, 212);
+	align-items: center;
+}
+
+.label-position2 {
+	position: absolute;
+	right: 5px;
+}
+
 </style>
 <title>설계조회</title>
 </head>
@@ -110,7 +179,8 @@
 		<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/sidebar-menu.jsp"
 			flush="false" />
 
-		<div class="main-content" style="background-image: url('/static_resources/team4/images/background-test.png'); background-size: cover; background-position: center; repeat: no-repeat">
+		<div class="main-content"
+			style="background-image: url('/static_resources/team4/images/background-test.png'); background-size: cover; background-position: center; repeat: no-repeat">
 
 			<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/header.jsp"
 				flush="false" />
@@ -150,7 +220,7 @@
 							</div>
 							<div class="search-item">
 								<label class="label-box">관리자명:</label> <input class="input-box"
-									v-model="my_name" readonly/>
+									v-model="my_name" readonly />
 							</div>
 						</div>
 						<div class="button-box">
@@ -168,89 +238,104 @@
 									전체검색 <i class="entypo-search"></i>
 								</button>
 							</div>
-
 						</div>
-					</div>
-					<div class="flex flex-100 flex-padding-10 flex-gap-10"
-						style="justify-content: flex-end">
-						<button type="button"
-							class="btn btn-green btn-icon icon-left btn-small"
-							@click="cf_movePage('/team4/calculate')">
-							등록 <i class="entypo-plus"></i>
-						</button>
-						<button type="button" value="+삭제" @click="deleteSelected"
-						 class="btn btn-red btn-icon icon-left btn-small">선택 삭제
-						 <i class="entypo-trash"></i>
-						 
-						 </button>
-					</div>
-					<table class="table table-bordered datatable dataTable"
-						id="grid_app" style="border-top-right-radius: 20px; border-top-left-radius: 20px;">
-						<thead>
-							<tr class="replace-inputs" style="text-align: center;">
-								<th style="width: 40px; background-color: #3EAB6F; color: white; border-top-left-radius: 20px;" class="center hidden-xs nosort"><input
-									type="checkbox" id="allCheck" @click="all_check(event.target)"></th>
-								<th style="width: 60px; background-color: #3EAB6F; color: white;" class="center sorting"
-									@click="sortList(event.target)" sort_target="design_id">ID</th>
-								<th style="width: 100px; background-color: #3EAB6F; color: white;" class="center sorting"
-									@click="sortList(event.target)" sort_target="user_id">관리자
-									ID</th>
-								<th style="width: 100px; background-color: #3EAB6F; color: white;" class="center sorting"
-									@click="sortList(event.target)" sort_target="name">관리자 성명</th>
-								<th style="width: 100px; background-color: #3EAB6F; color: white;" class="center sorting"
-									@click="sortList(event.target)" sort_target="customer_id">회원ID</th>
-								<th style="width: 100px; background-color: #3EAB6F; color: white;" class="center sorting"
-									@click="sortList(event.target)" sort_target="customer_name">회원성명</th>
-								<th style="width: 70px; background-color: #3EAB6F; color: white;" class="center sorting"
-									@click="sortList(event.target)" sort_target="product_type">상품유형</th>
-								<th style="width: 190px; background-color: #3EAB6F; color: white;" class="center sorting"
-									@click="sortList(event.target)" sort_target="product_name">상품명</th>
-								<th style="width: 100px; background-color: #3EAB6F; color: white;" class="center sorting"
-									@click="sortList(event.target)" sort_target="design_date">설계일</th>
-								<th style="width: 70px; background-color: #3EAB6F; color: white;" class="center">삭제</th>
-								<th style="width: 70px; background-color: #3EAB6F; color: white; border-top-right-radius: 20px;" class="center">상세정보</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr v-for="item in dataList" style="cursor: pointer;text-align: center; background-color: white;">
-								<td class="center"><input type="checkbox"
-									v-model="selectedIds" :value="item.design_id"
-									@click="onCheck(item)" name="is_check"></td>
-								<td class="left">{{item.design_id}}</td>
-								<td class="left">{{item.user_id}}</td>
-								<td class="left">{{item.name}}</td>
-								<td class="left">{{item.customer_id}}</td>
-								<td class="left">{{item.customer_name}}</td>
-								<td class="left">{{item.product_type}}</td>
-								<td class="left">{{item.product_name}}</td>
-								<td class="center">{{item.design_date}}</td>
-								<td class="left">
-								<button type="button" value="삭제"
-									@click="deleteItem(item.design_id)"  class="btn btn-red" style="border-style: none;">
-									<i class="entypo-trash"></i>
-									</button>
-									</td>
 
-								<td class="left"><input type="button" value="정보"
-									@click="gotoDtl(item.design_id, item.customer_id, item.product_id)"  class="btn btn-orange" style="border-style: none;">
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				
-	<div class="dataTables_paginate paging_simple_numbers" id="div_paginate" style="background-color: white;">
+					</div>
 			</div>
-				</template>
-			</div>
+			<div class="flex flex-100 flex-padding-10 flex-gap-10"
+				style="justify-content: flex-end">
+				<button type="button"
+					class="btn btn-green btn-icon icon-left btn-small"
+					@click="cf_movePage('/team4/calculate')">
+					등록 <i class="entypo-plus"></i>
+				</button>
+				<button type="button" value="+삭제" @click="deleteSelected"
+					class="btn btn-red btn-icon icon-left btn-small">
+					선택 삭제 <i class="entypo-trash"></i>
 
+				</button>
+			</div>
+			<table class="table table-bordered datatable dataTable" id="grid_app"
+				style="border-top-right-radius: 20px; border-top-left-radius: 20px;">
+				<thead>
+					<tr class="replace-inputs" style="text-align: center;">
+						<th
+							style="width: 40px; background-color: #3EAB6F; color: white; border-top-left-radius: 20px;"
+							class="center hidden-xs nosort"><input type="checkbox"
+							id="allCheck" @click="all_check(event.target)"></th>
+						<th style="width: 60px; background-color: #3EAB6F; color: white;"
+							class="center sorting" @click="sortList(event.target)"
+							sort_target="design_id">ID</th>
+						<th style="width: 100px; background-color: #3EAB6F; color: white;"
+							class="center sorting" @click="sortList(event.target)"
+							sort_target="user_id">관리자 ID</th>
+						<th style="width: 100px; background-color: #3EAB6F; color: white;"
+							class="center sorting" @click="sortList(event.target)"
+							sort_target="name">관리자 성명</th>
+						<th style="width: 100px; background-color: #3EAB6F; color: white;"
+							class="center sorting" @click="sortList(event.target)"
+							sort_target="customer_id">회원ID</th>
+						<th style="width: 100px; background-color: #3EAB6F; color: white;"
+							class="center sorting" @click="sortList(event.target)"
+							sort_target="customer_name">회원성명</th>
+						<th style="width: 70px; background-color: #3EAB6F; color: white;"
+							class="center sorting" @click="sortList(event.target)"
+							sort_target="product_type">상품유형</th>
+						<th style="width: 190px; background-color: #3EAB6F; color: white;"
+							class="center sorting" @click="sortList(event.target)"
+							sort_target="product_name">상품명</th>
+						<th style="width: 100px; background-color: #3EAB6F; color: white;"
+							class="center sorting" @click="sortList(event.target)"
+							sort_target="design_date">설계일</th>
+						<th style="width: 70px; background-color: #3EAB6F; color: white;"
+							class="center">삭제</th>
+						<th
+							style="width: 70px; background-color: #3EAB6F; color: white; border-top-right-radius: 20px;"
+							class="center">상세정보</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr v-for="item in dataList"
+						style="cursor: pointer; text-align: center; background-color: white;">
+						<td class="center"><input type="checkbox"
+							v-model="selectedIds" :value="item.design_id"
+							@click="onCheck(item)" name="is_check"></td>
+						<td class="left">{{item.design_id}}</td>
+						<td class="left">{{item.user_id}}</td>
+						<td class="left">{{item.name}}</td>
+						<td class="left">{{item.customer_id}}</td>
+						<td class="left">{{item.customer_name}}</td>
+						<td class="left">{{item.product_type}}</td>
+						<td class="left">{{item.product_name}}</td>
+						<td class="center">{{item.design_date}}</td>
+						<td class="left">
+							<button type="button" value="삭제"
+								@click="deleteItem(item.design_id)" class="btn btn-red"
+								style="border-style: none;">
+								<i class="entypo-trash"></i>
+							</button>
+						</td>
+
+						<td class="left"><input type="button" value="정보"
+							@click="gotoDtl(item.design_id, item.customer_id, item.product_id)"
+							class="btn btn-orange" style="border-style: none;"></td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="dataTables_wrapper" style="border-style: none;">
+				<div class="dataTables_paginate paging_simple_numbers"
+					id="div_paginate" style="background-color: white;"></div>
+			</div>
+			</template>
 		</div>
 	</div>
 
 	<!-- 설계 정보 조회 팝업 -->
-	<div class="modal fade" id="pop_sub_info" style="margin-top: 100px; margin-left: 50px;">
+	<div class="modal fade" id="pop_sub_info"
+		style="margin-top: 100px; margin-left: 50px;">
 		<template>
 			<div class="modal-dialog" style="width: 80%;">
-				<div class="modal-content">
+				<div class="modal-content1">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal"
 							aria-hidden="true" id="btn_popClose">&times;</button>
@@ -260,120 +345,205 @@
 						<div class="panel-body"
 							style="display: flex; border: 1px solid #FF0000; width: 100%;">
 							<div class="left-panel" style="width: 50%;">
-								<div class="form-group">
-									<label for="err_eng_nm" class="fix-width-33">ID:</label> <input
-										type="text" class="form-control" id="pop_design_id"
-										v-model="info.design_id" readonly>
+								<div class="form-group1">
+									<div class="label-box1">
+										<label for="err_eng_nm">ID :</label>
+									</div>
+									<div class="input-box">
+										<input type="text" class="form-control" id="pop_design_id"
+											v-model="info.design_id" readonly>
+									</div>
 								</div>
 
-								<div class="form-group">
-									<label for="err_eng_nm" class="fix-width-33">상품명:</label> <input
-										type="text" class="form-control" id="pop_product_name"
-										v-model="info.product_name" readonly>
+								<div class="form-group1">
+									<div class="label-box1">
+										<label for="err_eng_nm">상품명 :</label>
+									</div>
+									<div class="input-box">
+										<input type="text" class="form-control" id="pop_product_name"
+											v-model="info.product_name" readonly>
+									</div>
 								</div>
 
-								<div class="form-group">
-									<label for="err_eng_nm" class="fix-width-33">고객ID:</label> <input
-										type="text" class="form-control" id="pop_customer_id"
-										v-model="info.customer_id" readonly>
+								<div class="form-group1">
+									<div class="label-box1">
+										<label for="err_eng_nm">고객ID :</label>
+									</div>
+									<div class="input-box">
+										<input type="text" class="form-control" id="pop_customer_id"
+											v-model="info.customer_id" readonly>
+									</div>
 								</div>
 
-								<div class="form-group">
-									<label for="err_eng_nm" class="fix-width-33">고객명:</label> <input
-										type="text" class="form-control" id="pop_customer_name"
-										v-model="info.customer_name" readonly>
+								<div class="form-group1">
+									<div class="label-box1">
+										<label for="err_eng_nm">고객명 :</label>
+									</div>
+									<div class="input-box">
+										<input class="form-control" type="text" class="form-control"
+											id="pop_customer_name" v-model="info.customer_name" readonly>
+									</div>
 								</div>
-
-								<div class="form-group">
-									<div v-if="info.product_type === '예금'">
-										<label>예치 금액:</label> <input type="text" id="pop_sub_money"
+								<div class="form-group1" v-if="info.product_type === '예금'">
+									<div class="label-box1">
+										<label>예치 금액 :</label>
+									</div>
+									<div class="input-box">
+										<input class="form-control" type="text" id="pop_sub_money"
 											v-model="info.sub_money" readonly> <span>원</span>
 									</div>
-									<div v-else-if="info.product_type === '적금'">
-										<label>납입 금액:</label> <input type="text" id="pop_cycle_money"
-											v-model="info.cycle_money" readonly> <span>원</span>
+								</div>
+								<div class="form-group1" v-else-if="info.product_type === '적금'">
+									<div class="label-box1">
+										<label>납입 금액 :</label>
 									</div>
-									<div v-else-if="info.product_type === '대출'">
-										<label>대출 금액:</label> <input type="text" id="pop_sub_money"
-											v-model="info.sub_money" readonly> <span>원</span>
-									</div>
-									<div v-else-if="info.product_type === '목돈마련적금'">
-										<label>목표 금액:</label> <input type="text" id="pop_sub_money"
-											v-model="info.sub_money" readonly> <span>원</span> <label>예상
-											납부 금액:</label> <input type="text" id="pop_cycle_money"
-											v-model="info.cycle_money" readonly> <span>원</span>
+									<div class="input-box">
+										<input class="form-control" type="text" id="pop_cycle_money"
+											v-model="info.cycle_money" readonly> <label
+											class="label-position2">원</label>
 									</div>
 								</div>
-								<div class="form-group" v-if="info.product_type === '대출'">
-									<label for="err_eng_nm" class="fix-width-33">대출 유형:</label> <input
-										type="text" class="form-control"
-										id="pop_info.loan_repayment_type"
-										v-model="info.loan_repayment_type" readonly>
+								<div class="form-group1" v-else-if="info.product_type === '대출'">
+									<div class="label-box1">
+										<label>대출 금액 :</label>
+									</div>
+									<div class="input-box">
+										<input class="form-control" type="text" id="pop_sub_money"
+											v-model="info.sub_money" readonly> <label
+											class="label-position2">원</label>
+									</div>
 								</div>
-								<div class="form-group" v-else>
-									<label for="err_eng_nm" class="fix-width-33">이자 유형:</label> <input
-										type="text" class="form-control" id="pop_info.interest_type"
-										v-model="info.interest_type" readonly>
+								<div class="form-group1" v-if="info.product_type === '대출'">
+									<div class="label-box1">
+										<label for="err_eng_nm">대출 유형 :</label>
+									</div>
+									<div class="input-box">
+										<input type="text" class="form-control"
+											id="pop_info.loan_repayment_type"
+											v-model="info.loan_repayment_type" readonly>
+									</div>
 								</div>
-
-								<div class="form-group">
-									<label for="err_eng_nm" class="fix-width-33">고정금리:</label> <input
-										type="text" class="form-control" id="pop_f_interest_rate"
-										v-model="info.f_interest_rate" readonly> <span>%</span>
-								</div>
-								<div class="form-group">
-									<label for="err_eng_nm" class="fix-width-33">고정금리 기간:</label> <input
-										type="text" class="form-control" id="pop_f_select_month"
-										v-model="info.f_select_month" readonly> <span>(월)</span>
-								</div>
-
-								<div class="form-group">
-									<label for="err_eng_nm" class="fix-width-33">변동금리:</label> <input
-										type="text" class="form-control" id="pop_v_interest_rate"
-										v-model="info.v_interest_rate" readonly> <span>%</span>
-								</div>
-								<div class="form-group">
-									<label for="err_eng_nm" class="fix-width-33">변동금리 기간:</label> <input
-										type="text" class="form-control" id="pop_v_select_month"
-										v-model="info.v_select_month" readonly> <span>(월)</span>
-								</div>
-								<div class="form-group" v-if="info.product_type === '대출'">
-									<label for="err_eng_nm" class="fix-width-33">중도상환수수료:</label> <input
-										type="text" class="form-control" id="pop_rate"
-										v-model="info.rate" readonly> <span>%</span>
-								</div>
-								<div class="form-group" v-else>
-									<label for="err_eng_nm" class="fix-width-33">세율:</label> <input
-										type="text" class="form-control" id="pop_rate"
-										v-model="info.rate" readonly> <span>%</span>
+								<div class="form-group1" v-else>
+									<div class="label-box1">
+										<label for="err_eng_nm">이자 유형 :</label>
+									</div>
+									<div class="input-box">
+										<input type="text" class="form-control"
+											id="pop_info.interest_type" v-model="info.interest_type"
+											readonly>
+									</div>
 								</div>
 
-								<div class="form-group">
-									<label for="err_eng_nm" class="fix-width-33">최종 금액:</label> <input
-										type="text" class="form-control" id="pop_final_money"
-										v-model="info.final_money" readonly>
+								<div class="form-group1">
+									<div class="label-box1">
+										<label for="err_eng_nm">고정금리 :</label>
+									</div>
+									<div class="input-box">
+										<input type="text" class="form-control"
+											id="pop_f_interest_rate" v-model="info.f_interest_rate"
+											readonly> <label class="label-position2">%</label>
+									</div>
 								</div>
-								<div class="form-group">
-									<label for="err_eng_nm" class="fix-width-33">최종 이자:</label> <input
-										type="text" class="form-control" id="pop_final_interest"
-										v-model="info.final_interest" readonly>
+								<div class="form-group1">
+									<div class="label-box1">
+										<label for="err_eng_nm">고정금리 기간 :</label>
+									</div>
+									<div class="input-box">
+										<input type="text" class="form-control"
+											id="pop_f_select_month" v-model="info.f_select_month"
+											readonly> <label class="label-position2">월</label>
+									</div>
 								</div>
-								<div class="form-group">
-									<label for="err_eng_nm" class="fix-width-33">설계 날짜:</label> <input
-										type="text" class="form-control" id="pop_design_date"
-										v-model="info.design_date" readonly>
+
+								<div class="form-group1">
+									<div class="label-box1">
+										<label for="err_eng_nm">변동금리 :</label>
+									</div>
+									<div class="input-box">
+										<input type="text" class="form-control"
+											id="pop_v_interest_rate" v-model="info.v_interest_rate"
+											readonly> <label class="label-position2">%</label>
+									</div>
+								</div>
+								<div class="form-group1">
+									<div class="label-box1">
+										<label for="err_eng_nm">변동금리 기간 :</label>
+									</div>
+									<div class="input-box">
+										<input type="text" class="form-control"
+											id="pop_v_select_month" v-model="info.v_select_month"
+											readonly> <label class="label-position2">월</label>
+									</div>
+								</div>
+								<div class="form-group1" v-if="info.product_type === '대출'">
+									<div class="label-box1">
+										<label for="err_eng_nm">중도상환수수료 :</label>
+									</div>
+									<div class="input-box">
+										<input type="text" class="form-control" id="pop_rate"
+											v-model="info.rate" readonly> <label
+											class="label-position2">%</label>
+									</div>
+								</div>
+								<div class="form-group1" v-else>
+									<div class="label-box1">
+										<label for="err_eng_nm">세율 :</label>
+									</div>
+									<div class="input-box">
+										<input type="text" class="form-control" id="pop_rate"
+											v-model="info.rate" readonly> <label
+											class="label-position2">%</label>
+									</div>
+								</div>
+
+								<div class="form-group1">
+									<div class="label-box1">
+										<label for="err_eng_nm">최종 금액 :</label>
+									</div>
+									<div class="input-box">
+										<input type="text" class="form-control" id="pop_final_money"
+											v-model="info.final_money" readonly>
+									</div>
+								</div>
+								<div class="form-group1">
+									<div class="label-box1">
+										<label for="err_eng_nm">최종 이자 :</label>
+									</div>
+									<div class="input-box">
+										<input type="text" class="form-control"
+											id="pop_final_interest" v-model="info.final_interest"
+											readonly>
+									</div>
+								</div>
+								<div class="form-group1">
+									<div class="label-box1">
+										<label for="err_eng_nm">설계 날짜 :</label>
+									</div>
+									<div class="input-box">
+										<input type="text" class="form-control" id="pop_design_date"
+											v-model="info.design_date" readonly>
+									</div>
 								</div>
 
 							</div>
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" id="update" class="btn btn-secondary"
-							data-dismiss="modal" @click="updateProduct()">CHANGE</button>
-						<button type="button" id="update" class="btn btn-secondary"
-							data-dismiss="modal" @click="deleteDesign(info.design_id)">DELETE</button>
-						<button type="button" id="cancle" class="btn btn-secondary"
-							data-dismiss="modal" @click="close()">CLOSE</button>
+						<button type="button" id="update"
+							class="btn btn-green btn-icon btn-small" data-dismiss="modal"
+							@click="updateProduct()">
+							CHANGE <i class="entypo-check"></i>
+						</button>
+						<button type="button" id="update"
+							class="btn btn-red btn-icon btn-small" data-dismiss="modal"
+							@click="deleteDesign(info.design_id)">
+							DELETE<i class="entypo-trash"></i>
+						</button>
+						<button type="button" id="cancle"
+							class="btn btn-gray btn-icon btn-small" data-dismiss="modal"
+							@click="close()">
+							CLOSE</i>
+						</button>
 					</div>
 
 				</div>

@@ -131,7 +131,7 @@
 					<template>
 						<div class="left flex-column flex-gap-10 user-info-box"
 							v-if="info.simpl_ty_cd == '1'">
-							<label>고객정보:</label>
+							<label>고객정보 :</label>
 							<div class="form-group1">
 								<div class="label-box1">
 									<label>성명 : </label>
@@ -269,7 +269,7 @@
 									</div>
 									<div class="form-group1">
 										<div class="label-box2">
-											<label>대출금액 (원):</label>
+											<label>대출금액(원) :</label>
 										</div>
 										<div class="input-box">
 											<input type="text" id="dpst_amt" v-model="info.sub_money"
@@ -291,7 +291,7 @@
 
 									<div class="form-group1">
 										<div class="label-box2">
-											<label>이자유형:</label>
+											<label>이자유형 :</label>
 										</div>
 										<div class="select-box">
 											<select id="int_tax_ty_cd" v-model="info.loan_repayment_type"
@@ -304,7 +304,7 @@
 									</div>
 									<div class="form-group1">
 										<div class="label-box2">
-											<label>고정금리 (%) :</label>
+											<label>고정금리(%) :</label>
 										</div>
 										<div class="input-box">
 											<input class="form-control" type="text" id="aply_rate"
@@ -313,7 +313,7 @@
 									</div>
 									<div class="form-group1">
 										<div class="label-box2">
-											<label> 고정금리 예치기간 (개월) :</label>
+											<label> 고정금리 예치기간(개월) :</label>
 										</div>
 										<div class="input-box">
 											<input type="text" id="dpst_prd"
@@ -331,7 +331,7 @@
 									</div>
 									<div class="form-group1">
 										<div class="label-box2">
-											<label>변동금리 (%) :</label>
+											<label>변동금리(%) :</label>
 										</div>
 										<div class="input-box">
 											<input class="form-control" type="text" id="aply_rate"
@@ -340,7 +340,7 @@
 									</div>
 									<div class="form-group1">
 										<div class="label-box2">
-											<label> 변동금리 예치기간 (개월) :</label>
+											<label> 변동금리 예치기간(개월) :</label>
 										</div>
 										<div class="input-box">
 											<input type="text" id="dpst_prd"
@@ -358,7 +358,7 @@
 									</div>
 									<div class="form-group1">
 										<div class="label-box2">
-											<label>중도상환 수수료 (%):</label>
+											<label>중도상환 수수료(%):</label>
 										</div>
 										<div class="input-box">
 											<input class="form-control" type="text" id="aply_rate"
@@ -400,7 +400,7 @@
 												<div class="form-group1"
 													v-if="info.loan_repayment_type ==='원리금 균등'">
 													<div class="label-box1">
-														<label>매 회차 납입 금액:</label>
+														<label>매 회차 납입 금액 :</label>
 													</div>
 													<div class="input-box">
 														<input class="form-control" id="int_tax_amt"
@@ -410,7 +410,7 @@
 
 												<div class="form-group1">
 													<div class="label-box1">
-														<label>총 납입 이자:</label>
+														<label>총 납입 이자 :</label>
 													</div>
 													<div class="input-box">
 														<input class="form-control" id="int_tax_amt"
@@ -419,7 +419,7 @@
 												</div>
 												<div class="form-group1">
 													<div class="label-box1">
-														<label>총 상환 금액:</label>
+														<label>총 상환 금액 :</label>
 													</div>
 													<div class="input-box">
 														<input class="form-control" id="atx_rcve_amt"
