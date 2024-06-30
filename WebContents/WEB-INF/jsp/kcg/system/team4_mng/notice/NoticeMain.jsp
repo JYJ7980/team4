@@ -192,11 +192,11 @@
 								<th
 									style="width: 200px; background-color: #3EAB6F; color: white;"
 									class="center sorting">제목</th>
-								<c:if test="${userInfoVO.jikgubCd == '1'}">
+								
 									<th
 										style="width: 10%; background-color: #3EAB6F; color: white; border-top-right-radius: 20px;"
 										class="center sorting">비고</th>
-								</c:if>
+								
 							</tr>
 						</thead>
 						<tbody>
@@ -211,6 +211,11 @@
 										<button @click="openEditModal(notice)" class="btn">수정</button>
 										<button @click="deleteNotice(notice.notice_id)" class="btn">삭제</button>
 									</td>
+								</c:if>
+								<c:if test="${userInfoVO.jikgubCd != '1'}">
+								<td style="text-align: center;">
+								-
+								</td>
 								</c:if>
 							</tr>
 						</tbody>
