@@ -229,7 +229,7 @@
                            style="margin-right: 50px;">신규 직원</button>
 
                         <select v-model="statusSearch" @change="st"
-                           style="width: 50px; height: 30px;">
+                           style="width: 53px; height: 30px;">
                            <option value="전체">전체</option>
                            <option value="재직">재직</option>
                            <option value="휴가">휴가</option>
@@ -314,7 +314,6 @@
                                     <option value="대리" name="대리"style="text-align: center;">대리</option>
                                     <option value="차장" name="차장"style="text-align: center;">차장</option>
                                     <option value="과장" name="과장"style="text-align: center;">과장</option>
-                                    
                                     <option value="부장" name="부장"style="text-align: center;">부장</option>
                                     
                                  </select>
@@ -328,7 +327,9 @@
                                     <option id="개발팀"style="text-align: center;">개발팀</option>
                                  </select>
                               </div>
+                              <div v-if="emp_nfo.status_cd !== '퇴직'">
                               <button @click="update" style="margin-left: 230px; margin-top: 30px;">저장<i class="entypo entypo-check"></i></button>
+                              </div>
                            </div>
                         </div>
                      </div>
