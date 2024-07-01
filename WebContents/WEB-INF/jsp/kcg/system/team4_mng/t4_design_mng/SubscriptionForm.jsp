@@ -305,9 +305,9 @@ var vueapp = new Vue({
 
             // 유효성 검사
             function isValidInterestRate(rate) {
-                return /^\d+(\.\d{1})?$/.test(rate);
+                return /^\d+(\.\d{2})?$/.test(rate);
             }
-
+            
             function isValidDate(date) {
                 return /^\d{4}-\d{2}-\d{2}$/.test(date);
             }

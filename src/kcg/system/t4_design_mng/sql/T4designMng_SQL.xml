@@ -18,6 +18,13 @@
 		AND product_type LIKE CONCAT('%', #{product_type}, '%')	
 	</select>
 	
+	<select id="selectSaveProductList" parameterType="cmmnMap" resultType="cmmnMap">
+	    SELECT product_name, product_id, product_type 
+	    FROM kcgbd.db4_product_info 
+	    WHERE product_name NOT LIKE CONCAT('%', '목돈', '%')
+	    AND product_type LIKE CONCAT('%', #{product_type}, '%')  
+	</select>
+	
 	
 	<select id="selectOneProduct" parameterType="cmmnMap" resultType="cmmnMap">
     SELECT * FROM kcgbd.db4_product_info 
@@ -33,6 +40,10 @@
 	           , p.product_id
 	           , p.product_type
 	           , p.product_name
+	           , p.highest_rate
+	           , p.lowest_rate
+	           , p.highest_money
+	           , p.lowest_money
 	           , s.start_money
 	           , s.cycle_money
 	           , s.loan
