@@ -100,7 +100,7 @@
 	margin-left: 10px;
 	align-items: center;
 	border: 1px solid rgb(212, 212, 212);
-	border-radius:3px; 
+	border-radius: 3px;
 }
 </style>
 <title>금융계산기</title>
@@ -269,7 +269,7 @@
 									</div>
 									<div class="form-group1">
 										<div class="label-box2">
-											<label>불입금액 (원) :</label>
+											<label>불입금액(원) :</label>
 										</div>
 										<div class="input-box">
 											<input type="text" id="dpst_amt" v-model="info.cycle_money"
@@ -278,7 +278,8 @@
 												@click="setCircleAcmlAmt(10)"
 												style="width: 80px; right: 110px">+10만원</button>
 											<button type="button" class="btn btn-transparent"
-												@click="setCircleAcmlAmt(50)" style="width: 80px; right: 20px">+50만원</button>
+												@click="setCircleAcmlAmt(50)"
+												style="width: 80px; right: 20px">+50만원</button>
 											<button type="button" class="btn btn-transparent"
 												@click="setCircleAcmlAmt(100)"
 												style="width: 80px; right: -70px">+100만원</button>
@@ -292,17 +293,16 @@
 											<label>이자유형 :</label>
 										</div>
 										<div class="select-box">
-											<select id="int_tax_ty_cd"
-												v-model="info.interest_type" style="padding-top: 3px;">
+											<select id="int_tax_ty_cd" v-model="info.interest_type"
+												style="padding-top: 3px;">
 												<option value="단리">단리</option>
 												<option value="복리">복리</option>
 											</select>
 										</div>
 									</div>
-
 									<div class="form-group1">
 										<div class="label-box2">
-											<label>고정금리 (%) :</label>
+											<label>고정금리(%) :</label>
 										</div>
 										<div class="input-box">
 											<input class="form-control" type="text" id="aply_rate"
@@ -311,26 +311,25 @@
 									</div>
 									<div class="form-group1">
 										<div class="label-box2">
-											<label> 고정금리 예치기간 (개월) :</label>
+											<label> 고정금리 예치기간(개월) :</label>
 										</div>
 										<div class="input-box">
 											<input type="text" id="dpst_prd"
 												v-model="info.f_select_month"
 												style="width: 48%; border: 1px solid rgb(212, 212, 212); border-radius: 3px;">
 											<button type="button" class="btn btn-transparent"
-												style="width: 80px; right: 110px" @click="fSetGoalPrd(3)">+3개월</button>
+												@click="fSetGoalPrd(3)" style="width: 80px; right: 110px">+3개월</button>
 											<button type="button" class="btn btn-transparent"
-												style="width: 80px; right: 20px" @click="fSetGoalPrd(6)">+6개월</button>
+												@click="fSetGoalPrd(6)" style="width: 80px; right: 20px">+6개월</button>
 											<button type="button" class="btn btn-transparent"
-												style="width: 80px; right: -70px" @click="fSetGoalPrd(12)">+12개월</button>
+												@click="fSetGoalPrd(12)" style="width: 80px; right: -70px">+12개월</button>
 											<button type="button" class="btn btn-navy"
-												style="width: 80px; right: -160px" @click="fSetGoalPrd(0)">정정</button>
+												@click="fSetGoalPrd(0)" style="width: 80px; right: -160px">정정</button>
 										</div>
 									</div>
-
 									<div class="form-group1">
 										<div class="label-box2">
-											<label>변동금리 (%) :</label>
+											<label>변동금리(%) :</label>
 										</div>
 										<div class="input-box">
 											<input class="form-control" type="text" id="aply_rate"
@@ -339,31 +338,29 @@
 									</div>
 									<div class="form-group1">
 										<div class="label-box2">
-											<label> 변동금리 예치기간 (개월) :</label>
+											<label> 변동금리 예치기간(개월) :</label>
 										</div>
 										<div class="input-box">
 											<input type="text" id="dpst_prd"
 												v-model="info.v_select_month"
 												style="width: 48%; border: 1px solid rgb(212, 212, 212); border-radius: 3px;" />
 											<button type="button" class="btn btn-transparent"
-												style="width: 80px; right: 110px" @click="vSetGoalPrd(3)">+3개월</button>
+												@click="vSetGoalPrd(3)" style="width: 80px; right: 110px">+3개월</button>
 											<button type="button" class="btn btn-transparent"
-												style="width: 80px; right: 20px" @click="vSetGoalPrd(6)">+6개월</button>
+												@click="vSetGoalPrd(6)" style="width: 80px; right: 20px">+6개월</button>
 											<button type="button" class="btn btn-transparent"
-												style="width: 80px; right: -70px" @click="vSetGoalPrd(12)">+12개월</button>
+												@click="vSetGoalPrd(12)" style="width: 80px; right: -70px">+12개월</button>
 											<button type="button" class="btn btn-navy"
-												style="width: 80px; right: -160px" @click="vSetGoalPrd(0)">정정</button>
+												@click="vSetGoalPrd(0)" style="width: 80px; right: -160px">정정</button>
 										</div>
 									</div>
-
-
 									<div class="form-group1">
 										<div class="label-box2">
 											<label>이자과세 :</label>
 										</div>
 										<div class="select-box">
-											<select id="int_tax_ty_cd"
-												v-model="info.rate" style="padding-top: 3px;">
+											<select id="int_tax_ty_cd" v-model="info.rate"
+												style="padding-top: 3px;">
 												<option value="15.4">일반과세 (15.4%)</option>
 												<option value="9.5">세금우대 (9.5%)</option>
 												<option value="0">비과세</option>
@@ -462,10 +459,6 @@
 														info.net_profit_rate }}%</span>
 												</div>
 											</div>
-
-											<div class="panel-heading">
-												<div class="panel-title">계산결과 CHART</div>
-											</div>
 											<div id="chart" class="bottom-right-bottom flex-100"></div>
 										</td>
 										<td class="center" style="width: 3%;"></td>
@@ -473,13 +466,13 @@
 											<table class="table table-bordered datatable dataTable"
 												id="grid_app">
 												<thead>
-													<tr class="replace-inputs">
-														<th style="width: 10%;" class="center">회차</th>
-														<th style="width: 10%;" class="center">회차불입금액</th>
-														<th style="width: 10%;" class="center">누적불입금액</th>
-														<th style="width: 10%;" class="center">회차이자</th>
-														<th style="width: 10%;" class="center">누적이자</th>
-														<th style="width: 10%;" class="center">회차원리금</th>
+													<tr class="replace-inputs" style="flex: 1 1 1" >
+														<th class="center">회차</th>
+														<th class="center">회차불입금액</th>
+														<th class="center">누적불입금액</th>
+														<th class="center">회차이자</th>
+														<th class="center">누적이자</th>
+														<th class="center">회차원리금</th>
 													</tr>
 												</thead>
 												<tbody id="grid_tbody">
