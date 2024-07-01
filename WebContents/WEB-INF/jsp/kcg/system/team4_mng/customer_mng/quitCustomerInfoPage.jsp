@@ -23,7 +23,8 @@
 		<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/sidebar-menu.jsp"
 			flush="false" />
 
-        <div class="main-content" style="background-image: url('/static_resources/team4/images/background-test.png'); background-size: cover; background-position: center; repeat: no-repeat">
+		<div class="main-content"
+			style="background-image: url('/static_resources/team4/images/background-test.png'); background-size: cover; background-position: center; repeat: no-repeat">
 			<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/header.jsp"
 				flush="false" />
 
@@ -36,17 +37,26 @@
 			<h2>고객관리 > 탈퇴고객 조회</h2>
 			<br />
 
-			<div class="dataTables_wrapper" id="vueapp" style="border-style: none;">
+			<div class="dataTables_wrapper" id="vueapp"
+				style="border-style: none;">
 				<template>
 					<table class="table table-bordered datatable dataTable"
-						id="grid_app" style="border-top-left-radius: 20px; border-top-right-radius: 20px;">
+						id="grid_app"
+						style="border-top-left-radius: 20px; border-top-right-radius: 20px;">
 						<thead>
 							<tr class="replace-inputs">
-								<th style="width: 10%;background-color: #FDEE87; color: black; border-top-left-radius: 20px;" class="center sorting">성명</th>
-								<th style="width: 10%;background-color: #FDEE87; color: black;" class="center sorting">주민번호</th>
-								<th style="width: 10%;background-color: #FDEE87; color: black;" class="center sorting">담당부서</th>
-								<th style="width: 10%;background-color: #FDEE87; color: black;" class="center sorting">담당직원</th>
-								<th style="width: 10%;background-color: #FDEE87; color: black; border-top-right-radius: 20px;" class="center sorting">휴면해제</th>
+								<th
+									style="width: 10%; background-color: #FDEE87; color: black; border-top-left-radius: 20px;"
+									class="center sorting">성명</th>
+								<th style="width: 10%; background-color: #FDEE87; color: black;"
+									class="center sorting">주민번호</th>
+								<th style="width: 10%; background-color: #FDEE87; color: black;"
+									class="center sorting">담당부서</th>
+								<th style="width: 10%; background-color: #FDEE87; color: black;"
+									class="center sorting">담당직원</th>
+								<th
+									style="width: 10%; background-color: #FDEE87; color: black; border-top-right-radius: 20px;"
+									class="center sorting">휴면해제</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -55,8 +65,9 @@
 								<td class="center">{{ maskIdNumber(item.customer_id_number)
 									}}</td>
 								<td class="center">{{item.dept}}</td>
-								<td class="center">{{item.name}}</td>
-								<td class="center"><buttun @click="releaseQuitCust(item)" type="button" class="btn">계정 복구</buttun></td>
+								<td class="center">{{item.name}}({{item.status_cd}})</td>
+								<td class="center"><buttun @click="releaseQuitCust(item)"
+										type="button" class="btn">계정 복구</buttun></td>
 							</tr>
 						</tbody>
 					</table>
@@ -103,6 +114,10 @@
 						}
 					},
 					releaseQuitCust: function(item) {
+					     if (item.status_cd === '퇴직') {
+					            alert('해당 고객의 담당자는 퇴직상태로 계정을 복구할 수 없습니다.\n관리자에서 문의하세요');
+					            return;
+					        }
 						if (item !== null) {
 			                // 확인 메시지 추가
 			                if (confirm('해당 고객을 휴면해제합니다')) {
