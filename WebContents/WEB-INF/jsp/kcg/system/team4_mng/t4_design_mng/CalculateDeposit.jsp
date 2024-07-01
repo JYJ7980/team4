@@ -1191,7 +1191,6 @@ var pop_cust = new Vue({
 
     function removeCommas(stringWithCommas) {
 
-        // 콤마(,)를 제거하고 숫자만 남기기
         var stringWithoutCommas = stringWithCommas.replace(/,/g, '');
         // 숫자로 변환하여 반환
         return parseFloat(stringWithoutCommas);

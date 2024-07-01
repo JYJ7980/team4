@@ -594,7 +594,7 @@ public class Calculator {
 	        			
 		        		if(i == vSelectMonth) {
 							map.put("round_num", i+fSelectMonth);
-							map.put("round_cycle_money",subMoney+roundCycleMoney);
+							map.put("round_cycle_money",roundCycleMoney);
 							map.put("round_pri_cycle_money", subMoney);
 							map.put("round_interest", roundInterest);
 							map.put("acc_interest", accInterest);

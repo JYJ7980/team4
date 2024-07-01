@@ -1156,7 +1156,7 @@ var pop_prod = new Vue({
 			}
 			console.log("==params값");
 			console.log(JSON.stringify(params));
-			cf_ajax("/team4/typeProductList", params, function(proList){
+			cf_ajax("/team4/saveProductList", params, function(proList){
 				pop_prod.dataList = proList;
 				console.log("==받아온 데이터 값");
 				console.log(JSON.stringify(pop_prod.dataList));
