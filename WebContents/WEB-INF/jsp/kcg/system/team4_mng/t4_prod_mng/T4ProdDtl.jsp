@@ -285,7 +285,7 @@ button[type="button"]:disabled {
 								class="form-control" id="product_sale_start_date"
 								ref="product_sale_start_date"
 								v-model="info.product_sale_start_date"
-								:disabled="new Date(info.product_sale_start_date) < new Date(currentDate)">
+								:disabled="new Date(info.product_sale_start_date) <= new Date(currentDate)">
 						</div>
 						<div class="form-group3">
 							<label class="label-position3"> ～ </label>
@@ -294,7 +294,7 @@ button[type="button"]:disabled {
 							<label class="label-position1">(종료일)</label> <input type="date"
 								class="form-control" id="product_sale_end_date"
 								ref="product_sale_end_date" v-model="info.product_sale_end_date"
-								:disabled="info.product_status =='9'">
+								:disabled="info.product_status =='9'||jikgub_nm != '이사'">
 						</div>
 					</div>
 					<div class="form-group1">
@@ -313,7 +313,7 @@ button[type="button"]:disabled {
 						<label for="product_status" class="fix-width-20">판매상태 :</label> <select
 							class="select-control" id="product_status" ref="product_status"
 							v-model="info.product_status"
-							:disabled="info.product_status =='9'">
+							:disabled="info.product_status =='9'||jikgub_nm != '이사'">
 							<option value="0">정상(판매)</option>
 							<option value="1">판매준비</option>
 							<option value="2">판매인가</option>
@@ -548,7 +548,11 @@ button[type="button"]:disabled {
 								this.gotoList();
 							},
 							gotoList : function() {
+								if(this.info.product_status=='9'){
+								cf_movePage('/system/team4/product/endList');	
+								} else{
 								cf_movePage('/system/team4/product/list');
+								}
 							},
 							checkName : function() {
 								if (cf_isEmpty(this.info.product_name)) {
