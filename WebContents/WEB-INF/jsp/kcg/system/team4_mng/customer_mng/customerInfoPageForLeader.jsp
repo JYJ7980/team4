@@ -22,7 +22,10 @@
 }
 
 .input-form {
+	display: flex;
+	margin-top: 10px;
 	margin-bottom: 10px;
+	margin-left: 40px;
 }
 
 .input-form label {
@@ -41,7 +44,6 @@
 	flex: 1;
 	padding: 10px;
 	border: 1px solid #ccc;
-	padding: 10px;
 }
 
 .details-container {
@@ -72,7 +74,7 @@
 
 .customer-list {
 	width: 500px;
-	height: 400px;
+	height: 380px;
 	overflow-y: auto;
 	border: 1px solid #ccc;
 	padding: 10px;
@@ -94,7 +96,10 @@
 	display: flex;
 	font-weight: bold;
 	border-bottom: 2px solid #ccc;
+	padding-top: 5px;
+	padding-left: 5px;
 	padding-bottom: 5px;
+	background-color: #FDEE87;
 }
 
 .table-row {
@@ -114,6 +119,8 @@
 	position: fixed;
 	left: 50%;
 	top: 50%;
+	text-align: center;
+	padding:15px;
 	transform: translate(-50%, -50%);
 	border: 1px solid #ccc;
 	background-color: #fff;
@@ -186,7 +193,7 @@
 	margin: 10% auto;
 	padding: 20px;
 	border: 1px solid #888;
-	width: 400px;
+	width: 550px;
 	height: 350px;
 }
 
@@ -194,6 +201,7 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	text-align: left;
 	justify-content: center;
 	font-size: 17px;
 }
@@ -201,6 +209,7 @@
 .modal-addconsult {
 	background-color: #fefefe;
 	margin: 15% auto;
+	text-align: center;
 	padding: 20px;
 	border: 1px solid #888;
 	width: 400px;
@@ -224,6 +233,18 @@ textarea {
 	resize: none;
 	padding: 10px;
 }
+
+.my-hr3 {
+	border: 0;
+	height: 3px;
+	background: #ccc;
+}
+
+.search-icon {
+	width: 30px;
+	height: 30px;
+	margin-left: 30px;
+}
 </style>
 
 
@@ -233,7 +254,8 @@ textarea {
 		<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/sidebar-menu.jsp"
 			flush="false" />
 
-		  <div class="main-content" style="background-image: url('/static_resources/team4/images/background-2.png'); background-size: cover; background-position: center; repeat: no-repeat">
+		<div class="main-content"
+			style="background-image: url('/static_resources/team4/images/background-2.png'); background-size: cover; background-position: center; repeat: no-repeat">
 			<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/header.jsp"
 				flush="false" />
 			<ol class="breadcrumb bc-3">
@@ -246,25 +268,27 @@ textarea {
 				<h2>고객관리 > 고객정보 관리</h2>
 				<br /> <span
 					style="font-size: 18px; font-weight: bold; color: black;">${userInfoVO.dept}</span>&nbsp;
-				고객관리 화면 <br> <a href="/system/team4/main">메인으로 돌아가기</a> <br>
-
-				<br> <input id="keywordInput" type="text" name="keyword"
-					v-model="searchKeyword" class="inputtext"
-					placeholder="고객 이름을 입력하세요">
-				<button @click="searchCustomers">이름 검색</button>
-				<button @click="getAllCustomers">전체 조회</button>
-				<label for="managerSelect">담당자별 조회:</label> <select
-					id="managerSelect" v-model="selectedManager"
-					@change="filterByManager">
-					<option value="">전체</option>
-					<option v-for="manager in filteredManager" :key="manager.user_id"
-						:value="manager.name">{{ manager.name }}({{
-						manager.jikgub_nm }})</option>
-
-				</select> <br>
+				고객관리 화면 <br> <br>
+				<div style="margin-left: -100px">
+					<img src="/static_resources/team4/images/돋보기.PNG"
+						class="search-icon"> <input id="keywordInput" type="text"
+						name="keyword" v-model="searchKeyword" class="inputtext"
+						placeholder="고객 이름을 입력하세요">
+					<button @click="searchCustomers">이름 검색</button>
+					<button @click="getAllCustomers">전체 조회</button>
+					<label for="managerSelect">담당자별 조회:</label> <select
+						id="managerSelect" v-model="selectedManager"
+						@change="filterByManager">
+						<option value="">전체</option>
+						<option v-for="manager in filteredManager" :key="manager.user_id"
+							:value="manager.name">{{ manager.name }}({{
+							manager.jikgub_nm }})</option>
+					</select>
+				</div>
+				<br>
 				<div id="customerTable" class="customer-container">
 					<div class="customer-one">
-						<div class="customer-list">
+						<div class="customer-list" style="margin-left: -40px;">
 
 							<h3 v-show="filteredCustomers.length >= 0">전체 고객 정보</h3>
 							<div v-show="filteredCustomers.length == 0">
@@ -290,7 +314,8 @@ textarea {
 								</div>
 							</div>
 						</div>
-						<div class="customer-list" v-if="selectedCustomer !== null">
+						<div class="customer-list" v-if="selectedCustomer !== null"
+							style="margin-left: -40px; height: 220px; background-color: white;">
 							<h3>상담내역</h3>
 							<div v-if="consults.length > 0">
 								<div class="table-header">
@@ -311,20 +336,20 @@ textarea {
 							<div v-else>
 								<p>상담 내역이 없습니다.</p>
 							</div>
-							<!-- 							상세내역 모달 -->
+
 							<!-- 							상세내역 모달 -->
 							<div class="modal" v-if="selectedConsult !== null">
 								<div class="modal-content">
 									<span class="close" @click="closeModal">&times;</span>
 									<div class="modal-body">
 										<div>
-											<label>상담시간 </label><input type="text"
+											<label style="margin-left: -120px;">상담일시: </label><input type="text"
 												v-model="selectedConsult.con_date" disabled="disabled">
 										</div>
 										<br>
 										<div>
 											<label>상담내용</label><br>
-											<textarea cols="25" rows="5"
+											<textarea cols="40" rows="5"
 												v-model="selectedConsult.consult_context"
 												disabled="disabled"></textarea>
 										</div>
@@ -335,52 +360,58 @@ textarea {
 							<div class="modal" v-if="showAddConsultModal">
 								<div class="modal-addconsult">
 									<span class="close" @click="closeAddConsultModal">&times;</span>
-									<div class="input-form">
-									<span>**상담내역을 추가해주세요**</span><br>
-										<label for="consultTitle">제목:</label> <input type="text"
-											id="consultTitle" v-model="consultTitle">
+									<div class="modal-body">
+										<span>**상담내역을 추가해주세요**</span><br>
+										<div>
+											<label for="consultTitle" style="margin-left: -50px;">제목: </label>
+											<input type="text" id="consultTitle" v-model="consultTitle">
 
+										</div>
+										<div>
+											<label for="consultContext" style="margin-left: 10px;">내용:</label>
+											<textArea rows="5" cols="25" id="consultContext"
+												v-model="consultContext"></textArea>
+										</div>
 									</div>
-									<div class="input-form">
-										<label for="consultContext">내용:</label>
-										<textArea rows="4" cols="35" id="consultContext"
-											v-model="consultContext"></textArea>
-									</div>
-
-									<br>
-									<button @click="addConsult">추가</button>
-									<button @click="resetConsultForm">취소</button>
+									<button type="button" class="btn" @click="addConsult">추가</button>
+									<button type="button" class="btn" @click="resetConsultForm">취소</button>
 								</div>
 							</div>
 
 						</div>
 					</div>
 					<!-- 선택된 고객의 상세 정보 입력 폼 -->
-					<div class="customer-details" v-if="selectedCustomer !== null">
+					<div class="customer-details" v-if="selectedCustomer !== null"
+						style="height: 670px; margin-top: -40px;">
 						<div class="details-container">
 							<div class="customer-info">
 								<h3>고객 정보</h3>
 								<div class="input-form">
-									<label for="customerSubDate">등록일</label> <input type="text"
-										id="customerSubDate"
-										v-model="selectedCustomer.customer_sub_date" readonly>
+									<label for="customerSubDate" style="margin-left: 45px;">등록일</label>
+									<input type="text" id="customerSubDate"
+										v-model="selectedCustomer.customer_sub_date"
+										style="margin-left: 10px;" readonly>
 								</div>
 								<div class="input-form">
-									<label for="customerName">고객 이름</label> <input type="text"
-										id="customerName" v-model="selectedCustomer.customer_name">
+									<label for="customerName" style="margin-left: 28px;">고객
+										이름</label> <input type="text" id="customerName"
+										v-model="selectedCustomer.customer_name"
+										style="margin-left: 10px;">
 									<button type="button" class="btn"
-										@click="openAddConsultModal()">상담추가</button>
+										@click="openAddConsultModal()" style="margin-left: 10px;">상담추가</button>
 								</div>
 								<div class="input-form">
 									<label for="customerIdNumber">고객 주민번호</label> <input
 										type="text" id="customerIdNumber"
 										:value="maskIdNumber(selectedCustomer.customer_id_number)"
-										readonly>
-									<button @click="toggleMasking">확인</button>
+										readonly style="margin-left: 10px;">
+									<button @click="toggleMasking" style="margin-left: 10px;">확인</button>
 								</div>
 								<div class="input-form">
-									<label for="customerLevel">고객 등급</label> <select
-										id="customerLevel" v-model="selectedCustomer.customer_level">
+									<label for="customerLevel" style="margin-left: 28px;">고객
+										등급</label> <select id="customerLevel"
+										v-model="selectedCustomer.customer_level"
+										style="margin-left: 10px;">
 										<option value="1">일반</option>
 										<option value="2">우수</option>
 										<option value="3">VIP</option>
@@ -391,54 +422,73 @@ textarea {
 								</div>
 								<div class="input-form">
 									<label for="customerPhone">고객 전화번호</label> <input type="text"
-										id="customerPhone" v-model="selectedCustomer.customer_phone">
+										id="customerPhone" style="margin-left: 10px;"
+										v-model="selectedCustomer.customer_phone">
 								</div>
 								<div class="input-form">
-									<label for="customerSubTel">고객 비상연락망</label> <input type="text"
-										id="customerSubTel"
+									<label for="customerSubTel" style="margin-left: 18px;">비상연락망</label>
+									<input type="text" id="customerSubTel"
+										style="margin-left: 10px;"
 										v-model="selectedCustomer.customer_sub_tel">
 								</div>
 								<div class="input-form">
-									<label for="customerEmail">고객 이메일</label> <input type="text"
-										id="customerEmail" v-model="selectedCustomer.customer_email">
+									<label for="customerEmail" style="margin-left: 15px;">고객
+										이메일</label> <input type="text" id="customerEmail"
+										style="margin-left: 10px;"
+										v-model="selectedCustomer.customer_email">
 								</div>
 								<div class="input-form">
-									<label for="customerJob">고객 직업</label> <input type="text"
-										id="customerJob" v-model="selectedCustomer.customer_job">
+									<label for="customerJob" style="margin-left: 29px;">고객
+										직업</label> <input type="text" id="customerJob"
+										style="margin-left: 10px;"
+										v-model="selectedCustomer.customer_job">
 								</div>
 								<div class="input-form">
-									<label for="customerAddr">고객 주소</label> <input type="text"
-										id="customerAddr" v-model="selectedCustomer.customer_addr">
+									<label for="customerAddr" style="margin-left: 29px;">고객
+										주소</label> <input type="text" id="customerAddr"
+										style="margin-left: 10px;"
+										v-model="selectedCustomer.customer_addr">
 								</div>
 								<br>
-								<button @click="deleteCustomer">삭제</button>
-								<button @click="updateCustomer">수정</button>
-								<button @click="resetForm">신규</button>
-							</div>
-							<div class="other-info">
-								<div class="manager-info">
-									<h3>관리자 정보</h3>
+								<div style="margin-left: 150px;">
+									<button @click="deleteCustomer">삭제</button>
+									<button @click="updateCustomer">수정</button>
+									<button @click="resetForm">신규</button>
+								</div>
+
+								<hr>
+								<div class="manager-info" style="border-style: none;">
+									<h3>담당자 정보</h3>
 									<div class="input-form">
-										<label for="userName">관리자 이름</label> <input type="text"
-											id="userName" v-model="selectedCustomer.name" disabled>
+										<label for="userName" style="margin-left: 10px;">관리자
+											이름</label> <input type="text" id="userName"
+											v-model="selectedCustomer.name" disabled
+											style="margin-left: 10px;">
 										<button type="button" class="btn" @click="popupUser()">
 											<i class="fa fa-search"></i> 검색
 										</button>
 									</div>
 									<div class="input-form">
-										<label for="userDept">관리자 부서</label> <input type="text"
-											id="userDept" v-model="selectedCustomer.dept" disabled>
+										<label for="userDept" style="margin-left: 10px;">관리자
+											부서</label> <input type="text" id="userDept"
+											v-model="selectedCustomer.dept" disabled
+											style="margin-left: 10px;">
 									</div>
 									<div class="input-form">
-										<label for="userjikgub">관리자 직급</label> <input type="text"
-											id="userJikgub" v-model="selectedCustomer.jikgub_nm" disabled>
+										<label for="userjikgub" style="margin-left: 10px;">관리자
+											직급</label> <input type="text" id="userJikgub"
+											v-model="selectedCustomer.jikgub_nm" disabled
+											style="margin-left: 10px;">
 										<button @click="updateUser">수정</button>
 									</div>
 								</div>
+							</div>
+							<br>
+							<div class="other-info">
 								<br>
-								<div class="sub-product">
+								<div class="sub-product" style="border-style: none;">
 
-									<h3>가입상품 정보</h3>
+									<h3 style="margin-top: -5px;">가입상품 정보</h3>
 									<div v-if="subProducts.length > 0">
 										<div class="table-header">
 											<div class="table-cell">가입일</div>
@@ -458,9 +508,10 @@ textarea {
 									</div>
 
 								</div>
+								<hr class="my-hr3">
 								<br>
-								<div class="design-product">
-									<h3>설계상품 정보</h3>
+								<div class="design-product" style="border-style: none;">
+									<h3 style="margin-top: -5px;">설계상품 정보</h3>
 									<div v-if="designProducts.length > 0">
 										<div class="table-header">
 											<div class="table-cell">설계일</div>
@@ -479,12 +530,11 @@ textarea {
 									<div v-else>
 										<p>설계상품 내역이 없습니다.</p>
 									</div>
-
 								</div>
 							</div>
 						</div>
 					</div>
-					<div class="customer-details" v-else>
+					<div class="customer-details" v-else style="margin-top: -50px;">
 						<div class="details-container">
 							<div class="customer-info">
 								<!-- 선택된 고객이 없는 경우의 메시지 -->
@@ -492,51 +542,66 @@ textarea {
 								<p>**표시는 필수 입력값 입니다. [최조 등록 시 고객 등급은 일반 등급으로 등록]</p>
 								<h3>고객 정보</h3>
 								<div class="input-form">
-									<label for="customerName">**고객 이름</label> <input type="text"
-										id="customerName" v-model="customerName" required>
+									<label for="customerName" style="margin-left: 57px;">**고객
+										이름</label> <input type="text" id="customerName" v-model="customerName"
+										required style="margin-left: 10px;">
 								</div>
 								<div class="input-form">
-									<label for="customerIdNumber">**고객 주민번호</label> <input
-										type="text" id="customerIdNumber" v-model="customerIdNumber"
-										required maxlength="14"> <small>예시:
-										YYMMDD-1234567</small>
+									<label for="customerIdNumber" style="margin-left: 30px;">**고객
+										주민번호</label> <input type="text" id="customerIdNumber"
+										v-model="customerIdNumber" required maxlength="14"
+										style="margin-left: 10px;">
+								</div>
+								<div class="input-form" style="margin-left: 210px;">
+									<small>예시: YYMMDD-1234567</small>
 								</div>
 								<div class="input-form">
-									<label for="customerPhone">**고객 전화번호</label> <input type="text"
-										id="customerPhone" v-model="customerPhone" required>
+									<label for="customerPhone" style="margin-left: 30px;">**고객
+										전화번호</label> <input type="text" id="customerPhone"
+										v-model="customerPhone" required style="margin-left: 10px;">
 								</div>
 								<div class="input-form">
-									<label for="customerSubTel">**고객 비상연락망</label> <input
-										type="text" id="customerSubTel" v-model="customerSubTel">
+									<label for="customerSubTel" style="margin-left: 17px;">**고객
+										비상연락망</label> <input type="text" id="customerSubTel"
+										v-model="customerSubTel" style="margin-left: 10px;">
 								</div>
 								<div class="input-form">
-									<label for="customerEmail">**고객 이메일</label> <input type="email"
-										id="customerEmail" v-model="customerEmail" required>
+									<label for="customerEmail" style="margin-left: 45px;">**고객
+										이메일</label> <input type="email" id="customerEmail"
+										v-model="customerEmail" required style="margin-left: 10px;">
 								</div>
 								<div class="input-form">
-									<label for="customerJob">고객 직업</label> <input type="text"
-										id="customerJob" v-model="customerJob">
+									<label for="customerJob" style="margin-left: 70px;">고객
+										직업</label> <input type="text" id="customerJob" v-model="customerJob"
+										style="margin-left: 10px;">
 								</div>
 								<div class="input-form">
-									<label for="customerAddr">고객 주소</label> <input type="text"
-										id="customerAddr" v-model="customerAddr">
+									<label for="customerAddr" style="margin-left: 70px;">고객
+										주소</label> <input type="text" id="customerAddr" v-model="customerAddr"
+										style="margin-left: 10px;">
 								</div>
-								<button @click="addCustomer">등록</button>
-								<button @click="resetForm">초기화</button>
+								<div style="margin-left: 250px;">
+									<button @click="addCustomer">등록</button>
+									<button @click="resetForm">초기화</button>
+								</div>
 							</div>
 							<div class="manager-info">
 								<h3>관리자 정보</h3>
 								<div class="input-form">
-									<label for="userName">관리자 이름</label> <input type="text"
-										id="userName" value="${userInfoVO.name}" disabled>
+									<label for="userName" style="margin-left: 10px;">관리자 이름</label>
+									<input type="text" id="userName" value="${userInfoVO.name}"
+										disabled style="margin-left: 10px;">
 								</div>
 								<div class="input-form">
-									<label for="userDept">관리자 부서</label> <input type="text"
-										id="userDept" value="${userInfoVO.dept}" disabled>
+									<label for="userDept" style="margin-left: 10px;">관리자 부서</label>
+									<input type="text" id="userDept" value="${userInfoVO.dept}"
+										disabled style="margin-left: 10px;">
 								</div>
 								<div class="input-form">
-									<label for="userjikgub">관리자 직급</label> <input type="text"
-										id="userJikgub" value="${userInfoVO.jikgubNm}" disabled>
+									<label for="userjikgub" style="margin-left: 10px;">관리자
+										직급</label> <input type="text" id="userJikgub"
+										value="${userInfoVO.jikgubNm}" disabled
+										style="margin-left: 10px;">
 								</div>
 							</div>
 						</div>
@@ -562,10 +627,12 @@ textarea {
 						<tr>
 							<th>이름</th>
 							<th>소속 부서</th>
+							<th>직급</th>
 						</tr>
 						<tr v-for="manager in Managers" @click="selectManager(manager)">
 							<td>{{ manager.name }}</td>
 							<td>{{ manager.dept }}</td>
+							<td>{{ manager.jikgub_nm }}</td>
 						</tr>
 					</table>
 				</div>

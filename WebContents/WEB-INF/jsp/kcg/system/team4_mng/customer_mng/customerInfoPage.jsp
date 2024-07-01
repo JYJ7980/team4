@@ -134,7 +134,7 @@
 	margin: 10% auto;
 	padding: 20px;
 	border: 1px solid #888;
-	width: 400px;
+	width: 550px;
 	height: 350px;
 }
 
@@ -142,6 +142,7 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	text-align: left;
 	justify-content: center;
 	font-size: 17px;
 }
@@ -149,6 +150,7 @@
 .modal-addconsult {
 	background-color: #fefefe;
 	margin: 15% auto;
+	text-align: center;
 	padding: 20px;
 	border: 1px solid #888;
 	width: 400px;
@@ -212,10 +214,10 @@ textarea {
 						class="search-icon"> <input id="keywordInput" type="text"
 						name="keyword" v-model="searchKeyword" class="inputtext"
 						placeholder="이름을 입력하세요">
-						<button @click="searchCustomers" class="btn">이름 검색</button>
-				<button @click="getAllCustomers" class="btn">전체 조회</button>
+					<button @click="searchCustomers" class="btn">이름 검색</button>
+					<button @click="getAllCustomers" class="btn">전체 조회</button>
 				</div>
-				
+
 				<br>
 				<div id="customerTable" class="customer-container">
 					<div class="customer-one">
@@ -272,13 +274,13 @@ textarea {
 									<span class="close" @click="closeModal">&times;</span>
 									<div class="modal-body">
 										<div>
-											<label>상담시간 </label><input type="text"
+											<label style="margin-left: -120px;">상담일시: </label><input type="text"
 												v-model="selectedConsult.con_date" disabled="disabled">
 										</div>
 										<br>
 										<div>
 											<label>상담내용</label><br>
-											<textarea cols="25" rows="5"
+											<textarea cols="40" rows="5"
 												v-model="selectedConsult.consult_context"
 												disabled="disabled"></textarea>
 										</div>
@@ -289,21 +291,21 @@ textarea {
 							<div class="modal" v-if="showAddConsultModal">
 								<div class="modal-addconsult">
 									<span class="close" @click="closeAddConsultModal">&times;</span>
-									<div class="input-form">
-										<span>**상담내역을 추가해주세요**</span><br> <label
-											for="consultTitle">제목:</label> <input type="text"
-											id="consultTitle" v-model="consultTitle">
+									<div class="modal-body">
+										<span>**상담내역을 추가해주세요**</span><br>
+										<div>
+											<label for="consultTitle" style="margin-left: -50px;">제목:
+											</label> <input type="text" id="consultTitle" v-model="consultTitle">
 
+										</div>
+										<div>
+											<label for="consultContext" style="margin-left: 10px;">내용:</label>
+											<textArea rows="5" cols="25" id="consultContext"
+												v-model="consultContext"></textArea>
+										</div>
 									</div>
-									<div class="input-form">
-										<label for="consultContext">내용:</label>
-										<textArea rows="4" cols="35" id="consultContext"
-											v-model="consultContext"></textArea>
-									</div>
-
-									<br>
-									<button @click="addConsult">추가</button>
-									<button @click="resetConsultForm">취소</button>
+									<button type="button" class="btn" @click="addConsult">추가</button>
+									<button type="button" class="btn" @click="resetConsultForm">취소</button>
 								</div>
 							</div>
 
@@ -611,7 +613,6 @@ new Vue({
     		}
 			cf_movePage("/team4/designList", params);
     	},
-
         getAllCustomers: function() {
         	 axios.get('/system/team4/getCustInfo')
              .then(response => {
@@ -900,8 +901,6 @@ new Vue({
 </script>
 
 
-
-=======
 </body>
 
 </html>

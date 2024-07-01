@@ -71,6 +71,13 @@ public class T4designMngCtl {
 		List<CmmnMap> productList = cmmnDao.selectList("selectTypeProductList", params);
 		return productList;
 	}
+	
+	@RequestMapping("saveProductList")
+	public List<CmmnMap> saveProductList(CmmnMap params){
+		
+		List<CmmnMap> productList = cmmnDao.selectList("selectSaveProductList", params);
+		return productList;
+	}
 
 	@RequestMapping("customerList")
 	public List<CmmnMap> customerList(CmmnMap params){

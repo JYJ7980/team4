@@ -501,7 +501,10 @@ function pop_sub_info(mapData) {
 	                loan: mapData.loan,
 	                sub_start_date: mapData.sub_start_date,
 	                sub_end_date: mapData.sub_end_date,
-	                
+	                highest_rate : mapData.highest_rate,
+	                lowest_Rate : mapData.lowest_rate,
+	                highest_money : mapData.highest_money,
+	                lowest_money : mapData.lowest_money
 			    }
 			},
 			mounted : function(){
@@ -510,6 +513,60 @@ function pop_sub_info(mapData) {
 
 			methods : {
 				updateProduct : function(){
+					
+		            if(this.info.pro_interest_rate > this.info.highest_rate){
+		            	alert("상품 최대 금리보다 높습니다.")
+		            	 window.location.href = "/team4/subscriptionList";
+		            	return;
+		            }
+		            if(this.info.pro_interest_rate < this.info.lowest_rate){
+		            	alert("상품 최소 금리보다 낮습니다.")
+		                 window.location.href = "/team4/subscriptionList";                       
+		            	return;
+		            }
+
+					
+					if(this.info.product_type == "예금"){
+						if(this.info.start_money > this.info.highest_money){
+							alert("상품 최대 금액보다 높게 설정하였습니다.")
+			                 window.location.href = "/team4/subscriptionList";                       
+		            	return;
+						}
+						if(this.info.start_money < this.info.lowest_money){
+							alert("상품 최대 금액보다 적게 설정하였습니다.")
+			                 window.location.href = "/team4/subscriptionList";                       
+		            	return;
+						}
+					}
+					
+					if(this.info.product_type == "적금"){
+						if(this.info.cycle_money > this.info.highest_money){
+							alert("상품 최대 금액보다 높게 설정하였습니다.")
+			                 window.location.href = "/team4/subscriptionList";  
+			            	return;
+						}
+						if(this.info.cycle_money < this.info.lowest_money){
+							alert("상품 최대 금액보다 적게 설정하였습니다.")
+			                 window.location.href = "/team4/subscriptionList";        
+			            	return;
+						}
+					}
+					
+					if(this.info.product_type == "대출"){
+						if(this.info.loan > this.info.highest_money){
+							alert("상품 최대 금액보다 높게 설정하였습니다.")
+			                 window.location.href = "/team4/subscriptionList";  
+			            	return;
+						}
+						if(this.info.loan < this.info.lowest_money){
+							alert("상품 최대 금액보다 적게 설정하였습니다.")
+			                 window.location.href = "/team4/subscriptionList";     
+			            	return;
+						}
+					}
+
+					
+					
 					var params = {
 						sub_id: this.info.sub_id,
 						product_id: this.info.product_id,
@@ -530,7 +587,7 @@ function pop_sub_info(mapData) {
 		                axios.post('/team4/updateSubscription', { params : params })
 		                    .then(response => {
 		                    		alert("변경 완료");
-			                        vueapp.getList(false); // 목록을 다시 로드
+		       	                 window.location.href = "/team4/subscriptionList";                       
 		                        })
 		                    .catch(error => {
 		                        console.error('항목 삭제 중 에러 발생:', error);
