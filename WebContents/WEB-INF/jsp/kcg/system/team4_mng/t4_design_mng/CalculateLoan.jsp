@@ -1,350 +1,565 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
-	<jsp:include page="/WEB-INF/jsp/kcg/_include/system/header_meta.jsp" flush="false"/>
-	<!-- Imported styles on this page -->
-	<link rel="stylesheet" href="/static_resources/system/js/datatables/datatables.css">
-	<link rel="stylesheet" href="/static_resources/system/js/select2/select2-bootstrap.css">
-	<link rel="stylesheet" href="/static_resources/system/js/select2/select2.css">
-	<link rel="stylesheet" href="/static_resources/system/js/datatables/promion.css">
-	
-	<!-- Bilboard Chart(https://naver.github.io/billboard.js) -->
-	<script src="https://d3js.org/d3.v6.min.js"></script>
-	<script src="/static_resources/system/js/datatables/billboard.js"></script>
-	<link rel="stylesheet" href="/static_resources/system/js/datatables/billboard.css">
-	
-	<title>금융계산기</title>
+<jsp:include page="/WEB-INF/jsp/kcg/_include/system/header_meta.jsp"
+	flush="false" />
+<!-- Imported styles on this page -->
+<link rel="stylesheet"
+	href="/static_resources/system/js/datatables/datatables.css">
+<link rel="stylesheet"
+	href="/static_resources/system/js/select2/select2-bootstrap.css">
+<link rel="stylesheet"
+	href="/static_resources/system/js/select2/select2.css">
+<link rel="stylesheet"
+	href="/static_resources/system/js/datatables/promion.css">
+
+<!-- Bilboard Chart(https://naver.github.io/billboard.js) -->
+<script src="https://d3js.org/d3.v6.min.js"></script>
+<script src="/static_resources/system/js/datatables/billboard.js"></script>
+<link rel="stylesheet"
+	href="/static_resources/system/js/datatables/billboard.css">
+<style type="text/css">
+.main-box {
+	width: 1200px;
+	margin: 0 auto;
+}
+
+.user-info-box {
+	width: 30%;
+}
+
+.calculate-box {
+	width: 70%;
+	justify-content: center;
+	margin: 0 auto;
+}
+
+.form-group1 {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	width: 100%;
+	padding-top: 8px;
+}
+
+.form-group1 label {
+	font-weight: bold;
+	text-align: right;
+}
+
+.label-box1 {
+	display: flex;
+	width: 30%;
+	justify-content: flex-end;
+	align-items: center;
+}
+
+.label-box2 {
+	display: flex;
+	width: 20%;
+	justify-content: flex-end;
+	align-items: center;
+}
+
+.input-box {
+	position: relative;
+	display: flex;
+	width: 60%;
+}
+
+.input-box input {
+	width: 100%;
+	height: 30px;
+	justify-content: flex-start;
+	margin-left: 10px;
+	align-items: center;
+	border: 1px solid rgb(212, 212, 212);
+	align-items: center;
+}
+
+.input-box button {
+	position: absolute;
+	height: 30px;
+	align-items: center;
+	right: 0%;
+}
+
+.select-box {
+	display: flex;
+	width: 60%;
+}
+
+.select-box select {
+	width: 48%;
+	height: 30px;
+	justify-content: flex-start;
+	margin-left: 10px;
+	align-items: center;
+	border: 1px solid rgb(212, 212, 212);
+	border-radius: 3px;
+}
+</style>
+<title>금융계산기</title>
 </head>
 <body class="page-body">
 
-<div class="page-container">
+	<div class="page-container">
 
-	<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/sidebar-menu.jsp" flush="false"/>
+		<jsp:include page="/WEB-INF/jsp/kcg/_include/team4/sidebar-menu.jsp"
+			flush="false" />
 
-	<div class="main-content">
+		<div class="main-content">
 
-		<jsp:include page="/WEB-INF/jsp/kcg/_include/system/header.jsp" flush="false"/>
-		
-		<ol class="breadcrumb bc-3">
-			<li><a href="#none" onclick="cf_movePage('/system')"><i class="fa fa-home"></i>Home</a></li>
-			<li class="active"><strong>금융계산기</strong></li>
-		</ol>
-	
-		<h2>프로모션 > 금융계산기 (대출 설계)</h2>
-		<br/>
-		
-		<div class="row">
-			<div class="dataTables_wrapper flex" id="vueapp">
-			<template>
-			
-				<div class="left flex-column flex-gap-10 flex-40" v-if="info.simpl_ty_cd == '1'">
-                    <label>고객정보:</label>
-                    <div class="form-group">
-                        <label>성명:</label>
-                        <input class="form-control" v-model="custInfo.customer_name" disabled />
-                        <button type="button" class="btn" @click="popupCust()">
-                             <i class="fa fa-search"></i>
-                         </button>
-                    </div>
-                    <div class="form-group">
-                        <label>주민번호:</label>
-                        <input class="form-control" v-model="custInfo.customer_id_number" disabled />
-                    </div>
-                    <div class="form-group">
-                        <label>E-mail:</label>
-                        <input class="form-control" v-model="custInfo.customer_email" disabled />
-                    </div>
-                    <div class="form-group">
-                        <label>전화번호:</label>
-                        <input class="form-control" v-model="custInfo.customer_phone" disabled />
-                    </div>
-                    <div class="form-group">
-                        <label>비상연락처:</label>
-                        <input class="form-control" v-model="custInfo.customer_sub_tel" disabled />
-                    </div>
-                    <div class="form-group">
-                        <label>직업:</label>
-                        <input class="form-control" v-model="custInfo.customer_job" disabled />
-                    </div>
-                    <div class="form-group">
-                        <label>주소:</label>
-                        <input class="form-control" v-model="custInfo.customer_addr" disabled />
-                    </div>
-                    <div class="form-group">
-                        <label>관리담당자ID:</label>
-                        <input class="form-control" v-model="custInfo.user_id" disabled />
-                    </div>
-                    <div class="form-group">
-                        <label>관리담당자:</label>
-                        <input class="form-control" v-model="custInfo.name" disabled />
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>부서:</label>
-                        <input class="form-control" v-model="custInfo.dept" disabled />
-                    </div>
-                    <div class="form-group">
-                        <label>직위:</label>
-                        <input class="form-control" v-model="custInfo.jikgub_nm" disabled />
-                    </div>
-                </div>
-                
-				<div class="right flex-column flex-100">
-                    <div class="right-top">
-                        <ul class="nav">
-                            <li class="nav-tab" @click="tabChange(1)">적금 설계</li>
-                            <li class="nav-tab" @click="tabChange(2)">목돈마련적금 설계</li>
-                            <li class="nav-tab " @click="tabChange(3)">예금 설계</li>
-                            <li class="nav-tab active" @click="tabChange(4)">대출 설계</li>
-                        </ul>
-                        <div class="nav-content flex-column flex-gap-10">
-                        	<div class="form-group" style="justify-content: left">
-                                <label>설계번호:</label>
-                                <input class="form-control" id="design_id" v-model="info.design_id" disabled />
-                            </div>
-                            <div class="form-group" style="justify-content: left">
-                                <label>상품선택:</label>
-                                <input class="form-control" id="prod_cd" v-model="proInfo.product_id" disabled />
-                                <input class="form-control" id="prod_nm" v-model="proInfo.product_name" />
-                                <button type="button" class="btn" @click="popupProd()">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </div>
-                            <div class="form-group" style="justify-content: left">
-                                <label>대출금액 (원):</label>
-                                <input class="form-control flex-50" type="text" id="dpst_amt" v-model="info.sub_money" style="width: 700px;"/>
-                                <button type="button" class="btn btn-transparent flex-20" @click="setCircleAcmlAmt(10)">+10만원</button>
-                                <button type="button" class="btn btn-transparent flex-20" @click="setCircleAcmlAmt(50)">+50만원</button>
-                                <button type="button" class="btn btn-transparent flex-20" @click="setCircleAcmlAmt(100)">+100만원</button>
-                                <button type="button" class="btn btn-navy flex-20" @click="setCircleAcmlAmt(0)">정정</button>
-                            </div>
-                                                        
-                            <div class="form-group" style="justify-content: left">
-                                <label>이자유형:</label>
-								<select class="form-control" id="int_tax_ty_cd" v-model="info.loan_repayment_type" style="padding-top: 3px;">
-									<option value="원리금 균등">원리금 균등 상환방식</option>
-									<option value="원금 균등">원금 균등 상환방식</option>
-									<option value="만기 일시">만기일시상환방식</option>
-								</select>
-                            </div>
-                            
+			<jsp:include page="/WEB-INF/jsp/kcg/_include/system/header.jsp"
+				flush="false" />
 
-                            <div class="form-group" style="justify-content: left">
-                                <label>고정금리 (%):</label>
-                                <input class="form-control" type="text" id="aply_rate" v-model="info.f_interest_rate" />
-                            </div>
-                            <div class="form-group" style="justify-content: left">
-                                <label> 고정금리 예치기간 (개월):</label>
-                                <input class="form-control flex-50" type="text" id="dpst_prd" v-model="info.f_select_month" style="width: 700px;"/>
-                                <button type="button" class="btn btn-transparent flex-20" @click="fSetGoalPrd(3)">+3개월</button>
-                                <button type="button" class="btn btn-transparent flex-20" @click="fSetGoalPrd(6)">+6개월</button>
-                                <button type="button" class="btn btn-transparent flex-20" @click="fSetGoalPrd(12)">+12개월</button>
-                                <button type="button" class="btn btn-navy flex-20" @click="fSetGoalPrd(0)">정정</button>
-                            </div>
-                            
-                            <div class="form-group" style="justify-content: left">
-                                <label>변동금리 (%):</label>
-                                <input class="form-control" type="text" id="aply_rate" v-model="info.v_interest_rate" />
-                            </div>
-                            <div class="form-group" style="justify-content: left">
-                                <label> 변동금리 예치기간 (개월):</label>
-                                <input class="form-control flex-50" type="text" id="dpst_prd" v-model="info.v_select_month" style="width: 700px;"/>
-                                <button type="button" class="btn btn-transparent flex-20" @click="vSetGoalPrd(3)">+3개월</button>
-                                <button type="button" class="btn btn-transparent flex-20" @click="vSetGoalPrd(6)">+6개월</button>
-                                <button type="button" class="btn btn-transparent flex-20" @click="vSetGoalPrd(12)">+12개월</button>
-                                <button type="button" class="btn btn-navy flex-20" @click="vSetGoalPrd(0)">정정</button>
-                            </div>
-                            <div class="form-group" style="justify-content: left">
-                                <label>중도상환 수수료 (%):</label>
-                                <input class="form-control" type="text" id="aply_rate" v-model="info.rate" />
-                            </div>
-                        </div>
-                    </div>
-                    
-					<div class="dt-buttons" style="padding-top: 15px;">
-						<input id="external" type="radio" v-model="info.simpl_ty_cd" value="1">
-						<label class="tab_item" for="external">정상설계</label>
-						<input id="internal" type="radio" v-model="info.simpl_ty_cd"  value="0">
-						<label class="tab_item" for="internal">간편설계</label>
-					</div>
-					<div class="dataTables_filter">
-						<button type="button" class="btn btn-red btn-small" @click="prcCalc()">
-							이자계산
-						</button>
-					    <button type="button" class="btn btn-orange btn-small" v-if="!info.design_id" @click="save()">
-					        설계저장
-					    </button>
-					    <button type="button" class="btn btn-orange btn-small" v-else @click="update()">
-					        변경
-					    </button>
-						<button type="button" class="btn btn-blue btn-icon btn-small" @click="gotoList()">
-							목록 <i class="entypo-list"></i>
-						</button>
-					</div>
-					
-                    <ul class="nav">
-                        <li class="nav-tab active">계산결과</li>
-                    </ul>
-                    
-                    <div class="right-bottom flex-100">
-	                       <table>
-	                        <tr>
-	                        	<td class="center" style="width: 40%; vertical-align: top;">
-	                        		<div class="form-wrapper flex flex-wrap flex-gap-10">
+			<ol class="breadcrumb bc-3">
+				<li><a href="#none" onclick="cf_movePage('/system')"><i
+						class="fa fa-home"></i>Home</a></li>
+				<li class="active"><strong>금융계산기</strong></li>
+			</ol>
 
-			                               <div class="form-group" v-if="info.loan_repayment_type ==='원리금 균등'">
-			                                   <label>매 회차 납입 금액:</label>
-			                                   <input class="form-control" id="int_tax_amt" v-model="info.cycle_money" disabled />
-			                               </div>
+			<h2>프로모션 > 금융계산기 (대출 설계)</h2>
+			<br />
 
-			                               <div class="form-group">
-			                                   <label>총 납입 이자:</label>
-			                                   <input class="form-control" id="int_tax_amt" v-model="info.final_interest" disabled />
-			                               </div>
-			                               <div class="form-group">
-			                                   <label>총 상환 금액:</label>
-			                                   <input class="form-control" id="atx_rcve_amt" v-model="info.final_money" disabled />
-			                               </div>
-			                               
-			                           </div>	
-			                           
-		                            <div class="panel-heading">
-										<div class="panel-title">계산결과 CHART</div>
-									</div>										
-									<div id="chart" class="bottom-right-bottom flex-100"></div>
-	                        		</td>
-	                        		<td class="center" style="width: 3%;">
-	                        		</td>
-	                        		<td class="center" style="width: 57%; vertical-align: top;">
-			                            <table class="table table-bordered datatable dataTable" id="grid_app">
-											<thead>
-												<tr class="replace-inputs">
-													<th style="width: 8%;" class="center">회차</th>
-													<th style="width: 10%;" class="center">납입금액</th>
-													<th style="width: 10%;" class="center">원리금액</th>
-													<th style="width: 7%;" class="center">이자</th>
-													<th style="width: 10%;" class="center">누적 이자</th>
-													<th style="width: 7%;" class="center">잔금</th>
-													<th style="width: 15%;" class="center">중도상환 수수료</th>
-													
-												</tr>
-											</thead>
-											<tbody id="grid_tbody">
-												<tr v-for="item in calculate_arr" style="cursor: pointer;">
-													<td class="right" style="text-align: right;">{{item.round_num}}</td>
-													<td class="right" style="text-align: right;">{{item.round_cycle_money}}</td>
-													<td class="right" style="text-align: right;">{{item.round_pri_cycle_money}}</td>
-													<td class="right" style="text-align: right;">{{item.round_interest}}</td>
-													<td class="right" style="text-align: right;">{{item.acc_interest}}</td>
-													<td class="right" style="text-align: right;">{{item.round_total}}</td>
-													<td class="right" style="text-align: right;">{{item.early_repayment_fee}}</td>
-												</tr>
-											
-											</tbody>
-										</table>
-	                        		</td>
-	                        	</tr>
-	                        </table>
-                    </div>
-                </div>
-				
-			</template>
-			</div>
-		</div>
-		
-		<br />
-		
-		<jsp:include page="/WEB-INF/jsp/kcg/_include/system/footer.jsp" flush="false"/>
-		
-	</div>
-</div>
-
-			<!-- 상품팝업 -->
-			<div class="modal fade" id="pop_prod">
-				<template>
-					<div class="modal-dialog" style="width: 500px;">
-						<div class="modal-content">
-							<div class="modal-body">
-								<div class="dataTables_wrapper">
-									<div class="dt-buttons">
-											<label>상품명:</label>
-											<input type="search" id="pop_product_name" style="width: 200px;"
-												v-model="pop_product_name">
-											<button type="button" class="btn btn-red"
-												style="margin-left: 5px;" @click="getList">검색</button>
-									</div>
+			<div class="row">
+				<div class="dataTables_wrapper flex main-box" id="vueapp">
+					<template>
+						<div class="left flex-column flex-gap-10 user-info-box"
+							v-if="info.simpl_ty_cd == '1'">
+							<label>고객정보 :</label>
+							<div class="form-group1">
+								<div class="label-box1">
+									<label>성명 : </label>
 								</div>
-								<div style="height: 400px; overflow: auto;"
-									class="dataTables_wrapper">
-									<table class="table table-bordered datatable dataTable">
-										<thead style="position: sticky; top: 0px;">
-											<tr>
-												<th class="center" style="width: 25%;">상품ID</th>
-												<th class="center" style="width: 50%;">상품명</th>
-												<th class="center" style="width: 25%;">상품 유형</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr v-for="item in dataList" @click="selProd(item.product_id)"
-												style="cursor: pointer;">
-												<td class="center">{{item.product_id}}</td>
-												<td class="left">{{item.product_name}}</td>
-												<td class="left">{{item.product_type}}</td>
-											</tr>
-										</tbody>
-									</table>
+								<div class="input-box">
+									<input class="form-control" v-model="custInfo.customer_name"
+										disabled />
+									<button type="button" class="btn" @click="popupCust()">
+										<i class="fa fa-search"
+											style="align-items: padding-bottom: 5px;"></i>
+									</button>
+								</div>
+							</div>
+							<div class="form-group1">
+								<div class="label-box1">
+									<label>주민번호 : </label>
+								</div>
+								<div class="input-box">
+									<input class="form-control"
+										v-model="custInfo.customer_id_number" disabled />
+								</div>
+							</div>
+							<div class="form-group1">
+								<div class="label-box1">
+									<label>E-mail : </label>
+								</div>
+								<div class="input-box">
+									<input class="form-control" v-model="custInfo.customer_email"
+										disabled />
+								</div>
+							</div>
+							<div class="form-group1">
+								<div class="label-box1">
+									<label>전화번호 : </label>
+								</div>
+								<div class="input-box">
+									<input class="form-control" v-model="custInfo.customer_phone"
+										disabled />
+								</div>
+							</div>
+							<div class="form-group1">
+								<div class="label-box1">
+									<label>비상연락처 : </label>
+								</div>
+								<div class="input-box">
+									<input class="form-control" v-model="custInfo.customer_sub_tel"
+										disabled />
+								</div>
+							</div>
+							<div class="form-group1">
+								<div class="label-box1">
+									<label>직업 : </label>
+								</div>
+								<div class="input-box">
+									<input class="form-control" v-model="custInfo.customer_job"
+										disabled />
+								</div>
+							</div>
+							<div class="form-group1">
+								<div class="label-box1">
+									<label>주소 : </label>
+								</div>
+								<div class="input-box">
+									<input class="form-control" v-model="custInfo.customer_addr"
+										disabled />
+								</div>
+							</div>
+							<div class="form-group1">
+								<div class="label-box1">
+									<label>관리담당자ID : </label>
+								</div>
+								<div class="input-box">
+									<input class="form-control" v-model="custInfo.user_id" disabled />
+								</div>
+							</div>
+							<div class="form-group1">
+								<div class="label-box1">
+									<label>관리담당자 : </label>
+								</div>
+								<div class="input-box">
+									<input class="form-control" v-model="custInfo.name" disabled />
+								</div>
+							</div>
+
+							<div class="form-group1">
+								<div class="label-box1">
+									<label>부서 : </label>
+								</div>
+								<div class="input-box">
+									<input class="form-control" v-model="custInfo.dept" disabled />
+								</div>
+							</div>
+							<div class="form-group1">
+								<div class="label-box1">
+									<label>직위 : </label>
+								</div>
+								<div class="input-box">
+									<input class="form-control" v-model="custInfo.jikgub_nm"
+										disabled />
 								</div>
 							</div>
 						</div>
-					</div>
-				</template>
-			</div>
 
-			<!-- 고객팝업 -->
-			<div class="modal fade" id="pop_cust">
-				<template>
-					<div class="modal-dialog" style="width: 500px;">
-						<div class="modal-content">
-							<div class="modal-body">
-								<div class="dataTables_wrapper">
-									<div class="dt-buttons">
-										<div>
-											<label>고객명:</label> <input type="search" id="pop_customer_name"
-												style="width: 250px;" v-model="pop_customer_name">
-											<button type="button" class="btn btn-red"
-												style="margin-left: 5px;" @click="getList">검색</button>
+						<div class="right flex-column calculate-box">
+							<div class="right-top">
+								<ul class="nav">
+									<li class="nav-tab" @click="tabChange(1)">적금 설계</li>
+									<li class="nav-tab" @click="tabChange(2)">목돈마련적금 설계</li>
+									<li class="nav-tab " @click="tabChange(3)">예금 설계</li>
+									<li class="nav-tab active" @click="tabChange(4)">대출 설계</li>
+								</ul>
+								<div class="nav-content flex-column flex-gap-10">
+									<div class="form-group1">
+										<div class="label-box2">
+											<label>설계번호 : </label>
+										</div>
+										<div class="input-box">
+											<input class="form-control" id="design_id"
+												v-model="info.design_id" disabled />
+										</div>
+									</div>
+									<div class="form-group1">
+										<div class="label-box2">
+											<label>상품선택 : </label>
+										</div>
+										<div class="input-box">
+											<input class="form-control" id="prod_cd"
+												v-model="proInfo.product_id" disabled /> <input
+												class="form-control" id="prod_nm"
+												v-model="proInfo.product_name" />
+											<button type="button" class="btn" @click="popupProd()">
+												<i class="fa fa-search"></i>
+											</button>
+										</div>
+									</div>
+									<div class="form-group1">
+										<div class="label-box2">
+											<label>대출금액(원) :</label>
+										</div>
+										<div class="input-box">
+											<input type="text" id="dpst_amt" v-model="info.sub_money"
+												style="width: 48%; border: 1px solid rgb(212, 212, 212); border-radius: 3px;">
+											<button type="button" class="btn btn-transparent "
+												@click="setCircleAcmlAmt(10)"
+												style="width: 80px; right: 110px">+10만원</button>
+											<button type="button" class="btn btn-transparent "
+												@click="setCircleAcmlAmt(50)"
+												style="width: 80px; right: 20px">+50만원</button>
+											<button type="button" class="btn btn-transparent "
+												@click="setCircleAcmlAmt(100)"
+												style="width: 80px; right: -70px">+100만원</button>
+											<button type="button" class="btn btn-navy flex-20"
+												@click="setCircleAcmlAmt(0)"
+												style="width: 80px; right: -160px">정정</button>
+										</div>
+									</div>
+
+									<div class="form-group1">
+										<div class="label-box2">
+											<label>이자유형 :</label>
+										</div>
+										<div class="select-box">
+											<select id="int_tax_ty_cd" v-model="info.loan_repayment_type"
+												style="padding-top: 3px;">
+												<option value="원리금 균등">원리금 균등 상환방식</option>
+												<option value="원금 균등">원금 균등 상환방식</option>
+												<option value="만기 일시">만기일시상환방식</option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group1">
+										<div class="label-box2">
+											<label>고정금리(%) :</label>
+										</div>
+										<div class="input-box">
+											<input class="form-control" type="text" id="aply_rate"
+												v-model="info.f_interest_rate" />
+										</div>
+									</div>
+									<div class="form-group1">
+										<div class="label-box2">
+											<label> 고정금리 예치기간(개월) :</label>
+										</div>
+										<div class="input-box">
+											<input type="text" id="dpst_prd"
+												v-model="info.f_select_month"
+												style="width: 48%; border: 1px solid rgb(212, 212, 212); border-radius: 3px;">
+											<button type="button" class="btn btn-transparent"
+												@click="fSetGoalPrd(3)" style="width: 80px; right: 110px">+3개월</button>
+											<button type="button" class="btn btn-transparent"
+												@click="fSetGoalPrd(6)" style="width: 80px; right: 20px">+6개월</button>
+											<button type="button" class="btn btn-transparent"
+												@click="fSetGoalPrd(12)" style="width: 80px; right: -70px">+12개월</button>
+											<button type="button" class="btn btn-navy"
+												@click="fSetGoalPrd(0)" style="width: 80px; right: -160px">정정</button>
+										</div>
+									</div>
+									<div class="form-group1">
+										<div class="label-box2">
+											<label>변동금리(%) :</label>
+										</div>
+										<div class="input-box">
+											<input class="form-control" type="text" id="aply_rate"
+												v-model="info.v_interest_rate" />
+										</div>
+									</div>
+									<div class="form-group1">
+										<div class="label-box2">
+											<label> 변동금리 예치기간(개월) :</label>
+										</div>
+										<div class="input-box">
+											<input type="text" id="dpst_prd"
+												v-model="info.v_select_month"
+												style="width: 48%; border: 1px solid rgb(212, 212, 212); border-radius: 3px;" />
+											<button type="button" class="btn btn-transparent"
+												@click="vSetGoalPrd(3)" style="width: 80px; right: 110px">+3개월</button>
+											<button type="button" class="btn btn-transparent"
+												@click="vSetGoalPrd(6)" style="width: 80px; right: 20px">+6개월</button>
+											<button type="button" class="btn btn-transparent"
+												@click="vSetGoalPrd(12)" style="width: 80px; right: -70px">+12개월</button>
+											<button type="button" class="btn btn-navy"
+												@click="vSetGoalPrd(0)" style="width: 80px; right: -160px">정정</button>
+										</div>
+									</div>
+									<div class="form-group1">
+										<div class="label-box2">
+											<label>중도상환 수수료(%):</label>
+										</div>
+										<div class="input-box">
+											<input class="form-control" type="text" id="aply_rate"
+												v-model="info.rate" />
 										</div>
 									</div>
 								</div>
-								<div style="height: 400px; overflow: auto;"
-									class="dataTables_wrapper">
-									<table class="table table-bordered datatable dataTable">
-										<thead style="position: sticky; top: 0px;">
-											<tr>
-												<th class="center" style="width: 25%;">고객ID</th>											
-												<th class="center" style="width: 25%;">고객명</th>
-												<th class="center" style="width: 20%;">생년월일</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr v-for="item in dataList" @click="selCust(item.customer_id)"
-												style="cursor: pointer;">
-												<td class="center">{{item.customer_id}}</td>
-												<td class="center">{{item.customer_name}}</td>
-												<td class="center">{{item.customer_brdt}}</td>
-											</tr>
-										</tbody>
-									</table>
-									<div class="dataTables_paginate paging_simple_numbers"
-										id="div_paginate"></div>
+							</div>
+
+							<div class="dt-buttons" style="padding-top: 15px;">
+								<input id="external" type="radio" v-model="info.simpl_ty_cd"
+									value="1"> <label class="tab_item" for="external">정상설계</label>
+								<input id="internal" type="radio" v-model="info.simpl_ty_cd"
+									value="0"> <label class="tab_item" for="internal">간편설계</label>
+							</div>
+							<div class="dataTables_filter">
+								<button type="button" class="btn btn-red btn-small"
+									@click="prcCalc()">이자계산</button>
+								<button type="button" class="btn btn-orange btn-small"
+									v-if="!info.design_id" @click="save()">설계저장</button>
+								<button type="button" class="btn btn-orange btn-small" v-else
+									@click="update()">변경</button>
+								<button type="button" class="btn btn-blue btn-icon btn-small"
+									@click="gotoList()">
+									목록 <i class="entypo-list"></i>
+								</button>
+							</div>
+
+							<ul class="nav">
+								<li class="nav-tab active">계산결과</li>
+							</ul>
+
+							<div class="right-bottom flex-100">
+								<table>
+									<tr>
+										<td class="center" style="width: 40%; vertical-align: top;">
+											<div class="form-wrapper flex flex-wrap flex-gap-10">
+
+												<div class="form-group1"
+													v-if="info.loan_repayment_type ==='원리금 균등'">
+													<div class="label-box1">
+														<label>매 회차 납입 금액 :</label>
+													</div>
+													<div class="input-box">
+														<input class="form-control" id="int_tax_amt"
+															v-model="info.cycle_money" disabled />
+													</div>
+												</div>
+
+												<div class="form-group1">
+													<div class="label-box1">
+														<label>총 납입 이자 :</label>
+													</div>
+													<div class="input-box">
+														<input class="form-control" id="int_tax_amt"
+															v-model="info.final_interest" disabled />
+													</div>
+												</div>
+												<div class="form-group1">
+													<div class="label-box1">
+														<label>총 상환 금액 :</label>
+													</div>
+													<div class="input-box">
+														<input class="form-control" id="atx_rcve_amt"
+															v-model="info.final_money" disabled />
+													</div>
+												</div>
+
+											</div>
+											<div id="chart" class="bottom-right-bottom flex-100"></div>
+										</td>
+										<td class="center" style="width: 3%;"></td>
+										<td class="center" style="width: 57%; vertical-align: top;">
+											<table class="table table-bordered datatable dataTable"
+												id="grid_app">
+												<thead>
+													<tr class="replace-inputs" style="flex: 1 1 1">
+														<th class="center">회차</th>
+														<th class="center">납입금액</th>
+														<th class="center">원리금액</th>
+														<th class="center">이자</th>
+														<th class="center">누적 이자</th>
+														<th class="center">잔금</th>
+														<th class="center">중도상환 수수료</th>
+
+													</tr>
+												</thead>
+												<tbody id="grid_tbody">
+													<tr v-for="item in calculate_arr" style="cursor: pointer;">
+														<td class="right" style="text-align: right;">{{item.round_num}}</td>
+														<td class="right" style="text-align: right;">{{item.round_cycle_money}}</td>
+														<td class="right" style="text-align: right;">{{item.round_pri_cycle_money}}</td>
+														<td class="right" style="text-align: right;">{{item.round_interest}}</td>
+														<td class="right" style="text-align: right;">{{item.acc_interest}}</td>
+														<td class="right" style="text-align: right;">{{item.round_total}}</td>
+														<td class="right" style="text-align: right;">{{item.early_repayment_fee}}</td>
+													</tr>
+
+												</tbody>
+											</table>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+
+					</template>
+				</div>
+			</div>
+
+			<br />
+
+			<jsp:include page="/WEB-INF/jsp/kcg/_include/system/footer.jsp"
+				flush="false" />
+
+		</div>
+	</div>
+
+	<!-- 상품팝업 -->
+	<div class="modal fade" id="pop_prod">
+		<template>
+			<div class="modal-dialog" style="width: 500px;">
+				<div class="modal-content">
+					<div class="modal-body">
+						<div class="dataTables_wrapper">
+							<div class="dt-buttons">
+								<label>상품명:</label> <input type="search" id="pop_product_name"
+									style="width: 200px;" v-model="pop_product_name">
+								<button type="button" class="btn btn-red"
+									style="margin-left: 5px;" @click="getList">검색</button>
+							</div>
+						</div>
+						<div style="height: 400px; overflow: auto;"
+							class="dataTables_wrapper">
+							<table class="table table-bordered datatable dataTable">
+								<thead style="position: sticky; top: 0px;">
+									<tr>
+										<th class="center" style="width: 25%;">상품ID</th>
+										<th class="center" style="width: 50%;">상품명</th>
+										<th class="center" style="width: 25%;">상품 유형</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr v-for="item in dataList" @click="selProd(item.product_id)"
+										style="cursor: pointer;">
+										<td class="center">{{item.product_id}}</td>
+										<td class="left">{{item.product_name}}</td>
+										<td class="left">{{item.product_type}}</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</template>
+	</div>
+
+	<!-- 고객팝업 -->
+	<div class="modal fade" id="pop_cust">
+		<template>
+			<div class="modal-dialog" style="width: 500px;">
+				<div class="modal-content">
+					<div class="modal-body">
+						<div class="dataTables_wrapper">
+							<div class="dt-buttons">
+								<div>
+									<label>고객명:</label> <input type="search" id="pop_customer_name"
+										style="width: 250px;" v-model="pop_customer_name">
+									<button type="button" class="btn btn-red"
+										style="margin-left: 5px;" @click="getList">검색</button>
 								</div>
 							</div>
 						</div>
+						<div style="height: 400px; overflow: auto;"
+							class="dataTables_wrapper">
+							<table class="table table-bordered datatable dataTable">
+								<thead style="position: sticky; top: 0px;">
+									<tr>
+										<th class="center" style="width: 25%;">고객ID</th>
+										<th class="center" style="width: 25%;">고객명</th>
+										<th class="center" style="width: 20%;">생년월일</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr v-for="item in dataList" @click="selCust(item.customer_id)"
+										style="cursor: pointer;">
+										<td class="center">{{item.customer_id}}</td>
+										<td class="center">{{item.customer_name}}</td>
+										<td class="center">{{item.customer_brdt}}</td>
+									</tr>
+								</tbody>
+							</table>
+							<div class="dataTables_paginate paging_simple_numbers"
+								id="div_paginate"></div>
+						</div>
 					</div>
-				</template>
+				</div>
 			</div>
+		</template>
+	</div>
 
 </body>
 <script>
