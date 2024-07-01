@@ -243,13 +243,12 @@
                      </div>
                      <div class="customer-list">
 
-
                         <div class="customer-item" v-for="employee in employees"
-                           :key="employee.user_id">
+                           :key="employee.user_id" v-if="(employee.status_cd !== '퇴직' || statusSearch =='퇴직')">
                            <div class="table-cell" id="name" name="name"
                               @click="employeeInfo(employee.user_id)">{{employee.name}}</div>
                            <div class="table-cell">{{employee.jikgub_nm}}</div>
-                           <div class="table-cell">{{employee.status_cd}}</div>
+                          <div class="table-cell" >{{employee.status_cd}}</div>
                         </div>
                      </div>
                   </div>
@@ -438,7 +437,7 @@
                  .then(response => {
                     console.log(response.data);
                      var newEmployee = response.data.user_id;
-                     var b = (parseInt(newEmployee)+1);
+                     var b = ( parseInt( newEmployee ) +1 );
                      this.newEmployee.new_user_id = b
                  })
                  .catch(error => {

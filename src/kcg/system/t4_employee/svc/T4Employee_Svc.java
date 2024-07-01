@@ -35,7 +35,6 @@ public class T4Employee_Svc {
 
 	// 신규계정 생성을 위한 메서드
 	public CmmnMap insertEmployee(CmmnMap params) {
-		System.out.println("======================================== insert first log = " + params);
 		String email = params.getString("user_id") + "@team4.com";
 		String auth_cd = "admin";
 		String del_yn = "N";
